@@ -13,7 +13,7 @@
 </head>
 <body>
   
-    <p class="rotate">Loughborough University Timetabling Systemhbsadj</p>
+    <p class="rotate">Loughborough University Timetabling System</p>
     <div class="main">
         <div class="user">
             
