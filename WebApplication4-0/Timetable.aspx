@@ -250,6 +250,12 @@
         {
             background-color:#FF8060;
         }
+        .booking
+        {
+            cursor:pointer;
+            background-color:#FF8060;
+            color:#FFF;
+        }
         .whiteSpace
         {
             height:50px;
@@ -294,7 +300,7 @@
             </tr>
             <tr>
                 <td class="btmBdr rightBdr" >09:00</td>
-                <td class="btmBdr rightBdr" ></td>
+                <td class="btmBdr rightBdr booking" >COB101</td>
                 <td class="btmBdr rightBdr" ></td>
                 <td class="btmBdr rightBdr" ></td>
                 <td class="btmBdr rightBdr" ></td>
