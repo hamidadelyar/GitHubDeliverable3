@@ -4,7 +4,7 @@
 <html lang="en">
 <head runat="server">
     <meta charset="utf-8" />
-    <title><%: Page.Title %> - My ASP.NET Application</title>
+    <title><%: Page.Title %></title>
     <link href="~/Content/Site.css" rel="stylesheet" /> 
     <link href="~/Images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <asp:PlaceHolder runat="server">        
@@ -64,7 +64,7 @@
     <footer>
         <div class="content-wrapper">
             <div class="float-left">
-                <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
+                <p>&copy; <%: DateTime.Now.Year %> - Team 02</p>
             </div>
         </div>
     </footer>

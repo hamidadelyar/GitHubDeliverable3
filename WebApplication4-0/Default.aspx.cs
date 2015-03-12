@@ -44,7 +44,7 @@ namespace WebApplication4_0
                 if (password == TextboxPassword.Text)   //if password DOES match the username entered
                 {
                     Session["New"] = TextboxUsername.Text;
-                    Response.Redirect("https://www.google.co.uk");
+                    Response.Redirect("Timetable.aspx");
                     LoginErrorMessage.InnerHtml = "";   //no error message with successful password
                 }
                 else //if password DOES NOT match the username
