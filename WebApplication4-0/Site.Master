@@ -65,6 +65,7 @@
         <div class="content-wrapper">
             <div class="float-left">
                 <p>&copy; <%: DateTime.Now.Year %> - Team 02</p>
+                <p id="LoginDetails" runat="server"></p>
             </div>
         </div>
     </footer>

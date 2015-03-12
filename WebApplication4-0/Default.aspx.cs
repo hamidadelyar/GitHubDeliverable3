@@ -22,7 +22,8 @@ namespace WebApplication4_0
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             conn.Open(); //opening connection with the DB
             //prepare query
-            string checkuser = "Select count(*) FROM [User] WHERE deptName = '" + TextboxUsername.Text + "'";   //deptName is deptCode for some reason in the DB, vice versa
+            //checks to see if user exists in db
+            string checkuser = "Select count(*) FROM [Users] WHERE Username = '" + TextboxUsername.Text + "'";  //i.e. cord
             SqlCommand comm = new SqlCommand(checkuser, conn);  //1st argument is query, 2nd argument is connection with DB
             int temp = Convert.ToInt32(comm.ExecuteScalar().ToString());    //returns 1 if found
             // string result = comm.ExecuteScalar().ToString();
@@ -36,14 +37,15 @@ namespace WebApplication4_0
           
                 //check if password matches the username provided
                 conn.Open();
-                string checkpassword = "Select password from [User] where deptName='" + TextboxUsername.Text + "'";
+                string checkpassword = "Select Password from [Users] where Username='" + TextboxUsername.Text + "'";
                 SqlCommand comm2 = new SqlCommand(checkpassword, conn);  //1st argument is query, 2nd argument is connection with DB
                 string password = comm2.ExecuteScalar().ToString();
                 conn.Close();
 
                 if (password == TextboxPassword.Text)   //if password DOES match the username entered
                 {
-                    Session["New"] = TextboxUsername.Text;
+                    Session["Username"] = TextboxUsername.Text;
+                    Session["LoggedIn"] = true;
                     Response.Redirect("Timetable.aspx");
                     LoginErrorMessage.InnerHtml = "";   //no error message with successful password
                 }

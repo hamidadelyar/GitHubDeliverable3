@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace WebApplication4_0
 {
@@ -67,6 +69,26 @@ namespace WebApplication4_0
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            //no need to write this on every page as it is on master page
+            //checks to see if the user has logged in
+            //if not logged in, then redirect to login page
+            if ((Session["LoggedIn"]) == null || (bool)(Session["LoggedIn"]) == false)  //checks to see if it has been set or not or if it is false
+            {   //if not Logged in
+                Response.Redirect("Default.aspx");
+            }
+
+            string username = (string)(Session["username"]);
+
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+            conn.Open();
+            string getForename = "Select Forename from [Users] where Username='" + username + "'";
+            SqlCommand comm2 = new SqlCommand(getForename, conn);  //1st argument is query, 2nd argument is connection with DB
+            string forename = comm2.ExecuteScalar().ToString();
+            string getSurname = "Select Surname from [Users] where Username='" + username + "'";
+            SqlCommand comm3 = new SqlCommand(getSurname, conn);  //1st argument is query, 2nd argument is connection with DB
+            string surname = comm3.ExecuteScalar().ToString();
+            conn.Close();
+            LoginDetails.InnerHtml = "Logged in as: " + forename + " " + surname + " (" + username + ")";
 
         }
     }

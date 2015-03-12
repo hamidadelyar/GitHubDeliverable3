@@ -200,4 +200,5 @@
         <div class="rooms" ><b>ROOM</b><br /><input type="text" name="roomTxt" /><img src="Images/clear.png" width="23" height="15" /></div>
     </div>
     <div class="whiteSpace" ></div>
+    <p id="sessionTest" runat="server"></p>
 </asp:Content>
