@@ -1,12 +1,11 @@
 ﻿html {
-    background-color: #e2e2e2;
     margin: 0;
     padding: 0;
+    background-color: #79A2B8;
 }
 
 body {
     background-color: #fff;
-    border-top: solid 10px #000;
     color: #333;
     font-size: .85em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
@@ -98,7 +97,7 @@ h5, h6 {
 }
 
 #body {
-    background-color: #efeeef;
+    background-color: #86B4CC;
     clear: both;
     padding-bottom: 35px;
 }
@@ -119,7 +118,7 @@ header .content-wrapper {
     
 footer {
     clear: both;
-    background-color: #e2e2e2;
+    background-color: #79A2B8;
     font-size: .8em;
     height: 100px;
 }
