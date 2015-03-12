@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <title><%: Page.Title %> - My ASP.NET Application</title>
     <link href="~/Content/Site.css" rel="stylesheet" /> 
-    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/Images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <asp:PlaceHolder runat="server">        
         <script src="<%: ResolveUrl("~/Scripts/modernizr-2.6.2.js") %>"></script>
     </asp:PlaceHolder>
@@ -24,7 +24,7 @@
     <header>
         <div class="content-wrapper">
             <div class="float-left">
-                <p class="site-title"><a runat="server" href="~/">your logo here</a></p>
+                <p class="site-title"><a runat="server" href="~/"><img style="padding-bottom:15px" src="Images/LU_Color.png" width="200" height="47" /></a></p>
             </div>
             <div class="float-right">
                 <section id="login">
