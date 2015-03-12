@@ -13,7 +13,8 @@ namespace WebApplication4_0
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            /* If logged in i.e. Session["LoggedIn"]==true, then automatically navigates to home.aspx (not written yet)*/
+            /* If logged in i.e. Session["LoggedIn"]==true, then automatically navigates to home.aspx (not written yet), instead of asking
+             you to login again*/
         }
 
         protected void ButtonLogin_Click(object sender, EventArgs e)
@@ -41,13 +42,26 @@ namespace WebApplication4_0
                 SqlCommand comm2 = new SqlCommand(checkpassword, conn);  //1st argument is query, 2nd argument is connection with DB
                 string password = comm2.ExecuteScalar().ToString();
                 conn.Close();
-
+                //gets rid of empty space, i.e. "admin ", now equals "admin"
+                string username = TextboxUsername.Text.Replace(" ", ""); //removes any spaces a user may accidently put after username
+                
                 if (password == TextboxPassword.Text)   //if password DOES match the username entered
                 {
-                    Session["Username"] = TextboxUsername.Text;
-                    Session["LoggedIn"] = true;
-                    Response.Redirect("Timetable.aspx");
-                    LoginErrorMessage.InnerHtml = "";   //no error message with successful password
+                    
+                    if (username != "admin")    //timetabler view shown
+                    {
+                        Session["Username"] = username;
+                        Session["LoggedIn"] = true;
+                        Response.Redirect("Timetable.aspx");
+                        LoginErrorMessage.InnerHtml = "";   //no error message with successful password
+                    }
+                    else //if admin logs in, then they are redirected to a different view of the website
+                    {
+                        Session["Username"] = username;
+                        Session["LoggedIn"] = true;
+                        Response.Redirect("Admin.aspx");
+                        LoginErrorMessage.InnerHtml = "";   //no error message with successful password
+                    }
                 }
                 else //if password DOES NOT match the username
                 {
