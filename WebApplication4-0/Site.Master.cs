@@ -91,5 +91,12 @@ namespace WebApplication4_0
             LoginDetails.InnerHtml = "Logged in as: " + forename + " " + surname + " (" + username + ")";
 
         }
+
+        
+        protected void logoutButton_Click(object sender, EventArgs e)
+        {
+            Session["LoggedIn"] = false;
+            Response.Redirect("Default.aspx");
+        }
     }
 }

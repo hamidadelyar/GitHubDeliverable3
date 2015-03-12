@@ -13,7 +13,7 @@ namespace WebApplication4_0
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            /* If logged in i.e. Session["LoggedIn"]==true, then automatically navigates to home.aspx (not written yet)*/
         }
 
         protected void ButtonLogin_Click(object sender, EventArgs e)
