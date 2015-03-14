@@ -11,6 +11,7 @@
          var roomsArray = <%= this.data %>
          $(document).ready(function () {
              updateWeeks();
+             $('.bookingSpan').hide();
              $('.leftWk').click(function () {
                  $('.weeksRw').hide();
                  if (currWeek != 1) {
@@ -47,18 +48,20 @@
              $('.suggestTbl').hide();
              $('.roomTxt').focusin(function () {
                  $('.suggestTbl').show();
+                 $('.semesters').hide();
                  $('.suggestTbl').css('display', 'block');
                  $('.suggestTbl').height(420);
              });
              $('.roomTxt').on('input propertychange paste', function () {
                  $('.suggestTbl').html('');
-                 var roomTxt = $('.roomTxt').val().split('.').join('');
+                 var roomTxt = $('.roomTxt').val().split('.').join('').toUpperCase();;
                  for (var i = 0; i < roomsArray.length; i++) {
                      var searchTxt = roomsArray[i]['Room_ID'].split('.').join('');
                      if (roomTxt == searchTxt.substring(0, roomTxt.length)) {
                          $('.suggestTbl').append("<tr><td>" + roomsArray[i]['Room_ID'] + "</td></tr>");
                          $('.suggestTbl td').click(function () {
                              $('.suggestTbl').hide();
+                             $('.semesters').show();
                              $('.roomTxt').val($(this).html());
                          })
                      }
@@ -67,10 +70,12 @@
              $(document).click(function (event) {
                  if (event.target.id !== 'roomTxt' && event.target.id !== 'clearImg') {
                      $(".suggestTbl").hide();
+                     $('.semesters').show();
                  }
              })
              $('.suggestTbl td').click(function () {
                  $('.suggestTbl').hide();
+                 $('.semesters').show();
                  $('.roomTxt').val($(this).html());
                  $('.suggestTbl').html('');
                  var roomTxt = $('.roomTxt').val().split('.').join('');
@@ -95,10 +100,19 @@
                          $('.suggestTbl').append("<tr><td>" + roomsArray[i]['Room_ID'] + "</td></tr>");
                          $('.suggestTbl td').click(function () {
                              $('.suggestTbl').hide();
+                             $('.semesters').show();
                              $('.roomTxt').val($(this).html());
                          })
                      }
                  }
+             });
+             $('.booking').mouseover(function () {
+                 var left = $(this).position().left + $(this).width();
+                 var top = $(this).position().top;
+                 $(this).find('span').show().css('top', top + 'px').css('left', left + 'px');
+             });
+             $('.booking').mouseout(function () {
+                 $(this).find('span').hide();
              });
          });
          function updateWeeks() {
@@ -198,6 +212,7 @@
             width: calc(100% - 28px);
             color:#FFF;
             padding-left:5px;
+            text-transform:uppercase;
         }
         .rooms img
         {
@@ -223,6 +238,39 @@
         .suggestTbl td:hover
         {
             background-color:#2B3036;
+        }
+        .semesters
+        {
+            margin-top:40px;
+            width:100%;
+        }
+        .semBtn
+        {
+            position:relative;
+            padding:10px;
+            top:25px;
+            border-radius:7px;
+            cursor:pointer;
+        }
+        .semBtn:hover
+        {
+            background-color:#FF8060;
+        }
+        .semOne
+        {
+            background-color:#FF8060;
+        }
+        .semTwo
+        {
+            background-color:#2B3036;
+        }
+        .splitter
+        {
+            position:relative;
+            background-color:#3E454D;
+            padding:10px;
+            top:25px;
+            width:25px;
         }
         .weeksTbl
         {
@@ -255,6 +303,12 @@
             cursor:pointer;
             background-color:#FF8060;
             color:#FFF;
+        }
+        .bookingSpan
+        {
+            position: absolute;
+            background-color: #3E454D;
+            display:block;
         }
         .whiteSpace
         {
@@ -300,7 +354,7 @@
             </tr>
             <tr>
                 <td class="btmBdr rightBdr" >09:00</td>
-                <td class="btmBdr rightBdr booking" >COB101</td>
+                <td class="btmBdr rightBdr" ></td>
                 <td class="btmBdr rightBdr" ></td>
                 <td class="btmBdr rightBdr" ></td>
                 <td class="btmBdr rightBdr" ></td>
@@ -379,6 +433,7 @@
             <table class="suggestTbl">
             </table>
         </div>
+        <div class="semesters" ><b>SEMESTERS</b><br /><span class="semOne semBtn" >One</span><span class="splitter" ></span><span class="semTwo semBtn" >Two</span></div>
     </div>
     <div class="whiteSpace" ></div>
 </asp:Content>
