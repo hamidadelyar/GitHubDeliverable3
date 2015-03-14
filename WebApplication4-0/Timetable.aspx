@@ -374,7 +374,7 @@
     </div>
     <div class="toolsHolder" >
         <div class="hdr" ><b>TOOLS</b></div>
-        <div class="rooms" ><b>ROOM</b><br /><input autocomplete="off" type="text" class="roomTxt" id="roomTxt" name="roomTxt" /><img id="clearImg" src="Images/clear.png" width="23" height="15" /></div>
+        <div class="rooms" ><b>ROOM</b><br /><input style="text-transform:uppercase" autocomplete="off" type="text" class="roomTxt" id="roomTxt" name="roomTxt" /><img id="clearImg" src="Images/clear.png" width="23" height="15" /></div>
         <div class="suggest" >
             <table class="suggestTbl">
             </table>
