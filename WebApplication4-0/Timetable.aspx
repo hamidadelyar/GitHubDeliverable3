@@ -114,6 +114,23 @@
              $('.booking').mouseout(function () {
                  $(this).find('span').hide();
              });
+             $('.weekBtn').click(function () {
+                 var day = 1;
+                 var time = 1;
+                 $.ajax({
+                     type: "POST",
+                     url: "Timetable.aspx/SearchRoom",
+                     data: '{day: '+day+', time: '+time+'}',
+                     contentType: "application/json; charset=utf-8",
+                     dataType: "json",
+                     error: function (XMLHttpRequest, textStatus, errorThrown) {
+                         alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                     },
+                     success: function (result) {
+                         alert(result.d);
+                     }
+                 });
+             });
          });
          function updateWeeks() {
              $('.leftWk').html(weeksArray[currWeek - 1].substring(5));
@@ -320,25 +337,25 @@
     <div class="timetblHolder" >
         <table class="timetbl" >
             <tr>
-                <td colspan="2" class="nonSelect" ><span class="leftWk"></span></td>
+                <td colspan="2" class="nonSelect" ><span class="leftWk weekBtn"></span></td>
                 <td colspan="2" class="select" ><b class="centWk"></b></td>
-                <td colspan="2" class="nonSelect" ><span class="rightWk"></span></td>
+                <td colspan="2" class="nonSelect" ><span class="rightWk weekBtn"></span></td>
             </tr>
             <tr class="weeksRw">
                 <td colspan="2" ></td>
                 <td colspan="2" >
                     <table class="weeksTbl">
                         <tr>
-                            <td><span>1</span></td><td><span>2</span></td><td><span>3</span></td><td><span>4</span></td>
+                            <td><span class="weekBtn" >1</span></td><td><span class="weekBtn" >2</span></td><td><span class="weekBtn" >3</span></td><td><span class="weekBtn" >4</span></td>
                         </tr>
                         <tr>
-                            <td><span>5</span></td><td><span>6</span></td><td><span>7</span></td><td><span>8</span></td>
+                            <td><span class="weekBtn" >5</span></td><td><span class="weekBtn" >6</span></td><td><span class="weekBtn" >7</span></td><td><span class="weekBtn" >8</span></td>
                         </tr>
                         <tr>
-                            <td><span>9</span></td><td><span>10</span></td><td><span>11</span></td><td><span>12</span></td>
+                            <td><span class="weekBtn" >9</span></td><td><span class="weekBtn" >10</span></td><td><span class="weekBtn" >11</span></td><td><span class="weekBtn" >12</span></td>
                         </tr>
                         <tr>
-                            <td><span>13</span></td><td><span>14</span></td><td><span>15</span></td><td></td>
+                            <td><span class="weekBtn" >13</span></td><td><span class="weekBtn" >14</span></td><td><span class="weekBtn" >15</span></td><td></td>
                         </tr>
                     </table>
                 </td>
@@ -354,74 +371,74 @@
             </tr>
             <tr>
                 <td class="btmBdr rightBdr" >09:00</td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
             </tr>
             <tr>
                 <td class="btmBdr rightBdr" >10:00</td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
             </tr>
             <tr>
                 <td class="btmBdr rightBdr" >11:00</td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
             </tr>
             <tr>
                 <td class="btmBdr rightBdr" >12:00</td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
             </tr>
             <tr>
                 <td class="btmBdr rightBdr" >13:00</td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
             </tr>
             <tr>
                 <td class="btmBdr rightBdr" >14:00</td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
             </tr>
             <tr>
                 <td class="btmBdr rightBdr" >15:00</td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
             </tr>
             <tr>
                 <td class="btmBdr rightBdr" >16:00</td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
                 <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr rightBdr" ></td>
-                <td class="btmBdr" ></td>
+                <td class="btmBdr slot" ></td>
             </tr>
             <tr>
                 <td class="rightBdr" >17:00</td>
-                <td class="rightBdr" ></td>
-                <td class="rightBdr" ></td>
-                <td class="rightBdr" ></td>
-                <td class="rightBdr" ></td>
+                <td class="rightBdr slot" ></td>
+                <td class="rightBdr slot" ></td>
+                <td class="rightBdr slot" ></td>
+                <td class="rightBdr slot" ></td>
                 <td></td>
             </tr>
         </table>

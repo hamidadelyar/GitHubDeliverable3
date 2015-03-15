@@ -12,7 +12,7 @@ namespace WebApplication4_0
 {
     public partial class Timetable : System.Web.UI.Page
     {
-        SqlConnection conn;
+        static SqlConnection conn;
         DataTable dt = new DataTable();
         public String data = "";
         protected void Page_Load(object sender, EventArgs e)
@@ -40,6 +40,39 @@ namespace WebApplication4_0
             }
             data = serializer.Serialize(rows);
         }
+        [System.Web.Services.WebMethod]
+        public static string SearchRoom(int day, int time)
+        {
+            string modCode = "{";
+            for(int i = 1; i < 6; i++)
+            {
+                for(int j = 1; j < 9; j++)
+                {
+                    conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+                    conn.Open(); //opening connection with the DB
 
+                    string roomQuery = "SELECT Requests.Module_Code FROM Requests WHERE Start_Time = " + i + " AND Day = " + j;
+
+                    using (SqlCommand command = new SqlCommand(roomQuery, conn))
+                    {
+                        SqlDataReader reader = command.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            modCode += reader.GetString(0)+",";
+                        }
+                        else
+                        {
+                            modCode += "Blank,";
+                        }
+                    }
+
+                    conn.Close();
+                }
+            }
+            modCode = modCode.Remove(modCode.Length - 1);
+            modCode += "}";
+
+            return modCode;
+        }
     }
 }
