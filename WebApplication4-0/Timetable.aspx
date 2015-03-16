@@ -8,8 +8,10 @@
      <script>
          var weeksArray = ["", "WEEK ONE", "WEEK TWO", "WEEK THREE", "WEEK FOUR", "WEEK FIVE", "WEEK SIX", "WEEK SEVEN", "WEEK EIGHT", "WEEK NINE", "WEEK TEN", "WEEK ELEVEN", "WEEK TWELVE", "WEEK THIRTEEN", "WEEK FOURTEEN", "WEEK FIFTEEN", ""];
          var currWeek = 1;
-         var roomsArray = <%= this.data %>
+         var roomsArray = <%= this.data %>;
+         var showing = false;
          $(document).ready(function () {
+             $('.greyOut').hide();
              updateWeeks();
              $('.bookingSpan').hide();
              $('.leftWk').click(function () {
@@ -115,6 +117,9 @@
                  $(this).find('span').hide();
              });
              $('.weekBtn').click(function () {
+                 $('.greyOut').show();
+                 showing = true;
+                 shrink();
                  var day = 1;
                  var time = 1;
                  $.ajax({
@@ -127,6 +132,9 @@
                          alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
                      },
                      success: function (result) {
+                         $('.greyOut').hide();
+                         showing = false;
+                         finAnim();
                          var bookings = result.d;
                          var data = bookings.split(",");
                          var i = 0;
@@ -141,6 +149,54 @@
                  });
              });
          });
+         function shrink() {
+            $('.greyOut img').animate({
+                height: '5px',
+                width: '5px',
+                padding: '32.5px'
+            },
+            {
+                duration: 1500,
+                easing: 'swing',
+                complete: function () {
+                    if(showing)
+                    {
+                        grow()
+                    }
+                    else
+                    {
+                        finAnim()
+                    }
+                }
+            });
+         }
+         function grow() {
+             $('.greyOut img').animate({
+                 height: '70px',
+                 width: '70px',
+                 padding: '0px'
+             },
+             {
+                 duration : 1500,
+                 easing   : 'swing',
+                 complete: function () {
+                     if(showing)
+                     {
+                         shrink()
+                     }
+                     else
+                     {
+                         finAnim()
+                     }
+                 }
+            });
+         }
+         function finAnim()
+         {
+             $('.greyOut img').css('height', '70px');
+             $('.greyOut img').css('width', '70px');
+             $('.greyOut img').css('padding', '0px');
+         }
          function updateWeeks() {
              $('.leftWk').html(weeksArray[currWeek - 1].substring(5));
              $('.centWk').html(weeksArray[currWeek]);
@@ -340,12 +396,19 @@
         {
             position:relative;
             left:2.5%;
-            top:-73%;
-            background-color:#2B3036;
-            opacity:0.7;
-            height:73%;
+            top:-80%;
+            background-color:#FFF;
+            height:80%;
             width:95%;
             display:block;
+        }
+        .greyOut img
+        {   
+            position:relative;
+            left:50%;
+            top:50%;
+            margin-left:-35px;
+            margin-top:-35px;
         }
         .whiteSpace
         {
@@ -462,7 +525,7 @@
                 <td></td>
             </tr>
         </table>
-        <div class="greyOut" ><img src=""</div>
+        <div class="greyOut" ><img src="Images/Loading.png" width="70" height="70" /></div>
     </div>
     <div class="toolsHolder" >
         <div class="hdr" ><b>TOOLS</b></div>
