@@ -43,10 +43,10 @@ namespace WebApplication4_0
         [System.Web.Services.WebMethod]
         public static string SearchRoom(int day, int time)
         {
-            string modCode = "{";
+            string modCode = "";
             for(int i = 1; i < 6; i++)
             {
-                for(int j = 1; j < 9; j++)
+                for(int j = 1; j < 10; j++)
                 {
                     conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
                     conn.Open(); //opening connection with the DB
@@ -70,7 +70,7 @@ namespace WebApplication4_0
                 }
             }
             modCode = modCode.Remove(modCode.Length - 1);
-            modCode += "}";
+            modCode += "";
 
             return modCode;
         }

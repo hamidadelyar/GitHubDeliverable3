@@ -127,7 +127,16 @@
                          alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
                      },
                      success: function (result) {
-                         alert(result.d);
+                         var bookings = result.d;
+                         var data = bookings.split(",");
+                         var i = 0;
+                         $('.slot').each(function () {
+                             if (data[i] != "Blank")
+                             {
+                                 $(this).html(data[i]).addClass('booking');
+                             }
+                             i++;
+                         })
                      }
                  });
              });
@@ -327,6 +336,17 @@
             background-color: #3E454D;
             display:block;
         }
+        .greyOut
+        {
+            position:relative;
+            left:2.5%;
+            top:-73%;
+            background-color:#2B3036;
+            opacity:0.7;
+            height:73%;
+            width:95%;
+            display:block;
+        }
         .whiteSpace
         {
             height:50px;
@@ -442,6 +462,7 @@
                 <td></td>
             </tr>
         </table>
+        <div class="greyOut" ><img src=""</div>
     </div>
     <div class="toolsHolder" >
         <div class="hdr" ><b>TOOLS</b></div>
