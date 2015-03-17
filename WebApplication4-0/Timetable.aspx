@@ -120,12 +120,12 @@
                  $('.greyOut').show();
                  showing = true;
                  shrink();
-                 var day = 1;
-                 var time = 1;
+                 var room = $('.roomTxt').val();
+                 var week = currWeek;
                  $.ajax({
                      type: "POST",
                      url: "Timetable.aspx/SearchRoom",
-                     data: '{day: '+day+', time: '+time+'}',
+                     data: JSON.stringify({room: room, week: week}),
                      contentType: "application/json; charset=utf-8",
                      dataType: "json",
                      error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -142,6 +142,10 @@
                              if (data[i] != "Blank")
                              {
                                  $(this).html(data[i]).addClass('booking');
+                             }
+                             else
+                             {
+                                 $(this).html('').removeClass('booking');
                              }
                              i++;
                          })

@@ -41,29 +41,46 @@ namespace WebApplication4_0
             data = serializer.Serialize(rows);
         }
         [System.Web.Services.WebMethod]
-        public static string SearchRoom(int day, int time)
+        public static string SearchRoom(string room, int week)
         {
             string modCode = "";
-            for(int i = 1; i < 6; i++)
+            for(int i = 1; i < 10; i++)
             {
-                for(int j = 1; j < 10; j++)
+                for(int j = 1; j < 6; j++)
                 {
                     conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
                     conn.Open(); //opening connection with the DB
 
-                    string roomQuery = "SELECT Requests.Module_Code FROM Requests WHERE Start_Time = " + i + " AND Day = " + j;
-
-                    using (SqlCommand command = new SqlCommand(roomQuery, conn))
+                    if(week < 13)
                     {
-                        SqlDataReader reader = command.ExecuteReader();
-                        if (reader.Read())
+                        string roomQuery = "SELECT Requests.Module_Code FROM Requests LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID WHERE Requests.Start_Time = " + j + " AND Requests.Day = " + i + " AND Request_Preferences.Room_ID = '" + room + "' AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')";
+                        using (SqlCommand command = new SqlCommand(roomQuery, conn))
                         {
-                            modCode += reader.GetString(0)+",";
+                            SqlDataReader reader = command.ExecuteReader();
+                            if (reader.Read())
+                            {
+                                modCode += reader.GetString(0) + ",";
+                            }
+                            else
+                            {
+                                string roomQueryTwo = "SELECT Requests.Module_Code FROM Requests LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID WHERE Requests.Start_Time = " + j + " AND Requests.Day = " + i + " AND Request_Preferences.Room_ID = '" + room + "' AND Request_Weeks.Week_ID = " + week;
+                                using (SqlCommand commandTwo = new SqlCommand(roomQueryTwo, conn))
+                                {
+                                    reader.Close();
+                                    SqlDataReader readerTwo = commandTwo.ExecuteReader();
+                                    if (readerTwo.Read())
+                                    {
+                                        modCode += readerTwo.GetString(0) + ",";
+                                    }
+                                    else
+                                    {
+                                        modCode += "Blank,";
+                                    }
+                                }
+                            }
                         }
-                        else
-                        {
-                            modCode += "Blank,";
-                        }
+
+
                     }
 
                     conn.Close();
