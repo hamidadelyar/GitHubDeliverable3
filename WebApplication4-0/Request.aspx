@@ -51,11 +51,34 @@ input[type="text"]:hover, #active
 	outline:none;
 }
 
+.line{
+    background: #3E454D;
+    float:left;
+    width:100%;
+    height:1px;
+}
+
+ 
+
+   
+      
+    .auto-style1 {
+        width: 73%;
+    }
+
+ 
+
+   
       
 </style>
 
     <div id="requestContainer">
         <table id="requestTable">
+            <tr>
+                <td>
+                    <b>MODULE DETAILS</b>
+                </td>
+            </tr>
             <tr>
                 <td>
                     <asp:Label ID="modcodeLabel" runat="server" Text="MODULE CODE" ToolTip="Enter a module code i.e. COA123"></asp:Label>
@@ -70,10 +93,49 @@ input[type="text"]:hover, #active
                 <td>
                     <asp:TextBox ID="modnameInput" runat="server"></asp:TextBox>
                 </td>
+                <td>
+                    <asp:Label ID="capacityLabel" runat="server" Text="CAPACITY" ToolTip="Enter total number of students on the module"></asp:Label>
+                </td>
+                <td>
+                     <asp:TextBox ID="capacityInput" runat="server"></asp:TextBox>
+                </td>
             </tr>
 
-          
-        </table>
+            <!-- line seperator-->
+            <tr>
+                <td colspan="6">
+                    <div class="line"></div>
+                </td>
+            </tr>
+
+            <!-- Facility section -->
+            <tr>
+                <td>
+                    <b>FACILITY OPTIONS</b>
+                </td>
+            </tr>
+
+            <tr style="height:100px">
+                <td>
+                    <asp:Label ID="roomType" runat="server" Text="ROOM TYPE" ToolTip="Select the room type you would like to book"></asp:Label>
+                </td>
+               
+                 <td>
+                    Lecture
+                </td>  
+                <td>
+                    Wheelchair access
+                </td>
+               
+            </tr>
+
+
+            
+                
+
+
+         </table>
+        
     </div>
     
 </asp:Content>
