@@ -5,16 +5,13 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace WebApplication4_0
+namespace AdminProj
 {
-    public partial class Admin : System.Web.UI.Page
+    public partial class Contact : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if ((string)Session["Username"] != "admin")
-            {
-                Response.Redirect("Default.aspx");
-            }
+
         }
     }
 }

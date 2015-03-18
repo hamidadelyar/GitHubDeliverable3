@@ -3,7 +3,7 @@
 
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
-<style>
+    <style>
 
      #requestContainer
        {
@@ -62,15 +62,7 @@ input[type="text"]:hover, #active
 
    
       
-    .auto-style1 {
-        width: 73%;
-    }
-
- 
-
-   
-      
-</style>
+    </style>
 
     <div id="requestContainer">
         <table id="requestTable">
@@ -121,8 +113,12 @@ input[type="text"]:hover, #active
                 </td>
                
                  <td>
-                    Lecture
-                </td>  
+                    Lecture<input type="radio" runat="server" style="width:10px; margin-left:5px;" /><br />
+                    Seminar<input type="radio" runat="server" style="width:10px; margin-left:5px;" /><br />
+                    Lab<input type="radio" runat="server" style="width:10px; margin-left:5px;" />
+
+                 </td>  
+
                 <td>
                     Wheelchair access
                 </td>

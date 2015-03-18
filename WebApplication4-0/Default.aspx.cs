@@ -59,7 +59,7 @@ namespace WebApplication4_0
                     {
                         Session["Username"] = username;
                         Session["LoggedIn"] = true;
-                        Response.Redirect("Admin.aspx");
+                        Response.Redirect("AdminFolder/Admin.aspx");
                         LoginErrorMessage.InnerHtml = "";   //no error message with successful password
                     }
                 }
