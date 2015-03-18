@@ -141,7 +141,10 @@
                          $('.slot').each(function () {
                              if (data[i] != "Blank")
                              {
-                                 $(this).html(data[i]).addClass('booking');
+                                 var innerData = data[i].split("|");
+                                 $(this).html(innerData[0] + '<span class="bookingSpan" >' + innerData[0] + '<br />' + innerData[1] + '<br />' + innerData[2] + '</span>').addClass('booking');
+                                 $('.bookingSpan').hide();
+                                 bookingHover();
                              }
                              else
                              {
@@ -153,6 +156,17 @@
                  });
              });
          });
+         function bookingHover()
+         {
+             $('.booking').mouseover(function () {
+                 var left = $(this).position().left + $(this).width();
+                 var top = $(this).position().top;
+                 $(this).find('span').show().css('top', top + 'px').css('left', left + 'px');
+             });
+             $('.booking').mouseout(function () {
+                 $(this).find('span').hide();
+             });
+         }
          function shrink() {
             $('.greyOut img').animate({
                 height: '5px',
@@ -395,6 +409,7 @@
             position: absolute;
             background-color: #3E454D;
             display:block;
+            padding:5px;
         }
         .greyOut
         {
