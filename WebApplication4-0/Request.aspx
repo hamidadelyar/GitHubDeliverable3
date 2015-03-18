@@ -58,7 +58,80 @@ input[type="text"]:hover, #active
     height:1px;
 }
 
- 
+   
+
+.divClass {
+	clear: both;
+	margin: 0;
+    width: 140px;
+}
+
+.divClass label {
+  width: 140px;
+  border-radius: 3px;
+  border: 1px solid #D1D3D4
+}
+
+/* hide input */
+.divClass input.radio:empty {
+	margin-left: -999px;
+    display: none;
+}
+
+/* style label */
+.divClass input.radio:empty ~ label {
+	position: relative;
+	float: left;
+	line-height: 2.5em;
+	text-indent: 3.25em;
+	margin-top: 2em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.divClass input.radio:empty ~ label:before {
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: '';
+	width: 2.5em;
+	background: #D1D3D4;
+	border-radius: 3px 0 0 3px;
+}
+
+/* toggle hover */
+.divClass input.radio:hover:not(:checked) ~ label:before {
+	content:'\03a7';
+	text-indent: .2em;
+	/*color: #C2C2C2;*/
+    color:#fff;
+}
+
+.divClass input.radio:hover:not(:checked) ~ label {
+	color: #888;
+}
+
+/* toggle on */
+.divClass input.radio:checked ~ label:before {
+	content:'\03a7'; /* this is the css symbol, e.g. X */
+	text-indent: .2em;
+	color: #9CE2AE;
+	background-color: #4DCB6D;
+}
+
+.divClass input.radio:checked ~ label {
+	color: #777;
+}
+
+/* radio focus */
+.divClass input.radio:focus ~ label:before {
+	box-shadow: 0 0 0 3px #999;
+}
 
    
       
@@ -113,14 +186,24 @@ input[type="text"]:hover, #active
                 </td>
                
                  <td>
-                    Lecture<input type="radio" runat="server" style="width:10px; margin-left:5px;" /><br />
-                    Seminar<input type="radio" runat="server" style="width:10px; margin-left:5px;" /><br />
-                    Lab<input type="radio" runat="server" style="width:10px; margin-left:5px;" />
+                     <div class="divClass">
+                         <input type="radio" name="radio" id="radioLecture" class="radio" checked runat="server"/> <!-- checked by default -->
+                         <label for="radioLecture">Lecture</label>
+                     </div>
+                     <div class="divClass">
+                         <input type="radio" name="radio" id="radioSeminar" class="radio" runat="server"/>
+                         <label for="radioSeminar">Seminar</label>
+                     </div>
+                      <div class="divClass">
+                         <input type="radio" name="radio" id="radioLab" class="radio" runat="server"/>
+                         <label for="radioLab">Lab</label>
+                     </div>
+                      
 
                  </td>  
 
                 <td>
-                    Wheelchair access
+                    
                 </td>
                
             </tr>

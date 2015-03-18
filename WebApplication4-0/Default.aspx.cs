@@ -44,7 +44,8 @@ namespace WebApplication4_0
                 conn.Close();
                 //gets rid of empty space, i.e. "admin ", now equals "admin"
                 string username = TextboxUsername.Text.Replace(" ", ""); //removes any spaces a user may accidently put after username
-                
+                username = username.ToLower();
+
                 if (password == TextboxPassword.Text)   //if password DOES match the username entered
                 {
                     
