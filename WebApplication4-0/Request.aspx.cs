@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using System.Web.Providers.Entities;
 
 namespace WebApplication4_0
 {
@@ -14,7 +15,7 @@ namespace WebApplication4_0
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         //automatically fills the modnameInput
@@ -34,10 +35,14 @@ namespace WebApplication4_0
             SqlCommand comm = new SqlCommand(query, conn);  //1st argument is query, 2nd argument is connection with DB
             if (comm.ExecuteScalar() != null)   //if it does return something
             {
+                string username = HttpContext.Current.Session["Username"].ToString();
                 string result = comm.ExecuteScalar().ToString();
                 // string result = comm.ExecuteScalar().ToString();
                 modname = result;
-
+                if (modcode.ToLower().Substring(0, 2) != username.ToLower().Substring(0, 2))   //if request is for module from another department
+                {
+                    modname = "Sorry, you do not have access to this module";
+                }
             }
             else //if it doesnt return anything, it means that there is no such module code, hence no such module name
             {
@@ -50,6 +55,7 @@ namespace WebApplication4_0
             return modname;
         }
 
+      
         [System.Web.Services.WebMethod]
         public static string ModnameToModcode(string modname)
         {
@@ -60,9 +66,14 @@ namespace WebApplication4_0
             SqlCommand comm2 = new SqlCommand(query, conn);  //1st argument is query, 2nd argument is connection with DB
             if (comm2.ExecuteScalar() != null)   //if it does return something
             {
+                string username = HttpContext.Current.Session["Username"].ToString();
                 string result = comm2.ExecuteScalar().ToString();
-                // string result = comm.ExecuteScalar().ToString();
+           
                 modcode = result;
+                if (modcode.ToLower().Substring(0, 2) != username.ToLower().Substring(0,2))   //if request is for module from another department
+                {
+                    modcode = "Sorry, you do not have access to this module";
+                }
 
             }
             else //if it doesnt return anything, it means that there is no such module code, hence no such module name
