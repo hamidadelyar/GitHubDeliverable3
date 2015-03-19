@@ -41,7 +41,7 @@ namespace WebApplication4_0
             data = serializer.Serialize(rows);
         }
         [System.Web.Services.WebMethod]
-        public static string SearchRoom(string room, int week)
+        public static string SearchRoom(string room, int week, int semester)
         {
             string modCode = "";
             for(int i = 1; i < 10; i++)
@@ -53,7 +53,7 @@ namespace WebApplication4_0
 
                     if(week < 13)
                     {
-                        string roomQuery = "SELECT Requests.Module_Code, Modules.Module_Title, Requests.Request_ID FROM Requests LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID WHERE Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')";
+                        string roomQuery = "SELECT Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time FROM Requests LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID WHERE Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester +" AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')";
                         using (SqlCommand command = new SqlCommand(roomQuery, conn))
                         {
                             SqlDataReader reader = command.ExecuteReader();
@@ -64,6 +64,7 @@ namespace WebApplication4_0
                                 string lects = "";
                                 string modID = reader.GetString(0);
                                 string modName = reader.GetString(1);
+                                int length = reader.GetByte(4) - reader.GetByte(3) + 1;
                                 reader.Close();
                                 using (SqlCommand commandLect = new SqlCommand(lectQuery, conn))
                                 {
@@ -74,11 +75,11 @@ namespace WebApplication4_0
                                     }
                                 }
                                 lects = lects.Remove(lects.Length - 1);
-                                modCode += modID + "|" + modCode + "|" + lects + ",";
+                                modCode += modID + "|" + modName + "|" + lects + "|" + length + ",";
                             }
                             else
                             {
-                                string roomQueryTwo = "SELECT Requests.Module_Code, Modules.Module_Title, Requests.Request_ID FROM Requests LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID WHERE Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Request_Weeks.Week_ID = " + week;
+                                string roomQueryTwo = "SELECT Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time FROM Requests LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID WHERE Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester + " AND Request_Weeks.Week_ID = " + week;
                                 using (SqlCommand commandTwo = new SqlCommand(roomQueryTwo, conn))
                                 {
                                     reader.Close();
@@ -90,6 +91,7 @@ namespace WebApplication4_0
                                         string lects = "";
                                         string modID = readerTwo.GetString(0);
                                         string modName = readerTwo.GetString(1);
+                                        int length = readerTwo.GetByte(4) - readerTwo.GetByte(3) + 1;
                                         readerTwo.Close();
                                         using (SqlCommand commandLect = new SqlCommand(lectQuery, conn))
                                         {
@@ -100,7 +102,7 @@ namespace WebApplication4_0
                                             }
                                         }
                                         lects = lects.Remove(lects.Length - 1);
-                                        modCode += modID + "|" + modName + "|" + lects + ",";
+                                        modCode += modID + "|" + modName + "|" + lects + "|" + length + ",";
                                     }
                                     else
                                     {
