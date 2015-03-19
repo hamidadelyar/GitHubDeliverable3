@@ -137,6 +137,66 @@ input[type="text"]:hover, #active
       
     </style>
 
+
+
+
+    <script type="text/javascript">
+       
+   
+
+        $(document).ready(function () {
+
+            //on any input for the modcode, the data is sent to the c# function. This performs query on server and sends back data.
+            //returns relevant modname depending on modcode entered
+            $('#MainContent_modcodeInput').on('input propertychange paste', function () {
+                var modcode = $('#MainContent_modcodeInput').val();
+                //var modname = $('#MainContent_modnameInput').val();
+                //var dataInput = "{modcode: " + modcode + "}";
+       
+                $.ajax({
+                    type: "POST",
+                    url: "Request.aspx/ModcodeToModname",
+                    data: JSON.stringify({ modcode: modcode}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        document.getElementById('MainContent_modnameInput').value = result.d;   //have to write as result.d for some reason
+                    }
+                });
+            });
+
+            //on any input to modname, tries to find relevant modcode and updates modcode input
+            //does same thing as function above, but for modname
+            $('#MainContent_modnameInput').on('input propertychange paste', function () {
+                var modname = $('#MainContent_modnameInput').val();
+               
+                $.ajax({
+                    type: "POST",
+                    url: "Request.aspx/ModnameToModcode",
+                    data: JSON.stringify({ modname: modname }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        document.getElementById('MainContent_modcodeInput').value = result.d;   //have to write as result.d for some reason
+                    }
+                });
+            });
+
+
+        });
+
+       
+      
+      
+        
+    </script>
+
     <div id="requestContainer">
         <table id="requestTable">
             <tr>
@@ -163,6 +223,7 @@ input[type="text"]:hover, #active
                 </td>
                 <td>
                      <asp:TextBox ID="capacityInput" runat="server"></asp:TextBox>
+                    
                 </td>
             </tr>
 
@@ -187,15 +248,15 @@ input[type="text"]:hover, #active
                
                  <td>
                      <div class="divClass">
-                         <input type="radio" name="radio" id="radioLecture" class="radio" checked runat="server"/> <!-- checked by default -->
+                         <input type="radio" name="radio" id="radioLecture" class="radio" checked onclick =""> <!-- checked by default -->
                          <label for="radioLecture">Lecture</label>
                      </div>
                      <div class="divClass">
-                         <input type="radio" name="radio" id="radioSeminar" class="radio" runat="server"/>
+                         <input type="radio" name="radio" id="radioSeminar" class="radio"/>
                          <label for="radioSeminar">Seminar</label>
                      </div>
                       <div class="divClass">
-                         <input type="radio" name="radio" id="radioLab" class="radio" runat="server"/>
+                         <input type="radio" name="radio" id="radioLab" class="radio"/>
                          <label for="radioLab">Lab</label>
                      </div>
                       
@@ -203,7 +264,7 @@ input[type="text"]:hover, #active
                  </td>  
 
                 <td>
-                    
+                    <p id="testpara" runat="server"></p>
                 </td>
                
             </tr>
