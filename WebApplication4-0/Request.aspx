@@ -25,6 +25,16 @@
             color:#3E454D;
         }
 
+ 
+     #preferenceTable{
+            margin-left:2.5%;
+            width:95%;
+            height:90%;
+            table-layout:fixed;
+            text-align:center;
+            color:#3E454D;
+     }
+/*
 input[type="text"]{
 	padding: 9px;
 	width: 90%;
@@ -50,11 +60,40 @@ input[type="text"]:hover, #active
 	border:2px solid #609EC3;
 	outline:none;
 }
+*/
 
+input[type="text"]{
+	padding: 9px;
+	width: 90%;
+	font-size: 1.1em;
+	margin: 18px 0px;
+	border-bottom: 4px solid #ff8060;
+    border-top: 4px solid #ff8060;
+	color: #666666;
+	background:white;
+	font-family: 'Open Sans', sans-serif;
+	font-weight:600;
+	margin-left: 5px;
+	outline:none;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+
+input[type="text"]:hover, #active, input[type="text"]:focus
+{
+	background:#fff;
+	border-bottom:4px solid #609EC3;
+    border-top:4px solid #609EC3;
+
+	outline:none;
+}
 .line{
     background: #3E454D;
     float:left;
-    width:100%;
+    width:103%;
     height:1px;
 }
 
@@ -172,6 +211,30 @@ left: -15px;
 top: 10px;
 }
 
+.styled-select select {
+   background: transparent;
+   width: 130%;
+   padding: 5px;
+   font-size: 1em;
+   line-height: 1;
+   border: 0;
+   border-radius: 0;
+   height: 34px;
+   -webkit-appearance: none;
+   font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+   }
+
+.styled-select {
+   width: 105%;
+   height: 40px;
+   overflow: hidden;
+   background: url(Images/arrow.png) no-repeat right white;
+   border: 2px solid #D1D3D4;
+   border-radius:6px;
+   }
+
+
+
    
       
     </style>
@@ -228,6 +291,16 @@ top: 10px;
             });
 
 
+            $('#preferencesButton').click(function () {
+                document.getElementById("requestTable").style.display = "none";
+                document.getElementById("preferenceTable").style.display = "";
+            });
+            $('#preferencesDoneButton').click(function () {
+                document.getElementById("requestTable").style.display = "";
+                document.getElementById("preferenceTable").style.display = "none";
+            });
+           
+
         });
 
        
@@ -243,16 +316,24 @@ top: 10px;
                     <b>MODULE DETAILS</b>
                 </td>
             </tr>
+
+              <!-- line seperator-->
+            <tr>
+                <td colspan="6">
+                    <div class="line"></div>
+                </td>
+            </tr>
+
             <tr>
                 <!-- module code input with validator-->
                 <td>
                     <asp:Label ID="modcodeLabel" runat="server" Text="MODULE CODE" ToolTip="Enter a module code i.e. COA123"></asp:Label>
                 </td>
                 <td>
-                    <asp:TextBox ID="modcodeInput" runat="server"></asp:TextBox>
+                    <asp:TextBox ID="modcodeInput" style="width:110%;" runat="server"></asp:TextBox>
                 </td>
                 <td>
-                    <div id="modcodeFieldValidator" class="bubble" style="margin-left:-5px;">Please enter a module code</div>
+                    <div id="modcodeFieldValidator" style="display:none;" class="bubble" style="margin-left:-5px;">Please enter a module code</div> <!-- temporarily hidden -->
                 </td>
 
                 <!-- module name input with validator-->
@@ -263,7 +344,7 @@ top: 10px;
                     <asp:TextBox ID="modnameInput" runat="server" style="width:135%;"></asp:TextBox>
                 </td>
                 <td>
-                    <div id="modnameFieldValidator" class="bubble">Please enter a module name</div>
+                    <div id="modnameFieldValidator" style="display:none;" class="bubble">Please enter a module name</div> <!-- temporarily hidden -->
                 </td>
             </tr>
             <tr>
@@ -278,13 +359,76 @@ top: 10px;
                 </td>
             </tr>
 
-            <!-- line seperator-->
+          
+
             <tr>
-                <td colspan="6">
-                    <div class="line"></div>
+                <td>
+                    <asp:Label ID="daySelectLabel" runat="server" Text="DAY"></asp:Label>
+                </td>
+                <td>
+                    <div class="styled-select">
+                        <select id="daySelect">
+                            <option value="1">Monday</option>
+                            <option value="2">Tuesday</option>
+                            <option value="3">Wednesday</option>
+                            <option value="4">Thursday</option>
+                            <option value="5">Friday</option>
+                        </select>
+                    </div>
+                </td>
+
+                <td>
+                    <asp:Label ID="Label1" runat="server" Text="Start Time"></asp:Label>
+                </td>
+                <td>
+                    <div class="styled-select">
+                        <select>
+                            <option>09:00</option>
+                            <option>10:00</option>
+                            <option>11:00</option>
+                            <option>12:00</option>
+                            <option>13:00</option>
+                            <option>14:00</option>
+                            <option>15:00</option>
+                            <option>16:00</option>
+                            <option>17:00</option>
+                        </select>
+                    </div>
+                </td>
+
+                <td>
+                    <asp:Label ID="startTimeSelectLabel" runat="server" Text="End Time"></asp:Label>
+                </td>
+                <td>
+                    <div class="styled-select">
+                        <select>
+                            <option>10:00</option>
+                            <option>11:00</option>
+                            <option>12:00</option>
+                            <option>13:00</option>
+                            <option>14:00</option>
+                            <option>15:00</option>
+                            <option>16:00</option>
+                            <option>17:00</option>
+                            <option>18:00</option>
+                        </select>
+                    </div>
                 </td>
             </tr>
 
+         
+
+           
+            <tr>
+                <td colspan="6">
+                    <input type="button" id="preferencesButton" value="Preferences"/>
+                </td>
+            </tr>
+         </table>
+
+        <!-- preference table -->
+
+        <table id="preferenceTable" style="display:none">
             <!-- Facility section -->
             <tr>
                 <td>
@@ -292,14 +436,14 @@ top: 10px;
                 </td>
             </tr>
 
-            <tr style="height:100px">
+             <tr>
                 <td>
                     <asp:Label ID="roomType" runat="server" Text="ROOM TYPE" ToolTip="Select the room type you would like to book"></asp:Label>
                 </td>
                
                  <td>
                      <div class="divClass">
-                         <input type="radio" name="radio" id="radioLecture" class="radio" checked onclick =""> <!-- checked by default -->
+                         <input type="radio" name="radio" id="radioLecture" class="radio" checked> <!-- checked by default -->
                          <label for="radioLecture">Lecture</label>
                      </div>
                      <div class="divClass">
@@ -310,23 +454,19 @@ top: 10px;
                          <input type="radio" name="radio" id="radioLab" class="radio"/>
                          <label for="radioLab">Lab</label>
                      </div>
-                      
-
                  </td>  
 
                 <td>
-                    <p id="testpara" runat="server"></p>
-                    <asp:Button ID="Button1" runat="server" Text="Button" />
+                   
                 </td>
-               
             </tr>
 
-
-            
-                
-
-
-         </table>
+            <tr>
+                <td colspan="6">
+                    <input type="button" id="preferencesDoneButton" value="Done" />
+                </td>
+            </tr>
+        </table>
         
     </div>
     

@@ -22,7 +22,6 @@ namespace WebApplication4_0
         protected void modcodeInput_TextChanged(object sender, EventArgs e)
         {
             
-            testpara.InnerHtml = "blah";
         }
 
         [System.Web.Services.WebMethod]
