@@ -133,6 +133,45 @@ input[type="text"]:hover, #active
 	box-shadow: 0 0 0 3px #999;
 }
 
+.circle{
+   
+}
+
+/*
+#MainContent_RequiredFieldValidator1{
+    font-size:2em;
+    text-align:center;
+    cursor:pointer;
+}
+*/
+.bubble
+{
+position: relative;
+width: 130%;
+height: 50px;
+padding: 0px;
+background: #ff8060;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+margin-left:50px;
+color:white;
+}
+
+.bubble:after
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 15px 15px 15px 0;
+border-color: transparent #ff8060;
+display: block;
+width: 0;
+z-index: 1;
+left: -15px;
+top: 10px;
+}
+
    
       
     </style>
@@ -205,25 +244,37 @@ input[type="text"]:hover, #active
                 </td>
             </tr>
             <tr>
+                <!-- module code input with validator-->
                 <td>
                     <asp:Label ID="modcodeLabel" runat="server" Text="MODULE CODE" ToolTip="Enter a module code i.e. COA123"></asp:Label>
                 </td>
                 <td>
                     <asp:TextBox ID="modcodeInput" runat="server"></asp:TextBox>
                 </td>
+                <td>
+                    <div id="modcodeFieldValidator" class="bubble" style="margin-left:-5px;">Please enter a module code</div>
+                </td>
 
+                <!-- module name input with validator-->
                 <td>
                     <asp:Label ID="modnameLabel" runat="server" Text="MODULE NAME" ToolTip="Enter a module name i.e. Server Side Programming"></asp:Label>
                 </td>
                 <td>
-                    <asp:TextBox ID="modnameInput" runat="server"></asp:TextBox>
+                    <asp:TextBox ID="modnameInput" runat="server" style="width:135%;"></asp:TextBox>
                 </td>
+                <td>
+                    <div id="modnameFieldValidator" class="bubble">Please enter a module name</div>
+                </td>
+            </tr>
+            <tr>
                 <td>
                     <asp:Label ID="capacityLabel" runat="server" Text="CAPACITY" ToolTip="Enter total number of students on the module"></asp:Label>
                 </td>
                 <td>
                      <asp:TextBox ID="capacityInput" runat="server"></asp:TextBox>
-                    
+                </td>
+                <td>   
+                     <asp:RangeValidator ID="RangeValidator1" runat="server" ControlToValidate="capacityInput" ErrorMessage="Please enter a number within the range 5-500" ForeColor="Red" MaximumValue="500" MinimumValue="5" SetFocusOnError="True"></asp:RangeValidator>
                 </td>
             </tr>
 
@@ -265,6 +316,7 @@ input[type="text"]:hover, #active
 
                 <td>
                     <p id="testpara" runat="server"></p>
+                    <asp:Button ID="Button1" runat="server" Text="Button" />
                 </td>
                
             </tr>
