@@ -75,7 +75,7 @@
 
         <div class="updatesHolder">
             <h2 class="white" align="center">New Requests:</h2>
-            <p class="white" align="center">There are currently no new request results.</p>
+            <p class="white" align="center">There are currently no new requests.</p>
             <br />
             <br />
         </div>
