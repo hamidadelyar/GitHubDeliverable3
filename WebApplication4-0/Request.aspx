@@ -3,6 +3,9 @@
 
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script src="Scripts/jquery-ui-1.8.24.min.js" type="text/javascript"></script>
+   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <style>
 
      #requestContainer
@@ -23,6 +26,7 @@
             table-layout:fixed;
             text-align:center;
             color:#3E454D;
+
         }
 
  
@@ -34,7 +38,7 @@
             text-align:center;
             color:#3E454D;
      }
-/*
+
 input[type="text"]{
 	padding: 9px;
 	width: 90%;
@@ -60,8 +64,10 @@ input[type="text"]:hover, #active
 	border:2px solid #609EC3;
 	outline:none;
 }
-*/
 
+
+/*
+    orange
 input[type="text"]{
 	padding: 9px;
 	width: 90%;
@@ -90,6 +96,8 @@ input[type="text"]:hover, #active, input[type="text"]:focus
 
 	outline:none;
 }
+
+    */
 .line{
     background: #3E454D;
     float:left;
@@ -129,6 +137,8 @@ input[type="text"]:hover, #active, input[type="text"]:focus
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+    font-family:"Segoe UI",Verdana,Helvetica,sans-serif;
+    font-size:0.85em; /* sets size of the actual label */
 }
 
 .divClass input.radio:empty ~ label:before {
@@ -222,6 +232,7 @@ top: 10px;
    height: 34px;
    -webkit-appearance: none;
    font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+   cursor: pointer;
    }
 
 .styled-select {
@@ -233,8 +244,26 @@ top: 10px;
    border-radius:6px;
    }
 
+label{
+    
+}
 
-
+.ui-autocomplete {
+            max-height: 150px;
+            overflow-y: auto;
+            /* prevent horizontal scrollbar */
+            overflow-x: hidden;
+            /* add padding to account for vertical scrollbar */
+            padding-right: 20px;
+            max-width: 200px;
+    }
+    /* IE 6 doesn't support max-height
+     * we use height instead, but this forces the menu to always be this tall
+     */
+* html .ui-autocomplete {
+      height: 100px;
+      width: 2000px;
+ }
    
       
     </style>
@@ -250,8 +279,8 @@ top: 10px;
 
             //on any input for the modcode, the data is sent to the c# function. This performs query on server and sends back data.
             //returns relevant modname depending on modcode entered
-            $('#MainContent_modcodeInput').on('input propertychange paste', function () {
-                var modcode = $('#MainContent_modcodeInput').val();
+            $('#modcodeInput').on('input propertychange paste click focusout', function () {
+                var modcode = $('#modcodeInput').val();
                 //var modname = $('#MainContent_modnameInput').val();
                 //var dataInput = "{modcode: " + modcode + "}";
        
@@ -265,15 +294,16 @@ top: 10px;
                         alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
                     },
                     success: function (result) {
-                        document.getElementById('MainContent_modnameInput').value = result.d;   //have to write as result.d for some reason
+                        document.getElementById('modnameInput').value = result.d;   //have to write as result.d for some reason
                     }
                 });
             });
 
             //on any input to modname, tries to find relevant modcode and updates modcode input
             //does same thing as function above, but for modname
-            $('#MainContent_modnameInput').on('input propertychange paste', function () {
-                var modname = $('#MainContent_modnameInput').val();
+            $('#modnameInput').on('input propertychange paste click focusout', function () {
+              
+                var modname = $('#modnameInput').val();
                
                 $.ajax({
                     type: "POST",
@@ -285,10 +315,12 @@ top: 10px;
                         alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
                     },
                     success: function (result) {
-                        document.getElementById('MainContent_modcodeInput').value = result.d;   //have to write as result.d for some reason
+                        document.getElementById('modcodeInput').value = result.d;   //have to write as result.d for some reason
                     }
                 });
-            });
+           });
+
+           
 
 
             $('#preferencesButton').click(function () {
@@ -301,7 +333,54 @@ top: 10px;
             });
            
 
+
+            //autocomplete function for module name
+            //minimum number of characters = 3, before search begins
+            $("#modnameInput").autocomplete({minLength:3},{
+                
+                source: function (request, response) {
+                    
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "Request.aspx/GetModnames",
+                        data: "{'term':'" + $("#modnameInput").val() + "'}",
+                        dataType: "json",
+                        success: function (data) {
+                            response(data.d); 
+                        },
+                        error: function (result) {
+                            alert("Error");
+                        }
+                    });
+                }
+            });
+
+
+            //autocomplete function for module code
+            //minimum number of characters = 2, before search begins
+            $("#modcodeInput").autocomplete({ minLength: 2 }, {
+
+                source: function (request, response) {
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "Request.aspx/GetModcodes",
+                        data: "{'term':'" + $("#modcodeInput").val() + "'}",
+                        dataType: "json",
+                        success: function (data) {
+                            response(data.d);
+                        },
+                        error: function (result) {
+                            alert("Error");
+                        }
+                    });
+                }
+            });
         });
+
+
 
        
       
@@ -327,29 +406,35 @@ top: 10px;
             <tr>
                 <!-- module code input with validator-->
                 <td>
-                    <asp:Label ID="modcodeLabel" runat="server" Text="MODULE CODE" ToolTip="Enter a module code i.e. COA123"></asp:Label>
+                   <asp:Label ID="modcodeLabel" ToolTip="Enter a module code i.e. COA123" runat="server" Text="MODULE CODE" ></asp:Label>
                 </td>
                 <td>
-                    <asp:TextBox ID="modcodeInput" style="width:110%;" runat="server"></asp:TextBox>
+                    <input type="text" ID="modcodeInput" style="width:200%;"/>
+               
                 </td>
+      
+                  <!--  <div id="modcodeFieldValidator" style="display:none;" class="bubble" style="margin-left:-5px;">Please enter a module code</div>
+                       <div id="modnameFieldValidator" style="display:none;" class="bubble">Please enter a module name</div> <!-- temporarily hidden  -->
+              
                 <td>
-                    <div id="modcodeFieldValidator" style="display:none;" class="bubble" style="margin-left:-5px;">Please enter a module code</div> <!-- temporarily hidden -->
+                    <!--empty -->
                 </td>
-
                 <!-- module name input with validator-->
                 <td>
-                    <asp:Label ID="modnameLabel" runat="server" Text="MODULE NAME" ToolTip="Enter a module name i.e. Server Side Programming"></asp:Label>
+                   <!-- <label ID="modnameLabel"  for="modnameInput" title="Enter a module name i.e. Server Side Programming">MODULE NAME</label>-->
+                   <asp:Label ID="modnameLabel" runat="server" Text="MODULE NAME" ToolTip="Enter a module name i.e. Server Side Programming"></asp:Label>
                 </td>
                 <td>
-                    <asp:TextBox ID="modnameInput" runat="server" style="width:135%;"></asp:TextBox>
+                    <input type="text" ID="modnameInput" style="width:200%;"/>
+                    <!--<asp:TextBox ID="modnameInput" runat="server" style="width:135%;"></asp:TextBox>-->
                 </td>
                 <td>
-                    <div id="modnameFieldValidator" style="display:none;" class="bubble">Please enter a module name</div> <!-- temporarily hidden -->
+                    <!-- empty -->
                 </td>
             </tr>
             <tr>
                 <td>
-                    <asp:Label ID="capacityLabel" runat="server" Text="CAPACITY" ToolTip="Enter total number of students on the module"></asp:Label>
+                    <asp:Label ID="capacityLabel" for="capacityInput" runat="server" Text="CAPACITY" ToolTip="Enter total number of students on the module"></asp:Label>
                 </td>
                 <td>
                      <asp:TextBox ID="capacityInput" runat="server"></asp:TextBox>

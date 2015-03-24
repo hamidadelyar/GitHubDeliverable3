@@ -22,15 +22,6 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label modcodeLabel;
         
         /// <summary>
-        /// modcodeInput control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox modcodeInput;
-        
-        /// <summary>
         /// modnameLabel control.
         /// </summary>
         /// <remarks>
