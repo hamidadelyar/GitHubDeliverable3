@@ -491,9 +491,23 @@
             margin-left:-35px;
             margin-top:-35px;
         }
+        .switchView
+        {
+            float:right;
+            padding:10px;
+            color:#FFFFFF;
+            background-color:#3E454D;
+            border-radius:10px;
+            font-weight:bold;
+            cursor:pointer;
+        }
+        .switchView:hover
+        {
+            background-color:#2B3036;
+        }
         .whiteSpace
         {
-            height:50px;
+            height:30px;
             width:100%;
             float:left;
         }
@@ -616,7 +630,8 @@
             <table class="suggestTbl">
             </table>
         </div>
-        <div class="semesters" ><b>SEMESTERS</b><br /><span class="semOne semBtn" >One</span><span class="splitter" ></span><span class="semTwo semBtn" >Two</span></div>
+        <div class="semesters" ><b>SEMESTERS</b><br /><span class="semOne semBtn" >ONE</span><span class="splitter" ></span><span class="semTwo semBtn" >TWO</span></div>
     </div>
     <div class="whiteSpace" ></div>
+    <div class="switchView" onclick="window.location.href = 'FindRoom.aspx'" >FIND FREE ROOM <img src="/Images/RightArrow.png" height="11" width="6" /></div>
 </asp:Content>
