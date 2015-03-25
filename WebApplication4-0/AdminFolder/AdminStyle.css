@@ -1,0 +1,60 @@
+﻿        .contentHolder
+        {
+            margin-top:50px;
+            width:100%;
+            height:600px;
+            border-top-left-radius:10px;
+            border-top-right-radius:10px;
+            border-bottom-left-radius:10px;
+            border-bottom-right-radius:10px;
+            background-color:#FFF;
+            float:left;
+        }
+
+        .updatesHolder
+        {
+            margin-top:10px;
+            padding-top:10px;
+            width:100%;
+            background-color:#3E454D;
+        }
+        #progressbar{
+            width:94%;
+            margin-left:3%;
+            margin-right:3%;
+            margin-bottom:15px;
+        }
+
+        .ui-progressbar-value{
+            background:#79A2B8;
+        }
+
+        #newsTable{
+            
+            margin: 10px 20% 10px 20%;
+            width:60%;
+
+        }
+
+        
+
+        .white{
+            color:white;
+        }
+
+        .leftBorder{
+            border-left: 1px solid black; 
+        }
+
+        h1{
+            margin-bottom:10px;
+           
+        }
+
+        h2 {
+            margin-top:0px;
+        }
+
+        #containerTable{
+            width:100%;
+        }
