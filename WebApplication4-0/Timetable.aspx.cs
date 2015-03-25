@@ -13,15 +13,22 @@ namespace WebApplication4_0
     public partial class Timetable : System.Web.UI.Page
     {
         static SqlConnection conn;
-        DataTable dt = new DataTable();
         public String data = "";
         protected void Page_Load(object sender, EventArgs e)
         {
+            data = Select("Rooms", "Room_ID", "1=1", "");
+        }
+        
+        public static string Select(string table, string columns, string where, string leftJoin)
+        {
+            SqlConnection conn;
+            DataTable dt = new DataTable();
+            string result = "";
             //where "myConnectionString" is the connection string in the web.config file
             conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             conn.Open(); //opening connection with the DB
             //prepare query
-            string roomQuery = "Select Room_ID FROM Rooms WHERE 1 = 1";   //deptName is deptCode for some reason in the DB, vice versa
+            string roomQuery = "Select "+columns+" FROM "+table+" "+leftJoin+" WHERE "+where;   //deptName is deptCode for some reason in the DB, vice versa
             SqlCommand comm = new SqlCommand(roomQuery, conn);  //1st argument is query, 2nd argument is connection with DB
 
             SqlDataAdapter da = new SqlDataAdapter(comm);
@@ -38,39 +45,90 @@ namespace WebApplication4_0
                 }
                 rows.Add(row);
             }
-            data = serializer.Serialize(rows);
+            return result = serializer.Serialize(rows);
         }
         [System.Web.Services.WebMethod]
-        public static string SearchRoom(string room, int week)
+        public static string SearchRoom(string room, int week, int semester)
         {
-            string modCode = "";
+            string modSel = "";
+            string retData = "";
             for(int i = 1; i < 10; i++)
             {
                 for(int j = 1; j < 6; j++)
                 {
-                    conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
-                    conn.Open(); //opening connection with the DB
-
                     if(week < 13)
                     {
-                        string roomQuery = "SELECT Requests.Module_Code FROM Requests LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID WHERE Requests.Start_Time = " + j + " AND Requests.Day = " + i + " AND Request_Preferences.Room_ID = '" + room + "' AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')";
+                        retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time", "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester + " AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')", "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID");
+                        if (retData == "[]")
+                        {
+                            string where = "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester + " AND Request_Weeks.Week_ID = " + week;
+                            string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID";
+                            retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time", where, leftJoin);
+                            if(retData != "[]")
+                            {
+                                retData = retData.Substring(1, retData.Length - 2);
+                                modSel += "," + retData;
+                            }
+                            else
+                            {
+                                modSel += "," + "BLANK";
+                            }
+                        }
+                        else
+                        {
+                            retData = retData.Substring(1, retData.Length - 2);
+                            modSel += "," + retData;
+                        }
+                        /*
                         using (SqlCommand command = new SqlCommand(roomQuery, conn))
                         {
                             SqlDataReader reader = command.ExecuteReader();
                             if (reader.Read())
                             {
-                                modCode += reader.GetString(0) + ",";
+                                int ReqId = reader.GetInt32(2);
+                                string lectQuery = "SELECT Lecturer_Name FROM Lecturers LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID WHERE Request_Lecturers.Request_ID = " + ReqId;
+                                string lects = "";
+                                string modID = reader.GetString(0);
+                                string modName = reader.GetString(1);
+                                int length = reader.GetByte(4) - reader.GetByte(3) + 1;
+                                reader.Close();
+                                using (SqlCommand commandLect = new SqlCommand(lectQuery, conn))
+                                {
+                                    SqlDataReader readerLect = commandLect.ExecuteReader();
+                                    if (readerLect.Read())
+                                    {
+                                        lects += readerLect.GetString(0) + ",";
+                                    }
+                                }
+                                lects = lects.Remove(lects.Length - 1);
+                                modCode += modID + "|" + modName + "|" + lects + "|" + length + ",";
                             }
                             else
                             {
-                                string roomQueryTwo = "SELECT Requests.Module_Code FROM Requests LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID WHERE Requests.Start_Time = " + j + " AND Requests.Day = " + i + " AND Request_Preferences.Room_ID = '" + room + "' AND Request_Weeks.Week_ID = " + week;
+                                string roomQueryTwo = "SELECT Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time FROM Requests LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID WHERE Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester + " AND Request_Weeks.Week_ID = " + week;
                                 using (SqlCommand commandTwo = new SqlCommand(roomQueryTwo, conn))
                                 {
                                     reader.Close();
                                     SqlDataReader readerTwo = commandTwo.ExecuteReader();
                                     if (readerTwo.Read())
                                     {
-                                        modCode += readerTwo.GetString(0) + ",";
+                                        int ReqId = readerTwo.GetInt32(2);
+                                        string lectQuery = "SELECT Lecturer_Name FROM Lecturers LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID WHERE Request_Lecturers.Request_ID = " + ReqId;
+                                        string lects = "";
+                                        string modID = readerTwo.GetString(0);
+                                        string modName = readerTwo.GetString(1);
+                                        int length = readerTwo.GetByte(4) - readerTwo.GetByte(3) + 1;
+                                        readerTwo.Close();
+                                        using (SqlCommand commandLect = new SqlCommand(lectQuery, conn))
+                                        {
+                                            SqlDataReader readerLect = commandLect.ExecuteReader();
+                                            if (readerLect.Read())
+                                            {
+                                                lects += readerLect.GetString(0) + ",";
+                                            }
+                                        }
+                                        lects = lects.Remove(lects.Length - 1);
+                                        modCode += modID + "|" + modName + "|" + lects + "|" + length + ",";
                                     }
                                     else
                                     {
@@ -78,18 +136,11 @@ namespace WebApplication4_0
                                     }
                                 }
                             }
-                        }
-
-
+                            */
                     }
-
-                    conn.Close();
                 }
             }
-            modCode = modCode.Remove(modCode.Length - 1);
-            modCode += "";
-
-            return modCode;
+        return modSel;
         }
     }
 }

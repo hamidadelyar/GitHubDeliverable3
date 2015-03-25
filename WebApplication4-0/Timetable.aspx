@@ -8,7 +8,8 @@
      <script>
          var weeksArray = ["", "WEEK ONE", "WEEK TWO", "WEEK THREE", "WEEK FOUR", "WEEK FIVE", "WEEK SIX", "WEEK SEVEN", "WEEK EIGHT", "WEEK NINE", "WEEK TEN", "WEEK ELEVEN", "WEEK TWELVE", "WEEK THIRTEEN", "WEEK FOURTEEN", "WEEK FIFTEEN", ""];
          var currWeek = 1;
-         var roomsArray = <%= this.data %>;
+         var semester = 1;
+         var roomsArray = <%= this.data %> ;
          var showing = false;
          $(document).ready(function () {
              $('.greyOut').hide();
@@ -53,6 +54,8 @@
                  $('.semesters').hide();
                  $('.suggestTbl').css('display', 'block');
                  $('.suggestTbl').height(420);
+                 $('.suggestTbl').width('100%');
+                 $('.suggestTbl td').width($('.suggestTbl').width());
              });
              $('.roomTxt').on('input propertychange paste', function () {
                  $('.suggestTbl').html('');
@@ -61,6 +64,7 @@
                      var searchTxt = roomsArray[i]['Room_ID'].split('.').join('');
                      if (roomTxt == searchTxt.substring(0, roomTxt.length)) {
                          $('.suggestTbl').append("<tr><td>" + roomsArray[i]['Room_ID'] + "</td></tr>");
+                         $('.suggestTbl td').width($('.suggestTbl').width());
                          $('.suggestTbl td').click(function () {
                              $('.suggestTbl').hide();
                              $('.semesters').show();
@@ -85,12 +89,14 @@
                      var searchTxt = roomsArray[i]['Room_ID'].split('.').join('');
                      if (roomTxt == searchTxt.substring(0, roomTxt.length)) {
                          $('.suggestTbl').append("<tr><td>" + roomsArray[i]['Room_ID'] + "</td></tr>");
+                         $('.suggestTbl td').width($('.suggestTbl').width());
                          $('.suggestTbl td').click(function () {
                              $('.suggestTbl').hide();
                              $('.roomTxt').val($(this).html());
                          })
                      }
                  }
+                 getBooking();
              });
              $('.rooms img').click(function () {
                  $('.roomTxt').val("");
@@ -100,6 +106,7 @@
                      var searchTxt = roomsArray[i]['Room_ID'].split('.').join('');
                      if (roomTxt == searchTxt.substring(0, roomTxt.length)) {
                          $('.suggestTbl').append("<tr><td>" + roomsArray[i]['Room_ID'] + "</td></tr>");
+                         $('.suggestTbl td').width($('.suggestTbl').width());
                          $('.suggestTbl td').click(function () {
                              $('.suggestTbl').hide();
                              $('.semesters').show();
@@ -107,6 +114,7 @@
                          })
                      }
                  }
+                 getBooking();
              });
              $('.booking').mouseover(function () {
                  var left = $(this).position().left + $(this).width();
@@ -117,42 +125,82 @@
                  $(this).find('span').hide();
              });
              $('.weekBtn').click(function () {
-                 $('.greyOut').show();
-                 showing = true;
-                 shrink();
-                 var room = $('.roomTxt').val();
-                 var week = currWeek;
-                 $.ajax({
-                     type: "POST",
-                     url: "Timetable.aspx/SearchRoom",
-                     data: JSON.stringify({room: room, week: week}),
-                     contentType: "application/json; charset=utf-8",
-                     dataType: "json",
-                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                         alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
-                     },
-                     success: function (result) {
-                         $('.greyOut').hide();
-                         showing = false;
-                         finAnim();
-                         var bookings = result.d;
-                         var data = bookings.split(",");
-                         var i = 0;
-                         $('.slot').each(function () {
-                             if (data[i] != "Blank")
-                             {
-                                 $(this).html(data[i]).addClass('booking');
-                             }
-                             else
-                             {
-                                 $(this).html('').removeClass('booking');
-                             }
-                             i++;
-                         })
-                     }
-                 });
+                 getBooking();
+             });
+             $('.semOne').click(function(){
+                 semester = 1;
+                 getBooking();
+                 $(this).css('background-color', '#FF8060');
+                 $('.semTwo').css('background-color', '#2B3036')
+             });
+             $('.semTwo').click(function(){
+                 semester = 2;
+                 getBooking();
+                 $(this).css('background-color', '#FF8060');
+                 $('.semOne').css('background-color', '#2B3036')
              });
          });
+         function getBooking()
+         {
+             $('.greyOut').show();
+             showing = true;
+             shrink();
+             var room = $('.roomTxt').val();
+             var week = currWeek;
+             $.ajax({
+                 type: "POST",
+                 url: "Timetable.aspx/SearchRoom",
+                 data: JSON.stringify({room: room, week: week, semester:semester}),
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 error: function (XMLHttpRequest, textStatus, errorThrown) {
+                     alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                 },
+                 success: function (result) {
+                     /*$('.greyOut').hide();
+                     showing = false;
+                     finAnim();
+                     var bookings = result.d;
+                     var data = bookings.split(",");
+                     var i = 0;
+                     $('.slot').each(function () {
+                         if (data[i] != "Blank")
+                         {
+                             var innerData = data[i].split("|");
+                             $(this).html(innerData[0] + '<span class="bookingSpan" >' + innerData[0] + '<br />' + innerData[1] + '<br />' + innerData[2] + '</span>').addClass('booking');
+                             var cellIndex = $(this).index();
+                             var $currCell = $(this);
+                             for(var j = 0; j < innerData[3]-1; j++)
+                             {
+                                 $currCell =  $currCell.closest('tr').next().children().eq(cellIndex)
+                                 $currCell.hide();
+                             }
+                             $(this).attr('rowSpan', innerData[3]);
+                             $('.bookingSpan').hide();
+                             bookingHover();
+                         }
+                         else
+                         {
+                             $(this).html('').removeClass('booking');
+                         }
+                         i++;
+                     })
+                     */
+                     alert(result.d);
+                 }
+             });
+         }
+         function bookingHover()
+         {
+             $('.booking').mouseover(function () {
+                 var left = $(this).position().left + $(this).width();
+                 var top = $(this).position().top;
+                 $(this).find('span').show().css('top', top + 'px').css('left', left + 'px');
+             });
+             $('.booking').mouseout(function () {
+                 $(this).find('span').hide();
+             });
+         }
          function shrink() {
             $('.greyOut img').animate({
                 height: '5px',
@@ -283,9 +331,38 @@
             font-size:1.4em;
             color:#FFF;
         }
+        .options
+        {
+            cursor:default;
+        }
+        .roomChoice
+        {
+            cursor:pointer;
+            text-decoration:underline;
+        }
+        .roomChoice:hover
+        {
+            text-decoration:underline;
+        }
+        .modChoice
+        {
+            cursor:pointer;
+        }
+        .modChoice:hover
+        {
+            text-decoration:underline;
+        }
+        .lectChoice
+        {
+            cursor:pointer
+        }
+        .lectChoice:hover
+        {
+            text-decoration:underline;
+        }
         .rooms
         {
-            margin-top:25%;
+            margin-top:43px;
             border-bottom:#FFF solid 1px;
         }
         .rooms input
@@ -320,6 +397,7 @@
          {
              padding:5px!important;
              cursor:pointer;
+             width:100%;
          }
         .suggestTbl td:hover
         {
@@ -395,6 +473,7 @@
             position: absolute;
             background-color: #3E454D;
             display:block;
+            padding:5px;
         }
         .greyOut
         {
@@ -414,9 +493,23 @@
             margin-left:-35px;
             margin-top:-35px;
         }
+        .switchView
+        {
+            float:right;
+            padding:10px;
+            color:#FFFFFF;
+            background-color:#3E454D;
+            border-radius:10px;
+            font-weight:bold;
+            cursor:pointer;
+        }
+        .switchView:hover
+        {
+            background-color:#2B3036;
+        }
         .whiteSpace
         {
-            height:50px;
+            height:30px;
             width:100%;
             float:left;
         }
@@ -533,12 +626,14 @@
     </div>
     <div class="toolsHolder" >
         <div class="hdr" ><b>TOOLS</b></div>
+        <div class="options" ><span class="roomChoice" >ROOM</span> | <span class="modChoice" >MODULE</span> | <span class="lectChoice" >LECTURER</span></div>
         <div class="rooms" ><b>ROOM</b><br /><input style="text-transform:uppercase" autocomplete="off" type="text" class="roomTxt" id="roomTxt" name="roomTxt" /><img id="clearImg" src="Images/clear.png" width="23" height="15" /></div>
         <div class="suggest" >
             <table class="suggestTbl">
             </table>
         </div>
-        <div class="semesters" ><b>SEMESTERS</b><br /><span class="semOne semBtn" >One</span><span class="splitter" ></span><span class="semTwo semBtn" >Two</span></div>
+        <div class="semesters" ><b>SEMESTERS</b><br /><span class="semOne semBtn" >ONE</span><span class="splitter" ></span><span class="semTwo semBtn" >TWO</span></div>
     </div>
     <div class="whiteSpace" ></div>
+    <div class="switchView" onclick="window.location.href = 'FindRoom.aspx'" >FIND FREE ROOM <img src="/Images/RightArrow.png" height="11" width="6" /></div>
 </asp:Content>

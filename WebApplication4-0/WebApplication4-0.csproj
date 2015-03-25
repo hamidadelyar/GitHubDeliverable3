@@ -119,6 +119,10 @@
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
     <Content Include="AdminFolder\Admin.aspx" />
+    <Content Include="AdminFolder\AdminStyle.css" />
+    <Content Include="AdminFolder\Requests.aspx" />
+    <Content Include="AdminFolder\Rooms.aspx" />
+    <Content Include="AdminFolder\Rounds.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\LoginStyle.css" />
     <Content Include="Content\Site.css" />
@@ -233,6 +237,27 @@
     </Compile>
     <Compile Include="AdminFolder\AdminSite.master.designer.cs">
       <DependentUpon>AdminSite.master</DependentUpon>
+    </Compile>
+    <Compile Include="AdminFolder\Requests.aspx.cs">
+      <DependentUpon>Requests.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminFolder\Requests.aspx.designer.cs">
+      <DependentUpon>Requests.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminFolder\Rooms.aspx.cs">
+      <DependentUpon>Rooms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminFolder\Rooms.aspx.designer.cs">
+      <DependentUpon>Rooms.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminFolder\Rounds.aspx.cs">
+      <DependentUpon>Rounds.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminFolder\Rounds.aspx.designer.cs">
+      <DependentUpon>Rounds.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="About.aspx.cs">

@@ -1,35 +1,33 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Admin.aspx.cs" Inherits="WebApplication4_0.Admin" MasterPageFile="~/AdminFolder/AdminSite.master" %>
 
-
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
-    <hgroup class="title">
-        <h1><%: Title %>.</h1>
-        <h2>Your app description page.</h2>
-    </hgroup>
 
-    <article>
-        <p>        
-            Use this area to provide additional information.
-        </p>
+    <link rel="stylesheet" type="text/css" href="AdminStyle.css"> 
 
-        <p>        
-            Use this area to provide additional information.
-        </p>
+    <div class="contentHolder">
+        <h1 align="center">Welcome, Admin.</h1>
 
-        <p>        
-            Use this area to provide additional information.
-        </p>
-    </article>
+        <div class="updatesHolder">
+            <h2 class="white" align="center">New Requests:</h2>
+            <p class="white" align="center">There are currently no new requests.</p>
+            <br />
+            <br />
+        </div>
+                <table id="newsTable">
+                    <tr>
+                        <th colspan="4"  style="text-align:center;">News & Announcements</th>
+                    </tr>
+                    <tr>
+                        <td>Round 1 Has Started</td><td>13/03/2015</td><td>Edit</td><td>Remove</td>
+                    </tr>
+                    <tr>
+                        <td>AD Hoc Round Has Started</td><td>10/03/2015</td><td>Edit</td><td>Remove</td>
+                    </tr>
+                    <tr>
+                        <td>Tips for Creating Requests</td><td>04/03/2015</td><td>Edit</td><td>Remove</td>
+                    </tr>
+                </table>
+                
+    </div>
 
-    <aside>
-        <h3>Aside Title</h3>
-        <p>        
-            Use this area to provide additional information.
-        </p>
-        <ul>
-            <li><a runat="server" href="~/">Home</a></li>
-            <li><a runat="server" href="~/About">About</a></li>
-            <li><a runat="server" href="~/Contact">Contact</a></li>
-        </ul>
-    </aside>
 </asp:Content>
