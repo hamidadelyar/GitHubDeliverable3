@@ -9,7 +9,7 @@
          var weeksArray = ["", "WEEK ONE", "WEEK TWO", "WEEK THREE", "WEEK FOUR", "WEEK FIVE", "WEEK SIX", "WEEK SEVEN", "WEEK EIGHT", "WEEK NINE", "WEEK TEN", "WEEK ELEVEN", "WEEK TWELVE", "WEEK THIRTEEN", "WEEK FOURTEEN", "WEEK FIFTEEN", ""];
          var currWeek = 1;
          var semester = 1;
-         var roomsArray = <%= this.data %>;
+         var roomsArray = <%= this.data %> ;
          var showing = false;
          $(document).ready(function () {
              $('.greyOut').hide();
@@ -157,7 +157,7 @@
                      alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
                  },
                  success: function (result) {
-                     $('.greyOut').hide();
+                     /*$('.greyOut').hide();
                      showing = false;
                      finAnim();
                      var bookings = result.d;
@@ -185,6 +185,8 @@
                          }
                          i++;
                      })
+                     */
+                     alert(result.d);
                  }
              });
          }
