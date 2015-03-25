@@ -58,25 +58,16 @@ namespace WebApplication4_0
                 {
                     if(week < 13)
                     {
-                        if(modSel.Length > 0)
-                        {
-                            modSel = modSel.Remove(modSel.Length - 1);
-                        }
                         retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time", "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester + " AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')", "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID");
-                        retData = retData.Substring(1, retData.Length - 2);
-                        if (retData == "")
+                        if (retData == "[]")
                         {
                             string where = "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester + " AND Request_Weeks.Week_ID = " + week;
                             string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID";
-                            if (modSel.Length > 0)
-                            {
-                                modSel = modSel.Remove(modSel.Length - 1);
-                            }
                             retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time", where, leftJoin);
-                            retData = retData.Substring(1,retData.Length - 2);
-                            if(retData != "")
+                            if(retData != "[]")
                             {
-                                modSel += "," + retData + "}";
+                                retData = retData.Substring(1, retData.Length - 2);
+                                modSel += "," + retData;
                             }
                             else
                             {
@@ -85,7 +76,8 @@ namespace WebApplication4_0
                         }
                         else
                         {
-                            modSel += "," + retData + "}";
+                            retData = retData.Substring(1, retData.Length - 2);
+                            modSel += "," + retData;
                         }
                         /*
                         using (SqlCommand command = new SqlCommand(roomQuery, conn))
