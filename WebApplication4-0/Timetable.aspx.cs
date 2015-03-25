@@ -45,6 +45,7 @@ namespace WebApplication4_0
                 }
                 rows.Add(row);
             }
+            conn.Close();
             return result = serializer.Serialize(rows);
         }
         [System.Web.Services.WebMethod]
@@ -52,11 +53,11 @@ namespace WebApplication4_0
         {
             string modSel = "";
             string retData = "";
-            for(int i = 1; i < 10; i++)
+            for (int i = 1; i < 10; i++)
             {
-                for(int j = 1; j < 6; j++)
+                for (int j = 1; j < 6; j++)
                 {
-                    if(week < 13)
+                    if (week < 13)
                     {
                         retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time", "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester + " AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')", "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID");
                         if (retData == "[]")
@@ -64,83 +65,38 @@ namespace WebApplication4_0
                             string where = "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester + " AND Request_Weeks.Week_ID = " + week;
                             string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID";
                             retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time", where, leftJoin);
-                            if(retData != "[]")
+                            if (retData != "[]")
                             {
                                 retData = retData.Substring(1, retData.Length - 2);
-                                modSel += "," + retData;
+                                string reqID = getValue(retData, 2);
+                                string lecData = Select("Lecturers", "Lecturer_Name", "Request_Lecturers.Request_ID = " + reqID, "LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID");
+                                string fullData = "[" + retData.Substring(0, retData.Length - 1) + "," + lecData.Substring(2, lecData.Length - 3) + "]";
+                                modSel += "," + fullData;
                             }
                             else
                             {
-                                modSel += "," + "BLANK";
+                                modSel += "," + "[{}]";
                             }
                         }
                         else
                         {
                             retData = retData.Substring(1, retData.Length - 2);
-                            modSel += "," + retData;
+                            string reqID = getValue(retData, 2);
+                            string lecData = Select("Lecturers", "Lecturer_Name", "Request_Lecturers.Request_ID = " + reqID, "LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID");
+                            string fullData = "[" + retData.Substring(0, retData.Length - 1) + "," + lecData.Substring(2, lecData.Length - 3) + "]";
+                            modSel += "," + fullData;
                         }
-                        /*
-                        using (SqlCommand command = new SqlCommand(roomQuery, conn))
-                        {
-                            SqlDataReader reader = command.ExecuteReader();
-                            if (reader.Read())
-                            {
-                                int ReqId = reader.GetInt32(2);
-                                string lectQuery = "SELECT Lecturer_Name FROM Lecturers LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID WHERE Request_Lecturers.Request_ID = " + ReqId;
-                                string lects = "";
-                                string modID = reader.GetString(0);
-                                string modName = reader.GetString(1);
-                                int length = reader.GetByte(4) - reader.GetByte(3) + 1;
-                                reader.Close();
-                                using (SqlCommand commandLect = new SqlCommand(lectQuery, conn))
-                                {
-                                    SqlDataReader readerLect = commandLect.ExecuteReader();
-                                    if (readerLect.Read())
-                                    {
-                                        lects += readerLect.GetString(0) + ",";
-                                    }
-                                }
-                                lects = lects.Remove(lects.Length - 1);
-                                modCode += modID + "|" + modName + "|" + lects + "|" + length + ",";
-                            }
-                            else
-                            {
-                                string roomQueryTwo = "SELECT Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time FROM Requests LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID WHERE Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester + " AND Request_Weeks.Week_ID = " + week;
-                                using (SqlCommand commandTwo = new SqlCommand(roomQueryTwo, conn))
-                                {
-                                    reader.Close();
-                                    SqlDataReader readerTwo = commandTwo.ExecuteReader();
-                                    if (readerTwo.Read())
-                                    {
-                                        int ReqId = readerTwo.GetInt32(2);
-                                        string lectQuery = "SELECT Lecturer_Name FROM Lecturers LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID WHERE Request_Lecturers.Request_ID = " + ReqId;
-                                        string lects = "";
-                                        string modID = readerTwo.GetString(0);
-                                        string modName = readerTwo.GetString(1);
-                                        int length = readerTwo.GetByte(4) - readerTwo.GetByte(3) + 1;
-                                        readerTwo.Close();
-                                        using (SqlCommand commandLect = new SqlCommand(lectQuery, conn))
-                                        {
-                                            SqlDataReader readerLect = commandLect.ExecuteReader();
-                                            if (readerLect.Read())
-                                            {
-                                                lects += readerLect.GetString(0) + ",";
-                                            }
-                                        }
-                                        lects = lects.Remove(lects.Length - 1);
-                                        modCode += modID + "|" + modName + "|" + lects + "|" + length + ",";
-                                    }
-                                    else
-                                    {
-                                        modCode += "Blank,";
-                                    }
-                                }
-                            }
-                            */
                     }
                 }
             }
-        return modSel;
+            modSel = modSel.Remove(0,1);
+            return "[" + modSel + "]";
+        }
+        public static string getValue(string variable, int i)
+        {
+            List<string> newList = variable.Split(',').ToList<string>();
+            List<string> elList = newList[i].Split(':').ToList<string>();
+            return elList[1];
         }
     }
 }

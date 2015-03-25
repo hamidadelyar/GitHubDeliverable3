@@ -157,36 +157,35 @@
                      alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
                  },
                  success: function (result) {
-                     /*$('.greyOut').hide();
+                     $('.greyOut').hide();
+                     $('.slot').show();
                      showing = false;
                      finAnim();
-                     var bookings = result.d;
-                     var data = bookings.split(",");
-                     var i = 0;
+                     var bookings = $.parseJSON(result.d);
+                     var i = 0
                      $('.slot').each(function () {
-                         if (data[i] != "Blank")
+                         if (typeof bookings[i][0]['Module_Code'] != 'undefined')
                          {
-                             var innerData = data[i].split("|");
-                             $(this).html(innerData[0] + '<span class="bookingSpan" >' + innerData[0] + '<br />' + innerData[1] + '<br />' + innerData[2] + '</span>').addClass('booking');
+                             var innerData = bookings[i][0];
+                             $(this).html(innerData['Module_Code'] + '<span class="bookingSpan" >' + innerData['Module_Code'] + '<br />' + innerData['Module_Title'] + '<br />' + innerData['Lecturer_Name'] + '</span>').addClass('booking');
                              var cellIndex = $(this).index();
                              var $currCell = $(this);
-                             for(var j = 0; j < innerData[3]-1; j++)
+                             for(var j = 0; j < innerData['End_Time'] - innerData['Start_Time'] -1; j++)
                              {
                                  $currCell =  $currCell.closest('tr').next().children().eq(cellIndex)
                                  $currCell.hide();
                              }
-                             $(this).attr('rowSpan', innerData[3]);
+                             $(this).attr('rowSpan', innerData['End_Time'] - innerData['Start_Time']);
                              $('.bookingSpan').hide();
                              bookingHover();
                          }
                          else
                          {
                              $(this).html('').removeClass('booking');
+                             $(this).attr('rowSpan', 1);
                          }
                          i++;
                      })
-                     */
-                     alert(result.d);
                  }
              });
          }
