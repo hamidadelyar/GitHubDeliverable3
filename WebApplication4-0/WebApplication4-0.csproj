@@ -119,6 +119,7 @@
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
     <Content Include="AdminFolder\Admin.aspx" />
+    <Content Include="AdminFolder\AdminStyle.css" />
     <Content Include="AdminFolder\Requests.aspx" />
     <Content Include="AdminFolder\Rooms.aspx" />
     <Content Include="AdminFolder\Rounds.aspx" />
