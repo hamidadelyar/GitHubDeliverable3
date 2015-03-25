@@ -203,6 +203,7 @@
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Timetable.aspx" />
+    <Content Include="ViewRequest.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -329,6 +330,13 @@
     </Compile>
     <Compile Include="Timetable.aspx.designer.cs">
       <DependentUpon>Timetable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewRequest.aspx.cs">
+      <DependentUpon>ViewRequest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewRequest.aspx.designer.cs">
+      <DependentUpon>ViewRequest.aspx</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
