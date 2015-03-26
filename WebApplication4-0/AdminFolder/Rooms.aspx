@@ -5,7 +5,7 @@
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
 
-<link rel="stylesheet" type="text/css" href="AdminStyle.css"> 
+<link rel="stylesheet" type="text/css" href="css/AdminStyle.css"> 
 
 <style>
     .buildingHeader{
@@ -13,6 +13,7 @@
         padding-top:10px;
         width:100%;
         background-color:#3E454D;
+        clear:both;
     }
 
     .roomInfoTable{
@@ -23,13 +24,20 @@
     h2 {
         margin-left:5%;
     }
+
+    #buttonsDiv{
+        float:right;
+        margin-right:5%;
+    }
 </style>
 
 <div class="contentHolder">
 
     <h1 align="center">Rooms</h1>
-    <asp:Button ID="addRoom" runat="server" Text="Add Room" />
-    <asp:Button ID="addFacility" runat="server" Text="Add Facility" />
+    <div id="buttonsDiv">
+        <asp:Button ID="addRoom" runat="server" Text="Add Room" />
+        <asp:Button ID="addFacility" runat="server" Text="Add Facility" />
+    </div>
 
     <div class="buildingHeader" >
         <h2 class="white">James France - East Park</h2> 
@@ -46,6 +54,23 @@
             <td>JF.0.0.2</td><td>100</td><td>Lab</td><td>Visualiser, Wheelchair Access, Dual Projectors</td><td></td>
         </tr>
     </table>
+
+    <div class="buildingHeader" >
+        <h2 class="white">Haslegrave - East Park</h2> 
+    </div>
+
+    <table class="roomInfoTable">
+        <tr>
+            <th>Room No</th><th>Capacity</th><th>Room Type</th><th>Facilities</th>
+        </tr>
+        <tr>
+            <td>N.0.0.1</td><td>120</td><td>Lab</td><td>OHP, Wheelchair Access, Dual Projectors</td><td></td>
+        </tr>
+        <tr>
+            <td>N.0.0.2</td><td>100</td><td>Lab</td><td>Visualiser, Wheelchair Access, Dual Projectors</td><td></td>
+        </tr>
+    </table>
+
 </div> 
 
     

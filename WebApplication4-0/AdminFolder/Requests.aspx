@@ -5,7 +5,7 @@
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
 
-<link rel="stylesheet" type="text/css" href="AdminStyle.css"> 
+<link rel="stylesheet" type="text/css" href="css/AdminStyle.css"> 
 
 <style>
     .requestHeader{
