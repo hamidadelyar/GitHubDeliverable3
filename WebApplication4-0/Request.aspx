@@ -3,9 +3,11 @@
 
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
+ 
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
     <script src="Scripts/jquery-ui-1.8.24.min.js" type="text/javascript"></script>
-   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="Content/PopupBlur.css">
     <style>
 
      #requestContainer
@@ -155,7 +157,8 @@ input[type="text"]:hover, #active, input[type="text"]:focus
 
 /* toggle hover */
 .divClass input.radio:hover:not(:checked) ~ label:before {
-	content:'\03a7';
+	/*content:'\03a7';*/
+    content: '\2713';
 	text-indent: .2em;
 	/*color: #C2C2C2;*/
     color:#fff;
@@ -167,7 +170,8 @@ input[type="text"]:hover, #active, input[type="text"]:focus
 
 /* toggle on */
 .divClass input.radio:checked ~ label:before {
-	content:'\03a7'; /* this is the css symbol, e.g. X */
+	/*content:'\03a7';  X*/
+    content: '\2713';
 	text-indent: .2em;
 	color: #9CE2AE;
 	background-color: #4DCB6D;
@@ -182,6 +186,84 @@ input[type="text"]:hover, #active, input[type="text"]:focus
 	box-shadow: 0 0 0 3px #999;
 }
 
+/*for radioWeeks*/
+
+.divClassWeeks {
+	clear: both;
+	margin: 0;
+    width: 140px;
+}
+
+.divClassWeeks label {
+  width: 140px;
+  border-radius: 3px;
+  border: 1px solid #D1D3D4
+}
+
+/* hide input */
+.divClassWeeks input.radioWeeks:empty {
+	margin-left: -999px;
+    display: none;
+}
+
+/* style label */
+.divClassWeeks input.radioWeeks:empty ~ label {
+	position: relative;
+	float: left;
+	line-height: 2.5em;
+	text-indent: 3.25em;
+	margin-top: 2em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+    font-family:"Segoe UI",Verdana,Helvetica,sans-serif;
+    font-size:0.85em; /* sets size of the actual label */
+}
+
+.divClassWeeks input.radioWeeks:empty ~ label:before {
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: '';
+	width: 2.5em;
+	background: #D1D3D4;
+	border-radius: 3px 0 0 3px;
+}
+
+/* toggle hover */
+.divClassWeeks input.radioWeeks:hover:not(:checked) ~ label:before {
+	/*content:'\03a7';*/
+    content: '\2713';
+	text-indent: .2em;
+	/*color: #C2C2C2;*/
+    color:#fff;
+}
+
+.divClassWeeks input.radioWeeks:hover:not(:checked) ~ label {
+	color: #888;
+}
+
+/* toggle on */
+.divClassWeeks input.radioWeeks:checked ~ label:before {
+	/*content:'\03a7';  X*/
+    content: '\2713';
+	text-indent: .2em;
+	color: #9CE2AE;
+	background-color: #4DCB6D;
+}
+
+.divClassWeeks input.radioWeeks:checked ~ label {
+	color: #777;
+}
+
+/* radio focus */
+.divClassWeeks input.radioWeeks:focus ~ label:before {
+	box-shadow: 0 0 0 3px #999;
+}
 .circle{
    
 }
@@ -256,6 +338,8 @@ label{
             /* add padding to account for vertical scrollbar */
             padding-right: 20px;
             max-width: 200px;
+
+         
     }
     /* IE 6 doesn't support max-height
      * we use height instead, but this forces the menu to always be this tall
@@ -264,7 +348,22 @@ label{
       height: 100px;
       width: 2000px;
  }
-   
+
+.pop{
+  display:none;
+  position:fixed;
+  top:20%;
+  left:7.5%;
+  width:85%;
+  height:60%;
+  border-radius:8px;
+  background:#ff8060;
+  color:white;
+  font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+  
+}
+
+
       
     </style>
 
@@ -378,11 +477,71 @@ label{
                     });
                 }
             });
-        });
-
-
 
        
+            /* function to apply effects of blurring the background, whilst showing popup, then when popup closes, the background returns to normal */
+            $(function () {
+              //  $('.pop').hide(); //initially hidden
+
+                $("#defaultWeeksNo").click(function () { //onclick, fades in to display
+                    $('.pop').fadeIn(1000);
+                    $('#requestContainer').removeClass('blur-out');
+                    $('#requestContainer').addClass('blur-in');
+                    
+                    //only blurs the text in the footer
+                    $('footer #float-left').removeClass('blur-out'); 
+                    $('footer #float-left').addClass('blur-in');
+
+                    //blurs header content, i.e. navigation
+                    $('header').removeClass('blur-out');
+                    $('header').addClass('blur-in');
+
+                    
+                   
+                });
+
+                $("#closePopup").click(function () { //onclick, fades out
+                    $('.pop').fadeOut(1000);
+                    //$('#requestContainer').removeClass('blur-in');
+                    $('#requestContainer').addClass('blur-out');
+                    $('#requestContainer').removeClass('blur-in');
+
+                   
+                    //unblurs the text in the footer
+                    $('footer #float-left').addClass('blur-out');
+                    $('footer #float-left').removeClass('blur-in');
+
+                    //unblurs header content
+                    $('header').addClass('blur-out');
+                    $('header').removeClass('blur-in');
+
+           
+                    
+                });
+            });
+            
+
+
+        }); //document.ready closing tag
+
+
+        /*
+        function showPopup() { 
+            $("#defaultWeeksNo").click(function () { //onclick, fades in to display
+                $('.pop').fadeIn(1000);
+                $('#requestContainer').removeClass('blur-out');
+                $('#requestContainer').addClass('blur-in');
+
+            });   
+        }
+
+        function hidePopup() { 
+                $('.pop').fadeOut(1000);
+                //$('#requestContainer').removeClass('blur-in');
+                $('#requestContainer').addClass('blur-out');
+                $('#requestContainer').removeClass('blur-in');
+
+        }*/
       
       
         
@@ -437,10 +596,21 @@ label{
                     <asp:Label ID="capacityLabel" for="capacityInput" runat="server" Text="CAPACITY" ToolTip="Enter total number of students on the module"></asp:Label>
                 </td>
                 <td>
-                     <asp:TextBox ID="capacityInput" runat="server"></asp:TextBox>
+                    <input type="text" id="capacityInput" />
                 </td>
                 <td>   
-                     <asp:RangeValidator ID="RangeValidator1" runat="server" ControlToValidate="capacityInput" ErrorMessage="Please enter a number within the range 5-500" ForeColor="Red" MaximumValue="500" MinimumValue="5" SetFocusOnError="True"></asp:RangeValidator>
+                    <asp:Label ID="Label2" runat="server" Text="NUMBER OF ROOMS"></asp:Label>
+                </td>
+                <td>
+                     <div class="styled-select">
+                        <select>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                     </div>
                 </td>
             </tr>
 
@@ -463,7 +633,7 @@ label{
                 </td>
 
                 <td>
-                    <asp:Label ID="Label1" runat="server" Text="Start Time"></asp:Label>
+                    <asp:Label ID="Label1" runat="server" Text="START TIME"></asp:Label>
                 </td>
                 <td>
                     <div class="styled-select">
@@ -482,7 +652,7 @@ label{
                 </td>
 
                 <td>
-                    <asp:Label ID="startTimeSelectLabel" runat="server" Text="End Time"></asp:Label>
+                    <asp:Label ID="startTimeSelectLabel" runat="server" Text="END TIME"></asp:Label>
                 </td>
                 <td>
                     <div class="styled-select">
@@ -541,10 +711,21 @@ label{
                      </div>
                  </td>  
 
-                <td>
-                   
-                </td>
+                 <td>
+                    <asp:Label ID="Label3" runat="server" Text="DEFAULT WEEKS?" ToolTip="Default weeks are weeks 1 to 12"></asp:Label>
+                 </td>
+                 <td>
+                     <div class="divClassWeeks">
+                         <input type="radio" name="radioWeek" id="defaultWeeksYes" class="radioWeeks"> <!-- checked by default -->
+                         <label for="defaultWeeksYes">Yes</label>
+                     </div>
+                     <div class="divClassWeeks">
+                         <input type="radio" name="radioWeek" id="defaultWeeksNo" class="radioWeeks"/>
+                         <label for="defaultWeeksNo">No</label>
+                     </div>
+                 </td>
             </tr>
+
 
             <tr>
                 <td colspan="6">
@@ -555,4 +736,17 @@ label{
         
     </div>
     
+
+
+<!-- popup contents -->
+<div class="pop">
+  <span id="closePopup" style="cursor:pointer;left:10px; font-size:2em; position:relative;">✖</span>
+  <h1>jQuery Pop Up</h1>
+  <p>This is a random pop up, hopefully its not annoying.</p>
+  <select>
+    <option>1</option>
+    <option>2</option>
+  </select>
+</div>
+
 </asp:Content>
