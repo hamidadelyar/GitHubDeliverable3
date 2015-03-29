@@ -14,7 +14,7 @@
         SelectCommand="SELECT [announcementID], [postDate], [title], [content] FROM [Announcements]"
         UpdateCommand="UPDATE Announcements SET title=@title, content=@content, postDate=GETDATE() WHERE announcementID = @announcementID"
         DeleteCommand="DELETE FROM Announcements WHERE announcementID = @announcementID"
-        InsertCommand="">
+        InsertCommand=""> 
     </asp:SqlDataSource>
 
     <asp:GridView 
