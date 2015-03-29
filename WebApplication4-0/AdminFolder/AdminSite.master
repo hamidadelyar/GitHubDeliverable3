@@ -51,6 +51,7 @@
                         <li><a runat="server" href="Requests.aspx">Requests</a></li>
                         <li><a runat="server" href="Rounds.aspx">Rounds</a></li>
                         <li><a runat="server" href="Rooms.aspx">Rooms</a></li>
+                        <li><a runat="server" href="Demo.aspx">Demo</a></li>
                     </ul>
                 </nav>
             </div>

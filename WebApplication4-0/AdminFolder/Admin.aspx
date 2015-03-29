@@ -51,7 +51,7 @@
 			
 <li><a href="#0">Yes</a></li>
 			
-<li><a href="#0">No</a></li>
+<li><a href="#1">No</a></li>
 		
 </ul>
 		
