@@ -64,9 +64,9 @@
     </div>
     <footer>
         <div class="content-wrapper">
-            <div class="float-left">
+            <div class="float-left" style="color:white; font-family: 'Segoe UI',Verdana,Helvetica,sans-serif; font-size:1.3em">
                 <p>&copy; <%: DateTime.Now.Year %> - Team 02</p>
-                <p id="LoginDetails" runat="server"></p>
+                <p id="LoginDetails" runat="server" ></p>
             </div>
         </div>
     </footer>

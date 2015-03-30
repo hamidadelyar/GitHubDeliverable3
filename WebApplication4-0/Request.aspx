@@ -377,12 +377,24 @@ input[type=checkbox] {
  */
 .checkboxOne {
 	width: 50px;
-	height: 25px;
+	height: 15px;
 	background: white;
 	position: relative;
 	border-radius: 3px;
 }
 
+/*text inside check box*/
+/*
+.checkboxOne:before {
+	content: 'Yes';
+	position: absolute;
+	top: 12px;
+	left: 13px;
+	height: 2px;
+	color: #26ca28;
+	font-size: 16px;
+}
+*/
 /**
  * Create the slider from the label
  */
@@ -399,10 +411,10 @@ input[type=checkbox] {
 	transition: all .5s ease;
 	cursor: pointer;
 	position: absolute;
-	top: -5px;
+	top: -10px;
 	left: -7px;
 
-	background: red;
+	background: #999;
 }
 
 /**
@@ -414,6 +426,10 @@ input[type=checkbox] {
     content: 'on';
 }
 
+.pop table td input[type=button]{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
 
     </style>
 
@@ -471,7 +487,7 @@ input[type=checkbox] {
 
            
 
-
+            
             $('#preferencesButton').click(function () {
                 document.getElementById("requestTable").style.display = "none";
                 document.getElementById("preferenceTable").style.display = "";
@@ -481,8 +497,8 @@ input[type=checkbox] {
                 document.getElementById("preferenceTable").style.display = "none";
             });
            
-
-
+            
+         
             //autocomplete function for module name
             //minimum number of characters = 3, before search begins
             $("#modnameInput").autocomplete({minLength:3},{
@@ -539,8 +555,8 @@ input[type=checkbox] {
                     $('#requestContainer').addClass('blur-in');
                     
                     //only blurs the text in the footer
-                    $('footer #float-left').removeClass('blur-out'); 
-                    $('footer #float-left').addClass('blur-in');
+                    $('footer .float-left').removeClass('blur-out'); 
+                    $('footer .float-left').addClass('blur-in');
 
                     //blurs header content, i.e. navigation
                     $('header').removeClass('blur-out');
@@ -558,8 +574,8 @@ input[type=checkbox] {
 
                    
                     //unblurs the text in the footer
-                    $('footer #float-left').addClass('blur-out');
-                    $('footer #float-left').removeClass('blur-in');
+                    $('footer .float-left').addClass('blur-out');
+                    $('footer .float-left').removeClass('blur-in');
 
                     //unblurs header content
                     $('header').addClass('blur-out');
@@ -586,6 +602,8 @@ input[type=checkbox] {
                     $('#week' + i).prop('checked', true);
                 }
             });
+            
+
             
            
 
