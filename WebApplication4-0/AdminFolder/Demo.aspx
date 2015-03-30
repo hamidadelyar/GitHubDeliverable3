@@ -22,30 +22,30 @@
         SelectCommand="SELECT [announcementID], [postDate], [title], [content] FROM [Announcements]"
         UpdateCommand="UPDATE Announcements SET title=@title, content=@content, postDate=GETDATE() WHERE announcementID = @announcementID"
         DeleteCommand="DELETE FROM Announcements WHERE announcementID = @announcementID"
-        InsertCommand="INSERT INTO Announcements (title, content, postDate) VALUES (@titleDB, @contentDB, GETDATE() )">
+        InsertCommand="INSERT INTO Announcements (title, content, postDate) VALUES (@titleDB,@contentDB,GETDATE())">
             <InsertParameters>
-                <asp:FormParameter Name="titleDB" FormField="titleBox" />
-                <asp:FormParameter Name="contentDB" FormField="contentBox" />
+                <asp:FormParameter name="titleDB" FormField="titleInput" />
+                <asp:FormParameter name="contentDB" FormField="contentInput" />
             </InsertParameters>
     </asp:SqlDataSource>
 
     <br />
-    <asp:TextBox ID="titleBox" runat="server"></asp:TextBox>
+    <asp:TextBox ID="titleInput" runat="server"></asp:TextBox>
 
     <asp:RequiredFieldValidator
         id="RequiredFieldValidator1"
         runat="server"
-        ControlToValidate="titleBox"
+        ControlToValidate="titleInput"
         Display="Static"
         ErrorMessage="Please Enter a Title"/>
 
     <br />
-    <asp:TextBox ID="contentBox" runat="server"></asp:TextBox>
+    <asp:TextBox ID="contentInput" runat="server"></asp:TextBox>
 
     <asp:RequiredFieldValidator
         id="RequiredFieldValidator2"
         runat="server"
-        ControlToValidate="contentBox"
+        ControlToValidate="contentInput"
         Display="Static"
         ErrorMessage="Please Enter some Content"/>
 
@@ -58,7 +58,8 @@
         AutoGenerateColumns="False" 
         DataKeyNames="announcementID"
         DataSourceID="SqlDataSource1" 
-        EmptyDataText="There are no data records to display." AllowSorting="True">
+        EmptyDataText="There are no data records to display." 
+        AllowSorting="True">
 
         <Columns>
             <asp:BoundField DataField="title" HeaderText="title" SortExpression="title" />

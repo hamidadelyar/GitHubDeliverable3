@@ -22,13 +22,13 @@ namespace WebApplication4_0.AdminFolder {
         protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
         
         /// <summary>
-        /// TitleBox control.
+        /// titleInput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TitleBox;
+        protected global::System.Web.UI.WebControls.TextBox titleInput;
         
         /// <summary>
         /// RequiredFieldValidator1 control.
@@ -40,13 +40,13 @@ namespace WebApplication4_0.AdminFolder {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
         
         /// <summary>
-        /// contentBox control.
+        /// contentInput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox contentBox;
+        protected global::System.Web.UI.WebControls.TextBox contentInput;
         
         /// <summary>
         /// RequiredFieldValidator2 control.

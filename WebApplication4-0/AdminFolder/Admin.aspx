@@ -39,35 +39,48 @@
                     </tr>
                 </table>
             
-        <a href="#0" class="cd-popup-trigger">View Pop-up</a>
-
-<div class="cd-popup" role="alert">
-	
-<div class="cd-popup-container">
-		
-<p>Are you sure you want to delete this element?</p>
-		
-<ul class="cd-buttons">
-			
-<li><a href="#0">Yes</a></li>
-			
-<li><a href="#1">No</a></li>
-		
-</ul>
-		
-<a href="#0" class="cd-popup-close img-replace">Close</a>
-	
-</div> <!-- cd-popup-container -->
-</div> 
-<!-- cd-popup -->
+    <script runat="server">
+        private void NewAnnouncement (object source, EventArgs e) {
+          SqlDataSource1.Insert();
+        }
+    </script>
 
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
-</script>
+    <asp:SqlDataSource 
+        ID="SqlDataSource1" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+        ProviderName="<%$ ConnectionStrings:team02ConnectionString1.ProviderName %>" 
+        SelectCommand="SELECT [announcementID], [postDate], [title], [content] FROM [Announcements]"
+        InsertCommand="INSERT INTO Announcements (title, content, postDate) VALUES (@titleDB,@contentDB,GETDATE())">
+            <InsertParameters>
+                <asp:FormParameter name="titleDB" FormField="titleInput" />
+                <asp:FormParameter name="contentDB" FormField="contentInput" />
+            </InsertParameters>
+    </asp:SqlDataSource>
 
-<script src="js/main.js">
-</script> 
-<!-- Resource jQuery -->
+    <br />
+    <asp:TextBox ID="titleInput" runat="server"></asp:TextBox>
+
+    <asp:RequiredFieldValidator
+        id="RequiredFieldValidator1"
+        runat="server"
+        ControlToValidate="titleInput"
+        Display="Static"
+        ErrorMessage="Please Enter a Title"/>
+
+    <br />
+    <asp:TextBox ID="contentInput" runat="server"></asp:TextBox>
+
+    <asp:RequiredFieldValidator
+        id="RequiredFieldValidator2"
+        runat="server"
+        ControlToValidate="contentInput"
+        Display="Static"
+        ErrorMessage="Please Enter some Content"/>
+
+    <br />
+    <asp:Button ID="Button1" runat="server" Text="New Announcement" OnClick="NewAnnouncement" />
 
 
             
