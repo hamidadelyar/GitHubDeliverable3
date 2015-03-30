@@ -5,6 +5,14 @@
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
 
+
+    <script runat="server">
+        private void NewAnnouncement (object source, EventArgs e) {
+          SqlDataSource1.Insert();
+        }
+    </script>
+
+
     <asp:SqlDataSource 
         ID="SqlDataSource1" 
         runat="server" 
@@ -14,8 +22,35 @@
         SelectCommand="SELECT [announcementID], [postDate], [title], [content] FROM [Announcements]"
         UpdateCommand="UPDATE Announcements SET title=@title, content=@content, postDate=GETDATE() WHERE announcementID = @announcementID"
         DeleteCommand="DELETE FROM Announcements WHERE announcementID = @announcementID"
-        InsertCommand=""> 
+        InsertCommand="INSERT INTO Announcements (title, content, postDate) VALUES (@titleDB, @contentDB, GETDATE() )">
+            <InsertParameters>
+                <asp:FormParameter Name="titleDB" FormField="titleBox" />
+                <asp:FormParameter Name="contentDB" FormField="contentBox" />
+            </InsertParameters>
     </asp:SqlDataSource>
+
+    <br />
+    <asp:TextBox ID="titleBox" runat="server"></asp:TextBox>
+
+    <asp:RequiredFieldValidator
+        id="RequiredFieldValidator1"
+        runat="server"
+        ControlToValidate="titleBox"
+        Display="Static"
+        ErrorMessage="Please Enter a Title"/>
+
+    <br />
+    <asp:TextBox ID="contentBox" runat="server"></asp:TextBox>
+
+    <asp:RequiredFieldValidator
+        id="RequiredFieldValidator2"
+        runat="server"
+        ControlToValidate="contentBox"
+        Display="Static"
+        ErrorMessage="Please Enter some Content"/>
+
+    <br />
+    <asp:Button ID="Button1" runat="server" Text="New Announcement" OnClick="NewAnnouncement" />
 
     <asp:GridView 
         ID="GridView1" 
@@ -23,7 +58,7 @@
         AutoGenerateColumns="False" 
         DataKeyNames="announcementID"
         DataSourceID="SqlDataSource1" 
-        EmptyDataText="There are no data records to display.">
+        EmptyDataText="There are no data records to display." AllowSorting="True">
 
         <Columns>
             <asp:BoundField DataField="title" HeaderText="title" SortExpression="title" />
@@ -33,6 +68,5 @@
             <asp:CommandField ShowDeleteButton="True" />
         </Columns>
     </asp:GridView>
-
 
 </asp:Content>
