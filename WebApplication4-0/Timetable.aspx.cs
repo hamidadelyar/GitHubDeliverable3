@@ -49,22 +49,38 @@ namespace WebApplication4_0
             return result = serializer.Serialize(rows);
         }
         [System.Web.Services.WebMethod]
-        public static string SearchRoom(string room, int week, int semester)
+        public static string SearchRoom(string room, int week, int semester, int type)
         {
             string modSel = "";
             string retData = "";
+            string searchColumn = "";
+            string lectColumn = "";
+            if(type == 1)
+            {
+                searchColumn =  " AND Request_Preferences.Room_ID = '" + room + "'";
+                lectColumn = "";
+            }
+            else if(type == 2)
+            {
+                searchColumn =  " AND Requests.Module_Code = '" + room + "'";
+                lectColumn = "";
+            }
+            else
+            {
+                searchColumn = "AND Request_Lecturers.Lecturer_ID = '" + room + "'";
+            }
             for (int i = 1; i < 10; i++)
             {
                 for (int j = 1; j < 6; j++)
                 {
                     if (week < 13)
                     {
-                        retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time", "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester + " AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')", "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID");
+                        retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time, Request_Preferences.Room_ID", "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + searchColumn + " AND Requests.Semester = " + semester + " AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')", "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID");
                         if (retData == "[]")
                         {
-                            string where = "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + " AND Request_Preferences.Room_ID = '" + room + "' AND Requests.Semester = " + semester + " AND Request_Weeks.Week_ID = " + week;
-                            string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID";
-                            retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time", where, leftJoin);
+                            string where = "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + searchColumn + " AND Requests.Semester = " + semester + " AND Request_Weeks.Week_ID = " + week;
+                            string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID";
+                            retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time, Request_Preferences.Room_ID", where, leftJoin);
                             if (retData != "[]")
                             {
                                 retData = retData.Substring(1, retData.Length - 2);
