@@ -40,15 +40,6 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.TextBox modnameInput;
         
         /// <summary>
-        /// capacityLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label capacityLabel;
-        
-        /// <summary>
         /// Label2 control.
         /// </summary>
         /// <remarks>
@@ -85,6 +76,15 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label startTimeSelectLabel;
         
         /// <summary>
+        /// capacityLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label capacityLabel;
+        
+        /// <summary>
         /// roomType control.
         /// </summary>
         /// <remarks>
@@ -101,5 +101,23 @@ namespace WebApplication4_0 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label Label3;
+        
+        /// <summary>
+        /// Label4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label4;
+        
+        /// <summary>
+        /// Label8 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label8;
     }
 }
