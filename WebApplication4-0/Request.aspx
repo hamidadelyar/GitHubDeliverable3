@@ -32,7 +32,7 @@
         }
 
  
-     #preferenceTable{
+     .preferenceTable{
             margin-left:2.5%;
             width:95%;
             height:90%;
@@ -41,6 +41,7 @@
             color:#3E454D;
      }
 
+ 
 input[type="text"]{
 	padding: 9px;
 	width: 90%;
@@ -186,28 +187,28 @@ input[type="text"]:hover, #active, input[type="text"]:focus
 	box-shadow: 0 0 0 3px #999;
 }
 
-/*for radioWeeks*/
+/* checbox styling same as for radio button, but different colour */
 
-.divClassWeeks {
+.divClassCheckbox {
 	clear: both;
 	margin: 0;
     width: 140px;
 }
 
-.divClassWeeks label {
+.divClassCheckbox label {
   width: 140px;
   border-radius: 3px;
   border: 1px solid #D1D3D4
 }
 
 /* hide input */
-.divClassWeeks input.radioWeeks:empty {
+.divClassCheckbox input.radio:empty {
 	margin-left: -999px;
     display: none;
 }
 
 /* style label */
-.divClassWeeks input.radioWeeks:empty ~ label {
+.divClassCheckbox input.radio:empty ~ label {
 	position: relative;
 	float: left;
 	line-height: 2.5em;
@@ -222,7 +223,7 @@ input[type="text"]:hover, #active, input[type="text"]:focus
     font-size:0.85em; /* sets size of the actual label */
 }
 
-.divClassWeeks input.radioWeeks:empty ~ label:before {
+.divClassCheckbox input.radio:empty ~ label:before {
 	position: absolute;
 	display: block;
 	top: 0;
@@ -235,7 +236,7 @@ input[type="text"]:hover, #active, input[type="text"]:focus
 }
 
 /* toggle hover */
-.divClassWeeks input.radioWeeks:hover:not(:checked) ~ label:before {
+.divClassCheckbox input.radio:hover:not(:checked) ~ label:before {
 	/*content:'\03a7';*/
     content: '\2713';
 	text-indent: .2em;
@@ -243,38 +244,29 @@ input[type="text"]:hover, #active, input[type="text"]:focus
     color:#fff;
 }
 
-.divClassWeeks input.radioWeeks:hover:not(:checked) ~ label {
+.divClassCheckbox input.radio:hover:not(:checked) ~ label {
 	color: #888;
 }
 
 /* toggle on */
-.divClassWeeks input.radioWeeks:checked ~ label:before {
+.divClassCheckbox input.radio:checked ~ label:before {
 	/*content:'\03a7';  X*/
     content: '\2713';
 	text-indent: .2em;
-	color: #9CE2AE;
-	background-color: #4DCB6D;
+	color: white; /*color of tick when checked*/
+	background-color: #86b4cc; /*color of box when checked*/
 }
 
-.divClassWeeks input.radioWeeks:checked ~ label {
+.divClassCheckbox input.radio:checked ~ label {
 	color: #777;
 }
 
 /* radio focus */
-.divClassWeeks input.radioWeeks:focus ~ label:before {
+.divClassCheckbox input.radio:focus ~ label:before {
 	box-shadow: 0 0 0 3px #999;
 }
-.circle{
-   
-}
 
-/*
-#MainContent_RequiredFieldValidator1{
-    font-size:2em;
-    text-align:center;
-    cursor:pointer;
-}
-*/
+
 .bubble
 {
 position: relative;
@@ -444,7 +436,7 @@ input[type=checkbox] {
 
             //on any input for the modcode, the data is sent to the c# function. This performs query on server and sends back data.
             //returns relevant modname depending on modcode entered
-            $('#modcodeInput').on('input propertychange paste click focusout', function () {
+            $('#modcodeInput').on('input click paste focusout', function () {   //removed propertychange as it was buggy in ie8
                 var modcode = $('#modcodeInput').val();
                 //var modname = $('#MainContent_modnameInput').val();
                 //var dataInput = "{modcode: " + modcode + "}";
@@ -466,7 +458,7 @@ input[type=checkbox] {
 
             //on any input to modname, tries to find relevant modcode and updates modcode input
             //does same thing as function above, but for modname
-            $('#modnameInput').on('input propertychange paste click focusout', function () {
+            $('#modnameInput').on('input paste click focusout', function () {
               
                 var modname = $('#modnameInput').val();
                
@@ -603,8 +595,13 @@ input[type=checkbox] {
                 }
             });
             
+            //allows user to go to preferences for 2nd room. So can select a different room on inputted capacity etc.
+            $('#gotoRoom2').click(function () {
+                $('#preferenceTable').hide();
+                $('#preferenceTable2').show();
 
-            
+
+            });
            
 
 
@@ -678,12 +675,6 @@ input[type=checkbox] {
                 </td>
             </tr>
             <tr>
-                <td>
-                    <asp:Label ID="capacityLabel" for="capacityInput" runat="server" Text="CAPACITY" ToolTip="Enter total number of students on the module"></asp:Label>
-                </td>
-                <td>
-                    <input type="text" id="capacityInput" />
-                </td>
                 <td>   
                     <asp:Label ID="Label2" runat="server" Text="NUMBER OF ROOMS"></asp:Label>
                 </td>
@@ -767,17 +758,27 @@ input[type=checkbox] {
             </tr>
          </table>
 
-        <!-- preference table -->
+        <!-- preference table for room 1-->
 
-        <table id="preferenceTable" style="display:none">
+        <table id="preferenceTable" class="preferenceTable" style="display:none">
             <!-- Facility section -->
             <tr>
                 <td>
                     <b>FACILITY OPTIONS</b>
                 </td>
             </tr>
-
+            <tr>
+                <td colspan="6">
+                    <div class="line"></div>
+                </td>
+            </tr>
              <tr>
+                 <td>
+                    <asp:Label ID="capacityLabel" for="capacityInput" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
+                </td>
+                <td>
+                    <input type="text" id="capacityInput" />
+                </td>
                 <td>
                     <asp:Label ID="roomType" runat="server" Text="ROOM TYPE" ToolTip="Select the room type you would like to book"></asp:Label>
                 </td>
@@ -801,21 +802,118 @@ input[type=checkbox] {
                     <asp:Label ID="Label3" runat="server" Text="DEFAULT WEEKS?" ToolTip="Default weeks are weeks 1 to 12"></asp:Label>
                  </td>
                  <td>
-                     <div class="divClassWeeks">
-                         <input type="radio" name="radioWeek" id="defaultWeeksYes" class="radioWeeks"> <!-- checked by default -->
+                     <div class="divClass">
+                         <input type="radio" name="radioWeek" id="defaultWeeksYes" class="radio" checked /> <!-- checked by default -->
                          <label for="defaultWeeksYes">Yes</label>
                      </div>
-                     <div class="divClassWeeks">
-                         <input type="radio" name="radioWeek" id="defaultWeeksNo" class="radioWeeks"/>
+                     <div class="divClass">
+                         <input type="radio" name="radioWeek" id="defaultWeeksNo" class="radio"/>
                          <label for="defaultWeeksNo">No</label>
                      </div>
                  </td>
             </tr>
 
+            <tr>
+                 <td>
+                     <asp:Label ID="Label4" runat="server" Text="PARK" ToolTip="Select your preferred park(s)"></asp:Label>
+                 </td>
 
+                 <td>
+                     <div class="divClassCheckbox">  
+                         <input type="checkbox" name="park" id="centralPark" class="radio" checked/>
+                         <label for="centralPark">Central</label>
+                     </div>
+                     <div class="divClassCheckbox">  
+                         <input type="checkbox" name="park" id="westPark" class="radio" checked/>
+                         <label for="westPark">West</label>
+                     </div>
+                     <div class="divClassCheckbox">  
+                         <input type="checkbox" name="park" id="eastPark" class="radio" checked/>
+                         <label for="eastPark">Central</label>
+                     </div>
+                 </td>
+
+                <td>
+                     <asp:Label ID="Label8" runat="server" Text="ROOM FACILITIES" ToolTip="Select the preferences that you would like"></asp:Label>
+                </td>
+                <td>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="COMP" class="radio" />
+                        <label for="COMP">Computer</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="DDP" class="radio" /> <!-- dual data projection -->
+                        <label for="DDP">DDP</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="DP" class="radio" />
+                        <label for="DP">Data Projection</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="IL" class="radio" /> <!-- induction loop -->
+                        <label for="IL">Induction Loop</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="MP" class="radio" />
+                        <label for="MP">Media Player</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="PA" class="radio" />
+                        <label for="PA">PA</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="PLASMA" class="radio" />
+                        <label for="PLASMA">Plasma Screen</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="REV" class="radio" />
+                        <label for="REV">ReView</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="MIC" class="radio" />
+                        <label for="MIC">Microphone</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="VIS" class="radio" />
+                        <label for="VIS">Visualiser</label>
+                    </div>
+                    <div class="divClassCheckbox" >
+                        <input type="checkbox" id="Wchair" class="radio" />
+                        <label for="Wchair">Wheelchair</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="WB" class="radio" />
+                        <label for="WB">Whiteboard</label>
+                    </div>
+                </td>
+            </tr>
+           
+            <tr>
+                <td>
+                    <input type="button" id="preferencesDoneButton" value="Done" />
+                </td>
+                
+                <td>
+                    <input type="button" id="gotoRoom2" value="Next Room"/>
+                </td>
+            </tr>
+        </table>
+
+        <!-- preferences for 2nd room selection. Only selectable if user selects that they want to book 2 rooms.  -->
+         <table id="preferenceTable2" class="preferenceTable" style="display:none">
+            <!-- Facility section -->
+            <tr>
+                <td>
+                    <b>FACILITY OPTIONS</b>
+                </td>
+            </tr>
             <tr>
                 <td colspan="6">
-                    <input type="button" id="preferencesDoneButton" value="Done" />
+                    <div class="line"></div>
                 </td>
             </tr>
         </table>
