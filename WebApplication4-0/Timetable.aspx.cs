@@ -12,11 +12,16 @@ namespace WebApplication4_0
 {
     public partial class Timetable : System.Web.UI.Page
     {
-        static SqlConnection conn;
         public String data = "";
+        public String modData = "";
+        public String lectData = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             data = Select("Rooms", "Room_ID", "1=1", "");
+            if ((Session["LoggedIn"]) != null) { 
+                modData = Select("Modules", "Module_Code + ' ' + Module_Title AS Module_Code", "LEFT(Module_Code, 2) = '" + Session["Username"].ToString().Substring(0, 2) + "'", "");
+                lectData = Select("Lecturers", "Lecturer_ID + ' ' + Lecturer_Name AS Lecturer_ID", "LEFT(Lecturer_ID, 2) = '" + Session["Username"].ToString().Substring(0, 2) + "'", "");
+            }
         }
         
         public static string Select(string table, string columns, string where, string leftJoin)
@@ -54,54 +59,50 @@ namespace WebApplication4_0
             string modSel = "";
             string retData = "";
             string searchColumn = "";
-            string lectColumn = "";
             if(type == 1)
             {
                 searchColumn =  " AND Request_Preferences.Room_ID = '" + room + "'";
-                lectColumn = "";
             }
             else if(type == 2)
             {
+                room = room.Substring(0, room.IndexOf(' '));
                 searchColumn =  " AND Requests.Module_Code = '" + room + "'";
-                lectColumn = "";
             }
             else
             {
+                room = room.Substring(0, room.IndexOf(' '));
                 searchColumn = "AND Request_Lecturers.Lecturer_ID = '" + room + "'";
             }
             for (int i = 1; i < 10; i++)
             {
                 for (int j = 1; j < 6; j++)
                 {
-                    if (week < 13)
+                    retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time, Request_Preferences.Room_ID", "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + searchColumn + " AND Requests.Semester = " + semester + " AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')", "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID");
+                    if (retData == "[]")
                     {
-                        retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time, Request_Preferences.Room_ID", "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + searchColumn + " AND Requests.Semester = " + semester + " AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')", "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID");
-                        if (retData == "[]")
-                        {
-                            string where = "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + searchColumn + " AND Requests.Semester = " + semester + " AND Request_Weeks.Week_ID = " + week;
-                            string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID";
-                            retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time, Request_Preferences.Room_ID", where, leftJoin);
-                            if (retData != "[]")
-                            {
-                                retData = retData.Substring(1, retData.Length - 2);
-                                string reqID = getValue(retData, 2);
-                                string lecData = Select("Lecturers", "Lecturer_Name", "Request_Lecturers.Request_ID = " + reqID, "LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID");
-                                string fullData = "[" + retData.Substring(0, retData.Length - 1) + "," + lecData.Substring(2, lecData.Length - 3) + "]";
-                                modSel += "," + fullData;
-                            }
-                            else
-                            {
-                                modSel += "," + "[{}]";
-                            }
-                        }
-                        else
+                        string where = "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + searchColumn + " AND Requests.Semester = " + semester + " AND Request_Weeks.Week_ID = " + week;
+                        string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID";
+                        retData = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time, Request_Preferences.Room_ID", where, leftJoin);
+                        if (retData != "[]")
                         {
                             retData = retData.Substring(1, retData.Length - 2);
                             string reqID = getValue(retData, 2);
-                            string lecData = Select("Lecturers", "Lecturer_Name", "Request_Lecturers.Request_ID = " + reqID, "LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID");
+                            string lecData = Select("Lecturers", "Lecturer_Name, Lecturers.Lecturer_ID", "Request_Lecturers.Request_ID = " + reqID, "LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID");
                             string fullData = "[" + retData.Substring(0, retData.Length - 1) + "," + lecData.Substring(2, lecData.Length - 3) + "]";
                             modSel += "," + fullData;
                         }
+                        else
+                        {
+                            modSel += "," + "[{}]";
+                        }
+                    }
+                    else
+                    {
+                        retData = retData.Substring(1, retData.Length - 2);
+                        string reqID = getValue(retData, 2);
+                        string lecData = Select("Lecturers", "Lecturer_Name, Lecturers.Lecturer_ID", "Request_Lecturers.Request_ID = " + reqID, "LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID");
+                        string fullData = "[" + retData.Substring(0, retData.Length - 1) + "," + lecData.Substring(2, lecData.Length - 3) + "]";
+                        modSel += "," + fullData;
                     }
                 }
             }

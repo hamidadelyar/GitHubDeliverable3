@@ -5,7 +5,10 @@
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script src="Scripts/jquery-ui-1.8.24.min.js" type="text/javascript"></script>
     <script>var roomsArray = <%= this.data %>;</script>
+    <script>var modsArray = <%= this.modData %>;</script>
+    <script>var lectsArray = <%= this.lectData %>;</script>
     <script src="Scripts/Loading.js" type="text/javascript" ></script>
     <script src="Scripts/Timetable.js" type="text/javascript" ></script>
     <link rel="stylesheet" href="Content/Timetable.css" />
