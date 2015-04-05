@@ -142,6 +142,60 @@ namespace WebApplication4_0
             }
             return retCategory.ToArray();
         }
+
+        [System.Web.Services.WebMethod]
+        public static string ShowBuildingSelect(bool central, bool east, bool west)
+        {
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+            conn.Open(); //opening connection with the DB
+            string query = "";
+            //different possibilities of queries based on checkboxes checked by user. If user checks central, then central buildings shown.
+            if (central == true && east == false && west == false)
+            {
+                query = "select * from [Buildings] where Park_ID = 'C'";
+            }
+            if (central == false && east == true && west == false)
+            {
+                query = "select * from [Buildings] where Park_ID = 'E'";
+            }
+            if (central == false && east == false && west == true)
+            {
+                query = "select * from [Buildings] where Park_ID = 'W'";
+            }
+            //query if multiple checkbox selected
+            if (central == true && east == true && west == false)
+            {
+                query = "select * from [Buildings] where Park_ID != 'W'";
+            }
+            if (central == true && east == false && west == true)
+            {
+                query = "select * from [Buildings] where Park_ID != 'E'";
+            }
+            if (central == false && east == true && west == true)
+            {
+                query = "select * from [Buildings] where Park_ID != 'C'";
+            }
+            //query if all checkboxes selected
+            if (central == true && east == true && west == true)
+            {
+                query = "select * from [Buildings]";
+            }
+
+            string result = "<option value='0'> - NO BUILDING PREFERENCE - </option>"; 
+
+            if (query != "")
+            {
+                SqlCommand comm = new SqlCommand(query, conn);  //1st argument is query, 2nd argument is connection with DB
+                SqlDataReader reader = comm.ExecuteReader();
+                while (reader.Read())
+                {
+                    result += "<option value ='" + reader.GetString(0) + "'>" + reader.GetString(1) + " (" + reader.GetString(0) + ")</option>";
+                }
+            }
+           // string result = comm.ExecuteScalar().ToString();
+            conn.Close();
+            return result;
+        }
         
     }
 }
