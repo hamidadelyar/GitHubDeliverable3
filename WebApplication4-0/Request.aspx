@@ -655,30 +655,35 @@ input[type=checkbox] {
                 });
             });
             
+            /* 
+            This will update the rooms available to select based on the building that the user selects.
+            If user selects James France, then the rooms for james france will be shown.
+            TO DO - This will also take into consideration room type and room facilities. 
+            */
             $('#select_building').change(function () {
+                var building = document.getElementById('select_building').value; //selected building code
+                //if no building selected, then 0 is sent.
+                $.ajax({
+                    type: "POST",
+                    url: "Request.aspx/ShowRooms",
+                    data: JSON.stringify({ building: building }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        //document.getElementById('modcodeInput').value = result.d;   //have to write as result.d for some reason
+                        //alert(result.d);
+                        $('#select_room').html(result.d);
+                    }
+                });
 
             });
 
         }); //document.ready closing tag
 
 
-        /*
-        function showPopup() { 
-            $("#defaultWeeksNo").click(function () { //onclick, fades in to display
-                $('.pop').fadeIn(1000);
-                $('#requestContainer').removeClass('blur-out');
-                $('#requestContainer').addClass('blur-in');
-
-            });   
-        }
-
-        function hidePopup() { 
-                $('.pop').fadeOut(1000);
-                //$('#requestContainer').removeClass('blur-in');
-                $('#requestContainer').addClass('blur-out');
-                $('#requestContainer').removeClass('blur-in');
-
-        }*/
       
       
         
@@ -952,8 +957,23 @@ input[type=checkbox] {
                 <td>
                     <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
                         <select id="select_building">
-                            <option></option>
+                            <!-- options filled with AJAX -->
                         </select>
+                    </div>
+                </td>
+
+                <td>
+                    <!-- empty cell for formatting reasons -->
+                </td>
+
+                <td>
+                    <asp:Label ID="Label6" runat="server" Text="ROOM"></asp:Label>
+                </td>
+                <td>
+                    <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
+                        <select id="select_room">
+                            <!-- options filled with AJAX -->
+                         </select>
                     </div>
                 </td>
             </tr>
