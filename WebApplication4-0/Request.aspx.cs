@@ -196,6 +196,30 @@ namespace WebApplication4_0
             conn.Close();
             return result;
         }
-        
+
+        [System.Web.Services.WebMethod]
+        public static string ShowRooms(string building)
+        {
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+            conn.Open(); //opening connection with the DB
+            string query = "select Room_ID from [Rooms] where Building_ID = '" + building + "'";
+            SqlCommand comm = new SqlCommand(query, conn);  //1st argument is query, 2nd argument is connection with DB
+            SqlDataReader reader = comm.ExecuteReader();
+            string result = "<option value='0'> - NO ROOM PREFERENCE - </option>";
+            while (reader.Read())
+            {
+                result += "<option value ='" + reader.GetString(0) + "'>" + reader.GetString(0) + "</option>";
+            }
+            conn.Close();
+            return result;
+        }
+
+
+
+
+
     }
+
+   
+  
 }
