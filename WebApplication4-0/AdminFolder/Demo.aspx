@@ -6,12 +6,6 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
 
 
-    <script runat="server">
-        private void NewAnnouncement (object source, EventArgs e) {
-          SqlDataSource1.Insert();
-        }
-    </script>
-
 
     <asp:SqlDataSource 
         ID="SqlDataSource1" 
@@ -24,30 +18,17 @@
         DeleteCommand="DELETE FROM Announcements WHERE announcementID = @announcementID"
         InsertCommand="INSERT INTO Announcements (title, content, postDate) VALUES (@titleDB,@contentDB,GETDATE())">
             <InsertParameters>
-                <asp:FormParameter name="titleDB" FormField="titleInput" />
-                <asp:FormParameter name="contentDB" FormField="contentInput" />
+                <asp:ControlParameter name="titleDB" ControlId="TextBox1" PropertyName="Text" />
+                <asp:ControlParameter name="contentDB" ControlId="TextBox2" PropertyName="Text" />
             </InsertParameters>
+
     </asp:SqlDataSource>
 
-    <br />
-    <asp:TextBox ID="titleInput" runat="server"></asp:TextBox>
 
-    <asp:RequiredFieldValidator
-        id="RequiredFieldValidator1"
-        runat="server"
-        ControlToValidate="titleInput"
-        Display="Static"
-        ErrorMessage="Please Enter a Title"/>
+      <asp:TextBox id="TextBox1" runat="server" />
+      <asp:TextBox id="TextBox2" runat="server" />
 
-    <br />
-    <asp:TextBox ID="contentInput" runat="server"></asp:TextBox>
 
-    <asp:RequiredFieldValidator
-        id="RequiredFieldValidator2"
-        runat="server"
-        ControlToValidate="contentInput"
-        Display="Static"
-        ErrorMessage="Please Enter some Content"/>
 
     <br />
     <asp:Button ID="Button1" runat="server" Text="New Announcement" OnClick="NewAnnouncement" />
@@ -68,6 +49,12 @@
             <asp:CommandField ShowEditButton="True" />
             <asp:CommandField ShowDeleteButton="True" />
         </Columns>
-    </asp:GridView>
+    </asp:GridView>    
+    
+    <script runat="server">
+        private void NewAnnouncement (object source, EventArgs e) {
+          SqlDataSource1.Insert();
+        }
+    </script>
 
 </asp:Content>

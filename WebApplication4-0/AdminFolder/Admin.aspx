@@ -38,51 +38,12 @@
                         <td>Tips for Creating Requests</td><td>04/03/2015</td><td>Edit</td><td>Remove</td>
                     </tr>
                 </table>
-            
-    <script runat="server">
-        private void NewAnnouncement (object source, EventArgs e) {
-          SqlDataSource1.Insert();
-        }
-    </script>
 
+        <asp:SqlDataSource 
+            ID="SqlDataSource1"
+            runat="server" >
 
-    <asp:SqlDataSource 
-        ID="SqlDataSource1" 
-        runat="server" 
-        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-        ProviderName="<%$ ConnectionStrings:team02ConnectionString1.ProviderName %>" 
-        SelectCommand="SELECT [announcementID], [postDate], [title], [content] FROM [Announcements]"
-        InsertCommand="INSERT INTO Announcements (title, content, postDate) VALUES (@titleDB,@contentDB,GETDATE())">
-            <InsertParameters>
-                <asp:FormParameter name="titleDB" FormField="titleInput" />
-                <asp:FormParameter name="contentDB" FormField="contentInput" />
-            </InsertParameters>
-    </asp:SqlDataSource>
-
-    <br />
-    <asp:TextBox ID="titleInput" runat="server"></asp:TextBox>
-
-    <asp:RequiredFieldValidator
-        id="RequiredFieldValidator1"
-        runat="server"
-        ControlToValidate="titleInput"
-        Display="Static"
-        ErrorMessage="Please Enter a Title"/>
-
-    <br />
-    <asp:TextBox ID="contentInput" runat="server"></asp:TextBox>
-
-    <asp:RequiredFieldValidator
-        id="RequiredFieldValidator2"
-        runat="server"
-        ControlToValidate="contentInput"
-        Display="Static"
-        ErrorMessage="Please Enter some Content"/>
-
-    <br />
-    <asp:Button ID="Button1" runat="server" Text="New Announcement" OnClick="NewAnnouncement" />
-
-
+        </asp:SqlDataSource>
             
     </div>
 
