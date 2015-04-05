@@ -67,6 +67,7 @@
         </Columns>
     </asp:GridView>    
     </div>
+
     <script runat="server">
         private void NewAnnouncement (object source, EventArgs e) {
           SqlDataSource1.Insert();
