@@ -13,9 +13,10 @@
     </asp:PlaceHolder>
     <meta name="viewport" content="width=device-width" />
     <asp:ContentPlaceHolder runat="server" ID="HeadContent" />
+
 </head>
 <body>
-    <form runat="server">
+    <form id="form1" runat="server">
     <asp:ScriptManager runat="server">
         <Scripts>
             <asp:ScriptReference Name="jquery" />
@@ -52,11 +53,13 @@
                         <li><a runat="server" href="Rounds.aspx">Rounds</a></li>
                         <li><a runat="server" href="Rooms.aspx">Rooms</a></li>
                         <li><a runat="server" href="Demo.aspx">Demo</a></li>
+                        <li><a runat="server" href="demo_no_master.aspx">Demo (no master)</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
     </header>
+    
     <div id="body">
         <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
         <section class="content-wrapper main-content clear-fix">
@@ -71,6 +74,6 @@
             </div>
         </div>
     </footer>
-    </form>
+</form>    
 </body>
 </html>
