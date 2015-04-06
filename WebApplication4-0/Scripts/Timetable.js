@@ -44,9 +44,10 @@ $(document).ready(function () {
         $('.suggestTbl').show();
         $('.semesters').hide();
         $('.suggestTbl').css('display', 'block');
-        $('.suggestTbl').height(420);
+        $('.suggestTbl').height(425);
         $('.suggestTbl').width('100%');
         $('.suggestTbl td').width($('.suggestTbl').width());
+        fillTable();
     });
     $('.roomTxt').on('input propertychange paste', function () { // Finds suggestion to put in table that match the users input everytime they alter the text
         $('.suggestTbl').html('');
@@ -64,7 +65,6 @@ $(document).ready(function () {
         $('.roomTxt').val("");
         $('.suggestTbl').html('');
         fillTable();
-        getBooking();
     });
 
     $('.weekBtn').click(function () { // updates timetable when week is changed
@@ -125,19 +125,88 @@ $(document).ready(function () {
 });
 function fillTable() // fills the rooms suggestion table with data that matches the input
 {
-    var roomTxt = $('.roomTxt').val().split('.').join('');
-    for (var i = 0; i < roomsArray.length; i++) {
-        var searchTxt = roomsArray[i]['Room_ID'].split('.').join('');
-        if (roomTxt == searchTxt.substring(0, roomTxt.length)) {
-            $('.suggestTbl').append("<tr><td>" + roomsArray[i]['Room_ID'] + "</td></tr>");
-            $('.suggestTbl td').width($('.suggestTbl').width());
-            $('.suggestTbl td').click(function () {
-                $('.suggestTbl').hide();
-                $('.semesters').show();
-                $('.roomTxt').val($(this).html());
-            })
+    var roomTxt = $('.roomTxt').val().split('.').join('').toUpperCase();
+    if (type == 1)
+    {
+        if (roomTxt == "")
+        {
+            if ($('.suggestTbl tr').length == roomsArray.length)
+            {
+                return;
+            }
+            else
+            {
+                $('.suggestTbl').html('');
+                for (var i = 0; i < roomsArray.length; i++) {
+                    $('.suggestTbl').append("<tr><td>" + roomsArray[i]['Room_ID'] + "</td></tr>");
+                }
+            }
+        }
+        else
+        {
+            $('.suggestTbl').html('');
+            for (var i = 0; i < roomsArray.length; i++) {
+                var searchTxt = roomsArray[i]['Room_ID'].split('.').join('').toUpperCase();
+                if (searchTxt.indexOf(roomTxt) != -1) {
+                    $('.suggestTbl').append("<tr><td>" + roomsArray[i]['Room_ID'] + "</td></tr>");
+                }
+            }
         }
     }
+    else if (type == 2)
+    {
+        if (roomTxt == "") {
+            if ($('.suggestTbl tr').length == modsArray.length) {
+                return;
+            }
+            else {
+                $('.suggestTbl').html('');
+                for (var i = 0; i < modsArray.length; i++) {
+                    $('.suggestTbl').append("<tr><td>" + modsArray[i]['Module_Code'] + "</td></tr>");
+                }
+            }
+        }
+        else {
+            $('.suggestTbl').html('');
+            for (var i = 0; i < modsArray.length; i++) {
+                var searchTxt = modsArray[i]['Module_Code'].split('.').join('').toUpperCase();
+                if (searchTxt.indexOf(roomTxt) != -1) {
+                    $('.suggestTbl').append("<tr><td>" + modsArray[i]['Module_Code'] + "</td></tr>");
+                }
+            }
+        }
+    }
+    else {
+        if (roomTxt == "") {
+            if ($('.suggestTbl tr').length == lectsArray.length) {
+                return;
+            }
+            else {
+                $('.suggestTbl').html('');
+                for (var i = 0; i < lectsArray.length; i++) {
+                    $('.suggestTbl').append("<tr><td>" + lectsArray[i]['Lecturer_ID'] + "</td></tr>");
+                }
+            }
+        }
+        else {
+            $('.suggestTbl').html('');
+            for (var i = 0; i < lectsArray.length; i++) {
+                var searchTxt = lectsArray[i]['Lecturer_ID'].split('.').join('').toUpperCase();
+                if (searchTxt.indexOf(roomTxt) != -1) {
+                    $('.suggestTbl').append("<tr><td>" + lectsArray[i]['Lecturer_ID'] + "</td></tr>");
+                }
+            }
+        }
+    }
+    $('.suggestTbl td').width($('.suggestTbl').width());
+    $('.suggestTbl td').click(function () {
+        $('.suggestTbl').hide();
+        $('.semesters').show();
+        $('.roomTxt').val($(this).html());
+        $('.suggestTbl').html('');
+        fillTable();
+        getBooking();
+    })
 }
 function getBooking() // uses ajax to run the code behind and then put the data returned into the timetable
 {
@@ -171,7 +240,7 @@ function insertData(result)
     $('.slot').each(function () {
         if (typeof bookings[i][0]['Module_Code'] != 'undefined') {
             var innerData = bookings[i][0];
-            $(this).html(innerData['Module_Code'] + '<span class="bookingSpan" >' + innerData['Module_Code'] + '<br />' + innerData['Module_Title'] + '<br />' + innerData['Lecturer_Name'] + '<br />' + innerData['Room_ID'] + '</span>').addClass('booking');
+            $(this).html(innerData['Module_Code'] + '<span class="bookingSpan" ><span class="modCode" >' + innerData['Module_Code'] + '<br />' + innerData['Module_Title'] + '</span><br /><span class="lectName">' + innerData['Lecturer_ID'].toUpperCase() + '<br />' + innerData['Lecturer_Name'] + '</span><br /><span class="roomId">' + innerData['Room_ID'] + '</span></span>').addClass('booking');
             var cellIndex = $(this).index();
             var $currCell = $(this);
             for (var j = 0; j < innerData['End_Time'] - innerData['Start_Time'] - 1; j++) {
@@ -192,13 +261,42 @@ function insertData(result)
 function bookingHover() // adds the booking hover features to bookings added after the initial page load
 {
     $('.booking').mouseover(function () {
-        var left = $(this).position().left + $(this).width();
+        var left = $(this).position().left + $(this).width() + 1;
         var top = $(this).position().top;
         $(this).find('span').show().css('top', top + 'px').css('left', left + 'px');
     });
     $('.booking').mouseout(function () {
         $(this).find('span').hide();
     });
+    $('.roomId').click(function () {
+        type = 1;
+        $('.choice').css('text-decoration', 'none');
+        $('.roomChoice').css('text-decoration', 'underline');
+        $('.roomTxt').val($(this).html());
+        $('.rooms b').html('ROOM');
+        fillTable();
+        getBooking();
+    })
+    $('.modCode').click(function () {
+        type = 2;
+        $('.choice').css('text-decoration', 'none');
+        $('.modChoice').css('text-decoration', 'underline');
+        var text = $(this).html()
+        $('.roomTxt').val(text.replace('<br>', ' '));
+        $('.rooms b').html('MODULE CODE');
+        fillTable();
+        getBooking();
+    });
+    $('.lectName').click(function () {
+        type = 3;
+        $('.choice').css('text-decoration', 'none');
+        $('lectChoice').css('text-decoration', 'underline');
+        var text = $(this).html()
+        $('.roomTxt').val(text.replace('<br>', ' '));
+        $('.rooms b').html('LECTURER');
+        fillTable();
+        getBooking();
+    })
 }
 function updateWeeks() { // sets the week labels to be correct after selection is changed
     $('.leftWk').html(weeksArray[currWeek - 1].substring(5));
