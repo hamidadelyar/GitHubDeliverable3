@@ -603,28 +603,87 @@ input[type=checkbox] {
 
             });
            
+            /*
+            On park checkbox selection, updates the buildings that the user can select from.
+            If the user selects central park, only buildings from central park shown.
+            User can select multiple parks through checkboxes.
+            */
+            $('.parkClass').change(function () {
+                //if checked, then is set to true, otherwise false
+                var central = document.getElementById('checkbox_centralPark').checked;
+                var east = document.getElementById('checkbox_eastPark').checked;
+                var west = document.getElementById('checkbox_westPark').checked;
+                
+                $.ajax({
+                    type: "POST",
+                    url: "Request.aspx/ShowBuildingSelect",
+                    data: JSON.stringify({ central: central, east:east, west:west }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        //document.getElementById('modcodeInput').value = result.d;   //have to write as result.d for some reason
+                        //alert(result.d);
+                        $('#select_building').html(result.d);
+                    }
+                });
+            });
 
+            /*
+            will show all buildings available to select onload, seeing as west, central, east initially checked onload
+            */
+            $(function () {
+                var central = document.getElementById('checkbox_centralPark').checked;
+                var east = document.getElementById('checkbox_eastPark').checked;
+                var west = document.getElementById('checkbox_westPark').checked;
+                $.ajax({
+                    type: "POST",
+                    url: "Request.aspx/ShowBuildingSelect",
+                    data: JSON.stringify({ central: central, east: east, west: west }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        //document.getElementById('modcodeInput').value = result.d;   //have to write as result.d for some reason
+                        //alert(result.d);
+                        $('#select_building').html(result.d);
+                    }
+                });
+            });
+            
+            /* 
+            This will update the rooms available to select based on the building that the user selects.
+            If user selects James France, then the rooms for james france will be shown.
+            TO DO - This will also take into consideration room type and room facilities. 
+            */
+            $('#select_building').change(function () {
+                var building = document.getElementById('select_building').value; //selected building code
+                //if no building selected, then 0 is sent.
+                $.ajax({
+                    type: "POST",
+                    url: "Request.aspx/ShowRooms",
+                    data: JSON.stringify({ building: building }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        //document.getElementById('modcodeInput').value = result.d;   //have to write as result.d for some reason
+                        //alert(result.d);
+                        $('#select_room').html(result.d);
+                    }
+                });
+
+            });
 
         }); //document.ready closing tag
 
 
-        /*
-        function showPopup() { 
-            $("#defaultWeeksNo").click(function () { //onclick, fades in to display
-                $('.pop').fadeIn(1000);
-                $('#requestContainer').removeClass('blur-out');
-                $('#requestContainer').addClass('blur-in');
-
-            });   
-        }
-
-        function hidePopup() { 
-                $('.pop').fadeOut(1000);
-                //$('#requestContainer').removeClass('blur-in');
-                $('#requestContainer').addClass('blur-out');
-                $('#requestContainer').removeClass('blur-in');
-
-        }*/
       
       
         
@@ -674,25 +733,7 @@ input[type=checkbox] {
                     <!-- empty -->
                 </td>
             </tr>
-            <tr>
-                <td>   
-                    <asp:Label ID="Label2" runat="server" Text="NUMBER OF ROOMS"></asp:Label>
-                </td>
-                <td>
-                     <div class="styled-select">
-                        <select>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                     </div>
-                </td>
-            </tr>
-
-          
-
+     
             <tr>
                 <td>
                     <asp:Label ID="daySelectLabel" runat="server" Text="DAY"></asp:Label>
@@ -749,7 +790,22 @@ input[type=checkbox] {
             </tr>
 
          
-
+            <tr>
+                <td>   
+                    <asp:Label ID="Label2" runat="server" Text="NUMBER OF ROOMS"></asp:Label>
+                </td>
+                <td>
+                     <div class="styled-select">
+                        <select>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                     </div>
+                </td>
+            </tr>
            
             <tr>
                 <td colspan="6">
@@ -784,17 +840,18 @@ input[type=checkbox] {
                 </td>
                
                  <td>
-                     <div class="divClass">
-                         <input type="radio" name="radio" id="radioLecture" class="radio" checked> <!-- checked by default -->
-                         <label for="radioLecture">Lecture</label>
+
+                     <div class="divClassCheckbox">
+                         <input type="checkbox" id="checkbox_Lecture" class="radio" checked /> <!-- all checked by default -->
+                         <label for="checkbox_Lecture">Lecture</label>
                      </div>
-                     <div class="divClass">
-                         <input type="radio" name="radio" id="radioSeminar" class="radio"/>
-                         <label for="radioSeminar">Seminar</label>
+                     <div class="divClassCheckbox">
+                         <input type="checkbox" id="checkbox_Seminar" class="radio" />
+                         <label for="checkbox_Seminar">Seminar</label>
                      </div>
-                      <div class="divClass">
-                         <input type="radio" name="radio" id="radioLab" class="radio"/>
-                         <label for="radioLab">Lab</label>
+                      <div class="divClassCheckbox">
+                         <input type="checkbox" id="checkbox_Lab" class="radio" />
+                         <label for="checkbox_Lab">Lab</label>
                      </div>
                  </td>  
 
@@ -819,17 +876,17 @@ input[type=checkbox] {
                  </td>
 
                  <td>
-                     <div class="divClassCheckbox">  
-                         <input type="checkbox" name="park" id="centralPark" class="radio" checked/>
-                         <label for="centralPark">Central</label>
+                     <div class="divClassCheckbox parkClass">  
+                         <input type="checkbox" name="park" id="checkbox_centralPark" class="radio" checked/>
+                         <label for="checkbox_centralPark">Central</label>
                      </div>
-                     <div class="divClassCheckbox">  
-                         <input type="checkbox" name="park" id="westPark" class="radio" checked/>
-                         <label for="westPark">West</label>
+                     <div class="divClassCheckbox parkClass">  
+                         <input type="checkbox" name="park" id="checkbox_westPark" class="radio" checked/>
+                         <label for="checkbox_westPark">West</label>
                      </div>
-                     <div class="divClassCheckbox">  
-                         <input type="checkbox" name="park" id="eastPark" class="radio" checked/>
-                         <label for="eastPark">Central</label>
+                     <div class="divClassCheckbox parkClass">  
+                         <input type="checkbox" name="park" id="checkbox_eastPark" class="radio" checked/>
+                         <label for="checkbox_eastPark">East</label>
                      </div>
                  </td>
 
@@ -838,60 +895,89 @@ input[type=checkbox] {
                 </td>
                 <td>
                     <div class="divClassCheckbox">
-                        <input type="checkbox" id="COMP" class="radio" />
-                        <label for="COMP">Computer</label>
+                        <input type="checkbox" id="checkbox_COMP" class="radio" />
+                        <label for="checkbox_COMP">Computer</label>
                     </div>
                     <div class="divClassCheckbox">
-                        <input type="checkbox" id="DDP" class="radio" /> <!-- dual data projection -->
-                        <label for="DDP">DDP</label>
+                        <input type="checkbox" id="checkbox_DDP" class="radio" /> <!-- dual data projection -->
+                        <label for="checkbox_DDP">DDP</label>
                     </div>
                     <div class="divClassCheckbox">
-                        <input type="checkbox" id="DP" class="radio" />
-                        <label for="DP">Data Projection</label>
+                        <input type="checkbox" id="checkbox_DP" class="radio" />
+                        <label for="checkbox_DP">Data Projection</label>
                     </div>
                     <div class="divClassCheckbox">
-                        <input type="checkbox" id="IL" class="radio" /> <!-- induction loop -->
-                        <label for="IL">Induction Loop</label>
-                    </div>
-                </td>
-                <td>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="MP" class="radio" />
-                        <label for="MP">Media Player</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="PA" class="radio" />
-                        <label for="PA">PA</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="PLASMA" class="radio" />
-                        <label for="PLASMA">Plasma Screen</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="REV" class="radio" />
-                        <label for="REV">ReView</label>
+                        <input type="checkbox" id="checkbox_IL" class="radio" /> <!-- induction loop -->
+                        <label for="checkbox_IL">Induction Loop</label>
                     </div>
                 </td>
                 <td>
                     <div class="divClassCheckbox">
-                        <input type="checkbox" id="MIC" class="radio" />
-                        <label for="MIC">Microphone</label>
+                        <input type="checkbox" id="checkbox_MP" class="radio" />
+                        <label for="checkbox_MP">Media Player</label>
                     </div>
                     <div class="divClassCheckbox">
-                        <input type="checkbox" id="VIS" class="radio" />
-                        <label for="VIS">Visualiser</label>
+                        <input type="checkbox" id="checkbox_PA" class="radio" />
+                        <label for="checkbox_PA">PA</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_PLASMA" class="radio" />
+                        <label for="checkbox_PLASMA">Plasma Screen</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_REV" class="radio" />
+                        <label for="checkbox_REV">ReView</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_MIC" class="radio" />
+                        <label for="checkbox_MIC">Microphone</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_VIS" class="radio" />
+                        <label for="checkbox_VIS">Visualiser</label>
                     </div>
                     <div class="divClassCheckbox" >
-                        <input type="checkbox" id="Wchair" class="radio" />
-                        <label for="Wchair">Wheelchair</label>
+                        <input type="checkbox" id="checkbox_Wchair" class="radio" />
+                        <label for="checkbox_Wchair">Wheelchair</label>
                     </div>
                     <div class="divClassCheckbox">
-                        <input type="checkbox" id="WB" class="radio" />
-                        <label for="WB">Whiteboard</label>
+                        <input type="checkbox" id="checkbox_WB" class="radio" />
+                        <label for="checkbox_WB">Whiteboard</label>
                     </div>
                 </td>
             </tr>
            
+            <tr>
+                <td>
+                    <asp:Label ID="Label5" runat="server" Text="BUILDING"></asp:Label>
+                </td>
+
+                <td>
+                    <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
+                        <select id="select_building">
+                            <!-- options filled with AJAX -->
+                        </select>
+                    </div>
+                </td>
+
+                <td>
+                    <!-- empty cell for formatting reasons -->
+                </td>
+
+                <td>
+                    <asp:Label ID="Label6" runat="server" Text="ROOM"></asp:Label>
+                </td>
+                <td>
+                    <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
+                        <select id="select_room">
+                            <!-- options filled with AJAX -->
+                         </select>
+                    </div>
+                </td>
+            </tr>
+
             <tr>
                 <td>
                     <input type="button" id="preferencesDoneButton" value="Done" />
