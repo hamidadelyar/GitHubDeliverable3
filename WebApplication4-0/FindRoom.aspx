@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Timetable" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Timetable.aspx.cs" Inherits="WebApplication4_0.Timetable" %>
+﻿<%@ Page Title="Timetable" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="FindRoom.aspx.cs" Inherits="WebApplication4_0.Timetable" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
@@ -232,6 +232,40 @@
         {
             background-color:#FF8060;
         }
+        .dayBtn
+        {
+            margin-top:10px;
+            padding:12.5px 0 12.5px 0;
+            width:8.9%;
+            background-color:#2B3036;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+        }
+        .clr
+        {
+            background-color:#FF9060!important;
+        }
+        .dayBtn:hover
+        {
+            background-color:#FF8060;
+        }
+        .head
+        {
+            margin-top:10px;
+            line-height:35px;
+            width:8.9%;
+            background-color:#999;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+        }
+        .nonTop
+        {
+            margin-top:-2px;
+        }
         .outCirc
         {
             position:relative;
@@ -341,6 +375,96 @@
                         <span class="weekBtn oddBtn" >ODD</span>
                         <span class="weekBtn evenBtn" >EVEN</span>
                         <span class="weekBtn clrBtn" >CLEAR</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8" class="spc"></td>
+                </tr>
+                <tr>
+                    <td class="subHdr" colspan="8"><b>PERIODS</b></td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <span class="dayBtn clr" >CLEAR</span>
+                        <span class="head one" >09:00-09:50</span>
+                        <span class="head two" >10:00-10:50</span>
+                        <span class="head three" >11:00-11:50</span>
+                        <span class="head four" >12:00-12:50</span>
+                        <span class="head five" >13:00-13:50</span>
+                        <span class="head five" >14:00-14:50</span>
+                        <span class="head five" >15:00-15:50</span>
+                        <span class="head five" >16:00-16:50</span>
+                        <span class="head five" >17:00-17:50</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <span class="head nonTop" >MON</span>
+                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <span class="head nonTop" >TUES</span>
+                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <span class="head nonTop" >WED</span>
+                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <span class="head nonTop" >THURS</span>
+                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <span class="head nonTop" >FRI</span>
+                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /></span>
                     </td>
                 </tr>
                 <tr>
