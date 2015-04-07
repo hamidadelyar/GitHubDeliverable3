@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Timetable" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Timetable.aspx.cs" Inherits="WebApplication4_0.Timetable" %>
+﻿<%@ Page Title="Find Room" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="FindRoom.aspx.cs" Inherits="WebApplication4_0.FindRoom" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
@@ -8,10 +8,11 @@
     <script src="Scripts/jquery-ui-1.8.24.min.js" type="text/javascript"></script>
     <script>
         var typeSet = 0;
+        var semSet = 0;
         $(document).ready(function () {
             $('.circ').click(function () {
-                var currVal = $(this).siblings('.facCheck').val();
-                $(this).siblings('.facCheck').val(Math.abs(currVal - 1));
+                var currVal = $(this).siblings('input').val();
+                $(this).siblings('input').val(Math.abs(currVal - 1));
                 if (currVal == 0)
                 {
                     $(this).animate({
@@ -131,7 +132,112 @@
                 $(this).addClass('selectRad');
                 typeSet = $(this).siblings('.typeCheck').val();
             });
+            $('.semCirc').click(function () {
+                $('.semCirc').removeClass('selectRad');
+                $(this).addClass('selectRad');
+                semSet = $(this).siblings('.semCheck').val();
+            });
+            $('.dayBtn').click(function () {
+                var currVal = $(this).children('.perCheck').val();
+                $(this).children('.perCheck').val(Math.abs(currVal - 1));
+                if (currVal == 0)
+                {
+                    $(this).css('background-color', '#FF8060');
+                    $(this).children('img').attr('src', '/Images/tick.png')
+                }
+                else
+                {
+                    $(this).css('background-color', '#2B3036');
+                    $(this).children('img').attr('src', '/Images/cross.png')
+                }
+            });
+            $('.leftLab').click(function () {
+                $(this).siblings('.dayBtn').css('background-color', '#FF8060');
+                $(this).siblings('.dayBtn').children('img').attr('src', '/Images/tick.png')
+                $(this).siblings('.dayBtn').val(1);
+            });
+            $('.clr').click(function () {
+                $('.dayBtn').css('background-color', '#2B3036');
+                $('.dayBtn').children('img').attr('src', '/Images/cross.png')
+                $('.dayBtn').children('.perCheck').val(0);
+            });
         });
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+        function validation()
+        {
+            var perCount = 0;
+            var weekCount = 0;
+            var parkCount = 0;
+            var id = "";
+            var offset = 0;
+            if ($('.noStuds').val() == "")
+            {
+                $('.studTit').html('<b>NUMBER OF STUDENTS</b><span class="alert" >&nbsp;You must input the number of students for the room.</span>');
+                id = 'studs';
+            }
+            else if ($('.noStuds').val() == "0") {
+                $('.studTit').html('<b>NUMBER OF STUDENTS</b><span class="alert" >&nbsp;You must have at least one student for the room.</span>');
+                id = 'studs';
+            }
+            else
+            {
+                $('.studTit').html('<b>NUMBER OF STUDENTS</b>');
+            }
+            $('.perCheck').each(function () {
+                if ($(this).val() == 1) {
+                    perCount++;
+                }
+            });
+            if (perCount == 0) {
+                $('.perTit').html('<b>PERIODS</b><span class="alert" >&nbsp;You must select at least one period you would like a room in.</span>');
+                id = 'periods';
+            }
+            else {
+                $('.perTit').html('<b>PERIODS</b>');
+            }
+            $('.weekCheck').each(function () {
+                if ($(this).val() == 1) {
+                    weekCount++;
+                }
+            });
+            if (weekCount == 0) {
+                $('.weekTit').html('<b>WEEKS</b><span class="alert" >&nbsp;You must select at least one week you would like a room in.</span>');
+                id = 'week';
+            }
+            else {
+                $('.weekTit').html('<b>WEEK</b>');
+            }
+            $('.parkCheck').each(function () {
+                if($(this).val() == 1)
+                {
+                    parkCount++;
+                }
+            });
+            if(parkCount == 0)
+            {
+                $('.parkTit').html('<b>PARK</b><span class="alert" >&nbsp;You must select at least one park you would like a room in.</span>');
+                id = 'park';
+            }
+            else
+            {
+                $('.parkTit').html('<b>PARK</b>');
+            }
+            if (id != "")
+            {
+                $('html, body').animate({
+                    scrollTop: $("#"+id).offset().top - 300
+                }, 1000);
+            }
+            else
+            {
+                
+            }
+        }
     </script>
     <style>
         .toolsHolder
@@ -164,6 +270,11 @@
         {
             color:#FF8060;
             font-size:1.2em;
+        }
+        .alert
+        {
+            margin-top:10px;
+            color:#FFD800;
         }
         .spc
         {
@@ -203,6 +314,11 @@
             display:inline-block;
             cursor:pointer;
         }
+        .park
+        {
+            left:-12px;
+            background-color:#FF8060;
+        }
         .week
         {
             width:35px;
@@ -235,7 +351,7 @@
         .dayBtn
         {
             margin-top:10px;
-            line-height:35px;
+            padding:9.5px 0 9.5px 0;
             width:8.9%;
             background-color:#2B3036;
             cursor:pointer;
@@ -245,7 +361,14 @@
         }
         .clr
         {
-            background-color:#FF9060!important;
+            margin-top:10px;
+            line-height:35px;
+            width:8.9%;
+            background-color:#FF8060;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
         }
         .dayBtn:hover
         {
@@ -257,14 +380,40 @@
             line-height:35px;
             width:8.9%;
             background-color:#999;
-            cursor:pointer;
+            cursor:default;
             display:inline-block;
             text-align:center;
             border-radius:3px;
         }
+        .noStuds
+        {
+            line-height:17.5px;
+            width:200px;
+            background-color:#2B3036;
+            border-radius:3px;
+            border:1px #2B3036 solid;
+            color:#FFF;
+        }
         .nonTop
         {
-            margin-top:-2px;
+            margin-top:-1.5px!important;
+        }
+        .leftLab
+        {
+            cursor:pointer;
+            margin-top:-1.5px!important;
+        }
+        .semCirc
+        {
+            position:relative;
+            display:inline-block;
+            height:15px;
+            width:15px;
+            background-color:#3E454D;
+            border-radius:15px;
+            top:-4px;
+            left:-37px;
+            cursor:pointer;
         }
         .outCirc
         {
@@ -332,19 +481,29 @@
         <div class="tools" >
             <table class="facChecks" >
                 <tr>
-                    <td class="subHdr" colspan="8"><b>PARK</b></td>
+                    <td class="subHdr parkTit" id="park" colspan="8"><b>PARK</b></td>
                 </tr>
                 <tr class="parkRw">
-                    <td><b>CENTRAL PARK</b></td><td> <span class="line" ></span><span class="circ"></span><input class="facCheck" type="hidden" value="0" /></td>
-                    <td><b>WEST PARK</b></td><td> <span class="line" ></span><span class="circ"></span><input class="facCheck" type="hidden" value="0" /></td>
-                    <td><b>EAST PARK</b></td><td> <span class="line" ></span><span class="circ"></span><input class="facCheck" type="hidden" value="0" /></td>
+                    <td><b>CENTRAL PARK</b></td><td> <span class="line" ></span><span class="park circ"></span><input class="parkCheck" type="hidden" value="1" /></td>
+                    <td><b>WEST PARK</b></td><td> <span class="line" ></span><span class="park circ"></span><input class="parkCheck" type="hidden" value="1" /></td>
+                    <td><b>EAST PARK</b></td><td> <span class="line" ></span><span class="park circ"></span><input class="parkCheck" type="hidden" value="1" /></td>
                     <td colspan="2"></td>
                 </tr>
                 <tr>
                     <td colspan="8" class="spc"></td>
                 </tr>
                 <tr>
-                    <td class="subHdr" colspan="8"><b>WEEKS</b></td>
+                    <td class="subHdr" colspan="8"><b>SEMESTERS</b></td>
+                </tr>
+                <tr>
+                    <td><b>ONE</b></td><td> <span class="outCirc" ></span><span class="semCirc selectRad"  ></span><input class="semCheck" type="hidden" value="0" /></td>
+                    <td><b>TWO</b></td><td> <span class="outCirc" ></span><span class="semCirc" ></span><input class="semCheck" type="hidden" value="1" /></td>
+                </tr>
+                <tr>
+                    <td colspan="8" class="spc"></td>
+                </tr>
+                <tr>
+                    <td class="subHdr weekTit" id="week" colspan="8"><b>WEEKS</b></td>
                 </tr>
                 <tr>
                     <td colspan="8" class="smlSpc"></td>
@@ -381,11 +540,11 @@
                     <td colspan="8" class="spc"></td>
                 </tr>
                 <tr>
-                    <td class="subHdr" colspan="8"><b>PERIODS</b></td>
+                    <td class="subHdr perTit" id="periods" colspan="8"><b>PERIODS</b></td>
                 </tr>
                 <tr>
                     <td colspan="8">
-                        <span class="dayBtn clr" >CLEAR</span>
+                        <span class="clr" >CLEAR</span>
                         <span class="head one" >09:00-09:50</span>
                         <span class="head two" >10:00-10:50</span>
                         <span class="head three" >11:00-11:50</span>
@@ -399,73 +558,82 @@
                 </tr>
                 <tr>
                     <td colspan="8">
-                        <span class="head nonTop" >MON</span>
-                        <span class="dayBtn one nonTop" >X</span>
-                        <span class="dayBtn two nonTop" >X</span>
-                        <span class="dayBtn three nonTop" >X</span>
-                        <span class="dayBtn four nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
+                        <span class="head leftLab" >MON</span>
+                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="8">
-                        <span class="head nonTop" >TUES</span>
-                        <span class="dayBtn one nonTop" >X</span>
-                        <span class="dayBtn two nonTop" >X</span>
-                        <span class="dayBtn three nonTop" >X</span>
-                        <span class="dayBtn four nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
+                        <span class="head leftLab" >TUES</span>
+                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="8">
-                        <span class="head nonTop" >WED</span>
-                        <span class="dayBtn one nonTop" >X</span>
-                        <span class="dayBtn two nonTop" >X</span>
-                        <span class="dayBtn three nonTop" >X</span>
-                        <span class="dayBtn four nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
+                        <span class="head leftLab" >WED</span>
+                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="8">
-                        <span class="head nonTop" >THURS</span>
-                        <span class="dayBtn one nonTop" >X</span>
-                        <span class="dayBtn two nonTop" >X</span>
-                        <span class="dayBtn three nonTop" >X</span>
-                        <span class="dayBtn four nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
+                        <span class="head leftLab" >THURS</span>
+                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="8">
-                        <span class="head nonTop" >FRI</span>
-                        <span class="dayBtn one nonTop" >X</span>
-                        <span class="dayBtn two nonTop" >X</span>
-                        <span class="dayBtn three nonTop" >X</span>
-                        <span class="dayBtn four nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
-                        <span class="dayBtn five nonTop" >X</span>
+                        <span class="head leftLab" >FRI</span>
+                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
                     </td>
+                </tr>
+                <tr>
+                    <td colspan="8" class="spc"></td>
+                </tr>
+                <tr>
+                    <td class="subHdr studTit" id="studs" colspan="8"><b>NUMBER OF STUDENTS</b></td>
+                </tr>
+                <tr>
+                    <td colspan="8"><input type="number" class="noStuds" onkeypress="return isNumberKey(event)" /></td>
                 </tr>
                 <tr>
                     <td colspan="8" class="spc"></td>
@@ -507,7 +675,7 @@
                     <td colspan="8" class="spc"></td>
                 </tr>
                 <tr>
-                    <td colspan="8"><span class="searchBtn"><b>SEARCH </b><img src="/Images/RightArrow.png" height="11" width="6" /></span></td>
+                    <td colspan="8"><span class="searchBtn" onclick="validation()"><b>SEARCH</b></span></td>
                 </tr>
             </table>
         </div>
