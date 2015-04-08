@@ -5,8 +5,34 @@
     <link rel="stylesheet" type="text/css" href="css/AdminStyle.css"> 
   	
     <style>
-        #MainContent_GridView1 {
-        
+        .black_overlay{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:1001;
+            -moz-opacity: 0.8;
+            opacity:.80;
+            filter: alpha(opacity=80);
+        }
+        .white_content {
+            display: none;
+            position: absolute;
+            top: 30%;
+            left: 30%;
+            width: 40%;
+            height: 40%;
+            padding: 16px;
+            background-color: white;
+            z-index:1002;
+            overflow: auto;
+        }
+        #buttonsDiv{
+            float:right;
+            margin-right:5%;
         }
     </style>
 
@@ -21,8 +47,7 @@
             <br />
         </div>
 
-        
-    <div style="text-align:center;">
+
     <asp:SqlDataSource 
         ID="SqlDataSource1" 
         runat="server" 
@@ -40,15 +65,6 @@
 
     </asp:SqlDataSource>
 
-
-      <asp:TextBox id="TextBox1" runat="server" />
-      <asp:TextBox id="TextBox2" runat="server" />
-
-
-
-    <br />
-    <asp:Button ID="Button1" runat="server" Text="New Announcement" OnClick="NewAnnouncement" />
-
     <asp:GridView 
         ID="GridView1" 
         runat="server" 
@@ -65,7 +81,22 @@
             <asp:CommandField ShowEditButton="True" />
             <asp:CommandField ShowDeleteButton="True" />
         </Columns>
-    </asp:GridView>    
+    </asp:GridView>  
+        
+          
+    <div id="buttonsDiv">
+        <input type="button" ID="addNews" Value="Add New Announcement" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
+    </div>
+    <div id="light" class="white_content">
+        <asp:TextBox id="TextBox1" runat="server" />
+        <asp:TextBox id="TextBox2" runat="server" />
+
+        <br />
+        <asp:Button ID="Button1" runat="server" Text="New Announcement" OnClick="NewAnnouncement" /> 
+        <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">Close</a>
+
+    </div>
+    <div id="fade" class="black_overlay">
     </div>
 
     <script runat="server">
