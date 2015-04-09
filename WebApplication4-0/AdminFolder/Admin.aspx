@@ -22,17 +22,20 @@
             display: none;
             position: absolute;
             top: 30%;
-            left: 30%;
+            right: 30%;
             width: 40%;
-            height: 40%;
+            max-width:370px;
+            height: 250px;
             padding: 16px;
             background-color: white;
             z-index:1002;
             overflow: auto;
+            border: 2px solid;
+            border-radius: 25px;
         }
-        #buttonsDiv{
-            float:right;
-            margin-right:5%;
+        #TableDiv{
+            float:left;
+            margin-left:5%;
         }
     </style>
 
@@ -64,7 +67,7 @@
             </InsertParameters>
 
     </asp:SqlDataSource>
-
+    <div id="TableDiv">
     <asp:GridView 
         ID="GridView1" 
         runat="server" 
@@ -84,16 +87,19 @@
     </asp:GridView>  
         
           
-    <div id="buttonsDiv">
+    
         <input type="button" ID="addNews" Value="Add New Announcement" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
     </div>
     <div id="light" class="white_content">
-        <asp:TextBox id="TextBox1" runat="server" />
+        <h1>New Announcement</h1>
+        Announcement Title: <br />
+        <asp:TextBox id="TextBox1" runat="server" /><br />
+        Announcement Details: <br />
         <asp:TextBox id="TextBox2" runat="server" />
 
         <br />
-        <asp:Button ID="Button1" runat="server" Text="New Announcement" OnClick="NewAnnouncement" /> 
-        <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">Close</a>
+        <asp:Button ID="Button1" runat="server" Text="Save" OnClick="NewAnnouncement" /> 
+        <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'" />
 
     </div>
     <div id="fade" class="black_overlay">
