@@ -79,6 +79,7 @@ namespace WebApplication4_0
             List<List<int>> periods = json.Deserialize<List<List<int>>>(periodData);
             List<Periods> times = new List<Periods>();
             string rooms = "";
+            semester = semester + 1;
             for (int i = 1; i < periods.Count + 1; i++)
             {
                 int length = 0;
@@ -94,7 +95,6 @@ namespace WebApplication4_0
                         length++;
                         if(j == periods[i-1].Count)
                         {
-                            rooms += "New Period(Day: " + i + " Start: " + startTime + " Length: " + length + ")\n";
                             Periods newPer = new Periods(i, startTime, length);
                             times.Add(newPer);
                             startTime = 0;
@@ -103,7 +103,6 @@ namespace WebApplication4_0
                     }
                     else if (length != 0)
                     {
-                        rooms += "New Period(Day: "+i+" Start: "+startTime+" Length: "+length+")\n";
                         Periods newPer = new Periods(i, startTime, length);
                         times.Add(newPer);
                         startTime = 0;
@@ -111,51 +110,45 @@ namespace WebApplication4_0
                     }
                 }
             }
-            /*
-            for( int i = 1; i < weeks.Count+1; i++)
+            string leftJoin;
+            string where;
+            string retRooms;
+            for (int i = 1; i < weeks.Count + 1; i++)
             {
-                for( int j = 1; j < 6; j++)
+                for(int j = 1; j < times.Count + 1; j++)
                 {
-                    for(int k = 1; k < 10; k++)
+                    int startTime = times[j - 1].getStart();
+                    int endTime = times[j - 1].getEnd();
+                    int day = times[j - 1].getDay();
+                    if(weeks[i-1] < 13)
                     {
-                        if(periods[j-1][k-1] == 1)
+                        leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID";
+                        where = "Requests.Day = " + day + " AND Requests.Semester = " + semester + " AND (Requests.Start_Time = "+ startTime + " OR (Requests.Start_Time < " + startTime + " AND Requests.End_Time > " + startTime + ") OR (Requests.Start_Time < " + endTime + " AND Requests.End_Time > " + endTime + ") OR Requests.End_Time = " + endTime + ") AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true') AND Bookings.Confirmed = 'Allocated'";
+                        retRooms = Select("Requests", "Request_Preferences.Room_ID", where, leftJoin);
+                    }
+                    else
+                    {
+                        retRooms = "[]";
+                    }
+                    if (retRooms == "[]")
+                    {
+                        leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID";
+                        where = "Requests.Day = " + day + " AND Requests.Semester = " + semester + " AND (Requests.Start_Time = " + startTime + " OR (Requests.Start_Time < " + startTime + " AND Requests.End_Time > " + startTime + ") OR (Requests.Start_Time < " + endTime + " AND Requests.End_Time > " + endTime + ") OR Requests.End_Time = " + endTime + ") AND Request_Weeks.Week_ID = " + weeks[i-1] + " AND Bookings.Confirmed = 'Allocated'";
+                        retRooms = Select("Requests", "Request_Preferences.Room_ID", where, leftJoin);
+                        if (retRooms != "[]")
                         {
-                            string where = "";
-                            string leftJoin = "";
-                            string retRooms = "";
-                            if (weeks[i - 1] < 13)
-                            {
-                                leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID";
-                                where = "Requests.Day = day AND Requests.Semester = semester AND (Requests.Start_Time = startTime OR (Requests.Start_Time < startTime AND Requests.End_Time > startTime) OR (Requests.Start_Time < endTime AND Requests.End_Time > endTime) OR Requests.End_Time = endTime) AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true') AND Bookings.Confirmed = 'Allocated'";
-                                retRooms = Select("Requests", "Request_Preferences.Room_ID", where, leftJoin);
-                            }
-                            else
-                            {
-                                retRooms = "[]";
-                            }
-                            if (retRooms == "[]")
-                            {
-                                leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID";
-                                where = "Requests.Day = day AND Requests.Semester = semester AND (Requests.Start_Time = startTime OR (Requests.Start_Time < startTime AND Requests.End_Time > startTime) OR (Requests.Start_Time < endTime AND Requests.End_Time > endTime) OR Requests.End_Time = endTime) AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true') AND Bookings.Confirmed = 'Allocated'";
-                                retRooms = Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time, Request_Preferences.Room_ID", where, leftJoin);
-                                if (rooms != "[]")
-                                {
-                                    rooms += retRooms;
-                                    rooms = rooms.Substring(1, rooms.Length - 2);
-                                    rooms = rooms.Replace("[", ",");
-                                }
-                            }
-                            else
-                            {
-                                rooms += retRooms;
-                                rooms = rooms.Substring(1, rooms.Length - 2);
-                                rooms = rooms.Replace("[", ",");
-                            }
+                            rooms += retRooms;
                         }
+                    }
+                    else
+                    {
+                        rooms += retRooms;
                     }
                 }
             }
-            */
+            rooms = rooms.Substring(1, rooms.Length - 2);
+            rooms = rooms.Replace("[", ",");
+            rooms = rooms.Replace("]", "");
             return rooms;
         }
     }
