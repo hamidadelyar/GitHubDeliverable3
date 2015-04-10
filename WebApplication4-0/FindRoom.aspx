@@ -10,6 +10,7 @@
         var typeSet = 0;
         var semSet = 0;
         $(document).ready(function () {
+            
             $('.circ').click(function () {
                 var currVal = $(this).siblings('input').val();
                 $(this).siblings('input').val(Math.abs(currVal - 1));
@@ -235,8 +236,51 @@
             }
             else
             {
-                
+                getRooms();
             }
+        }
+        function getRooms()
+        {
+            var parks = new Array();
+            var weeks = new Array();
+            var periods = new Array();
+            var times = new Array();
+            var students = $('.noStuds').val();
+            var facs = new Array();
+            $('.parkCheck').each(function () {
+                parks.push($(this).val());
+            });
+            parks = JSON.stringify(parks);
+            $('.weekCheck').each(function () {
+                weeks.push($(this).val());
+            });
+            weeks = JSON.stringify(weeks);
+
+            $('.leftLab').each(function () {
+                $(this).siblings().children('.perCheck').each(function () {
+                    times.push($(this).val());
+                });
+                periods.push(times);
+                times = [];
+            });
+            periods = JSON.stringify(periods);
+            $('.facCheck').each(function () {
+                facs.push($(this).val());
+            });
+            facs = JSON.stringify(facs);
+            $.ajax({
+                type: "POST",
+                url: "FindRoom.aspx/SearchRooms",
+                data: JSON.stringify({ parks: parks, semester: semSet, weeks: weeks, periods: periods, students:students, facs:facs, roomType: typeSet}),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                },
+                success: function (result) {
+                    alert(result.d)
+                }
+            });
         }
     </script>
     <style>
@@ -633,7 +677,7 @@
                     <td class="subHdr studTit" id="studs" colspan="8"><b>NUMBER OF STUDENTS</b></td>
                 </tr>
                 <tr>
-                    <td colspan="8"><input type="number" class="noStuds" onkeypress="return isNumberKey(event)" /></td>
+                    <td colspan="8"><input type="number" class="noStuds" min="1" onkeypress="return isNumberKey(event)" /></td>
                 </tr>
                 <tr>
                     <td colspan="8" class="spc"></td>
