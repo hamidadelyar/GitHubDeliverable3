@@ -50,35 +50,100 @@ namespace WebApplication4_0
         [System.Web.Services.WebMethod]
         public static string SearchRooms(string parks, string semester,  string weeks, string periods, string students, string facs, string roomType)
         {
-            string parkRooms = SearchParks(parks);
-            string takenRooms = SearchPeriods(semester, weeks, periods);
-            return takenRooms;
+            List<Periods> times = new List<Periods>();
+         
+            List<Rooms> parkRooms = SearchParks(parks, roomType, students);
+            List<Rooms> takenRooms = SearchPeriods(semester, weeks, periods, times);
+            List<Rooms> facRooms = SearchFacs(facs);
+            List<Rooms> possRooms = new List<Rooms>();
+            for (int i = 0; i < facRooms.Count; i++)
+            {
+                for (int j = 0; j < parkRooms.Count; j++)
+                {
+                    if(parkRooms[j].getNum() == facRooms[i].getNum())
+                    {
+                        possRooms.Add(parkRooms[j]);
+                    }
+                }
+            }
+
+            possRooms = possRooms.Distinct().ToList();
+
+            JavaScriptSerializer json = new JavaScriptSerializer();
+            List<int> weekData = json.Deserialize<List<int>>(weeks);
+
+            List<FreeRoom> rooms = new List<FreeRoom>();
+            //Loop through each week they've selected, then each period selected that week, then remove rooms not availible.
+            for (int i = 0; i < weekData.Count; i++)
+            {
+                if(weekData[i] == 1)
+                {
+                    for (int j = 0; j < times.Count; j++)
+                    {
+                        List<Rooms> tmpRooms = possRooms;
+                        for(int k = 0; k < takenRooms.Count; k++)
+                        {
+                            Periods takenRoom = takenRooms[k].getPer();
+                            if(takenRoom.getDay() == times[j].getDay() && takenRoom.getEnd() == times[j].getEnd() && takenRoom.getStart() == times[j].getStart() && takenRooms[k].getWeek() == i+1)
+                            {
+                                for(int l = 0; l < tmpRooms.Count; l++)
+                                {
+                                    if(tmpRooms[l].getNum() == takenRooms[k].getNum())
+                                    {
+                                        tmpRooms.RemoveAt(l);
+                                    }
+                                }
+                            }
+                        }
+                        for(int m = 0; m < tmpRooms.Count; m++)
+                        {
+                            FreeRoom newRoom = new FreeRoom(tmpRooms[m].getNum(), i+1, times[j].getDay(), times[j].getStart(), times[j].getEnd());
+                            rooms.Add(newRoom);
+                        }
+                    }
+                }
+            }
+            rooms = rooms.OrderBy(x => x.week).ThenBy(x => x.day).ThenBy(x => x.start).ToList();
+            return json.Serialize(rooms);
         }
-        private static string SearchParks(string parkData)
+        private static List<Rooms> SearchParks(string parkData, string typeData, string students)
         {
             JavaScriptSerializer json = new JavaScriptSerializer();
             List<int> parks = json.Deserialize<List<int>>(parkData);
-            string rooms = "";
+            int type = Convert.ToInt32(typeData);
+            string retRooms = "";
             List<char> parkList = new List<char>(){'C','E','W'};
+            List<string> typeList = new List<string>() { "[TSL]", "T", "S", "L" };
+            List<Rooms> rooms = new List<Rooms>();
+            string typeC = typeList[type];
             for (int i = 0; i < parks.Count; i++ )
             {
                 if(parks[i] == 1)
                 {
                     char parkID = parkList[i];
-                    rooms += Select("Rooms", "Room_ID", "Buildings.Park_ID = '" + parkID + "'", "LEFT JOIN Buildings ON Rooms.Building_ID = Buildings.Building_ID");
-                    rooms = rooms.Substring(1, rooms.Length - 2);
-                    rooms = rooms.Replace("[", ",");
+                    retRooms += Select("Rooms", "Room_ID", "Buildings.Park_ID = '" + parkID + "' AND Rooms.Room_Type LIKE '" + typeC + "' AND Rooms.Capacity >= " + students , "LEFT JOIN Buildings ON Rooms.Building_ID = Buildings.Building_ID");
+                    retRooms = retRooms.Replace("{", "");
+                    retRooms = retRooms.Replace("}", "");
+                    retRooms = retRooms.Replace("\"Room_ID\":", "");
+                    retRooms = retRooms.Replace("\"", "");
+                    retRooms = retRooms.Replace("[", "");
+                    retRooms = retRooms.Replace("]", "");
+                    string[] fndRooms = retRooms.Split(',');
+                    for (int n = 0; n < fndRooms.Length; n++)
+                    {
+                        Rooms newBook = new Rooms(fndRooms[n]);
+                        rooms.Add(newBook);
+                    }
                 }
             }
+            rooms = rooms.OrderBy(x => x.roomNum).ToList();
             return rooms;
         }
-        private static string SearchPeriods(string semester, string weekData, string periodData)
+        private static List<Rooms> SearchPeriods(string semester, string weekData, string periodData, List<Periods> times)
         {
             JavaScriptSerializer json = new JavaScriptSerializer();
             List<int> weeks = json.Deserialize<List<int>>(weekData);
             List<List<int>> periods = json.Deserialize<List<List<int>>>(periodData);
-            List<Periods> times = new List<Periods>();
-            string rooms = "";
             semester = semester + 1;
             for (int i = 1; i < periods.Count + 1; i++)
             {
@@ -113,50 +178,156 @@ namespace WebApplication4_0
             string leftJoin;
             string where;
             string retRooms;
+            List<Rooms> bookedRooms = new List<Rooms>();
             for (int i = 1; i < weeks.Count + 1; i++)
             {
-                for(int j = 1; j < times.Count + 1; j++)
+                if (weeks[i-1] == 1)
                 {
-                    int startTime = times[j - 1].getStart();
-                    int endTime = times[j - 1].getEnd();
-                    int day = times[j - 1].getDay();
-                    if(weeks[i-1] < 13)
+                    for (int j = 1; j < times.Count + 1; j++)
                     {
-                        leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID";
-                        where = "Requests.Day = " + day + " AND Requests.Semester = " + semester + " AND (Requests.Start_Time = "+ startTime + " OR (Requests.Start_Time < " + startTime + " AND Requests.End_Time > " + startTime + ") OR (Requests.Start_Time < " + endTime + " AND Requests.End_Time > " + endTime + ") OR Requests.End_Time = " + endTime + ") AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true') AND Bookings.Confirmed = 'Allocated'";
-                        retRooms = Select("Requests", "Request_Preferences.Room_ID", where, leftJoin);
-                    }
-                    else
-                    {
-                        retRooms = "[]";
-                    }
-                    if (retRooms == "[]")
-                    {
-                        leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID";
-                        where = "Requests.Day = " + day + " AND Requests.Semester = " + semester + " AND (Requests.Start_Time = " + startTime + " OR (Requests.Start_Time < " + startTime + " AND Requests.End_Time > " + startTime + ") OR (Requests.Start_Time < " + endTime + " AND Requests.End_Time > " + endTime + ") OR Requests.End_Time = " + endTime + ") AND Request_Weeks.Week_ID = " + weeks[i-1] + " AND Bookings.Confirmed = 'Allocated'";
-                        retRooms = Select("Requests", "Request_Preferences.Room_ID", where, leftJoin);
-                        if (retRooms != "[]")
+                        int startTime = times[j - 1].getStart();
+                        int endTime = times[j - 1].getEnd();
+                        int day = times[j - 1].getDay();
+                        if (weeks[i - 1] < 13)
                         {
-                            rooms += retRooms;
+                            leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID";
+                            where = "Requests.Day = " + day + " AND Requests.Semester = " + semester + " AND (Requests.Start_Time = " + startTime + " OR (Requests.Start_Time < " + startTime + " AND Requests.End_Time > " + startTime + ") OR (Requests.Start_Time < " + endTime + " AND Requests.End_Time > " + endTime + ") OR Requests.End_Time = " + endTime + ") AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true') AND Bookings.Confirmed = 'Allocated'";
+                            retRooms = Select("Requests", "Request_Preferences.Room_ID", where, leftJoin);
                         }
-                    }
-                    else
-                    {
-                        rooms += retRooms;
+                        else
+                        {
+                            retRooms = "[]";
+                        }
+                        if (retRooms == "[]")
+                        {
+                            leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID";
+                            where = "Requests.Day = " + day + " AND Requests.Semester = " + semester + " AND (Requests.Start_Time = " + startTime + " OR (Requests.Start_Time < " + startTime + " AND Requests.End_Time > " + startTime + ") OR (Requests.Start_Time < " + endTime + " AND Requests.End_Time > " + endTime + ") OR Requests.End_Time = " + endTime + ") AND Request_Weeks.Week_ID = " + i + " AND Bookings.Confirmed = 'Allocated'";
+                            retRooms = Select("Requests", "Request_Preferences.Room_ID", where, leftJoin);
+                            if (retRooms != "[]")
+                            {
+                                retRooms = retRooms.Replace("{", "");
+                                retRooms = retRooms.Replace("}", "");
+                                retRooms = retRooms.Replace("\"Room_ID\":", "");
+                                retRooms = retRooms.Replace("\"", "");
+                                retRooms = retRooms.Replace("[", "");
+                                retRooms = retRooms.Replace("]", "");
+                                string[] fndRooms = retRooms.Split(',');
+                                for (int n = 0; n < fndRooms.Length; n++)
+                                {
+                                    Rooms newBook = new Rooms(fndRooms[n], times[j - 1], i);
+                                    bookedRooms.Add(newBook);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            retRooms = retRooms.Replace("{", "");
+                            retRooms = retRooms.Replace("}", "");
+                            retRooms = retRooms.Replace("\"Room_ID\":", "");
+                            retRooms = retRooms.Replace("\"", "");
+                            retRooms = retRooms.Replace("[", "");
+                            retRooms = retRooms.Replace("]", "");
+                            string[] fndRooms = retRooms.Split(',');
+                            for (int n = 0; n < fndRooms.Length; n++)
+                            {
+                                Rooms newBook = new Rooms(fndRooms[n], times[j-1], i);
+                                bookedRooms.Add(newBook);
+                            }
+                        }
                     }
                 }
             }
-            rooms = rooms.Substring(1, rooms.Length - 2);
-            rooms = rooms.Replace("[", ",");
-            rooms = rooms.Replace("]", "");
-            return rooms;
+            return bookedRooms;
+        }
+        private static List<Rooms> SearchFacs(string facs)
+        {
+            JavaScriptSerializer json = new JavaScriptSerializer();
+            List<int> reqFacs = json.Deserialize<List<int>>(facs);
+            List<Rooms> possRooms = new List<Rooms>();
+            List<Rooms> rooms = new List<Rooms>();
+            string retRooms;
+            string where;
+            string leftJoin;
+            List<string> facilities = new List<string>() { "C", "MP", "RM", "DP", "PS", "V", "PA", "DDP", "W", "WB", "RLC", "I" };
+            int numRequests = 0;
+            if (facs.Contains("1"))
+            {
+                for (int i = 0; i < reqFacs.Count; i++)
+                {
+                    if (reqFacs[i] == 1)
+                    {
+                        numRequests++;
+                        leftJoin = "";
+                        where = "Room_Facilities.Facility_ID = '" + facilities[i] + "'";
+                        retRooms = Select("Room_Facilities", "Room_Facilities.Room_ID", where, leftJoin);
+                        if (retRooms != "[]")
+                        {
+                            retRooms = retRooms.Replace("{", "");
+                            retRooms = retRooms.Replace("}", "");
+                            retRooms = retRooms.Replace("\"Room_ID\":", "");
+                            retRooms = retRooms.Replace("\"", "");
+                            retRooms = retRooms.Replace("[", "");
+                            retRooms = retRooms.Replace("]", "");
+                            string[] fndRooms = retRooms.Split(',');
+                            for (int n = 0; n < fndRooms.Length; n++)
+                            {
+                                Rooms newBook = new Rooms(fndRooms[n]);
+                                possRooms.Add(newBook);
+                            }
+                        }
+                    }
+                }
+                possRooms = possRooms.OrderBy(x => x.roomNum).ToList();
+                int counter = 1;
+                for (int i = 0; i < possRooms.Count; i++)
+                {
+                    if (i != 0 && possRooms[i].getNum() == possRooms[i - 1].getNum())
+                    {
+                        counter++;
+                    }
+                    else
+                    {
+                        if (i != 0 && counter == numRequests)
+                        {
+                            rooms.Add(possRooms[i - 1]);
+                        }
+                        else if (i == 0 && counter == numRequests && possRooms[i].getNum() != possRooms[i + 1].getNum())
+                        {
+                            rooms.Add(possRooms[i]);
+                        }
+                        counter = 1;
+                    }
+                }
+            }
+            else
+            {
+                leftJoin = "";
+                where = "1=1";
+                retRooms = Select("Room_Facilities", "Room_Facilities.Room_ID", where, leftJoin);
+                if (retRooms != "[]")
+                {
+                    retRooms = retRooms.Replace("{", "");
+                    retRooms = retRooms.Replace("}", "");
+                    retRooms = retRooms.Replace("\"Room_ID\":", "");
+                    retRooms = retRooms.Replace("\"", "");
+                    retRooms = retRooms.Replace("[", "");
+                    retRooms = retRooms.Replace("]", "");
+                    string[] fndRooms = retRooms.Split(',');
+                    for (int n = 0; n < fndRooms.Length; n++)
+                    {
+                        Rooms newBook = new Rooms(fndRooms[n]);
+                        rooms.Add(newBook);
+                    }
+                }
+            }
+                return rooms;
         }
     }
     public class Periods
     {
-        public int day;
-        public int start;
-        public int end;
+        private int day;
+        private int start;
+        private int end;
 
         public Periods(int day, int start, int length)
         {
@@ -175,6 +346,59 @@ namespace WebApplication4_0
         public int getEnd()
         {
             return end;
+        }
+    }
+
+    public class FreeRoom
+    {
+        public string room;
+        public int week;
+        public int day;
+        public int start;
+        public int end;
+
+        public FreeRoom(string room, int week, int day, int start, int end)
+        {
+            this.room = room;
+            this.week = week;
+            this.day = day;
+            this.start = start;
+            this.end = end;
+        }
+    }
+    
+    public class Rooms
+    {
+        public string roomNum;
+        private Periods periodBooked;
+        private int week;
+
+        public Rooms(String roomNum)
+        {
+            this.roomNum = roomNum;
+            this.periodBooked = null;
+            this.week = -1;
+        }
+
+        public Rooms(String roomNum, Periods periodBooked, int week)
+        {
+            this.roomNum = roomNum;
+            this.periodBooked = periodBooked;
+            this.week = week;
+        }
+
+        public string getNum()
+        {
+            return roomNum;
+        }
+
+        public Periods getPer()
+        {
+            return periodBooked;
+        }
+        public int getWeek()
+        {
+            return week;
         }
     }
 }

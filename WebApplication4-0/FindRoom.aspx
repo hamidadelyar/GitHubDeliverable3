@@ -278,7 +278,8 @@
                     alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
                 },
                 success: function (result) {
-                    alert(result.d)
+                    var arr = JSON.parse(result.d);
+                    alert(arr[0])
                 }
             });
         }
