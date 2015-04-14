@@ -278,8 +278,39 @@
                     alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
                 },
                 success: function (result) {
+                    $('.resTbl').html('');
                     var arr = JSON.parse(result.d);
-                    alert(arr[0])
+                    var weeks = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN', 'ELEVEN', 'TWELVE', 'THIRTEEN', 'FOURTEEN', 'FIFTEEN'];
+                    var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                    var start = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+                    var end = ['09:50', '10:50', '11:50', '12:50', '13:50', '14:50', '15:50', '16:50', '17:50'];
+                    var currWeek = 0;
+                    var currDay = 0;
+                    var currStart = 0;
+                    var currEnd = 0;
+                    for (var i = 0; i < arr.length; i++)
+                    {
+                        if(arr[i]['week'] != currWeek)
+                        {
+                            $('.resTbl').append('<tr><td class="subHdr" ><b>WEEK ' + weeks[arr[i]['week'] - 1] + '</b></td></tr>');
+                            $('.resTbl').append('<tr><td><b>'+days[arr[i]['day'] -1]+' ' +start[arr[i]['start'] - 1]+'-'+end[arr[i]['end']-1]+'</b></td></tr>')
+                            $('.resTbl').append('<tr><td class="'+weeks[arr[i]['week'] - 1]+days[arr[i]['day'] - 1]+start[arr[i]['start'] - 1]+'" ><span class="roomRes" >'+arr[i]['room']+'</span></td></tr>')
+                            currWeek = arr[i]['week'];
+                            currDay = arr[i]['day'];
+                            currStart = arr[i]['start'];
+                        }
+                        else if(arr[i]['day'] != currDay || (arr[i]['start'] != currStart))
+                        {
+                            $('.resTbl').append('<tr><td><b>' + days[arr[i]['day'] - 1] + ' ' + start[arr[i]['start'] - 1] + '-' + end[arr[i]['end'] - 1] + '</b></td></tr>')
+                            $('.resTbl').append('<tr><td class="' + weeks[arr[i]['week'] - 1] + days[arr[i]['day'] - 1] + start[arr[i]['start'] - 1] + '" ><span class="roomRes" >' + arr[i]['room'] + '</span></td></tr>')
+                            currDay = arr[i]['day'];
+                            currStart = arr[i]['start'];
+                        }
+                        else
+                        {
+                            $('.resTbl td:last').append('<span class="roomRes" >' + arr[i]['room'] + '</span>')
+                        }
+                    }
                 }
             });
         }
@@ -520,6 +551,56 @@
         {
             background-color:#2B3036;
         }
+        .resultHolder
+        {
+            color:#2B3036;
+            margin-top:50px;
+            width:100%;
+            border-radius:10px;
+            background-color:#FFF;
+        }
+        .resHdr
+        {
+            margin-top:10px;
+            font-size:1.4em;
+            color:#2B3036;
+            float:left;
+            text-align:center;
+            width:95%;
+            margin-left:2.5%;
+        }
+        .res
+        {
+            width:95%;
+            margin-left:2.5%;
+            margin-top:15px;
+            text-align:left!important;
+            display:inline;
+        }
+        .resTbl
+        {
+            margin-top:35px;
+            margin-left:2.5%;
+            width:105%;
+            table-layout:fixed;
+        }
+        .roomRes
+        {
+            float:left;
+            width:8.9%;
+            line-height:35px;
+            background-color:#999;
+            text-align:center;
+            color:#FFF!important;
+            margin-top:2.5px;
+            margin-right:2.5px;
+            cursor:pointer;
+            border-radius:3px;
+        }
+        .roomRes:hover
+        {
+            background-color:#FF8060;
+        }
     </style>
     <div class="toolsHolder" >
         <div class="hdr" ><b>TOOLS</b></div>
@@ -721,6 +802,19 @@
                 </tr>
                 <tr>
                     <td colspan="8"><span class="searchBtn" onclick="validation()"><b>SEARCH</b></span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="resultHolder" >
+        <div class="resHdr" ><b>RESULTS</b></div>
+        <div class="res" >
+            <table class="resTbl" >
+                <tr>
+                    <td class="subHdr" ><b>ALL WEEKS</b></td>
+                </tr>
+                <tr>
+                    <td class="allResults">There were no rooms found for all weeks.</td>
                 </tr>
             </table>
         </div>

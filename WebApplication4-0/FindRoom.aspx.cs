@@ -80,7 +80,12 @@ namespace WebApplication4_0
                 {
                     for (int j = 0; j < times.Count; j++)
                     {
-                        List<Rooms> tmpRooms = possRooms;
+                        List<Rooms> tmpRooms = new List<Rooms>();
+                        for (int q = 0; q < possRooms.Count; q++)
+                        {
+                            tmpRooms.Add(possRooms[q]);
+                        }
+                            System.Diagnostics.Debug.WriteLine("Length: " + tmpRooms.Count);
                         for(int k = 0; k < takenRooms.Count; k++)
                         {
                             Periods takenRoom = takenRooms[k].getPer();
@@ -88,22 +93,26 @@ namespace WebApplication4_0
                             {
                                 for(int l = 0; l < tmpRooms.Count; l++)
                                 {
-                                    if(tmpRooms[l].getNum() == takenRooms[k].getNum())
+                                    if (tmpRooms[l].getNum() == takenRooms[k].getNum())
                                     {
                                         tmpRooms.RemoveAt(l);
                                     }
                                 }
                             }
                         }
-                        for(int m = 0; m < tmpRooms.Count; m++)
+                        for (int m = 0; m < tmpRooms.Count; m++)
                         {
-                            FreeRoom newRoom = new FreeRoom(tmpRooms[m].getNum(), i+1, times[j].getDay(), times[j].getStart(), times[j].getEnd());
+                            FreeRoom newRoom = new FreeRoom(tmpRooms[m].getNum(), i + 1, times[j].getDay(), times[j].getStart(), times[j].getEnd());
                             rooms.Add(newRoom);
                         }
                     }
                 }
             }
             rooms = rooms.OrderBy(x => x.week).ThenBy(x => x.day).ThenBy(x => x.start).ToList();
+            for(int i = 0; i < rooms.Count; i++)
+            {
+                System.Diagnostics.Debug.WriteLine("Rooms: " + rooms[i].room + ", Day: " + rooms[i].day + ", Start: " + rooms[i].start + ", End: " + rooms[i].end + ", Week: " + rooms[i].week);
+            }
             return json.Serialize(rooms);
         }
         private static List<Rooms> SearchParks(string parkData, string typeData, string students)
