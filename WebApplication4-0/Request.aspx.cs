@@ -197,20 +197,57 @@ namespace WebApplication4_0
             return result;
         }
 
+        /*
+         *Will narrow down rooms shown dependent on the building selected and room type.
+         *to include: Capacity dependant. Dependant of Room facilities selected.
+         */
         [System.Web.Services.WebMethod]
-        public static string ShowRooms(string building)
+        public static string ShowRooms(string building, bool lecture, bool seminar, bool lab)
         {
-            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
-            conn.Open(); //opening connection with the DB
-            string query = "select Room_ID from [Rooms] where Building_ID = '" + building + "'";
-            SqlCommand comm = new SqlCommand(query, conn);  //1st argument is query, 2nd argument is connection with DB
-            SqlDataReader reader = comm.ExecuteReader();
-            string result = "<option value='0'> - NO ROOM PREFERENCE - </option>";
-            while (reader.Read())
+            string query = "";
+            if (lecture == true && seminar == false && lab == false) //Tiered - T
             {
-                result += "<option value ='" + reader.GetString(0) + "'>" + reader.GetString(0) + "</option>";
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'T'";
             }
-            conn.Close();
+            if (lecture == false && seminar == true && lab == false) //Seminar - S
+            {
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'S'";
+            }
+            if (lecture == false && seminar == false && lab == true) //Lab - L
+            {
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'L'";
+            }
+            if (lecture == true && seminar == true && lab == false) 
+            {
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'L'";
+            }
+            if (lecture == true && seminar == false && lab == true)
+            {
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'S'";
+            }
+            if (lecture == false && seminar == true && lab == true)
+            {
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'T'";
+            }
+            if (lecture == true && seminar == true && lab == true) //query when all checkboxes are selected
+            {
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "'";
+            }
+            string result = "<option value='0'> - NO ROOM PREFERENCE - </option>";
+            //only carries out query if query exists
+            if (query != "")
+            {
+                SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+                conn.Open(); //opening connection with the DB
+                SqlCommand comm = new SqlCommand(query, conn);  //1st argument is query, 2nd argument is connection with DB
+                SqlDataReader reader = comm.ExecuteReader();
+                while (reader.Read())
+                {
+                    result += "<option value ='" + reader.GetString(0) + "'>" + reader.GetString(0) + "</option>";
+                }
+                conn.Close();
+            }
+          
             return result;
         }
 

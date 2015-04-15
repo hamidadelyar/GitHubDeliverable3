@@ -536,35 +536,83 @@ input[type=checkbox] {
                 }
             });
 
-       
-            /* function to apply effects of blurring the background, whilst showing popup, then when popup closes, the background returns to normal */
+            
+            /*
+            Function to apply effects of blurring the background, whilst showing popup, then when popup closes, the background returns to normal 
+            For weeks popup.
+            Includes functions for the weeks popup.
+            */
             $(function () {
-              //  $('.pop').hide(); //initially hidden
-
                 $("#defaultWeeksNo").click(function () { //onclick, fades in to display
-                    $('.pop').fadeIn(1000);
+                    $('#popupWeeks').fadeIn(1000);
                     $('#requestContainer').removeClass('blur-out');
                     $('#requestContainer').addClass('blur-in');
-                    
+                   
                     //only blurs the text in the footer
                     $('footer .float-left').removeClass('blur-out'); 
                     $('footer .float-left').addClass('blur-in');
 
                     //blurs header content, i.e. navigation
                     $('header').removeClass('blur-out');
-                    $('header').addClass('blur-in');
-
-                    
-                   
+                    $('header').addClass('blur-in');             
                 });
 
+                //Close popup weeks
                 $("#closePopup").click(function () { //onclick, fades out
-                    $('.pop').fadeOut(1000);
+                    $('#popupWeeks').fadeOut(1000);
                     //$('#requestContainer').removeClass('blur-in');
                     $('#requestContainer').addClass('blur-out');
                     $('#requestContainer').removeClass('blur-in');
 
-                   
+                    //unblurs the text in the footer
+                    $('footer .float-left').addClass('blur-out');
+                    $('footer .float-left').removeClass('blur-in');
+
+                    //unblurs header content
+                    $('header').addClass('blur-out');
+                    $('header').removeClass('blur-in');                 
+                });
+
+                //sets all the weeks to none checked
+                $('#resetWeeks').click(function () {
+                    // $('#week9').is(':checked')
+                    for (i = 0; i < 16; i++) {
+                        $('#week' + i).prop('checked', false);
+                    }
+                });
+
+                //sets all the weeks to all checked
+                $('#selectAllWeeks').click(function () {
+                    // $('#week9').is(':checked')
+                    for (i = 0; i < 16; i++) {
+                        $('#week' + i).prop('checked', true);
+                    }
+                });
+            });
+
+            //closes and opens the facility popup
+            $(function () {
+                $('#checkbox_yesPreferences').click(function () {
+                    $('#popupFacilities').fadeIn(1000);
+                    $('#requestContainer').removeClass('blur-out');
+                    $('#requestContainer').addClass('blur-in');
+
+                    //only blurs the text in the footer
+                    $('footer .float-left').removeClass('blur-out');
+                    $('footer .float-left').addClass('blur-in');
+
+                    //blurs header content, i.e. navigation
+                    $('header').removeClass('blur-out');
+                    $('header').addClass('blur-in');
+                });
+
+                //Close popup facilities
+                $("#closePopupFacilities").click(function () { //onclick, fades out
+                    $('#popupFacilities').fadeOut(1000);
+                    //$('#requestContainer').removeClass('blur-in');
+                    $('#requestContainer').addClass('blur-out');
+                    $('#requestContainer').removeClass('blur-in');
+
                     //unblurs the text in the footer
                     $('footer .float-left').addClass('blur-out');
                     $('footer .float-left').removeClass('blur-in');
@@ -572,35 +620,15 @@ input[type=checkbox] {
                     //unblurs header content
                     $('header').addClass('blur-out');
                     $('header').removeClass('blur-in');
-
-           
-                    
                 });
             });
             
-            //sets all the weeks to none checked
-            $('#resetWeeks').click(function () {
-                // $('#week9').is(':checked')
-                for (i = 0; i < 16; i++) {
-                    $('#week' + i).prop('checked', false);
-                }   
-            });
-
-
-            //sets all the weeks to all checked
-            $('#selectAllWeeks').click(function () {
-                // $('#week9').is(':checked')
-                for (i = 0; i < 16; i++) {
-                    $('#week' + i).prop('checked', true);
-                }
-            });
+           
             
             //allows user to go to preferences for 2nd room. So can select a different room on inputted capacity etc.
             $('#gotoRoom2').click(function () {
                 $('#preferenceTable').hide();
                 $('#preferenceTable2').show();
-
-
             });
            
             /*
@@ -660,13 +688,18 @@ input[type=checkbox] {
             If user selects James France, then the rooms for james france will be shown.
             TO DO - This will also take into consideration room type and room facilities. 
             */
-            $('#select_building').change(function () {
+            //Updates when building selected changed, also when room type is changed
+            $('#select_building, .roomTypeClass').change(function () {
+                //variables to send to the C# class
                 var building = document.getElementById('select_building').value; //selected building code
+                var lecture = document.getElementById('checkbox_Lecture').checked; // set to true if user wants a lecture room type
+                var seminar = document.getElementById('checkbox_Seminar').checked; //set to true if user wants a seminar
+                var lab = document.getElementById('checkbox_Lab').checked; //set to true if user wants a lab
                 //if no building selected, then 0 is sent.
                 $.ajax({
                     type: "POST",
                     url: "Request.aspx/ShowRooms",
-                    data: JSON.stringify({ building: building }),
+                    data: JSON.stringify({ building: building, lecture: lecture, seminar: seminar, lab:lab }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -678,6 +711,8 @@ input[type=checkbox] {
                         $('#select_room').html(result.d);
                     }
                 });
+
+
 
             });
 
@@ -840,16 +875,16 @@ input[type=checkbox] {
                 </td>
                
                  <td>
-
-                     <div class="divClassCheckbox">
+                     
+                     <div class="divClassCheckbox roomTypeClass">
                          <input type="checkbox" id="checkbox_Lecture" class="radio" checked /> <!-- all checked by default -->
                          <label for="checkbox_Lecture">Lecture</label>
                      </div>
-                     <div class="divClassCheckbox">
+                     <div class="divClassCheckbox roomTypeClass">
                          <input type="checkbox" id="checkbox_Seminar" class="radio" />
                          <label for="checkbox_Seminar">Seminar</label>
                      </div>
-                      <div class="divClassCheckbox">
+                      <div class="divClassCheckbox roomTypeClass">
                          <input type="checkbox" id="checkbox_Lab" class="radio" />
                          <label for="checkbox_Lab">Lab</label>
                      </div>
@@ -891,62 +926,18 @@ input[type=checkbox] {
                  </td>
 
                 <td>
-                     <asp:Label ID="Label8" runat="server" Text="ROOM FACILITIES" ToolTip="Select the preferences that you would like"></asp:Label>
+                     <asp:Label ID="Label8" runat="server" Text="REQUEST ROOM FACILITIES?" ToolTip="Select the preferences that you would like"></asp:Label>
                 </td>
                 <td>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_COMP" class="radio" />
-                        <label for="checkbox_COMP">Computer</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_DDP" class="radio" /> <!-- dual data projection -->
-                        <label for="checkbox_DDP">DDP</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_DP" class="radio" />
-                        <label for="checkbox_DP">Data Projection</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_IL" class="radio" /> <!-- induction loop -->
-                        <label for="checkbox_IL">Induction Loop</label>
-                    </div>
-                </td>
-                <td>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_MP" class="radio" />
-                        <label for="checkbox_MP">Media Player</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_PA" class="radio" />
-                        <label for="checkbox_PA">PA</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_PLASMA" class="radio" />
-                        <label for="checkbox_PLASMA">Plasma Screen</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_REV" class="radio" />
-                        <label for="checkbox_REV">ReView</label>
-                    </div>
-                </td>
-                <td>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_MIC" class="radio" />
-                        <label for="checkbox_MIC">Microphone</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_VIS" class="radio" />
-                        <label for="checkbox_VIS">Visualiser</label>
-                    </div>
-                    <div class="divClassCheckbox" >
-                        <input type="checkbox" id="checkbox_Wchair" class="radio" />
-                        <label for="checkbox_Wchair">Wheelchair</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_WB" class="radio" />
-                        <label for="checkbox_WB">Whiteboard</label>
-                    </div>
-                </td>
+                   <div class="divClass">
+                       <input type="radio" name="preferenceRadio" class="radio" id="checkbox_noPreferences" checked />
+                       <label for="checkbox_noPreferences">No</label>
+                   </div>
+                     <div class="divClass">
+                       <input type="radio" name="preferenceRadio" class="radio" id="checkbox_yesPreferences" />
+                       <label for="checkbox_yesPreferences">Yes</label>
+                   </div>
+                </td>   
             </tr>
            
             <tr>
@@ -1009,10 +1000,10 @@ input[type=checkbox] {
 
 
 <!-- popup contents for week selection-->
-<div class="pop">
+<div class="pop" id="popupWeeks">
 
-        <span id="closePopup" style="cursor: pointer; left: 15px; top: -10px; font-size: 2em; display:inline-block; position:relative; ">✖</span>
-        <h1 style="display:inline-block; left:140px; position:relative; color:white; top: -10px;">Week Selection</h1>  
+    <span id="closePopup" style="cursor: pointer; left: 15px; top: -10px; font-size: 2em; display:inline-block; position:relative; ">✖</span>
+    <h1 style="display:inline-block; left:140px; position:relative; color:white; top: -10px;">Week Selection</h1>  
    
     <div style="width:100%; height:90%; top:10%; background-color:#3E454D; border-bottom-left-radius:8px; border-bottom-right-radius:8px;">
        
@@ -1186,5 +1177,74 @@ input[type=checkbox] {
     </div>
 </div>
 
+<!-- popup contents for facility selection-->
+<div class="pop" id="popupFacilities">
+
+    <span id="closePopupFacilities" style="cursor: pointer; left: 15px; top: -10px; font-size: 2em; display:inline-block; position:relative; ">✖</span>
+    <h1 style="display:inline-block; left:140px; position:relative; color:white; top: -10px;">Facility Selection</h1>  
+   
+    <div style="width:100%; height:90%; top:10%; background-color:#3E454D; border-bottom-left-radius:8px; border-bottom-right-radius:8px;">
+        <table>
+            <tr>
+                <td>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_COMP" class="radio" />
+                        <label for="checkbox_COMP">Computer</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_DDP" class="radio" />
+                        <!-- dual data projection -->
+                        <label for="checkbox_DDP">DDP</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_DP" class="radio" />
+                        <label for="checkbox_DP">Data Projection</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_IL" class="radio" />
+                        <!-- induction loop -->
+                        <label for="checkbox_IL">Induction Loop</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_MP" class="radio" />
+                        <label for="checkbox_MP">Media Player</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_PA" class="radio" />
+                        <label for="checkbox_PA">PA</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_PLASMA" class="radio" />
+                        <label for="checkbox_PLASMA">Plasma Screen</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_REV" class="radio" />
+                        <label for="checkbox_REV">ReView</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_MIC" class="radio" />
+                        <label for="checkbox_MIC">Microphone</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_VIS" class="radio" />
+                        <label for="checkbox_VIS">Visualiser</label>
+                    </div>
+                    <div class="divClassCheckbox" >
+                        <input type="checkbox" id="checkbox_Wchair" class="radio" />
+                        <label for="checkbox_Wchair">Wheelchair</label>
+                    </div>
+                    <div class="divClassCheckbox">
+                        <input type="checkbox" id="checkbox_WB" class="radio" />
+                        <label for="checkbox_WB">Whiteboard</label>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
     
 </asp:Content>
