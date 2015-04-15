@@ -202,36 +202,42 @@ namespace WebApplication4_0
          *to include: Capacity dependant. Dependant of Room facilities selected.
          */
         [System.Web.Services.WebMethod]
-        public static string ShowRooms(string building, bool lecture, bool seminar, bool lab)
+        public static string ShowRooms(string building, bool lecture, bool seminar, bool lab, string capacity)
         {
+            //if capacity input is empty, then set automatically to 0
+            if (capacity == "")
+            {
+                capacity = "0";
+            }
             string query = "";
+            
             if (lecture == true && seminar == false && lab == false) //Tiered - T
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'T'";
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'T' and Capacity >=" + capacity;
             }
             if (lecture == false && seminar == true && lab == false) //Seminar - S
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'S'";
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'S' and Capacity >=" + capacity;
             }
             if (lecture == false && seminar == false && lab == true) //Lab - L
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'L'";
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'L' and Capacity >=" + capacity;
             }
             if (lecture == true && seminar == true && lab == false) 
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'L'";
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'L' and Capacity >=" + capacity;
             }
             if (lecture == true && seminar == false && lab == true)
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'S'";
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'S' and Capacity >=" + capacity;
             }
             if (lecture == false && seminar == true && lab == true)
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'T'";
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'T' and Capacity >=" + capacity;
             }
             if (lecture == true && seminar == true && lab == true) //query when all checkboxes are selected
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "'";
+                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Capacity >=" + capacity;
             }
             string result = "<option value='0'> - NO ROOM PREFERENCE - </option>";
             //only carries out query if query exists

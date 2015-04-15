@@ -686,20 +686,21 @@ input[type=checkbox] {
             /* 
             This will update the rooms available to select based on the building that the user selects.
             If user selects James France, then the rooms for james france will be shown.
-            TO DO - This will also take into consideration room type and room facilities. 
+            TO DO - This will also take into consideration room type, capacity and room facilities. 
             */
             //Updates when building selected changed, also when room type is changed
-            $('#select_building, .roomTypeClass').change(function () {
+            $('#select_building, .roomTypeClass, #capacityInput').change(function () {
                 //variables to send to the C# class
                 var building = document.getElementById('select_building').value; //selected building code
                 var lecture = document.getElementById('checkbox_Lecture').checked; // set to true if user wants a lecture room type
                 var seminar = document.getElementById('checkbox_Seminar').checked; //set to true if user wants a seminar
                 var lab = document.getElementById('checkbox_Lab').checked; //set to true if user wants a lab
+                var capacity = document.getElementById('capacityInput').value;
                 //if no building selected, then 0 is sent.
                 $.ajax({
                     type: "POST",
                     url: "Request.aspx/ShowRooms",
-                    data: JSON.stringify({ building: building, lecture: lecture, seminar: seminar, lab:lab }),
+                    data: JSON.stringify({ building: building, lecture: lecture, seminar: seminar, lab:lab , capacity: capacity}),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
