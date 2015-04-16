@@ -174,7 +174,7 @@ input[type="text"]:hover, #active, input[type="text"]:focus
 	/*content:'\03a7';  X*/
     content: '\2713';
 	text-indent: .2em;
-	color: #9CE2AE;
+	color: white;
 	background-color: #4DCB6D;
 }
 
@@ -689,18 +689,52 @@ input[type=checkbox] {
             TO DO - This will also take into consideration room type, capacity and room facilities. 
             */
             //Updates when building selected changed, also when room type is changed
-            $('#select_building, .roomTypeClass, #capacityInput').change(function () {
+            $('#select_building, .roomTypeClass, #capacityInput, .facilityCheckboxes, .requestFacilitiesClass').change(function () {
                 //variables to send to the C# class
                 var building = document.getElementById('select_building').value; //selected building code
                 var lecture = document.getElementById('checkbox_Lecture').checked; // set to true if user wants a lecture room type
                 var seminar = document.getElementById('checkbox_Seminar').checked; //set to true if user wants a seminar
                 var lab = document.getElementById('checkbox_Lab').checked; //set to true if user wants a lab
                 var capacity = document.getElementById('capacityInput').value;
+
+                if (document.getElementById('checkbox_noPreferences').checked) {// if user selects 'no' facilities required, then all set to default false 
+                    var comp = false; //computer
+                    var ddp = false;    //Dual Data projection
+                    var dp = false;    //Data Projection
+                    var il = false;    //Induction Loop
+                    var mp = false;    //Media Player
+                    var pa = false;    //PA
+                    var plasma = false;  //Plasma
+                    var rev = false;    //ReView
+                    var mic = false;     //Radio Microphone
+                    var vis = false;    //Visualiser
+                    var wc = false;  //Wheelchair Access
+                    var wb = false;      //Whiteboard
+                } else {    //if user selects 'yes' they do want to specify facilities
+                    //room preference selections, such as whiteboard
+                    var comp = document.getElementById('checkbox_COMP').checked;    //computer 
+                    var ddp = document.getElementById('checkbox_DDP').checked;     //Dual Data projection
+                    var dp = document.getElementById('checkbox_DP').checked;      //Data Projection
+                    var il = document.getElementById('checkbox_IL').checked;      //Induction Loop
+                    var mp = document.getElementById('checkbox_MP').checked;      //Media Player
+                    var pa = document.getElementById('checkbox_PA').checked;      //PA
+                    var plasma = document.getElementById('checkbox_PLASMA').checked;  //Plasma
+                    var rev = document.getElementById('checkbox_REV').checked;     //ReView
+                    var mic = document.getElementById('checkbox_MIC').checked;      //Radio Microphone
+                    var vis = document.getElementById('checkbox_VIS').checked;     //Visualiser
+                    var wc = document.getElementById('checkbox_Wchair').checked;  //Wheelchair Access
+                    var wb = document.getElementById('checkbox_WB').checked;      //Whiteboard
+                }
+                
                 //if no building selected, then 0 is sent.
                 $.ajax({
                     type: "POST",
                     url: "Request.aspx/ShowRooms",
-                    data: JSON.stringify({ building: building, lecture: lecture, seminar: seminar, lab:lab , capacity: capacity}),
+                    data: JSON.stringify({
+                        building: building, lecture: lecture, seminar: seminar, lab: lab, capacity: capacity,
+                        comp: comp, ddp: ddp, dp: dp, il: il, mp: mp, pa: pa, plasma: plasma, rev: rev, mic: mic,
+                        vis: vis, wc: wc, wb: wb
+                    }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -930,11 +964,11 @@ input[type=checkbox] {
                      <asp:Label ID="Label8" runat="server" Text="REQUEST ROOM FACILITIES?" ToolTip="Select the preferences that you would like"></asp:Label>
                 </td>
                 <td>
-                   <div class="divClass">
+                   <div class="divClass requestFacilitiesClass">
                        <input type="radio" name="preferenceRadio" class="radio" id="checkbox_noPreferences" checked />
                        <label for="checkbox_noPreferences">No</label>
                    </div>
-                     <div class="divClass">
+                     <div class="divClass requestFacilitiesClass">
                        <input type="radio" name="preferenceRadio" class="radio" id="checkbox_yesPreferences" />
                        <label for="checkbox_yesPreferences">Yes</label>
                    </div>
@@ -1185,62 +1219,129 @@ input[type=checkbox] {
     <h1 style="display:inline-block; left:140px; position:relative; color:white; top: -10px;">Facility Selection</h1>  
    
     <div style="width:100%; height:90%; top:10%; background-color:#3E454D; border-bottom-left-radius:8px; border-bottom-right-radius:8px;">
-        <table>
+        <table style="width:70%; height:80%; top: 5%; left:15%;position:relative;">
             <tr>
-                <td>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_COMP" class="radio" />
-                        <label for="checkbox_COMP">Computer</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_DDP" class="radio" />
-                        <!-- dual data projection -->
-                        <label for="checkbox_DDP">DDP</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_DP" class="radio" />
-                        <label for="checkbox_DP">Data Projection</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_IL" class="radio" />
-                        <!-- induction loop -->
-                        <label for="checkbox_IL">Induction Loop</label>
+                <td style="text-align:center; padding-left:5px">
+                    Computer
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_COMP"/>
+                        <label for="checkbox_COMP" ></label>
                     </div>
                 </td>
-                <td>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_MP" class="radio" />
-                        <label for="checkbox_MP">Media Player</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_PA" class="radio" />
-                        <label for="checkbox_PA">PA</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_PLASMA" class="radio" />
-                        <label for="checkbox_PLASMA">Plasma Screen</label>
-                    </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_REV" class="radio" />
-                        <label for="checkbox_REV">ReView</label>
+
+                <td style="text-align:center; padding-left:5px">
+                    Dual Data Projection
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_DDP"/>
+                        <label for="checkbox_DDP" ></label>
                     </div>
                 </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    Data Projection
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_DP"/>
+                        <label for="checkbox_DP" ></label>
+                    </div>
+                </td>
+
+                 <td style="text-align:center; padding-left:5px">
+                    Induction Loop
+                </td>
+                <td >
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_IL"/>
+                        <label for="checkbox_IL" ></label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr style="border-top:3px solid white; border-bottom: 3px solid white;">
+                <td style="text-align:center; padding-left:5px">
+                    Media Player
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_MP"/>
+                        <label for="checkbox_MP" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    PA
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_PA"/>
+                        <label for="checkbox_PA" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    Plasma Screen
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_PLASMA"/>
+                        <label for="checkbox_PLASMA" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    ReView
+                </td>
                 <td>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_MIC" class="radio" />
-                        <label for="checkbox_MIC">Microphone</label>
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_REV"/>
+                        <label for="checkbox_REV" ></label>
                     </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_VIS" class="radio" />
-                        <label for="checkbox_VIS">Visualiser</label>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align:center; padding-left:5px">
+                    Microphone
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_MIC"/>
+                        <label for="checkbox_MIC" ></label>
                     </div>
-                    <div class="divClassCheckbox" >
-                        <input type="checkbox" id="checkbox_Wchair" class="radio" />
-                        <label for="checkbox_Wchair">Wheelchair</label>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    Visualiser
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_VIS"/>
+                        <label for="checkbox_VIS" ></label>
                     </div>
-                    <div class="divClassCheckbox">
-                        <input type="checkbox" id="checkbox_WB" class="radio" />
-                        <label for="checkbox_WB">Whiteboard</label>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    Wheelchair
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_Wchair"/>
+                        <label for="checkbox_Wchair" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    Whiteboard
+                </td>
+                <td >
+                    <div class="checkboxOne facilityCheckboxes">
+                        <input type="checkbox" id="checkbox_WB"/>
+                        <label for="checkbox_WB" ></label>
                     </div>
                 </td>
             </tr>
