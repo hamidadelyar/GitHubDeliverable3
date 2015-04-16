@@ -58,14 +58,17 @@
         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
         ProviderName="<%$ ConnectionStrings:team02ConnectionString1.ProviderName %>" 
         SelectCommand="SELECT [announcementID], [postDate], [title], [content] FROM [Announcements]"
-        UpdateCommand="UPDATE Announcements SET title=@title, content=@content, postDate=GETDATE() WHERE announcementID = @announcementID"
+        UpdateCommand="UPDATE [Announcements] SET [title]=@title, [content]=@content, [postDate]=GETDATE() WHERE [announcementID] = @announcementID"
         DeleteCommand="DELETE FROM Announcements WHERE announcementID = @announcementID"
         InsertCommand="INSERT INTO Announcements (title, content, postDate) VALUES (@titleDB,@contentDB,GETDATE())">
             <InsertParameters>
                 <asp:ControlParameter name="titleDB" ControlId="TextBox1" PropertyName="Text" />
                 <asp:ControlParameter name="contentDB" ControlId="TextBox2" PropertyName="Text" />
             </InsertParameters>
-
+            <UpdateParameters>
+                <asp:ControlParameter Name="title" ControlId="TextBox3" PropertyName="Text"/>
+                <asp:ControlParameter Name="content" ControlId="TextBox4" PropertyName="Text" />
+            </UpdateParameters>
     </asp:SqlDataSource>
     <div id="TableDiv">
     <asp:GridView 
@@ -78,14 +81,13 @@
         AllowSorting="True">
 
         <Columns>
-            <asp:BoundField DataField="title" HeaderText="title" SortExpression="title" />
-            <asp:BoundField DataField="content" HeaderText="content" SortExpression="content" />
-            <asp:BoundField DataField="postDate" HeaderText="postDate" SortExpression="postDate" />
-            <asp:CommandField ShowEditButton="True" />
-            <asp:CommandField ShowDeleteButton="True" />
+            <asp:BoundField DataField="title" HeaderText="Title" SortExpression="title" />
+            <asp:BoundField DataField="content" HeaderText="Content" SortExpression="content" />
+            <asp:BoundField DataField="postDate" HeaderText="Date" SortExpression="postDate" />
+            <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" />
         </Columns>
     </asp:GridView>  
-        
+    <hr />    
           
     
         <input type="button" ID="addNews" Value="Add New Announcement" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
