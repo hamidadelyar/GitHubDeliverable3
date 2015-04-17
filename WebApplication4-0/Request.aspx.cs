@@ -57,7 +57,7 @@ namespace WebApplication4_0
 
       
         [System.Web.Services.WebMethod]
-        public static string ModnameToModcode(string modname)
+        public static string ModnameToModcode(string modname) 
         {
             var modcode = "";
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
