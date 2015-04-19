@@ -63,6 +63,20 @@
 
 
 
+
+
+    <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT * FROM [Requests]"></asp:SqlDataSource>
+    <br />
+    <asp:Repeater ID="Repeater1" runat="server" DataSourceID="SqlDataSource1">
+        <ItemTemplate>
+            <%#Eval("Module_Code") %>
+        </ItemTemplate>
+    </asp:Repeater>
+
+
+
+
+
 </div> 
 
 
