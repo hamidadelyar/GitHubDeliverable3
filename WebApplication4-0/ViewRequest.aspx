@@ -7,8 +7,9 @@
     <h1>Your Requests</h1>
 </hgroup>
 <section class ="tableOfRequests">
+<asp:PlaceHolder ID = "PlaceHolder1" runat="server" />
     
-<asp:Table ID="Table1" runat="server" GridLines="Both">
+<!--<asp:Table ID="Table1" runat="server" GridLines="Both">
         <asp:TableRow>
             <asp:TableCell>Semester</asp:TableCell>
             <asp:TableCell>Day</asp:TableCell>
@@ -26,6 +27,7 @@
             <asp:TableCell>Edit</asp:TableCell>
             <asp:TableCell>Delete</asp:TableCell>
         </asp:TableRow>
-    </asp:Table>
+    </asp:Table>-->
 </section>
+
 </asp:Content>
