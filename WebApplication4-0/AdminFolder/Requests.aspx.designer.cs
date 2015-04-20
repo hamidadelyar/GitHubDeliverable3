@@ -13,21 +13,21 @@ namespace WebApplication4_0.AdminFolder {
     public partial class Requests {
         
         /// <summary>
-        /// respondButton1 control.
+        /// SqlDataSource1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button respondButton1;
+        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
         
         /// <summary>
-        /// respondButton2 control.
+        /// Repeater1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button respondButton2;
+        protected global::System.Web.UI.WebControls.Repeater Repeater1;
     }
 }

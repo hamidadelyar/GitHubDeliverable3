@@ -57,7 +57,7 @@ namespace WebApplication4_0
 
       
         [System.Web.Services.WebMethod]
-        public static string ModnameToModcode(string modname)
+        public static string ModnameToModcode(string modname) 
         {
             var modcode = "";
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
@@ -198,12 +198,18 @@ namespace WebApplication4_0
         }
 
         /*
-         *Will narrow down rooms shown dependent on the building selected and room type.
-         *to include: Capacity dependant. Dependant of Room facilities selected.
+         *Will narrow down rooms shown dependent on the building selected, capacity and room type.
+         *to include: Dependant on Room facilities selected.
          */
         [System.Web.Services.WebMethod]
-        public static string ShowRooms(string building, bool lecture, bool seminar, bool lab, string capacity)
+        public static string ShowRooms(string building, bool lecture, bool seminar, bool lab, string capacity, bool comp, bool ddp,
+                                        bool dp, bool il, bool mp, bool pa, bool plasma, bool rev, bool mic, bool vis, bool wc, bool wb)
         {
+            /*
+             select distinct Room_Facilities.Room_ID from [Room_Facilities] 
+             inner join [Rooms] on Room_Facilities.Room_ID = Rooms.Room_ID
+             where Building_ID = 'A' and Room_Type = 'T' and Room_Facilities.Facility_ID= 'w' 
+             */
             //if capacity input is empty, then set automatically to 0
             if (capacity == "")
             {
@@ -213,31 +219,444 @@ namespace WebApplication4_0
             
             if (lecture == true && seminar == false && lab == false) //Tiered - T
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'T' and Capacity >=" + capacity;
+                //query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'T' and Capacity >=" + capacity;
+                query = "select distinct room.Room_ID";
+                query += " from [Rooms] room";
+                if (comp == true) 
+                    query += " join [Room_Facilities] facility1 ON room.Room_ID = facility1.Room_ID"; 
+                if (ddp == true) 
+                    query += " join [Room_Facilities] facility2 ON room.Room_ID = facility2.Room_ID";
+                if (dp == true) 
+                    query += " join [Room_Facilities] facility3 ON room.Room_ID = facility3.Room_ID";
+                if (il == true) 
+                    query += " join [Room_Facilities] facility4 ON room.Room_ID = facility4.Room_ID";
+                if (mp == true) 
+                    query += " join [Room_Facilities] facility5 ON room.Room_ID = facility5.Room_ID";
+                if (pa == true) 
+                    query += " join [Room_Facilities] facility6 ON room.Room_ID = facility6.Room_ID";
+                if (plasma == true) 
+                    query += " join [Room_Facilities] facility7 ON room.Room_ID = facility7.Room_ID";
+                if (rev == true) 
+                    query += " join [Room_Facilities] facility8 ON room.Room_ID = facility8.Room_ID";
+                if (mic == true) 
+                    query += " join [Room_Facilities] facility9 ON room.Room_ID = facility9.Room_ID";
+                if (vis == true) 
+                    query += " join [Room_Facilities] facility10 ON room.Room_ID = facility10.Room_ID";
+                if (wc == true) 
+                    query += " join [Room_Facilities] facility11 ON room.Room_ID = facility11.Room_ID";
+                if (wb == true) 
+                    query += " join [Room_Facilities] facility12 ON room.Room_ID = facility12.Room_ID";
+                    
+                query += " where";
+                query += " room.Building_ID = '" + building + "' ";
+                query += " and room.Room_Type = 'T'";
+                query += " and Capacity >=" + capacity;
+                if(comp == true)
+                    query += " and facility1.Facility_ID = 'C'";
+                if(ddp == true)
+                    query += " and facility2.Facility_ID = 'DDP'";
+                if(dp == true)
+                    query += " and facility3.Facility_ID = 'DP'";
+                if(il == true)
+                    query += " and facility4.Facility_ID = 'I'";
+                if(mp == true)
+                    query += " and facility5.Facility_ID = 'MP'";
+                if(pa == true)
+                    query += " and facility6.Facility_ID = 'PA'";
+                if(plasma == true)
+                    query += " and facility7.Facility_ID = 'PS'";
+                if(rev == true)
+                    query += " and facility8.Facility_ID = 'RLC'";
+                if(mic == true)
+                    query += " and facility9.Facility_ID = 'RM'";
+                if(vis == true)
+                    query += " and facility10.Facility_ID = 'V'";
+                if(wc == true)
+                    query += " and facility11.Facility_ID = 'W'";
+                if(wb == true)
+                    query += " and facility12.Facility_ID = 'WB'";
+                
+
+                //bool comp, bool ddp, bool dp, bool il, bool mp, bool pa, bool plasma, bool rev, bool mic, bool vis, bool wc, bool wb
+                /*
+                 * SQL query to carry out with multiple 'ands' on same column. This method renames the rooms table to room.
+                 select distinct 
+                    room.Room_ID 
+                from 
+                    [Rooms] room
+                    join [Room_Facilities] facility1 ON room.Room_ID = facility1.Room_ID
+                    join [Room_Facilities] facility2 ON room.Room_ID = facility2.Room_ID
+                where 
+                    room.Building_ID = 'LDS' 
+                    and room.Room_Type = 's'
+                    and facility1.Facility_ID = 'C' 
+                    and facility2.Facility_ID = 'V'
+                 */
             }
             if (lecture == false && seminar == true && lab == false) //Seminar - S
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'S' and Capacity >=" + capacity;
+                //query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'S' and Capacity >=" + capacity;
+                query = "select distinct room.Room_ID";
+                query += " from [Rooms] room";
+                if (comp == true)
+                    query += " join [Room_Facilities] facility1 ON room.Room_ID = facility1.Room_ID";
+                if (ddp == true)
+                    query += " join [Room_Facilities] facility2 ON room.Room_ID = facility2.Room_ID";
+                if (dp == true)
+                    query += " join [Room_Facilities] facility3 ON room.Room_ID = facility3.Room_ID";
+                if (il == true)
+                    query += " join [Room_Facilities] facility4 ON room.Room_ID = facility4.Room_ID";
+                if (mp == true)
+                    query += " join [Room_Facilities] facility5 ON room.Room_ID = facility5.Room_ID";
+                if (pa == true)
+                    query += " join [Room_Facilities] facility6 ON room.Room_ID = facility6.Room_ID";
+                if (plasma == true)
+                    query += " join [Room_Facilities] facility7 ON room.Room_ID = facility7.Room_ID";
+                if (rev == true)
+                    query += " join [Room_Facilities] facility8 ON room.Room_ID = facility8.Room_ID";
+                if (mic == true)
+                    query += " join [Room_Facilities] facility9 ON room.Room_ID = facility9.Room_ID";
+                if (vis == true)
+                    query += " join [Room_Facilities] facility10 ON room.Room_ID = facility10.Room_ID";
+                if (wc == true)
+                    query += " join [Room_Facilities] facility11 ON room.Room_ID = facility11.Room_ID";
+                if (wb == true)
+                    query += " join [Room_Facilities] facility12 ON room.Room_ID = facility12.Room_ID";
+
+                query += " where";
+                query += " room.Building_ID = '" + building + "' ";
+                query += " and room.Room_Type = 'S'";
+                query += " and Capacity >=" + capacity;
+                if (comp == true)
+                    query += " and facility1.Facility_ID = 'C'";
+                if (ddp == true)
+                    query += " and facility2.Facility_ID = 'DDP'";
+                if (dp == true)
+                    query += " and facility3.Facility_ID = 'DP'";
+                if (il == true)
+                    query += " and facility4.Facility_ID = 'I'";
+                if (mp == true)
+                    query += " and facility5.Facility_ID = 'MP'";
+                if (pa == true)
+                    query += " and facility6.Facility_ID = 'PA'";
+                if (plasma == true)
+                    query += " and facility7.Facility_ID = 'PS'";
+                if (rev == true)
+                    query += " and facility8.Facility_ID = 'RLC'";
+                if (mic == true)
+                    query += " and facility9.Facility_ID = 'RM'";
+                if (vis == true)
+                    query += " and facility10.Facility_ID = 'V'";
+                if (wc == true)
+                    query += " and facility11.Facility_ID = 'W'";
+                if (wb == true)
+                    query += " and facility12.Facility_ID = 'WB'";
+                
             }
             if (lecture == false && seminar == false && lab == true) //Lab - L
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'L' and Capacity >=" + capacity;
+               // query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'L' and Capacity >=" + capacity;
+                query = "select distinct room.Room_ID";
+                query += " from [Rooms] room";
+                if (comp == true)
+                    query += " join [Room_Facilities] facility1 ON room.Room_ID = facility1.Room_ID";
+                if (ddp == true)
+                    query += " join [Room_Facilities] facility2 ON room.Room_ID = facility2.Room_ID";
+                if (dp == true)
+                    query += " join [Room_Facilities] facility3 ON room.Room_ID = facility3.Room_ID";
+                if (il == true)
+                    query += " join [Room_Facilities] facility4 ON room.Room_ID = facility4.Room_ID";
+                if (mp == true)
+                    query += " join [Room_Facilities] facility5 ON room.Room_ID = facility5.Room_ID";
+                if (pa == true)
+                    query += " join [Room_Facilities] facility6 ON room.Room_ID = facility6.Room_ID";
+                if (plasma == true)
+                    query += " join [Room_Facilities] facility7 ON room.Room_ID = facility7.Room_ID";
+                if (rev == true)
+                    query += " join [Room_Facilities] facility8 ON room.Room_ID = facility8.Room_ID";
+                if (mic == true)
+                    query += " join [Room_Facilities] facility9 ON room.Room_ID = facility9.Room_ID";
+                if (vis == true)
+                    query += " join [Room_Facilities] facility10 ON room.Room_ID = facility10.Room_ID";
+                if (wc == true)
+                    query += " join [Room_Facilities] facility11 ON room.Room_ID = facility11.Room_ID";
+                if (wb == true)
+                    query += " join [Room_Facilities] facility12 ON room.Room_ID = facility12.Room_ID";
+
+                query += " where";
+                query += " room.Building_ID = '" + building + "' ";
+                query += " and room.Room_Type = 'L'";
+                query += " and Capacity >=" + capacity;
+                if (comp == true)
+                    query += " and facility1.Facility_ID = 'C'";
+                if (ddp == true)
+                    query += " and facility2.Facility_ID = 'DDP'";
+                if (dp == true)
+                    query += " and facility3.Facility_ID = 'DP'";
+                if (il == true)
+                    query += " and facility4.Facility_ID = 'I'";
+                if (mp == true)
+                    query += " and facility5.Facility_ID = 'MP'";
+                if (pa == true)
+                    query += " and facility6.Facility_ID = 'PA'";
+                if (plasma == true)
+                    query += " and facility7.Facility_ID = 'PS'";
+                if (rev == true)
+                    query += " and facility8.Facility_ID = 'RLC'";
+                if (mic == true)
+                    query += " and facility9.Facility_ID = 'RM'";
+                if (vis == true)
+                    query += " and facility10.Facility_ID = 'V'";
+                if (wc == true)
+                    query += " and facility11.Facility_ID = 'W'";
+                if (wb == true)
+                    query += " and facility12.Facility_ID = 'WB'";
+                
             }
             if (lecture == true && seminar == true && lab == false) 
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'L' and Capacity >=" + capacity;
+                //query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'L' and Capacity >=" + capacity;
+
+                
+                query = "select distinct room.Room_ID";
+                query += " from [Rooms] room";
+                if (comp == true)
+                    query += " join [Room_Facilities] facility1 ON room.Room_ID = facility1.Room_ID";
+                if (ddp == true)
+                    query += " join [Room_Facilities] facility2 ON room.Room_ID = facility2.Room_ID";
+                if (dp == true)
+                    query += " join [Room_Facilities] facility3 ON room.Room_ID = facility3.Room_ID";
+                if (il == true)
+                    query += " join [Room_Facilities] facility4 ON room.Room_ID = facility4.Room_ID";
+                if (mp == true)
+                    query += " join [Room_Facilities] facility5 ON room.Room_ID = facility5.Room_ID";
+                if (pa == true)
+                    query += " join [Room_Facilities] facility6 ON room.Room_ID = facility6.Room_ID";
+                if (plasma == true)
+                    query += " join [Room_Facilities] facility7 ON room.Room_ID = facility7.Room_ID";
+                if (rev == true)
+                    query += " join [Room_Facilities] facility8 ON room.Room_ID = facility8.Room_ID";
+                if (mic == true)
+                    query += " join [Room_Facilities] facility9 ON room.Room_ID = facility9.Room_ID";
+                if (vis == true)
+                    query += " join [Room_Facilities] facility10 ON room.Room_ID = facility10.Room_ID";
+                if (wc == true)
+                    query += " join [Room_Facilities] facility11 ON room.Room_ID = facility11.Room_ID";
+                if (wb == true)
+                    query += " join [Room_Facilities] facility12 ON room.Room_ID = facility12.Room_ID";
+
+                query += " where";
+                query += " room.Building_ID = '" + building + "' ";
+                query += " and room.Room_Type != 'L'";
+                query += " and Capacity >=" + capacity;
+                if (comp == true)
+                    query += " and facility1.Facility_ID = 'C'";
+                if (ddp == true)
+                    query += " and facility2.Facility_ID = 'DDP'";
+                if (dp == true)
+                    query += " and facility3.Facility_ID = 'DP'";
+                if (il == true)
+                    query += " and facility4.Facility_ID = 'I'";
+                if (mp == true)
+                    query += " and facility5.Facility_ID = 'MP'";
+                if (pa == true)
+                    query += " and facility6.Facility_ID = 'PA'";
+                if (plasma == true)
+                    query += " and facility7.Facility_ID = 'PS'";
+                if (rev == true)
+                    query += " and facility8.Facility_ID = 'RLC'";
+                if (mic == true)
+                    query += " and facility9.Facility_ID = 'RM'";
+                if (vis == true)
+                    query += " and facility10.Facility_ID = 'V'";
+                if (wc == true)
+                    query += " and facility11.Facility_ID = 'W'";
+                if (wb == true)
+                    query += " and facility12.Facility_ID = 'WB'";
+                
             }
             if (lecture == true && seminar == false && lab == true)
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'S' and Capacity >=" + capacity;
+                //query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'S' and Capacity >=" + capacity;
+
+                query = "select distinct room.Room_ID";
+                query += " from [Rooms] room";
+                if (comp == true)
+                    query += " join [Room_Facilities] facility1 ON room.Room_ID = facility1.Room_ID";
+                if (ddp == true)
+                    query += " join [Room_Facilities] facility2 ON room.Room_ID = facility2.Room_ID";
+                if (dp == true)
+                    query += " join [Room_Facilities] facility3 ON room.Room_ID = facility3.Room_ID";
+                if (il == true)
+                    query += " join [Room_Facilities] facility4 ON room.Room_ID = facility4.Room_ID";
+                if (mp == true)
+                    query += " join [Room_Facilities] facility5 ON room.Room_ID = facility5.Room_ID";
+                if (pa == true)
+                    query += " join [Room_Facilities] facility6 ON room.Room_ID = facility6.Room_ID";
+                if (plasma == true)
+                    query += " join [Room_Facilities] facility7 ON room.Room_ID = facility7.Room_ID";
+                if (rev == true)
+                    query += " join [Room_Facilities] facility8 ON room.Room_ID = facility8.Room_ID";
+                if (mic == true)
+                    query += " join [Room_Facilities] facility9 ON room.Room_ID = facility9.Room_ID";
+                if (vis == true)
+                    query += " join [Room_Facilities] facility10 ON room.Room_ID = facility10.Room_ID";
+                if (wc == true)
+                    query += " join [Room_Facilities] facility11 ON room.Room_ID = facility11.Room_ID";
+                if (wb == true)
+                    query += " join [Room_Facilities] facility12 ON room.Room_ID = facility12.Room_ID";
+
+                query += " where";
+                query += " room.Building_ID = '" + building + "' ";
+                query += " and room.Room_Type != 'S'";
+                query += " and Capacity >=" + capacity;
+                if (comp == true)
+                    query += " and facility1.Facility_ID = 'C'";
+                if (ddp == true)
+                    query += " and facility2.Facility_ID = 'DDP'";
+                if (dp == true)
+                    query += " and facility3.Facility_ID = 'DP'";
+                if (il == true)
+                    query += " and facility4.Facility_ID = 'I'";
+                if (mp == true)
+                    query += " and facility5.Facility_ID = 'MP'";
+                if (pa == true)
+                    query += " and facility6.Facility_ID = 'PA'";
+                if (plasma == true)
+                    query += " and facility7.Facility_ID = 'PS'";
+                if (rev == true)
+                    query += " and facility8.Facility_ID = 'RLC'";
+                if (mic == true)
+                    query += " and facility9.Facility_ID = 'RM'";
+                if (vis == true)
+                    query += " and facility10.Facility_ID = 'V'";
+                if (wc == true)
+                    query += " and facility11.Facility_ID = 'W'";
+                if (wb == true)
+                    query += " and facility12.Facility_ID = 'WB'";
+                
             }
             if (lecture == false && seminar == true && lab == true)
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'T' and Capacity >=" + capacity;
+                //query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type != 'T' and Capacity >=" + capacity;
+
+                query = "select distinct room.Room_ID";
+                query += " from [Rooms] room";
+                if (comp == true)
+                    query += " join [Room_Facilities] facility1 ON room.Room_ID = facility1.Room_ID";
+                if (ddp == true)
+                    query += " join [Room_Facilities] facility2 ON room.Room_ID = facility2.Room_ID";
+                if (dp == true)
+                    query += " join [Room_Facilities] facility3 ON room.Room_ID = facility3.Room_ID";
+                if (il == true)
+                    query += " join [Room_Facilities] facility4 ON room.Room_ID = facility4.Room_ID";
+                if (mp == true)
+                    query += " join [Room_Facilities] facility5 ON room.Room_ID = facility5.Room_ID";
+                if (pa == true)
+                    query += " join [Room_Facilities] facility6 ON room.Room_ID = facility6.Room_ID";
+                if (plasma == true)
+                    query += " join [Room_Facilities] facility7 ON room.Room_ID = facility7.Room_ID";
+                if (rev == true)
+                    query += " join [Room_Facilities] facility8 ON room.Room_ID = facility8.Room_ID";
+                if (mic == true)
+                    query += " join [Room_Facilities] facility9 ON room.Room_ID = facility9.Room_ID";
+                if (vis == true)
+                    query += " join [Room_Facilities] facility10 ON room.Room_ID = facility10.Room_ID";
+                if (wc == true)
+                    query += " join [Room_Facilities] facility11 ON room.Room_ID = facility11.Room_ID";
+                if (wb == true)
+                    query += " join [Room_Facilities] facility12 ON room.Room_ID = facility12.Room_ID";
+
+                query += " where";
+                query += " room.Building_ID = '" + building + "' ";
+                query += " and room.Room_Type != 'T'";
+                query += " and Capacity >=" + capacity;
+                if (comp == true)
+                    query += " and facility1.Facility_ID = 'C'";
+                if (ddp == true)
+                    query += " and facility2.Facility_ID = 'DDP'";
+                if (dp == true)
+                    query += " and facility3.Facility_ID = 'DP'";
+                if (il == true)
+                    query += " and facility4.Facility_ID = 'I'";
+                if (mp == true)
+                    query += " and facility5.Facility_ID = 'MP'";
+                if (pa == true)
+                    query += " and facility6.Facility_ID = 'PA'";
+                if (plasma == true)
+                    query += " and facility7.Facility_ID = 'PS'";
+                if (rev == true)
+                    query += " and facility8.Facility_ID = 'RLC'";
+                if (mic == true)
+                    query += " and facility9.Facility_ID = 'RM'";
+                if (vis == true)
+                    query += " and facility10.Facility_ID = 'V'";
+                if (wc == true)
+                    query += " and facility11.Facility_ID = 'W'";
+                if (wb == true)
+                    query += " and facility12.Facility_ID = 'WB'";
+                
             }
             if (lecture == true && seminar == true && lab == true) //query when all checkboxes are selected
             {
-                query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Capacity >=" + capacity;
+                //query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Capacity >=" + capacity;
+
+                //query = "select Room_ID from [Rooms] where Building_ID = '" + building + "' and Room_Type = 'T' and Capacity >=" + capacity;
+                query = "select distinct room.Room_ID";
+                query += " from [Rooms] room";
+                if (comp == true)
+                    query += " join [Room_Facilities] facility1 ON room.Room_ID = facility1.Room_ID";
+                if (ddp == true)
+                    query += " join [Room_Facilities] facility2 ON room.Room_ID = facility2.Room_ID";
+                if (dp == true)
+                    query += " join [Room_Facilities] facility3 ON room.Room_ID = facility3.Room_ID";
+                if (il == true)
+                    query += " join [Room_Facilities] facility4 ON room.Room_ID = facility4.Room_ID";
+                if (mp == true)
+                    query += " join [Room_Facilities] facility5 ON room.Room_ID = facility5.Room_ID";
+                if (pa == true)
+                    query += " join [Room_Facilities] facility6 ON room.Room_ID = facility6.Room_ID";
+                if (plasma == true)
+                    query += " join [Room_Facilities] facility7 ON room.Room_ID = facility7.Room_ID";
+                if (rev == true)
+                    query += " join [Room_Facilities] facility8 ON room.Room_ID = facility8.Room_ID";
+                if (mic == true)
+                    query += " join [Room_Facilities] facility9 ON room.Room_ID = facility9.Room_ID";
+                if (vis == true)
+                    query += " join [Room_Facilities] facility10 ON room.Room_ID = facility10.Room_ID";
+                if (wc == true)
+                    query += " join [Room_Facilities] facility11 ON room.Room_ID = facility11.Room_ID";
+                if (wb == true)
+                    query += " join [Room_Facilities] facility12 ON room.Room_ID = facility12.Room_ID";
+
+                query += " where";
+                query += " room.Building_ID = '" + building + "' ";
+                query += " and Capacity >=" + capacity;
+                if (comp == true)
+                    query += " and facility1.Facility_ID = 'C'";
+                if (ddp == true)
+                    query += " and facility2.Facility_ID = 'DDP'";
+                if (dp == true)
+                    query += " and facility3.Facility_ID = 'DP'";
+                if (il == true)
+                    query += " and facility4.Facility_ID = 'I'";
+                if (mp == true)
+                    query += " and facility5.Facility_ID = 'MP'";
+                if (pa == true)
+                    query += " and facility6.Facility_ID = 'PA'";
+                if (plasma == true)
+                    query += " and facility7.Facility_ID = 'PS'";
+                if (rev == true)
+                    query += " and facility8.Facility_ID = 'RLC'";
+                if (mic == true)
+                    query += " and facility9.Facility_ID = 'RM'";
+                if (vis == true)
+                    query += " and facility10.Facility_ID = 'V'";
+                if (wc == true)
+                    query += " and facility11.Facility_ID = 'W'";
+                if (wb == true)
+                    query += " and facility12.Facility_ID = 'WB'";
+                
             }
             string result = "<option value='0'> - NO ROOM PREFERENCE - </option>";
             //only carries out query if query exists

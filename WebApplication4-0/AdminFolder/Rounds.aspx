@@ -29,14 +29,67 @@
         float:right;
         margin-right:5%;
     }
+
+        .black_overlay{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:1001;
+            -moz-opacity: 0.8;
+            opacity:.80;
+            filter: alpha(opacity=80);
+        }
+        .white_content {
+            display: none;
+            position: absolute;
+            top: 30%;
+            right: 30%;
+            width: 40%;
+            max-width:370px;
+            height: 250px;
+            padding: 16px;
+            background-color: white;
+            z-index:1002;
+            overflow: auto;
+            border: 2px solid;
+            border-radius: 25px;
+        }
+
 </style>
 
 <div class="contentHolder">
 
     <h1 align="center">Rounds</h1>
     <div id="buttonsDiv">
-        <asp:Button ID="addRound" runat="server" Text="Add New Round" />
+         <input type="button" ID="addRound" Value="Add New Round" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
+
     </div>
+
+
+
+    <div id="light" class="white_content">
+        <h1>New Round</h1>
+        Round Number: <br />
+        <asp:TextBox id="TextBox1" runat="server" /><br />
+        Start Date: <br />
+        <asp:TextBox id="TextBox2" runat="server" />
+        End Date: <br />
+        <asp:TextBox id="TextBox3" runat="server" />
+
+        <br />
+        <asp:Button ID="Button1" runat="server" Text="Save"  /> 
+        <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'" />
+
+    </div>
+    <div id="fade" class="black_overlay">
+    </div>
+
+
+
 
     <div class="semesterHeader" >
         <h2 class="white">Semester 2 - 2014/2015</h2> 
