@@ -7,7 +7,37 @@
 
 <link rel="stylesheet" type="text/css" href="css/AdminStyle.css"> 
 
-<style>
+ <style>
+        .black_overlay{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:1001;
+            -moz-opacity: 0.8;
+            opacity:.80;
+            filter: alpha(opacity=80);
+        }
+        .white_content {
+            display: none;
+            position: absolute;
+            top: 30%;
+            right: 30%;
+            width: 40%;
+            max-width:370px;
+            height: 250px;
+            padding: 16px;
+            background-color: white;
+            z-index:1002;
+            overflow: auto;
+            border: 2px solid;
+            border-radius: 25px;
+        }
+
+
     .buildingHeader{
         margin-top:10px;
         padding-top:10px;
@@ -35,13 +65,53 @@
 
     <h1 align="center">Rooms</h1>
     <div id="buttonsDiv">
-        <asp:Button ID="addRoom" runat="server" Text="Add Room" />
-        <asp:Button ID="addFacility" runat="server" Text="Add Facility" />
+        <input type="button" ID="addRoom" Value="Add Room" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
+        <input type="button" ID="addFacility" Value="Add Facility" onclick = "document.getElementById('light2').style.display = 'block'; document.getElementById('fade2').style.display = 'block'" />
     </div>
 
+    <div id="light" class="white_content">
+        <h1>New Room</h1>
+        Building: <br />
+        <asp:TextBox id="TextBox1" runat="server" /><br />
+        Room Number: <br />
+        <asp:TextBox id="TextBox2" runat="server" />
+        Capacity: <br />
+        <asp:TextBox id="TextBox5" runat="server" />
+        Room Type: <br />
+        <asp:TextBox id="TextBox6" runat="server" />
+
+        <br />
+        <asp:Button ID="Button1" runat="server" Text="Save" /> 
+        <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'" />
+
+    </div>
+
+    <div id="fade" class="black_overlay">
+    </div>
+
+            
+
+    <div id="light2" class="white_content">
+        <h1>New Facility</h1>
+        Facility Name: <br />
+        <asp:TextBox id="TextBox3" runat="server" /><br />
+        Facility ID: <br />
+        <asp:TextBox id="TextBox4" runat="server" />
+
+        <br />
+        <asp:Button ID="Button2" runat="server" Text="Save" /> 
+        <input type="button" ID="closeInsert2" value="Close" onclick = "document.getElementById('light2').style.display = 'none'; document.getElementById('fade2').style.display = 'none'" />
+
+    </div>
+
+    <div id="fade2" class="black_overlay">
+    </div>
     <div class="buildingHeader" >
         <h2 class="white">James France - East Park</h2> 
     </div>
+
+
+
 
     <table class="roomInfoTable">
         <tr>
@@ -70,6 +140,13 @@
             <td>N.0.0.2</td><td>100</td><td>Lab</td><td>Visualiser, Wheelchair Access, Dual Projectors</td><td></td>
         </tr>
     </table>
+
+
+
+
+         
+   
+
 
 </div> 
 

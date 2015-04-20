@@ -29,47 +29,33 @@
     <h1 align="center">Requests</h1>
     
 
-    <div class="requestHeader">
-        <h2 class="white">COA123 - Server Side Programming</h2> 
-    </div>
+    <asp:SqlDataSource 
+        ID="SqlDataSource1" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+        SelectCommand="SELECT * FROM [Requests] INNER JOIN [Modules] ON [Requests].[Module_Code]=[Modules].[Module_Code]">
 
-    <table class="requestInfoTable">
-        <tr>
-            <th>Day</th><th>Start Time</th><th>End Time</th><th>Weeks</th><th>Students</th>
-        </tr>
-        <tr>
-            <td>1 - Monday</td><td>2 - 10:00</td><td>3 - 11:00</td><td>1-12</td><td>100</td><td>
-                <asp:Button ID="respondButton1" runat="server" Text="Respond" /></td>
-        </tr>
-    </table>
-
-
-
-
-
-    <div class="requestHeader">
-        <h2 class="white">COA101 - Team Projects</h2>
-    </div>
-
-    <table class="requestInfoTable">
-        <tr>
-            <th>Day</th><th>Start Time</th><th>End Time</th><th>Weeks</th><th>Students</th>
-        </tr>
-        <tr>
-            <td>3 - Wednesday</td><td>4 - 12:00</td><td>6 - 14:00</td><td>1-12</td><td>150</td><td>
-                <asp:Button ID="respondButton2" runat="server" Text="Respond" /></td>
-        </tr>
-    </table>
-
-
-
-
-
-    <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT * FROM [Requests]"></asp:SqlDataSource>
+    </asp:SqlDataSource>
     <br />
     <asp:Repeater ID="Repeater1" runat="server" DataSourceID="SqlDataSource1">
         <ItemTemplate>
-            <%#Eval("Module_Code") %>
+
+            <div class="requestHeader">
+                <h2 class="white"><%#Eval("Module_Code") %> - <%#Eval("Module_Title") %></h2> 
+            </div>
+
+            <table class="requestInfoTable">
+                <tr>
+                    <th>Day</th><th>Start Time</th><th>End Time</th><th>Weeks</th><th>Students</th>
+                </tr>
+                <tr>
+                    <td><%#Eval("Day") %></td><td><%#Eval("Start_Time") %></td><td><%#Eval("End_Time") %></td><td>####</td><td><%#Eval("Number_Students") %></td><td>
+                        <asp:Button ID="Button1" runat="server" Text="Respond" /></td>
+                </tr>
+            </table>
+
+
+            
         </ItemTemplate>
     </asp:Repeater>
 

@@ -13,24 +13,6 @@ namespace WebApplication4_0.AdminFolder {
     public partial class Requests {
         
         /// <summary>
-        /// respondButton1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button respondButton1;
-        
-        /// <summary>
-        /// respondButton2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button respondButton2;
-        
-        /// <summary>
         /// SqlDataSource1 control.
         /// </summary>
         /// <remarks>
