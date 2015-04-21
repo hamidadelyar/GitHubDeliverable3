@@ -28,7 +28,7 @@
             right: 30%;
             width: 40%;
             max-width:370px;
-            height: 250px;
+            height: 300px;
             padding: 16px;
             background-color: white;
             z-index:1002;
@@ -140,6 +140,44 @@
             <td>N.0.0.2</td><td>100</td><td>Lab</td><td>Visualiser, Wheelchair Access, Dual Projectors</td><td></td>
         </tr>
     </table>
+
+
+
+    <asp:SqlDataSource 
+        ID="SqlDataSource1" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+        SelectCommand="SELECT * FROM [Buildings]">
+
+    </asp:SqlDataSource>
+
+
+
+
+
+    <asp:Repeater ID="Repeater1" runat="server" DataSourceID="SqlDataSource1">
+       <ItemTemplate> 
+
+            <div class="buildingHeader" >
+                <h2 class="white"><%#Eval("Building_Name") %> - <%#Eval("Park_ID") %></h2> 
+            </div>
+            <asp:SqlDataSource 
+                ID="SqlDataSource2" 
+                runat="server" 
+                ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+                SelectCommand="SELECT * FROM [Rooms] WHERE [Building_ID] = 'CC'">
+
+            </asp:SqlDataSource>
+
+            <asp:GridView 
+                ID="GridView1" 
+                runat="server" 
+                DataSourceID="SqlDataSource2">
+            </asp:GridView>
+
+
+        </ItemTemplate>
+    </asp:Repeater>
 
 
 
