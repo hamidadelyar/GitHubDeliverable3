@@ -427,6 +427,58 @@ input[type=checkbox] {
     margin-bottom: 0px;
 }
 
+.orangeButton {
+	-moz-box-shadow: 0px 10px 14px -7px #fce2c1;
+	-webkit-box-shadow: 0px 10px 14px -7px #fce2c1;
+	box-shadow: 0px 10px 14px -7px #fce2c1;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffc477), color-stop(1, #fb9e25));
+	background:-moz-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
+	background:-webkit-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
+	background:-o-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
+	background:-ms-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
+	background:linear-gradient(to bottom, #ffc477 5%, #fb9e25 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25',GradientType=0);
+	background-color:#ffc477;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:arial;
+	font-size:1.5em;
+	font-weight:bold;
+	padding:20px 32px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #cc9f52;
+}
+.orangeButton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477));
+	background:-moz-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
+	background:-webkit-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
+	background:-o-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
+	background:-ms-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
+	background:linear-gradient(to bottom, #fb9e25 5%, #ffc477 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='#ffc477',GradientType=0);
+	background-color:#fb9e25;
+}
+.orangeButton:active {
+	position:relative;
+	top:1px;
+}
+
+/*size of font inside buttons */
+td input[type="submit"], td input[type="button"], td button{
+    font-size:1.5em;
+}
+
+#contentContainer{
+     box-shadow: 10px 10px 40px grey; 
+     -moz-box-shadow: 10px 10px 40px grey; 
+     -webkit-box-shadow: 10px 10px 40px grey; 
+}
+
+
     </style>
 
 
@@ -489,10 +541,11 @@ input[type=checkbox] {
                 document.getElementById("preferenceTable").style.display = "";
                 $('#title').html("FACILITY OPTIONS (ROOM 1)");
             });
-            $('#preferencesDoneButton, #preferencesDoneButton2').click(function () {
+            $('#preferencesDoneButton, #preferencesDoneButton2, #preferencesDoneButton3').click(function () {
                 document.getElementById("modDetails").style.display = "";
                 document.getElementById("preferenceTable").style.display = "none";
                 document.getElementById("preferenceTable2").style.display = "none";
+                document.getElementById("preferenceTable3").style.display = "none";
                 $('#title').html("MODULE DETAILS");
             });
 
@@ -543,6 +596,33 @@ input[type=checkbox] {
                 }
             });
 
+            /*
+            Allows user to specify facilities of up to 3 rooms, depending on the number of rooms they require.
+            Does this by hiding/unhiding the buttons that allows the user to go to the specific room facility page 
+           */
+            $(function () {
+                //initially only 1 room chosen
+                $('#gotoRoom2').hide();
+                $('#gotoRoom3').hide();
+                $('#numRooms').change(function () {
+                    var numRooms = document.getElementById('numRooms').value;
+                    if (numRooms == 1) {
+                        $('#gotoRoom2').hide();
+                        $('#gotoRoom3').hide();
+                    }
+                    //when 2 rooms chosen, access to room 2 must be given and access to room 3 must be disallowed. 
+                    if (numRooms == 2) {
+                        $('#gotoRoom2').show();
+                        $('#gotoRoom3').hide();
+
+                    }
+                    //when 3 rooms chosen, access to room 3 AND room 2 must be given. All rooms are accessible
+                    if (numRooms == 3) {
+                        $('#gotoRoom2').show();
+                        $('#gotoRoom3').show();
+                    }
+                });
+            });
 
             /*
             Function to apply effects of blurring the background, whilst showing popup, then when popup closes, the background returns to normal 
@@ -627,6 +707,20 @@ input[type=checkbox] {
                     $('header').addClass('blur-in');
                 });
 
+                $('#checkbox_yesPreferences3').click(function () {
+                    $('#popupFacilities3').fadeIn(1000);
+                    $('#requestContainer').removeClass('blur-out');
+                    $('#requestContainer').addClass('blur-in');
+
+                    //only blurs the text in the footer
+                    $('footer .float-left').removeClass('blur-out');
+                    $('footer .float-left').addClass('blur-in');
+
+                    //blurs header content, i.e. navigation
+                    $('header').removeClass('blur-out');
+                    $('header').addClass('blur-in');
+                });
+
                 //Close popup facilities
                 $("#closePopupFacilities").click(function () { //onclick, fades out
                     $('#popupFacilities').fadeOut(1000);
@@ -658,6 +752,22 @@ input[type=checkbox] {
                     $('header').addClass('blur-out');
                     $('header').removeClass('blur-in');
                 });
+
+                //Close popup facilities 3
+                $("#closePopupFacilities3").click(function () { //onclick, fades out
+                    $('#popupFacilities3').fadeOut(1000);
+                    //$('#requestContainer').removeClass('blur-in');
+                    $('#requestContainer').addClass('blur-out');
+                    $('#requestContainer').removeClass('blur-in');
+
+                    //unblurs the text in the footer
+                    $('footer .float-left').addClass('blur-out');
+                    $('footer .float-left').removeClass('blur-in');
+
+                    //unblurs header content
+                    $('header').addClass('blur-out');
+                    $('header').removeClass('blur-in');
+                });
             });
 
 
@@ -673,8 +783,19 @@ input[type=checkbox] {
                 $('#preferenceTable2').hide();
                 $('#preferenceTable').show();
                 $('#title').html("FACILITY OPTIONS (ROOM 1)");
-            })
+            });
 
+            $('#gotoRoom3').click(function () {
+                $('#preferenceTable2').hide();
+                $('#preferenceTable3').show();
+                $('#title').html("FACILITY OPTIONS (ROOM 3)");
+            });
+
+            $('#gotoPrevRoom2').click(function () {
+                $('#preferenceTable3').hide();
+                $('#preferenceTable2').show();
+                $('#title').html("FACILITY OPTIONS (ROOM 2)");
+            });
             /*
             On park checkbox selection, updates the buildings that the user can select from.
             If the user selects central park, only buildings from central park shown.
@@ -727,9 +848,33 @@ input[type=checkbox] {
                 });
             });
 
+
+            //same thing as above, but for room 3
+            $('.parkClass3').change(function () {
+                //if checked, then is set to true, otherwise false
+                var central = document.getElementById('checkbox_centralPark3').checked;
+                var east = document.getElementById('checkbox_eastPark3').checked;
+                var west = document.getElementById('checkbox_westPark3').checked;
+
+                $.ajax({
+                    type: "POST",
+                    url: "Request.aspx/ShowBuildingSelect",
+                    data: JSON.stringify({ central: central, east: east, west: west }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        //document.getElementById('modcodeInput').value = result.d;   //have to write as result.d for some reason
+                        //alert(result.d);
+                        $('#select_building3').html(result.d);
+                    }
+                });
+            });
             /*
             will show all buildings available to select onload, seeing as west, central, east initially checked onload
-            Does this for room 2 also
+            Does this for room 2 and room 3 also
             */
             $(function () {
                 var central = document.getElementById('checkbox_centralPark').checked;
@@ -749,7 +894,7 @@ input[type=checkbox] {
                         //alert(result.d);
                         $('#select_building').html(result.d);
                         $('#select_building2').html(result.d);
-
+                        $('#select_building3').html(result.d);
                     }
                 });
             });
@@ -817,75 +962,132 @@ input[type=checkbox] {
                         $('#select_room').html(result.d);
                     }
                 });
+            });
 
-                //same as above, but for room 2
-                $('#select_building2, .roomTypeClass2, #capacityInput2, .facilityCheckboxes2, .requestFacilitiesClass2, .parkClass2').change(function () {
-                    //variables to send to the C# class
-                    var building = document.getElementById('select_building2').value; //selected building code
-                    var lecture = document.getElementById('checkbox_Lecture2').checked; // set to true if user wants a lecture room type
-                    var seminar = document.getElementById('checkbox_Seminar2').checked; //set to true if user wants a seminar
-                    var lab = document.getElementById('checkbox_Lab2').checked; //set to true if user wants a lab
-                    var capacity = document.getElementById('capacityInput2').value;
+            //same as above, but for room 2
+            $('#select_building2, .roomTypeClass2, #capacityInput2, .facilityCheckboxes2, .requestFacilitiesClass2, .parkClass2').change(function () {
+                //variables to send to the C# class
+                var building = document.getElementById('select_building2').value; //selected building code
+                var lecture = document.getElementById('checkbox_Lecture2').checked; // set to true if user wants a lecture room type
+                var seminar = document.getElementById('checkbox_Seminar2').checked; //set to true if user wants a seminar
+                var lab = document.getElementById('checkbox_Lab2').checked; //set to true if user wants a lab
+                var capacity = document.getElementById('capacityInput2').value;
 
-                    if (document.getElementById('checkbox_noPreferences2').checked) {// if user selects 'no' facilities required, then all set to default false 
-                        var comp = false; //computer
-                        var ddp = false;    //Dual Data projection
-                        var dp = false;    //Data Projection
-                        var il = false;    //Induction Loop
-                        var mp = false;    //Media Player
-                        var pa = false;    //PA
-                        var plasma = false;  //Plasma
-                        var rev = false;    //ReView
-                        var mic = false;     //Radio Microphone
-                        var vis = false;    //Visualiser
-                        var wc = false;  //Wheelchair Access
-                        var wb = false;      //Whiteboard
-                    } else {    //if user selects 'yes' they do want to specify facilities
-                        //room preference selections, such as whiteboard
-                        var comp = document.getElementById('checkbox_COMP2').checked;    //computer 
-                        var ddp = document.getElementById('checkbox_DDP2').checked;     //Dual Data projection
-                        var dp = document.getElementById('checkbox_DP2').checked;      //Data Projection
-                        var il = document.getElementById('checkbox_IL2').checked;      //Induction Loop
-                        var mp = document.getElementById('checkbox_MP2').checked;      //Media Player
-                        var pa = document.getElementById('checkbox_PA2').checked;      //PA
-                        var plasma = document.getElementById('checkbox_PLASMA2').checked;  //Plasma
-                        var rev = document.getElementById('checkbox_REV2').checked;     //ReView
-                        var mic = document.getElementById('checkbox_MIC2').checked;      //Radio Microphone
-                        var vis = document.getElementById('checkbox_VIS2').checked;     //Visualiser
-                        var wc = document.getElementById('checkbox_Wchair2').checked;  //Wheelchair Access
-                        var wb = document.getElementById('checkbox_WB2').checked;      //Whiteboard
+                if (document.getElementById('checkbox_noPreferences2').checked) {// if user selects 'no' facilities required, then all set to default false 
+                    var comp = false; //computer
+                    var ddp = false;    //Dual Data projection
+                    var dp = false;    //Data Projection
+                    var il = false;    //Induction Loop
+                    var mp = false;    //Media Player
+                    var pa = false;    //PA
+                    var plasma = false;  //Plasma
+                    var rev = false;    //ReView
+                    var mic = false;     //Radio Microphone
+                    var vis = false;    //Visualiser
+                    var wc = false;  //Wheelchair Access
+                    var wb = false;      //Whiteboard
+                } else {    //if user selects 'yes' they do want to specify facilities
+                    //room preference selections, such as whiteboard
+                    var comp = document.getElementById('checkbox_COMP2').checked;    //computer 
+                    var ddp = document.getElementById('checkbox_DDP2').checked;     //Dual Data projection
+                    var dp = document.getElementById('checkbox_DP2').checked;      //Data Projection
+                    var il = document.getElementById('checkbox_IL2').checked;      //Induction Loop
+                    var mp = document.getElementById('checkbox_MP2').checked;      //Media Player
+                    var pa = document.getElementById('checkbox_PA2').checked;      //PA
+                    var plasma = document.getElementById('checkbox_PLASMA2').checked;  //Plasma
+                    var rev = document.getElementById('checkbox_REV2').checked;     //ReView
+                    var mic = document.getElementById('checkbox_MIC2').checked;      //Radio Microphone
+                    var vis = document.getElementById('checkbox_VIS2').checked;     //Visualiser
+                    var wc = document.getElementById('checkbox_Wchair2').checked;  //Wheelchair Access
+                    var wb = document.getElementById('checkbox_WB2').checked;      //Whiteboard
+                }
+
+                //if no building selected, then 0 is sent.
+                $.ajax({
+                    type: "POST",
+                    url: "Request.aspx/ShowRooms",
+                    data: JSON.stringify({
+                        building: building, lecture: lecture, seminar: seminar, lab: lab, capacity: capacity,
+                        comp: comp, ddp: ddp, dp: dp, il: il, mp: mp, pa: pa, plasma: plasma, rev: rev, mic: mic,
+                        vis: vis, wc: wc, wb: wb
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        //document.getElementById('modcodeInput').value = result.d;   //have to write as result.d for some reason
+                        //alert(result.d);
+                        $('#select_room2').html(result.d);
                     }
-
-                    //if no building selected, then 0 is sent.
-                    $.ajax({
-                        type: "POST",
-                        url: "Request.aspx/ShowRooms",
-                        data: JSON.stringify({
-                            building: building, lecture: lecture, seminar: seminar, lab: lab, capacity: capacity,
-                            comp: comp, ddp: ddp, dp: dp, il: il, mp: mp, pa: pa, plasma: plasma, rev: rev, mic: mic,
-                            vis: vis, wc: wc, wb: wb
-                        }),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
-                        },
-                        success: function (result) {
-                            //document.getElementById('modcodeInput').value = result.d;   //have to write as result.d for some reason
-                            //alert(result.d);
-                            $('#select_room2').html(result.d);
-                        }
-                    });
-
-
-
-
                 });
+            });
 
-            }); //document.ready closing tag
+            //same as above 2 functions, but for room 3
+            $('#select_building3, .roomTypeClass3, #capacityInput3, .facilityCheckboxes3, .requestFacilitiesClass3, .parkClass3').change(function () {
+                //variables to send to the C# class
+                var building = document.getElementById('select_building3').value; //selected building code
+                var lecture = document.getElementById('checkbox_Lecture3').checked; // set to true if user wants a lecture room type
+                var seminar = document.getElementById('checkbox_Seminar3').checked; //set to true if user wants a seminar
+                var lab = document.getElementById('checkbox_Lab3').checked; //set to true if user wants a lab
+                var capacity = document.getElementById('capacityInput3').value;
+
+                if (document.getElementById('checkbox_noPreferences3').checked) {// if user selects 'no' facilities required, then all set to default false 
+                    var comp = false; //computer
+                    var ddp = false;    //Dual Data projection
+                    var dp = false;    //Data Projection
+                    var il = false;    //Induction Loop
+                    var mp = false;    //Media Player
+                    var pa = false;    //PA
+                    var plasma = false;  //Plasma
+                    var rev = false;    //ReView
+                    var mic = false;     //Radio Microphone
+                    var vis = false;    //Visualiser
+                    var wc = false;  //Wheelchair Access
+                    var wb = false;      //Whiteboard
+                } else {    //if user selects 'yes' they do want to specify facilities
+                    //room preference selections, such as whiteboard
+                    var comp = document.getElementById('checkbox_COMP3').checked;    //computer 
+                    var ddp = document.getElementById('checkbox_DDP3').checked;     //Dual Data projection
+                    var dp = document.getElementById('checkbox_DP3').checked;      //Data Projection
+                    var il = document.getElementById('checkbox_IL3').checked;      //Induction Loop
+                    var mp = document.getElementById('checkbox_MP3').checked;      //Media Player
+                    var pa = document.getElementById('checkbox_PA3').checked;      //PA
+                    var plasma = document.getElementById('checkbox_PLASMA3').checked;  //Plasma
+                    var rev = document.getElementById('checkbox_REV3').checked;     //ReView
+                    var mic = document.getElementById('checkbox_MIC3').checked;      //Radio Microphone
+                    var vis = document.getElementById('checkbox_VIS3').checked;     //Visualiser
+                    var wc = document.getElementById('checkbox_Wchair3').checked;  //Wheelchair Access
+                    var wb = document.getElementById('checkbox_WB3').checked;      //Whiteboard
+                }
+
+                //if no building selected, then 0 is sent.
+                $.ajax({
+                    type: "POST",
+                    url: "Request.aspx/ShowRooms",
+                    data: JSON.stringify({
+                        building: building, lecture: lecture, seminar: seminar, lab: lab, capacity: capacity,
+                        comp: comp, ddp: ddp, dp: dp, il: il, mp: mp, pa: pa, plasma: plasma, rev: rev, mic: mic,
+                        vis: vis, wc: wc, wb: wb
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        //document.getElementById('modcodeInput').value = result.d;   //have to write as result.d for some reason
+                        //alert(result.d);
+                        $('#select_room3').html(result.d);
+                    }
+                });
+            });
+
+        }); //document.ready closing tag
 
 
-        });
+ 
       
         
     </script>
@@ -893,7 +1095,7 @@ input[type=checkbox] {
     <div id="requestContainer">
         <h2 id="title"style="color:white; text-align:center; font-family: 'Segoe UI',Verdana,Helvetica,sans-serif">MODULE DETAILS</h2>
 
-        <div style="background-color:white; position:relative; top:1%; height:90%; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+        <div id="contentContainer" style="background-color:white; position:relative; top:1%; height:90%; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
             <table id="modDetails">
                 <tr>
                     <!-- module code input with validator-->
@@ -987,7 +1189,7 @@ input[type=checkbox] {
                     </td>
                     <td>
                         <div class="styled-select">
-                            <select>
+                            <select id="numRooms">
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
@@ -1009,17 +1211,21 @@ input[type=checkbox] {
                             <label for="defaultWeeksNo">No</label>
                         </div>
                     </td>
+                    
+                    <td colspan="2">
+                        <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; display:block;"/>
+                    </td>
                 </tr>
 
                 <tr>
                     <td colspan="6">
-                        <input type="button" id="preferencesButton" value="Preferences" />
+                        
                     </td>
                 </tr>
             </table>
         
 
-        <!-- preference table for room 1-->
+        <!-- preference table for room 1, room 2 and room 3-->
 
         <table id="preferenceTable" class="preferenceTable" style="display:none">
              <tr>
@@ -1114,9 +1320,11 @@ input[type=checkbox] {
            
             <tr>
                 <td>
-                    <input type="button" id="preferencesDoneButton" value="Done" />
+                    <input type="button" id="preferencesDoneButton" value="Done" class="orangeButton" />
                 </td>
-                
+                <td>
+                    <!-- empty - formatting -->
+                </td>
                 <td>
                     <input type="button" id="gotoRoom2" value="Next Room"/>
                 </td>
@@ -1217,7 +1425,7 @@ input[type=checkbox] {
            
             <tr>
                 <td>
-                    <input type="button" id="preferencesDoneButton2" value="Done" />
+                    <input type="button" id="preferencesDoneButton2" value="Done" class="orangeButton"/>
                 </td>
                 
                 <td>
@@ -1228,6 +1436,112 @@ input[type=checkbox] {
                 </td>
             </tr>
         </table>
+
+         <!-- preferences for 3rd room selection. Only selectable if user selects that they want to book 3 rooms.  -->
+         <table id="preferenceTable3" class="preferenceTable" style="display:none">
+           <tr>
+                 <td>
+                    <asp:Label ID="Label14" for="capacityInput3" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
+                </td>
+                <td>
+                    <input type="text" id="capacityInput3" />
+                </td>
+                <td>
+                    <asp:Label ID="Label15" runat="server" Text="ROOM TYPE" ToolTip="Select the room type you would like to book"></asp:Label>
+                </td>
+               
+                 <td>
+                     
+                     <div class="divClassCheckbox roomTypeClass3">
+                         <input type="checkbox" id="checkbox_Lecture3" class="radio" checked /> <!-- all checked by default -->
+                         <label for="checkbox_Lecture3">Lecture</label>
+                     </div>
+                     <div class="divClassCheckbox roomTypeClass3">
+                         <input type="checkbox" id="checkbox_Seminar3" class="radio" />
+                         <label for="checkbox_Seminar3">Seminar</label>
+                     </div>
+                      <div class="divClassCheckbox roomTypeClass3">
+                         <input type="checkbox" id="checkbox_Lab3" class="radio" />
+                         <label for="checkbox_Lab3">Lab</label>
+                     </div>
+                 </td>  
+
+                 <td>
+                     <asp:Label ID="Label16" runat="server" Text="PARK" ToolTip="Select your preferred park(s)"></asp:Label>
+                 </td>
+
+                 <td>
+                     <div class="divClassCheckbox parkClass3">  
+                         <input type="checkbox" name="park" id="checkbox_centralPark3" class="radio" checked/>
+                         <label for="checkbox_centralPark3">Central</label>
+                     </div>
+                     <div class="divClassCheckbox parkClass3">  
+                         <input type="checkbox" name="park" id="checkbox_westPark3" class="radio" checked/>
+                         <label for="checkbox_westPark3">West</label>
+                     </div>
+                     <div class="divClassCheckbox parkClass3">  
+                         <input type="checkbox" name="park" id="checkbox_eastPark3" class="radio" checked/>
+                         <label for="checkbox_eastPark3">East</label>
+                     </div>
+                 </td>
+
+            </tr>
+
+            <tr>
+             
+                <td>
+                     <asp:Label ID="Label17" runat="server" Text="REQUEST ROOM FACILITIES?" ToolTip="Select the preferences that you would like"></asp:Label>
+                </td>
+                <td>
+                   <div class="divClass requestFacilitiesClass3">
+                       <input type="radio" name="preferenceRadio3" class="radio" id="checkbox_noPreferences3" checked />
+                       <label for="checkbox_noPreferences3">No</label>
+                   </div>
+                     <div class="divClass requestFacilitiesClass3">
+                       <input type="radio" name="preferenceRadio3" class="radio" id="checkbox_yesPreferences3" />
+                       <label for="checkbox_yesPreferences3">Yes</label>
+                   </div>
+                </td>   
+
+                <td>
+                    <!-- empty cell - formatting -->
+                </td>
+                   
+                
+                <td>
+                    <asp:Label ID="Label18" runat="server" Text="BUILDING"></asp:Label>
+                    <br /><br /><br />
+                    <asp:Label ID="Label19" runat="server" Text="ROOM"></asp:Label>
+                </td>
+
+                <td>
+                    <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
+                        <select id="select_building3">
+                            <!-- options filled with AJAX -->
+                        </select>
+                    </div>
+                    <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
+                        <select id="select_room3">
+                            <!-- options filled with AJAX -->
+                         </select>
+                    </div>
+                </td>
+
+            </tr>
+           
+            <tr>
+                <td>
+                    <input type="button" id="preferencesDoneButton3" value="Done" class="orangeButton"/>
+                </td>
+      
+                <td>
+                    <input type="button" id="gotoPrevRoom2" value="Previous Room" />
+                </td>
+
+            </tr>
+        </table>
+
+   
         </div>
     </div>
     
@@ -1549,7 +1863,7 @@ input[type=checkbox] {
 </div>
 
 
-<!-- popup contents for facility selection - Room 1-->
+<!-- popup contents for facility selection - Room 2-->
 <div class="pop" id="popupFacilities2">
 
     <span id="closePopupFacilities2" style="cursor: pointer; left: 15px; top: -10px; font-size: 2em; display:inline-block; position:relative; ">✖</span>
@@ -1686,4 +2000,142 @@ input[type=checkbox] {
     </div>
 </div>
     
+
+
+<!-- popup contents for facility selection - Room 2-->
+<div class="pop" id="popupFacilities3">
+
+    <span id="closePopupFacilities3" style="cursor: pointer; left: 15px; top: -10px; font-size: 2em; display:inline-block; position:relative; ">✖</span>
+    <h1 style="display:inline-block; left:140px; position:relative; color:white; top: -10px;">Facility Selection</h1>  
+   
+    <div style="width:100%; height:90%; top:10%; background-color:#3E454D; border-bottom-left-radius:8px; border-bottom-right-radius:8px;">
+        <table style="width:70%; height:80%; top: 5%; left:15%;position:relative;">
+            <tr>
+                <td style="text-align:center; padding-left:5px">
+                    Computer
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_COMP3"/>
+                        <label for="checkbox_COMP3" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    Dual Data Projection
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_DDP3"/>
+                        <label for="checkbox_DDP3" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    Data Projection
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_DP3"/>
+                        <label for="checkbox_DP3" ></label>
+                    </div>
+                </td>
+
+                 <td style="text-align:center; padding-left:5px">
+                    Induction Loop
+                </td>
+                <td >
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_IL3"/>
+                        <label for="checkbox_IL3" ></label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr style="border-top:3px solid white; border-bottom: 3px solid white;">
+                <td style="text-align:center; padding-left:5px">
+                    Media Player
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_MP3"/>
+                        <label for="checkbox_MP3" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    PA
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_PA3"/>
+                        <label for="checkbox_PA3" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    Plasma Screen
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_PLASMA3"/>
+                        <label for="checkbox_PLASMA3" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    ReView
+                </td>
+                <td>
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_REV3"/>
+                        <label for="checkbox_REV3" ></label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align:center; padding-left:5px">
+                    Microphone
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_MIC3"/>
+                        <label for="checkbox_MIC3" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    Visualiser
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_VIS3"/>
+                        <label for="checkbox_VIS3" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    Wheelchair
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_Wchair3"/>
+                        <label for="checkbox_Wchair3" ></label>
+                    </div>
+                </td>
+
+                <td style="text-align:center; padding-left:5px">
+                    Whiteboard
+                </td>
+                <td >
+                    <div class="checkboxOne facilityCheckboxes3">
+                        <input type="checkbox" id="checkbox_WB3"/>
+                        <label for="checkbox_WB3" ></label>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
 </asp:Content>
