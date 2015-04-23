@@ -50,7 +50,7 @@
             right: 30%;
             width: 40%;
             max-width:370px;
-            height: 250px;
+            height: 300px;
             padding: 16px;
             background-color: white;
             z-index:1002;
@@ -76,7 +76,7 @@
         Round Number: <br />
         <asp:TextBox id="TextBox1" runat="server" /><br />
         Start Date: <br />
-        <asp:TextBox id="TextBox2" runat="server" />
+        <asp:TextBox id="TextBox2" runat="server" /><br />
         End Date: <br />
         <asp:TextBox id="TextBox3" runat="server" />
 

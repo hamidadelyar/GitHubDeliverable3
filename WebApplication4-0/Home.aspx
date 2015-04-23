@@ -80,6 +80,35 @@
             width:100%;
         }
 
+        .black_overlay{
+            display: none;
+            position: fixed;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:1001;
+            -moz-opacity: 0.8;
+            opacity:.80;
+            filter: alpha(opacity=80);
+        }
+        .white_content {
+            display: none;
+            position: absolute;
+            top: 30%;
+            right: 30%;
+            width: 40%;
+            max-width:370px;
+            height: 300px;
+            padding: 16px;
+            background-color: white;
+            z-index:1002;
+            overflow: auto;
+            border: 2px solid;
+            border-radius: 25px;
+        }
+
     </style>
     
     <div class="contentHolder">
@@ -95,37 +124,71 @@
         </div>
         <table id="containerTable">
             <tr>
-                <td style="text-align:center;"><table id="newsTable">
+                <td style="text-align:center;" valign="top">                    
+                    
+                    <asp:SqlDataSource 
+                        ID="SqlDataSource1" 
+                        runat="server" 
+                        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+                        SelectCommand="SELECT * FROM [Announcements]">
+
+                    </asp:SqlDataSource>
+                    <table id="newsTable">
                     <tr>
                         <th colspan="3"  style="text-align:center;">News & Announcements</th>
                     </tr>
-                    <tr>
-                        <td>Round 1 Has Started</td><td>13/03/2015</td><td>Details</td>
-                    </tr>
-                    <tr>
-                        <td>AD Hoc Round Has Started</td><td>10/03/2015</td><td>Details</td>
-                    </tr>
-                    <tr>
-                        <td>Tips for Creating Requests</td><td>04/03/2015</td><td>Details</td>
-                    </tr>
-                </table>
+                    <asp:Repeater ID="Repeater1" runat="server" DataSourceID="SqlDataSource1">
+                        <ItemTemplate>
+                            <tr>
+                                <td><%#Eval("Title") %></td><td><%#Eval("postDate") %></td><td><input type="button" ID="respond<%#Eval("announcementID") %>" Value="Respond" onclick = "document.getElementById('light<%#Eval("announcementID") %>').style.display='block';document.getElementById('fade').style.display='block'" /></td>
+                            </tr>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                    </table>
+                
+
+
+                
+
                 </td>
-                <td class="leftBorder"  style="text-align:center;">
+                <td class="leftBorder" valign="top" style="text-align:center;">
+
+                    <asp:SqlDataSource 
+                        ID="SqlDataSource2" 
+                        runat="server" 
+                        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+                        SelectCommand="SELECT * FROM [Requests]">
+
+                    </asp:SqlDataSource>
+
                 <table id="activityTable">
                     <tr>
                         <th colspan="3"  style="text-align:center;">Recent Activity</th>
                     </tr>
-                    <tr>
-                        <td>Request for COA123 made</td><td>13/03/2015</td><td>View</td>
-                    </tr>
-                    <tr>
-                        <td>#Announcement#</td><td>11/03/2015</td><td>View</td>
-                    </tr>
-                    <tr>
-                        <td>#Announcement#</td><td>10/03/2015</td><td>View</td>
-                    </tr>
+                    <asp:Repeater ID="Repeater3" runat="server" DataSourceID="SqlDataSource2">
+                        <ItemTemplate>
+                            <tr>
+                                <td>Request for <%#Eval("Module_Code") %> made</td><td></td><td><input type="button" Value="View" /></td>
+                            </tr>
+                        </ItemTemplate>
+                    </asp:Repeater>
                 </table></td>
             </tr>
-        </table>
+        </table>      
+        
+                    <asp:Repeater ID="Repeater2" runat="server" DataSourceID="SqlDataSource1">
+                        <ItemTemplate>
+                            <div id="light<%#Eval("announcementID") %>" class="white_content">
+                            <h1><%#Eval("Title") %></h1>
+                            <%#Eval("Content") %>
+                            <br />
+                            <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light<%#Eval("announcementID") %>').style.display='none';document.getElementById('fade').style.display='none'" />
+
+                            </div>
+                            <div id="fade" class="black_overlay">
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
+
     </div>
 </asp:Content>

@@ -23,6 +23,35 @@
     h2 {
         margin-left:5%;
     }
+
+     .black_overlay{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:1001;
+            -moz-opacity: 0.8;
+            opacity:.80;
+            filter: alpha(opacity=80);
+        }
+        .white_content {
+            display: none;
+            position: absolute;
+            top: 30%;
+            right: 30%;
+            width: 40%;
+            max-width:370px;
+            height: 300px;
+            padding: 16px;
+            background-color: white;
+            z-index:1002;
+            overflow: auto;
+            border: 2px solid;
+            border-radius: 25px;
+        }
 </style>
 
 <div class="contentHolder">
@@ -50,10 +79,25 @@
                 </tr>
                 <tr>
                     <td><%#Eval("Day") %></td><td><%#Eval("Start_Time") %></td><td><%#Eval("End_Time") %></td><td>####</td><td><%#Eval("Number_Students") %></td><td>
-                        <asp:Button ID="Button1" runat="server" Text="Respond" /></td>
+                        <input type="button" ID="respond<%#Eval("Request_ID") %>" Value="Respond" onclick = "document.getElementById('light<%#Eval("Request_ID") %>').style.display='block';document.getElementById('fade').style.display='block'" /></td>
                 </tr>
             </table>
 
+                
+            <div id="light<%#Eval("Request_ID") %>" class="white_content">
+                <h1><%#Eval("Module_Code") %> - <%#Eval("Module_Title") %></h1>
+                Announcement Title: <br />
+                <asp:TextBox id="TextBox1" runat="server" /><br />
+                Announcement Details: <br />
+                <asp:TextBox id="TextBox2" runat="server" />
+
+                <br />
+                <asp:Button ID="Button2" runat="server" Text="Save" /> 
+                <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light<%#Eval("Request_ID") %>').style.display='none';document.getElementById('fade').style.display='none'" />
+
+            </div>
+            <div id="fade" class="black_overlay">
+            </div>
 
             
         </ItemTemplate>
