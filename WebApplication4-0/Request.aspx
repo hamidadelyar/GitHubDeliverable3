@@ -521,6 +521,21 @@ td input[type="submit"], td input[type="button"], td button{
 	top:1px;
 }
 
+#validationContainer{
+  /*display:none;*/
+  position:fixed;
+  top:35%;
+  left:30%;
+  width:40%;
+  /*height:30%; taking this out allows height to adjust*/ 
+  border-radius:8px;
+  background:white;
+  border: solid 5px black;
+  font-size: 1em;
+  color:black;
+  font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+
+}
 
 </style>
 
@@ -1129,9 +1144,240 @@ td input[type="submit"], td input[type="button"], td button{
 
 
             $('#changeTime').click(function () {
+                if (document.getElementById('select_startTime').options[0].text != '1') { //if not already set to period, then set to period
+                    //change label to say period
+                    $('#MainContent_startPeriodLabel').show();
+                    $('#MainContent_startTimeLabel').hide();
+                    $('#MainContent_endPeriodLabel').show();
+                    $('#MainContent_endTimeLabel').hide();
 
+                    for (i = 0; i < 9; i++) {
+                        document.getElementById('select_startTime').options[i].text = i + 1;
+                        document.getElementById('select_endTime').options[i].text = i + 2;
+                    }
 
+                } else {    //if it has been set to period, now changes back to normal time
+
+                    //change label to say time
+                    $('#MainContent_startPeriodLabel').hide();
+                    $('#MainContent_startTimeLabel').show();
+                    $('#MainContent_endPeriodLabel').hide();
+                    $('#MainContent_endTimeLabel').show();
+                    for (i = 0; i < 9; i++) { //sets back to normal time form rather than periods i.e. 09:00:00 instead of 1
+                        document.getElementById('select_startTime').options[i].text = (document.getElementById('select_startTime').options[i].value).substring(0, 5);
+                        document.getElementById('select_endTime').options[i].text = (document.getElementById('select_endTime').options[i].value).substring(0, 5);
+                    }
+                 
+                }
             });
+
+         
+
+            /*
+                 VALIDATION FOR TIME SELECTION
+                 if the user selects a start time which is later then the end time, will not be allowed, user will be notified.
+            */
+            $('#select_startTime, #select_endTime').change(function () {
+                var startTime = document.getElementById('select_startTime').value;
+                var endTime = document.getElementById('select_endTime').value;
+                if (startTime > endTime) {
+                    showValidation();
+                    //showValidation("The <b>'Start time'</b> cannot finish after <b>'End Time'</b>, it must be before.");   //opens up validation message box
+                    $('#messageContents').html("The <b>'Start time'</b> cannot finish after <b>'End Time'</b>, it must be before.");
+                    //Sets red to bottom border of the corresponding labels, highlighting user of the location of the error.
+                    document.getElementById("MainContent_startTimeLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_endTimeLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_startPeriodLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "3px solid red";
+                } else { //gets rid of the red border
+                    document.getElementById("MainContent_startTimeLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_endTimeLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_startPeriodLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "";
+                }
+            });
+
+            function showValidation() {
+                $('#validationContainer').show();
+                $('#requestContainer').removeClass('blur-out');
+                $('#requestContainer').addClass('blur-in');
+
+                //only blurs the text in the footer
+                $('footer .float-left').removeClass('blur-out');
+                $('footer .float-left').addClass('blur-in');
+
+                //blurs header content, i.e. navigation
+                $('header').removeClass('blur-out');
+                $('header').addClass('blur-in');
+            }
+
+            $('#closeValidation').click(function () {
+                $('#validationContainer').hide();
+
+                $('#requestContainer').addClass('blur-out');
+                $('#requestContainer').removeClass('blur-in');
+
+                //unblurs the text in the footer
+                $('footer .float-left').addClass('blur-out');
+                $('footer .float-left').removeClass('blur-in');
+
+                //unblurs header content
+                $('header').addClass('blur-out');
+                $('header').removeClass('blur-in');
+            });
+
+
+            /*
+                Submits the request.
+                Also, performs validation before submitting the request, to ensure required fields entered are valid and non empty.
+            */
+            $('#submitButton').click(function () {
+                var modcode = $('#modcodeInput').val();
+                var modname = $('#modnameInput').val()
+
+                var startTime = document.getElementById('select_startTime').value;
+                var endTime = document.getElementById('select_endTime').value;
+
+                var numRooms = $('#numRooms').val();
+                var roomCap1 = $('#capacityInput').val();
+                var roomCap2 = $('#capacityInput2').val();
+                var roomCap3 = $('#capacityInput3').val();
+
+                var flag = true; // if on clicking submit, no errors occur, can complete submission. Else will notify user of the errors to fix.
+
+                $('#messageContents').html("<ul id='errorList'></ul>");
+                $('#messageContents').append("Cannot submit until you correct the above error(s)");
+
+                /*if module code is empty*/
+
+                if (modcode == "") {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li><b>'Module Code'</b> is empty. Please enter a value</li>");
+                    document.getElementById("MainContent_modcodeLabel").style.borderBottom = "3px solid red";
+                } else { //error corrected
+                    document.getElementById("MainContent_modcodeLabel").style.borderBottom = "";
+                }
+
+                /*if module name is empty*/
+
+                if (modname == "") {
+                    showValidation();
+                    $('#errorList').append("<li><b>'Module Name'</b> is empty. Please enter a value</li>");
+                    document.getElementById("MainContent_modnameLabel").style.borderBottom = "3px solid red";
+                } else { //error corrected
+                    document.getElementById("MainContent_modnameLabel").style.borderBottom = "";
+                }
+
+                /*if module name is empty */
+
+                if (startTime > endTime) {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li><b>'Start Time'</b> must be before <b>'End Time'</b>.  Please change desired times.</li>");
+                    document.getElementById("MainContent_startTimeLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_endTimeLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_startPeriodLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "3px solid red";
+                } else { //gets rid of the red border
+                    document.getElementById("MainContent_startTimeLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_endTimeLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_startPeriodLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "";
+                }
+
+                /*if the capacity input is empty*/
+                if (numRooms == 1) {
+                    if (roomCap1 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 1. Can be found in <b>'Preferences'</b> for Room 1 </li>");
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "";
+                    }
+                }
+
+                if (numRooms == 2) {
+                    if (roomCap1 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 1. Can be found in <b>'Preferences'</b> for Room 1 </li>");
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "";
+                    }
+                    if (roomCap2 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 2. Can be found in <b>'Preferences'</b> for Room 2 </li>");
+                        document.getElementById("MainContent_capacity2Label").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacity2Label").style.borderBottom = "";
+                    }
+                }
+
+                if (numRooms == 3) {
+                    if (roomCap1 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 1. Can be found in <b>'Preferences'</b> for Room 1 </li>");
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "";
+                    }
+                    if (roomCap2 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 2. Can be found in <b>'Preferences'</b> for Room 2 </li>");
+                        document.getElementById("MainContent_capacity2Label").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacity2Label").style.borderBottom = "";
+                    }
+                    if (roomCap3 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 3. Can be found in <b>'Preferences'</b> for Room 3 </li>");
+                        document.getElementById("MainContent_capacity3Label").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacity3Label").style.borderBottom = "";
+                    }
+                }// numRooms 3 closing tag
+
+                var defaultWeeks = document.getElementById('defaultWeeksYes').checked; //if false, then user has selected to choose own weeks
+                
+
+
+                /*
+                    Check if any weeks have been selected when user selects to choose his/her own weeks.
+                */
+                if (!defaultWeeks) {
+                    var checkedWeeks = false;
+                    for (i = 1; i < 16; i++) {
+                        if (document.getElementById('week' + i).checked) { 
+                            checkedWeeks = true; //if at least 1 week has been checked, then checked weeks set to true
+                            /*
+                                If at least 1 week has been checked, then checked weeks set to true.
+                                Otherwise, no weeks have been selected. User must be notified.
+                            */
+                        }
+                    }
+
+                    if (checkedWeeks != true) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>No weeks have been selected. Please select at least 1 week to continue or set <b>'Default Weeks'</b> to <b>'Yes'</b></li>");
+                        document.getElementById("MainContent_defaultWeeks").style.borderBottom = "3px solid red";
+                    } else {
+                        document.getElementById("MainContent_defaultWeeks").style.borderBottom = "";
+                    }
+                }
+
+                if (flag == true) {
+                    alert("great, you can pass through!");
+                }
+            }); //submit action closing tag
+
         }); //document.ready closing tag
 
 
@@ -1177,7 +1423,7 @@ td input[type="submit"], td input[type="button"], td button{
 
                 <tr>
                     <td>
-                        <asp:Label ID="daySelectLabel" runat="server" Text="DAY"></asp:Label>
+                        <asp:Label ID="daySelectLabel" runat="server" Text="DAY" ToolTip="Select the day that you would like to make the booking for"></asp:Label>
                     </td>
                     <td>
                         <div class="styled-select">
@@ -1192,40 +1438,43 @@ td input[type="submit"], td input[type="button"], td button{
                     </td>
 
                     <td>
-                        <asp:Label ID="Label1" runat="server" Text="START TIME"></asp:Label>
-                        <img id="changeTime" src="images/Change.png" style="width:20px; height:20px; margin-left:15px; cursor:pointer" />
+                        <asp:Label ID="startTimeLabel" runat="server" Text="START TIME" ToolTip="Select the time that you would like the lecture to start i.e. 10:00"></asp:Label>
+                        <asp:Label ID="startPeriodLabel" runat="server" Text="START PERIOD" style="display:none" ToolTip="Select the period that you would like the lecture to start i.e. 2"></asp:Label>
+                        <img id="changeTime" src="images/change.png" style="width:20px; height:20px; margin-left:5px; cursor:pointer"/>
+                        
                     </td>
                     <td>
                         <div class="styled-select">
                             <select id="select_startTime">
-                                <option value="9">09:00</option>
-                                <option value="10">10:00</option>
-                                <option value="11">11:00</option>
-                                <option value="12">12:00</option>
-                                <option value="13">13:00</option>
-                                <option value="14">14:00</option>
-                                <option value="15">15:00</option>
-                                <option value="16">16:00</option>
-                                <option value="17">17:00</option>
+                                <option value="09:00:00">09:00</option>
+                                <option value="10:00:00">10:00</option>
+                                <option value="11:00:00">11:00</option>
+                                <option value="12:00:00">12:00</option>
+                                <option value="13:00:00">13:00</option>
+                                <option value="14:00:00">14:00</option>
+                                <option value="15:00:00">15:00</option>
+                                <option value="16:00:00">16:00</option>
+                                <option value="17:00:00">17:00</option>
                             </select>
                         </div>
                     </td>
 
                     <td>
-                        <asp:Label ID="startTimeSelectLabel" runat="server" Text="END TIME"></asp:Label>
+                        <asp:Label ID="endTimeLabel" runat="server" Text="END TIME" ToolTip="Select the time that you would like the lecture to end i.e. 11:00"></asp:Label>
+                        <asp:Label ID="endPeriodLabel" runat="server" Text="END PERIOD" style="display:none" ToolTip="Select the period that you would like the lecture to end i.e. 5"></asp:Label>
                     </td>
                     <td>
                         <div class="styled-select">
                             <select id="select_endTime">
-                                <option value="10">10:00</option>
-                                <option value="11">11:00</option>
-                                <option value="12">12:00</option>
-                                <option value="13">13:00</option>
-                                <option value="14">14:00</option>
-                                <option value="15">15:00</option>
-                                <option value="16">16:00</option>
-                                <option value="17">17:00</option>
-                                <option value="18">18:00</option>
+                                <option value="10:00:00">10:00</option>
+                                <option value="11:00:00">11:00</option>
+                                <option value="12:00:00">12:00</option>
+                                <option value="13:00:00">13:00</option>
+                                <option value="14:00:00">14:00</option>
+                                <option value="15:00:00">15:00</option>
+                                <option value="16:00:00">16:00</option>
+                                <option value="17:00:00">17:00</option>
+                                <option value="18:00:00">18:00</option>
                             </select>
                         </div>
                     </td>
@@ -1234,7 +1483,7 @@ td input[type="submit"], td input[type="button"], td button{
 
                 <tr>
                     <td>
-                        <asp:Label ID="Label2" runat="server" Text="NUMBER OF ROOMS"></asp:Label>
+                        <asp:Label ID="Label2" runat="server" Text="NUMBER OF ROOMS" ToolTip="Select the number of rooms that you would like for this booking."></asp:Label>
                     </td>
                     <td>
                         <div class="styled-select">
@@ -1247,7 +1496,7 @@ td input[type="submit"], td input[type="button"], td button{
                     </td>
 
                     <td>
-                        <asp:Label ID="Label3" runat="server" Text="DEFAULT WEEKS?" ToolTip="Default weeks are weeks 1 to 12"></asp:Label>
+                        <asp:Label ID="defaultWeeksLabel" runat="server" Text="DEFAULT WEEKS?" ToolTip="Default weeks are weeks 1 to 12. if you wish to choose the specific weeks yourself, select 'No'."></asp:Label>
                     </td>
                     <td>
                         <div class="divClass">
@@ -1263,7 +1512,7 @@ td input[type="submit"], td input[type="button"], td button{
                     
                     <td colspan="2">
                         <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; width: 60%; display:block;"/>
-                        <input type="button" value="Submit" style="margin-bottom:0px; width:60%; position:relative; top:10px;" class="submitButton"/>
+                        <input type="button" id="submitButton" value="Submit" style="margin-bottom:0px; width:60%; position:relative; top:10px;" class="submitButton"/>
                     </td>
                 </tr>
 
@@ -1278,7 +1527,7 @@ td input[type="submit"], td input[type="button"], td button{
                     <asp:Label ID="capacityLabel" for="capacityInput" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
                 </td>
                 <td>
-                    <input type="text" id="capacityInput" placeholder="e.g. 50" />
+                    <input type="text" id="capacityInput" value='30'/>
                 </td>
                 <td>
                     <asp:Label ID="roomType" runat="server" Text="ROOM TYPE" ToolTip="Select the room type you would like to book"></asp:Label>
@@ -1380,10 +1629,10 @@ td input[type="submit"], td input[type="button"], td button{
          <table id="preferenceTable2" class="preferenceTable" style="display:none">
            <tr>
                  <td>
-                    <asp:Label ID="Label6" for="capacityInput2" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
+                    <asp:Label ID="capacity2Label" for="capacityInput2" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
                 </td>
                 <td>
-                    <input type="text" id="capacityInput2" />
+                    <input type="text" id="capacityInput2"  value="30" />
                 </td>
                 <td>
                     <asp:Label ID="Label9" runat="server" Text="ROOM TYPE" ToolTip="Select the room type you would like to book"></asp:Label>
@@ -1486,10 +1735,10 @@ td input[type="submit"], td input[type="button"], td button{
          <table id="preferenceTable3" class="preferenceTable" style="display:none">
            <tr>
                  <td>
-                    <asp:Label ID="Label14" for="capacityInput3" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
+                    <asp:Label ID="capacity3Label" for="capacityInput3" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
                 </td>
                 <td>
-                    <input type="text" id="capacityInput3" />
+                    <input type="text" id="capacityInput3" value='30' placeholder="e.g. 50"  />
                 </td>
                 <td>
                     <asp:Label ID="Label15" runat="server" Text="ROOM TYPE" ToolTip="Select the room type you would like to book"></asp:Label>
@@ -1759,10 +2008,10 @@ td input[type="submit"], td input[type="button"], td button{
                 </td>
 
                 <td>
-                    <input type="button" value="Reset" id="resetWeeks" style="margin-left:10px; background-color:white; width: 90%; border-radius:8px"/>
+                    <input type="button" value="Reset" id="resetWeeks" style="margin-left:10px; background-color:white; width: 90%; font-size: 1em; border-radius:8px"/>
                 </td>
                <td>
-                    <input type="button" value="Select All" id="selectAllWeeks" style="background-color:white; width: 100%; border-radius:8px"/>
+                    <input type="button" value="Select All" id="selectAllWeeks" style="background-color:white; width: 100%; font-size: 1em; border-radius:8px"/>
                </td>
             </tr>
         </table>
@@ -2183,4 +2432,22 @@ td input[type="submit"], td input[type="button"], td button{
         </table>
     </div>
 </div>
+ 
+    <!-- box to show validation errors -->
+    <div id="validationContainer" style="display:none">
+
+            <table style="table-layout:fixed; width:100%; height:90%; position:relative; color:black;text-align:center">
+                <tr>
+                    <td id="messageContents" style="font-size: 1em;">
+                        <!-- filled in with js depending on error -->
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="button" id="closeValidation" class="orangeButton" style="width:30%;" value="OK"/>
+                    </td>
+                </tr>
+            </table>
+    
+    </div>
 </asp:Content>

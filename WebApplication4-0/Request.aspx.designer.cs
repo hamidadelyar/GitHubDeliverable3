@@ -49,22 +49,40 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label daySelectLabel;
         
         /// <summary>
-        /// Label1 control.
+        /// startTimeLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
+        protected global::System.Web.UI.WebControls.Label startTimeLabel;
         
         /// <summary>
-        /// startTimeSelectLabel control.
+        /// startPeriodLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label startTimeSelectLabel;
+        protected global::System.Web.UI.WebControls.Label startPeriodLabel;
+        
+        /// <summary>
+        /// endTimeLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label endTimeLabel;
+        
+        /// <summary>
+        /// endPeriodLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label endPeriodLabel;
         
         /// <summary>
         /// Label2 control.
@@ -76,13 +94,13 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label Label2;
         
         /// <summary>
-        /// Label3 control.
+        /// defaultWeeksLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label3;
+        protected global::System.Web.UI.WebControls.Label defaultWeeksLabel;
         
         /// <summary>
         /// capacityLabel control.
@@ -139,13 +157,13 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label Label7;
         
         /// <summary>
-        /// Label6 control.
+        /// capacity2Label control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label6;
+        protected global::System.Web.UI.WebControls.Label capacity2Label;
         
         /// <summary>
         /// Label9 control.
@@ -193,13 +211,13 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label Label13;
         
         /// <summary>
-        /// Label14 control.
+        /// capacity3Label control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label14;
+        protected global::System.Web.UI.WebControls.Label capacity3Label;
         
         /// <summary>
         /// Label15 control.
