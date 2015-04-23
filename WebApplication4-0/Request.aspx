@@ -427,40 +427,42 @@ input[type=checkbox] {
     margin-bottom: 0px;
 }
 
+
 .orangeButton {
-	-moz-box-shadow: 0px 10px 14px -7px #fce2c1;
-	-webkit-box-shadow: 0px 10px 14px -7px #fce2c1;
-	box-shadow: 0px 10px 14px -7px #fce2c1;
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffc477), color-stop(1, #fb9e25));
-	background:-moz-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
-	background:-webkit-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
-	background:-o-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
-	background:-ms-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
-	background:linear-gradient(to bottom, #ffc477 5%, #fb9e25 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25',GradientType=0);
-	background-color:#ffc477;
-	-moz-border-radius:8px;
-	-webkit-border-radius:8px;
-	border-radius:8px;
+	-moz-box-shadow: 0px 10px 14px -7px #ff8060;
+	-webkit-box-shadow: 0px 10px 14px -7px #ff8060;
+	box-shadow: 0px 10px 14px -7px #ff8060;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ff8060), color-stop(1, #fa7250));
+	background:-moz-linear-gradient(top, #ff8060 5%, #fa7250 100%);
+	background:-webkit-linear-gradient(top, #ff8060 5%, #fa7250 100%);
+	background:-o-linear-gradient(top, #ff8060 5%, #fa7250 100%);
+	background:-ms-linear-gradient(top, #ff8060 5%, #fa7250 100%);
+	background:linear-gradient(to bottom, #ff8060 5%, #fa7250 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff8060', endColorstr='#fa7250',GradientType=0);
+	background-color:#ff8060;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	border:1px solid #ff5126;
 	display:inline-block;
 	cursor:pointer;
 	color:#ffffff;
-	font-family:arial;
-	font-size:1.5em;
+	font-family:Arial;
+	font-size:13px;
 	font-weight:bold;
-	padding:20px 32px;
+	padding:11px 20px;
 	text-decoration:none;
-	text-shadow:0px 1px 0px #cc9f52;
+	text-shadow:0px 1px 0px #ff8060;
 }
 .orangeButton:hover {
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477));
-	background:-moz-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
-	background:-webkit-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
-	background:-o-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
-	background:-ms-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
-	background:linear-gradient(to bottom, #fb9e25 5%, #ffc477 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='#ffc477',GradientType=0);
-	background-color:#fb9e25;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #e0512d), color-stop(1, #fa7250));
+	background:-moz-linear-gradient(top, #e0512d 5%, #fa7250 100%);
+	background:-webkit-linear-gradient(top, #e0512d 5%, #fa7250 100%);
+	background:-o-linear-gradient(top, #e0512d 5%, #fa7250 100%);
+	background:-ms-linear-gradient(top, #e0512d 5%, #fa7250 100%);
+	background:linear-gradient(to bottom, #e0512d 5%, #fa7250 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e0512d', endColorstr='#fa7250',GradientType=0);
+	background-color:#3e7327;
 }
 .orangeButton:active {
 	position:relative;
@@ -478,8 +480,49 @@ td input[type="submit"], td input[type="button"], td button{
      -webkit-box-shadow: 10px 10px 40px grey; 
 }
 
+.submitButton {
+	-moz-box-shadow: 0px 10px 14px -7px #3e7327;
+	-webkit-box-shadow: 0px 10px 14px -7px #3e7327;
+	box-shadow: 0px 10px 14px -7px #3e7327;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #77b55a), color-stop(1, #72b352));
+	background:-moz-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-webkit-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-o-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-ms-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77b55a', endColorstr='#72b352',GradientType=0);
+	background-color:#77b55a;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	border:1px solid #4b8f29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:11px 20px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #5b8a3c;
+}
+.submitButton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3e7327), color-stop(1, #77b55a));
+	background:-moz-linear-gradient(top, #3e7327 5%, #77b55a 100%);
+	background:-webkit-linear-gradient(top, #3e7327 5%, #77b55a 100%);
+	background:-o-linear-gradient(top, #3e7327 5%, #77b55a 100%);
+	background:-ms-linear-gradient(top, #3e7327 5%, #77b55a 100%);
+	background:linear-gradient(to bottom, #3e7327 5%, #77b55a 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3e7327', endColorstr='#77b55a',GradientType=0);
+	background-color:#3e7327;
+}
+.submitButton:active {
+	position:relative;
+	top:1px;
+}
 
-    </style>
+
+</style>
 
 
 
@@ -1084,6 +1127,11 @@ td input[type="submit"], td input[type="button"], td button{
                 });
             });
 
+
+            $('#changeTime').click(function () {
+
+
+            });
         }); //document.ready closing tag
 
 
@@ -1103,7 +1151,7 @@ td input[type="submit"], td input[type="button"], td button{
                         <asp:Label ID="modcodeLabel" ToolTip="Enter a module code i.e. COA123" runat="server" Text="MODULE CODE"></asp:Label>
                     </td>
                     <td>
-                        <input type="text" id="modcodeInput" style="width: 200%;" />
+                        <input type="text" id="modcodeInput" style="width: 200%;" placeholder="e.g. COA101"/>
 
                     </td>
 
@@ -1119,7 +1167,7 @@ td input[type="submit"], td input[type="button"], td button{
                         <asp:Label ID="modnameLabel" runat="server" Text="MODULE NAME" ToolTip="Enter a module name i.e. Server Side Programming"></asp:Label>
                     </td>
                     <td>
-                        <input type="text" id="modnameInput" style="width: 200%;" />
+                        <input type="text" id="modnameInput" style="width: 200%;" placeholder="e.g. Essential Skills for Computing"/>
                         <!--<asp:TextBox ID="modnameInput" runat="server" style="width:135%;"></asp:TextBox>-->
                     </td>
                     <td>
@@ -1145,19 +1193,20 @@ td input[type="submit"], td input[type="button"], td button{
 
                     <td>
                         <asp:Label ID="Label1" runat="server" Text="START TIME"></asp:Label>
+                        <img id="changeTime" src="images/Change.png" style="width:20px; height:20px; margin-left:15px; cursor:pointer" />
                     </td>
                     <td>
                         <div class="styled-select">
-                            <select>
-                                <option>09:00</option>
-                                <option>10:00</option>
-                                <option>11:00</option>
-                                <option>12:00</option>
-                                <option>13:00</option>
-                                <option>14:00</option>
-                                <option>15:00</option>
-                                <option>16:00</option>
-                                <option>17:00</option>
+                            <select id="select_startTime">
+                                <option value="9">09:00</option>
+                                <option value="10">10:00</option>
+                                <option value="11">11:00</option>
+                                <option value="12">12:00</option>
+                                <option value="13">13:00</option>
+                                <option value="14">14:00</option>
+                                <option value="15">15:00</option>
+                                <option value="16">16:00</option>
+                                <option value="17">17:00</option>
                             </select>
                         </div>
                     </td>
@@ -1167,16 +1216,16 @@ td input[type="submit"], td input[type="button"], td button{
                     </td>
                     <td>
                         <div class="styled-select">
-                            <select>
-                                <option>10:00</option>
-                                <option>11:00</option>
-                                <option>12:00</option>
-                                <option>13:00</option>
-                                <option>14:00</option>
-                                <option>15:00</option>
-                                <option>16:00</option>
-                                <option>17:00</option>
-                                <option>18:00</option>
+                            <select id="select_endTime">
+                                <option value="10">10:00</option>
+                                <option value="11">11:00</option>
+                                <option value="12">12:00</option>
+                                <option value="13">13:00</option>
+                                <option value="14">14:00</option>
+                                <option value="15">15:00</option>
+                                <option value="16">16:00</option>
+                                <option value="17">17:00</option>
+                                <option value="18">18:00</option>
                             </select>
                         </div>
                     </td>
@@ -1213,15 +1262,11 @@ td input[type="submit"], td input[type="button"], td button{
                     </td>
                     
                     <td colspan="2">
-                        <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; display:block;"/>
+                        <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; width: 60%; display:block;"/>
+                        <input type="button" value="Submit" style="margin-bottom:0px; width:60%; position:relative; top:10px;" class="submitButton"/>
                     </td>
                 </tr>
 
-                <tr>
-                    <td colspan="6">
-                        
-                    </td>
-                </tr>
             </table>
         
 
@@ -1233,7 +1278,7 @@ td input[type="submit"], td input[type="button"], td button{
                     <asp:Label ID="capacityLabel" for="capacityInput" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
                 </td>
                 <td>
-                    <input type="text" id="capacityInput" />
+                    <input type="text" id="capacityInput" placeholder="e.g. 50" />
                 </td>
                 <td>
                     <asp:Label ID="roomType" runat="server" Text="ROOM TYPE" ToolTip="Select the room type you would like to book"></asp:Label>
