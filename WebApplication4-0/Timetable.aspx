@@ -13,7 +13,7 @@
     <script src="Scripts/Timetable.js" type="text/javascript" ></script>
     <link rel="stylesheet" href="Content/Timetable.css" />
     <div class="timetblHolder" >
-        <table class="timetbl" >
+        <table class="timetbl">
             <tr>
                 <td colspan="2" class="nonSelect" ><span class="leftWk weekBtn"></span></td>
                 <td colspan="2" class="select" ><b class="centWk"></b></td>
@@ -125,7 +125,7 @@
     <div class="toolsHolder" >
         <div class="hdr" ><b>TOOLS</b></div>
         <div class="options" ><span class="roomChoice choice" >ROOM</span> | <span class="modChoice choice" >MODULE</span> | <span class="lectChoice choice" >LECTURER</span></div>
-        <div class="rooms" ><b>ROOM</b><br /><input style="text-transform:uppercase" autocomplete="off" type="text" class="roomTxt" id="roomTxt" name="roomTxt" /><img id="clearImg" src="Images/clear.png" width="23" height="15" /></div>
+        <div class="rooms" ><b>ROOM</b><br /><input style="text-transform:uppercase" autocomplete="off" type="text" class="roomTxt" id="roomTxt" name="roomTxt" value="<%= this.code %>" /><img id="clearImg" src="Images/clear.png" width="23" height="15" /></div>
         <div class="suggest" >
             <table class="suggestTbl">
             </table>

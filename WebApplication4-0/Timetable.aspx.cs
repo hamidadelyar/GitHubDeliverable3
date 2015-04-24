@@ -15,12 +15,17 @@ namespace WebApplication4_0
         public String data = "";
         public String modData = "";
         public String lectData = "";
+        public string code = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             data = Select("Rooms", "Room_ID", "1=1", "");
             if ((Session["LoggedIn"]) != null) { 
                 modData = Select("Modules", "Module_Code + ' ' + Module_Title AS Module_Code", "LEFT(Module_Code, 2) = '" + Session["Username"].ToString().Substring(0, 2) + "'", "");
                 lectData = Select("Lecturers", "Lecturer_ID + ' ' + Lecturer_Name AS Lecturer_ID", "LEFT(Lecturer_ID, 2) = '" + Session["Username"].ToString().Substring(0, 2) + "'", "");
+            }
+            if (Request.QueryString["roomCode"] != null)
+            {
+                code = Request.QueryString["roomCode"];
             }
         }
         

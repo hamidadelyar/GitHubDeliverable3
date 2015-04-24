@@ -4,6 +4,11 @@ var semester = 1;
 var showing = false;
 var type = 1;
 $(document).ready(function () {
+    if ($('.roomTxt').val() != "")
+    {
+        fillTable();
+        getBooking();
+    }
     updateWeeks();
     $('.bookingSpan').hide();
     $('.leftWk').click(function () { // the week to the left of the selected week is clicked so it scrolls through the weeks setting the left one to be the current week
