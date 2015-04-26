@@ -401,9 +401,9 @@
                     {
                         if (arr[i]['all'] == true)
                         {
-                            $('<span class="roomRes ' + arr[i]['park'] + ' ' + arr[i]['type']+'">' + arr[i]['room'] + '</span>').insertAfter('.all'+weeks[arr[i]['day'] - 1] + weeks[arr[i]['start'] - 1])
+                            $('<span onclick="OpenInNewTab(\'RoomsDetails.aspx?roomCode='+arr[i]['room'] + '\')" class="roomRes ' + arr[i]['park'] + ' ' + arr[i]['type']+'">' + arr[i]['room'] + '</span>').insertAfter('.all'+weeks[arr[i]['day'] - 1] + weeks[arr[i]['start'] - 1])
                         }
-                        $('<span class="roomRes ' + arr[i]['park'] + ' ' + arr[i]['type'] + '">' + arr[i]['room'] + '</span>').insertAfter('.' + weeks[arr[i]['week'] - 1]+weeks[arr[i]['day'] - 1]+weeks[arr[i]['start'] - 1])
+                        $('<span onclick="OpenInNewTab(\'RoomsDetails.aspx?roomCode=' + arr[i]['room'] + '\')" class="roomRes ' + arr[i]['park'] + ' ' + arr[i]['type'] + '">' + arr[i]['room'] + '</span>').insertAfter('.' + weeks[arr[i]['week'] - 1] + weeks[arr[i]['day'] - 1] + weeks[arr[i]['start'] - 1])
                     }
                     var numOfVisibleRows = $('.resTbl td:visible').length - 2;
                     $('.resTbl td').each(function () {
@@ -468,6 +468,10 @@
                 }
             }
             return selPeriods;
+        }
+        function OpenInNewTab(url) {
+            var win = window.open(url, '_blank');
+            win.focus();
         }
     </script>
     <style>

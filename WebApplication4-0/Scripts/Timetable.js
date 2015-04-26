@@ -218,12 +218,12 @@ function getBooking() // uses ajax to run the code behind and then put the data 
     showLoader();
     showing = true;
     shrink();
-    var room = $('.roomTxt').val();
+    var search = $('.roomTxt').val();
     var week = currWeek;
     $.ajax({
         type: "POST",
         url: "Timetable.aspx/SearchRoom",
-        data: JSON.stringify({room: room, week: week, semester:semester, type:type}),
+        data: JSON.stringify({search: search, week: week, semester:semester, type:type}),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -245,7 +245,15 @@ function insertData(result)
     $('.slot').each(function () {
         if (typeof bookings[i][0]['Module_Code'] != 'undefined') {
             var innerData = bookings[i][0];
-            $(this).html(innerData['Module_Code'] + '<span class="bookingSpan" ><span class="modCode" >' + innerData['Module_Code'] + '<br />' + innerData['Module_Title'] + '</span><br /><span class="lectName">' + innerData['Lecturer_ID'].toUpperCase() + '<br />' + innerData['Lecturer_Name'] + '</span><br /><span class="roomId">' + innerData['Room_ID'] + '</span></span>').addClass('booking');
+            var lecCodes = innerData['Lecturer_ID'].split(",");
+            var lecNames = innerData['Lecturer_Name'].split(",");
+            var lecSpans = "";
+            for (var j = 0; j < lecCodes.length; j++)
+            {
+                lecSpans += '<span class="lectName">' + lecCodes[j].toUpperCase() + ' ' + lecNames[j] + '</span>,<br />';
+            }
+            lecSpans = lecSpans.substring(0, lecSpans.length - 7);
+            $(this).html(innerData['Module_Code'] + '<span class="bookingSpan" ><span class="modCode" >' + innerData['Module_Code'] + '<br />' + innerData['Module_Title'] + '</span><br />'+lecSpans+'<br /><span class="roomId">' + innerData['Room_ID'] + '</span></span>').addClass('booking');
             var cellIndex = $(this).index();
             var $currCell = $(this);
             for (var j = 0; j < innerData['End_Time'] - innerData['Start_Time'] - 1; j++) {
@@ -295,8 +303,8 @@ function bookingHover() // adds the booking hover features to bookings added aft
     $('.lectName').click(function () {
         type = 3;
         $('.choice').css('text-decoration', 'none');
-        $('lectChoice').css('text-decoration', 'underline');
-        var text = $(this).html()
+        $('.lectChoice').css('text-decoration', 'underline');
+        var text = $(this).html().trim();
         $('.roomTxt').val(text.replace('<br>', ' '));
         $('.rooms b').html('LECTURER');
         fillTable();
