@@ -73,6 +73,32 @@ input[type="text"]:hover, #active
 }
 
 
+textarea{
+	padding: 9px;
+	width: 90%;
+	font-size: 1.1em;
+	margin: 18px 0px;
+	border: 2px solid#EAEEF1;
+	color: #666666;
+	background:#EAEEF1;
+	font-family: 'Open Sans', sans-serif;
+	font-weight:600;
+	margin-left: 5px;
+	outline:none;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+
+textarea:hover, #active
+{
+	background:#fff;
+	border:2px solid #609EC3;
+	outline:none;
+}
+
 /*
     orange
 input[type="text"]{
@@ -480,7 +506,7 @@ td input[type="submit"], td input[type="button"], td button{
      -webkit-box-shadow: 10px 10px 40px grey; 
 }
 
-.submitButton {
+.greenButton {
 	-moz-box-shadow: 0px 10px 14px -7px #3e7327;
 	-webkit-box-shadow: 0px 10px 14px -7px #3e7327;
 	box-shadow: 0px 10px 14px -7px #3e7327;
@@ -506,7 +532,7 @@ td input[type="submit"], td input[type="button"], td button{
 	text-decoration:none;
 	text-shadow:0px 1px 0px #5b8a3c;
 }
-.submitButton:hover {
+.greenButton:hover {
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3e7327), color-stop(1, #77b55a));
 	background:-moz-linear-gradient(top, #3e7327 5%, #77b55a 100%);
 	background:-webkit-linear-gradient(top, #3e7327 5%, #77b55a 100%);
@@ -516,9 +542,29 @@ td input[type="submit"], td input[type="button"], td button{
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3e7327', endColorstr='#77b55a',GradientType=0);
 	background-color:#3e7327;
 }
-.submitButton:active {
+.greenButton:active {
 	position:relative;
 	top:1px;
+}
+
+
+
+#confirmationContainer{
+  position:fixed;
+  top:20%;
+  left:30%;
+  width:40%;
+  /*height:30%; taking this out allows height to adjust*/ 
+  border-radius:8px;
+  background:white;
+  border: solid 5px black;
+  font-size: 1em;
+  color:black;
+  font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+  box-shadow: 30px 30px 70px black;
+  -moz-box-shadow: 30px 30px 70px black;
+  -webkit-box-shadow: 30px 30px 70px black;
+  
 }
 
 #validationContainer{
@@ -534,7 +580,9 @@ td input[type="submit"], td input[type="button"], td button{
   font-size: 1em;
   color:black;
   font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
-
+  box-shadow: 30px 30px 70px black;
+  -moz-box-shadow: 30px 30px 70px black;
+  -webkit-box-shadow: 30px 30px 70px black;
 }
 
 </style>
@@ -1164,8 +1212,10 @@ td input[type="submit"], td input[type="button"], td button{
                     $('#MainContent_endPeriodLabel').hide();
                     $('#MainContent_endTimeLabel').show();
                     for (i = 0; i < 9; i++) { //sets back to normal time form rather than periods i.e. 09:00:00 instead of 1
-                        document.getElementById('select_startTime').options[i].text = (document.getElementById('select_startTime').options[i].value).substring(0, 5);
-                        document.getElementById('select_endTime').options[i].text = (document.getElementById('select_endTime').options[i].value).substring(0, 5);
+                        //document.getElementById('select_startTime').options[i].text = (document.getElementById('select_startTime').options[i].value).substring(0, 5);
+                        //document.getElementById('select_endTime').options[i].text = (document.getElementById('select_endTime').options[i].value).substring(0, 5);
+                        document.getElementById('select_startTime').options[i].text = i + 9 + ":00";
+                        document.getElementById('select_endTime').options[i].text = i + 10 + ":00";
                     }
                  
                 }
@@ -1180,10 +1230,10 @@ td input[type="submit"], td input[type="button"], td button{
             $('#select_startTime, #select_endTime').change(function () {
                 var startTime = document.getElementById('select_startTime').value;
                 var endTime = document.getElementById('select_endTime').value;
-                if (startTime > endTime) {
-                    showValidation();
+                if (startTime >= endTime) {
+                    showValidation();                    
                     //showValidation("The <b>'Start time'</b> cannot finish after <b>'End Time'</b>, it must be before.");   //opens up validation message box
-                    $('#messageContents').html("The <b>'Start time'</b> cannot finish after <b>'End Time'</b>, it must be before.");
+                    $('#messageContents').html("The <b>'Start time'</b> must be before the <b>'End Time'</b>.");
                     //Sets red to bottom border of the corresponding labels, highlighting user of the location of the error.
                     document.getElementById("MainContent_startTimeLabel").style.borderBottom = "3px solid red";
                     document.getElementById("MainContent_endTimeLabel").style.borderBottom = "3px solid red";
@@ -1199,6 +1249,7 @@ td input[type="submit"], td input[type="button"], td button{
 
             function showValidation() {
                 $('#validationContainer').show();
+                formInputEnabled('false');  //disable changing of input until this is closed.
                 $('#requestContainer').removeClass('blur-out');
                 $('#requestContainer').addClass('blur-in');
 
@@ -1211,9 +1262,10 @@ td input[type="submit"], td input[type="button"], td button{
                 $('header').addClass('blur-in');
             }
 
+
             $('#closeValidation').click(function () {
                 $('#validationContainer').hide();
-
+                formInputEnabled('true');
                 $('#requestContainer').addClass('blur-out');
                 $('#requestContainer').removeClass('blur-in');
 
@@ -1226,22 +1278,66 @@ td input[type="submit"], td input[type="button"], td button{
                 $('header').removeClass('blur-in');
             });
 
+            /* brings up confirmation box */
+            function showConfirmation() {
+                $('#confirmationContainer').show();
+                $('#requestContainer').removeClass('blur-out');
+                $('#requestContainer').addClass('blur-in');
+
+                //only blurs the text in the footer
+                $('footer .float-left').removeClass('blur-out');
+                $('footer .float-left').addClass('blur-in');
+
+                //blurs header content, i.e. navigation
+                $('header').removeClass('blur-out');
+                $('header').addClass('blur-in');
+            }
+
+            $('#cancelRequest').click(function () {
+                formInputEnabled("true");
+                $('#confirmationContainer').hide();
+                
+                $('#requestContainer').addClass('blur-out');
+                $('#requestContainer').removeClass('blur-in');
+
+                //unblurs the text in the footer
+                $('footer .float-left').addClass('blur-out');
+                $('footer .float-left').removeClass('blur-in');
+
+                //unblurs header content
+                $('header').addClass('blur-out');
+                $('header').removeClass('blur-in');
+            });
 
             /*
                 Submits the request.
                 Also, performs validation before submitting the request, to ensure required fields entered are valid and non empty.
             */
             $('#submitButton').click(function () {
-                var modcode = $('#modcodeInput').val();
-                var modname = $('#modnameInput').val()
+                var modcode = $('#modcodeInput').val().toUpperCase();
+                var modname = $('#modnameInput').val();
 
-                var startTime = document.getElementById('select_startTime').value;
-                var endTime = document.getElementById('select_endTime').value;
+                var day = $('#daySelect').val();
+                var dayString = document.getElementById('daySelect').options[document.getElementById('daySelect').value - 1].text; //i.e. monday instead of 1
+
+                var startTimeString = document.getElementById('select_startTime').options[document.getElementById('select_startTime').value - 1].text;//i.e. 10:00 instead of 2
+                var endTimeString = document.getElementById('select_endTime').options[document.getElementById('select_endTime').value - 2].text;//i.e. 10:00 instead of 2
+                var startTime = document.getElementById('select_startTime').value; //1-9
+                var endTime = document.getElementById('select_endTime').value; //2-10
 
                 var numRooms = $('#numRooms').val();
                 var roomCap1 = $('#capacityInput').val();
                 var roomCap2 = $('#capacityInput2').val();
                 var roomCap3 = $('#capacityInput3').val();
+                //var weeks array is an array containing the weeks selected. Declared later on.
+                var capacity = +roomCap1;
+
+                if(numRooms == 2){
+                    capacity = +roomCap1 + +roomCap2;
+                }
+                if(numRooms == 3){
+                    capacity = +roomCap1 + +roomCap2 + +roomCap3;   //unary plus operator, converts string to number                }
+                }
 
                 var flag = true; // if on clicking submit, no errors occur, can complete submission. Else will notify user of the errors to fix.
 
@@ -1262,6 +1358,7 @@ td input[type="submit"], td input[type="button"], td button{
                 /*if module name is empty*/
 
                 if (modname == "") {
+                    flag = false;
                     showValidation();
                     $('#errorList').append("<li><b>'Module Name'</b> is empty. Please enter a value</li>");
                     document.getElementById("MainContent_modnameLabel").style.borderBottom = "3px solid red";
@@ -1346,37 +1443,127 @@ td input[type="submit"], td input[type="button"], td button{
 
                 var defaultWeeks = document.getElementById('defaultWeeksYes').checked; //if false, then user has selected to choose own weeks
                 
-
-
+              
+                //var weeks = []; //creates empty array
+              
                 /*
                     Check if any weeks have been selected when user selects to choose his/her own weeks.
                 */
-                if (!defaultWeeks) {
-                    var checkedWeeks = false;
-                    for (i = 1; i < 16; i++) {
-                        if (document.getElementById('week' + i).checked) { 
-                            checkedWeeks = true; //if at least 1 week has been checked, then checked weeks set to true
-                            /*
-                                If at least 1 week has been checked, then checked weeks set to true.
-                                Otherwise, no weeks have been selected. User must be notified.
-                            */
-                        }
-                    }
+         
+                var weeks = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+                var weekChecked = 15; //15 weeks checked automatically
 
-                    if (checkedWeeks != true) {
-                        flag = false;
-                        showValidation();
-                        $('#errorList').append("<li>No weeks have been selected. Please select at least 1 week to continue or set <b>'Default Weeks'</b> to <b>'Yes'</b></li>");
-                        document.getElementById("MainContent_defaultWeeks").style.borderBottom = "3px solid red";
-                    } else {
-                        document.getElementById("MainContent_defaultWeeks").style.borderBottom = "";
-                    }
+                if (document.getElementById('defaultWeeksNo').checked == true) {    //if user has selected to choose own weeks
+                    //check to see if any weeks have been selected.
+                    weeks = []; //sets the weeks array to empty, so can add the specific weeks user chooses.
+                    var weekChecked = 0;
+                    for (i = 1; i < 16; i++) {
+                        if (document.getElementById('week' + i).checked == true) {
+                            weekChecked = weekChecked + 1; //if at least 1 week has been checked, then weekChecked set to true
+                            weeks.push(i); //corresponding week number will be added to the array if it has been checked
+                            /*
+                              If at least 1 week has been checked, then checked weeks set to true.
+                              Otherwise, no weeks have been selected. User must be notified.
+                          */
+                        }
+                     }
                 }
 
+                //if user selects to choose own weeks, must select at least 1 week.
+                if (weekChecked == 0) {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li>No weeks have been selected. Please select at least 1 week to continue or set <b>'Default Weeks'</b> to <b>'Yes'</b></li>");
+                    document.getElementById("MainContent_defaultWeeksLabel").style.borderBottom = "3px solid red";
+                } else {  //gets rid of the red border
+                    document.getElementById("MainContent_defaultWeeksLabel").style.borderBottom = "";
+                }
+               
+
+                /*
+                    If the flag is still true, that means all errors have been handled, can now submit the request to the DB.
+                */
+
+                var weeksString = "";
+                //iterates through the weeks array, to find out which weeks have been selected
+                for (i = 0; i<weeks.length; i++) {
+                    weeksString += weeks[i] + ", "  //puts contents of the array into the form 1, 2, 3 etc.
+                }
+                weeksString = weeksString.substring(0, weeksString.length - 2); //gets rid of the ',' at the end.
                 if (flag == true) {
-                    alert("great, you can pass through!");
+                    formInputEnabled("false");  //cannot change data once in submission mode
+                    showConfirmation(); //brings up confirmation pop up
+                    $('#confirmationContents').html(""); //clears previous added content
+                    $('#confirmationContents').append("<strong>Module:</strong> " + modname + " (" + modcode + ")" + "<br />");
+                    //$('#confirmationContents').append("<strong>Module Code:</strong> " + modcode + "<br />");
+                    $('#confirmationContents').append("<strong>Day:</strong> " + dayString + "<br />");
+                    $('#confirmationContents').append("<strong>Start Time:</strong> " + startTimeString + " (Period " + startTime + ")" + "<br />");
+                    $('#confirmationContents').append("<strong>End Time:</strong> " + endTimeString + " (Period " + endTime + ")" + "<br />");
+                    $('#confirmationContents').append("<strong>Weeks:</strong> " + weeksString + "<br />");
+                    if (numRooms == 1) { //if user has requested just 1 room
+                        if (document.getElementById('select_room').value != 0) {    //if a room has been chosen
+                            $('#confirmationContents').append("<strong>Room:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room:</strong> n/a <br />");
+                        }
+                        $('#confirmationContents').append("<strong>Total number of students:</strong> " + capacity + "<br />");  
+                    }
+                    if (numRooms == 2) {    //if user has requested 2 rooms
+                        if (document.getElementById('select_room').value != 0) {    //if a room has been chosen
+                            $('#confirmationContents').append("<strong>Room 1:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room 1:</strong> n/a <br />");
+                        }
+                        if (document.getElementById('select_room2').value != 0) {    //if a room2 has been chosen
+                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room 2:</strong> n/a <br />");
+                        }
+                        $('#confirmationContents').append("<strong>Total number of students:</strong> " + capacity + "<br />");
+                    }
+                    if (numRooms == 3) {    //if user has requested 2 rooms
+                        if (document.getElementById('select_room').value != 0) {    //if a room has been chosen
+                            $('#confirmationContents').append("<strong>Room 1:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room 1:</strong> n/a <br />");
+                        }
+                        if (document.getElementById('select_room2').value != 0) {    //if a room2 has been chosen
+                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room 2:</strong> n/a <br />");
+                        }
+                        if (document.getElementById('select_room3').value != 0) {    //if a room2 has been chosen
+                            $('#confirmationContents').append("<strong>Room 3:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room 3:</strong> n/a <br />");
+                        }
+                        $('#confirmationContents').append("<strong>Total number of students:</strong> " + capacity + "<br />");
+                    }
+
                 }
             }); //submit action closing tag
+
+            /* 
+                disables, or re-enables user input into the form
+                If parameter is 'true', input is enabled
+                if parameter is 'false', input is disabled
+            */
+            function formInputEnabled(decision) {
+                var status = false;
+                if (decision == "false") {
+                    status = true;
+                }
+                document.getElementById('modcodeInput').disabled = status;
+                document.getElementById('modnameInput').disabled = status;
+                document.getElementById('daySelect').disabled = status;
+                document.getElementById('select_startTime').disabled = status;
+                document.getElementById('select_endTime').disabled = status;
+                document.getElementById('numRooms').disabled = status;
+                document.getElementById('defaultWeeksYes').disabled = status;
+                document.getElementById('defaultWeeksNo').disabled = status;
+                document.getElementById('submitButton').disabled = status;
+                document.getElementById('preferencesButton').disabled = status;
+            }
 
         }); //document.ready closing tag
 
@@ -1446,15 +1633,15 @@ td input[type="submit"], td input[type="button"], td button{
                     <td>
                         <div class="styled-select">
                             <select id="select_startTime">
-                                <option value="09:00:00">09:00</option>
-                                <option value="10:00:00">10:00</option>
-                                <option value="11:00:00">11:00</option>
-                                <option value="12:00:00">12:00</option>
-                                <option value="13:00:00">13:00</option>
-                                <option value="14:00:00">14:00</option>
-                                <option value="15:00:00">15:00</option>
-                                <option value="16:00:00">16:00</option>
-                                <option value="17:00:00">17:00</option>
+                                <option value="1">9:00</option>
+                                <option value="2">10:00</option>
+                                <option value="3">11:00</option>
+                                <option value="4">12:00</option>
+                                <option value="5">13:00</option>
+                                <option value="6">14:00</option>
+                                <option value="7">15:00</option>
+                                <option value="8">16:00</option>
+                                <option value="9">17:00</option>
                             </select>
                         </div>
                     </td>
@@ -1466,15 +1653,15 @@ td input[type="submit"], td input[type="button"], td button{
                     <td>
                         <div class="styled-select">
                             <select id="select_endTime">
-                                <option value="10:00:00">10:00</option>
-                                <option value="11:00:00">11:00</option>
-                                <option value="12:00:00">12:00</option>
-                                <option value="13:00:00">13:00</option>
-                                <option value="14:00:00">14:00</option>
-                                <option value="15:00:00">15:00</option>
-                                <option value="16:00:00">16:00</option>
-                                <option value="17:00:00">17:00</option>
-                                <option value="18:00:00">18:00</option>
+                                <option value="2">10:00</option>
+                                <option value="3">11:00</option>
+                                <option value="4">12:00</option>
+                                <option value="5">13:00</option>
+                                <option value="6">14:00</option>
+                                <option value="7">15:00</option>
+                                <option value="8">16:00</option>
+                                <option value="9">17:00</option>
+                                <option value="10">18:00</option>
                             </select>
                         </div>
                     </td>
@@ -1512,7 +1699,7 @@ td input[type="submit"], td input[type="button"], td button{
                     
                     <td colspan="2">
                         <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; width: 60%; display:block;"/>
-                        <input type="button" id="submitButton" value="Submit" style="margin-bottom:0px; width:60%; position:relative; top:10px;" class="submitButton"/>
+                        <input type="button" id="submitButton" value="Submit" style="margin-bottom:0px; width:60%; position:relative; top:10px;" class="greenButton"/>
                     </td>
                 </tr>
 
@@ -2445,6 +2632,40 @@ td input[type="submit"], td input[type="button"], td button{
                 <tr>
                     <td>
                         <input type="button" id="closeValidation" class="orangeButton" style="width:30%;" value="OK"/>
+                    </td>
+                </tr>
+            </table>
+    
+    </div>
+
+    <!-- box to show validation errors -->
+    <div id="confirmationContainer" style="display:none">
+
+            <table style="table-layout:fixed; width:100%; left:10px; height:90%; position:relative; color:black;text-align:center">
+                <tr>
+                    <td style="font-size: 1em; text-align:center" colspan="2">
+                        
+                    </td>
+                </tr>
+                <tr>
+                     <td id="confirmationContents" style="font-size: 1em; text-align:center" colspan="2">
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <textarea style="max-height:100px; max-width:92%; min-width:40%; color: black; position:relative; text-align:center;"  wrap="soft" placeholder="Please enter any 'Special Requirements' here."></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        Please double check the details above to ensure that they are correct. If you are happy, click 'Yes' to submit.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="button" id="submitRequest" class="greenButton" style="width:30%; float:right;" value="Yes"/>
+                    </td>
+                    <td>
+                        <input type="button" id="cancelRequest" class="orangeButton" style="width:30%; float:left;" value="No" />
                     </td>
                 </tr>
             </table>
