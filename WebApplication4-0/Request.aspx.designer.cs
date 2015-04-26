@@ -103,6 +103,24 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label defaultWeeksLabel;
         
         /// <summary>
+        /// priorityLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label priorityLabel;
+        
+        /// <summary>
+        /// lecturerLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lecturerLabel;
+        
+        /// <summary>
         /// capacityLabel control.
         /// </summary>
         /// <remarks>

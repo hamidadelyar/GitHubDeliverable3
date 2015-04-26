@@ -655,8 +655,34 @@ td input[type="submit"], td input[type="button"], td button{
                 $('#title').html("MODULE DETAILS");
             });
 
+            /*
+                autocomplete function for lecturer input
+                minimum number of characters = 0, before search begins
+                can search for either lecturer name, or lecturer id
+            */
+            
 
+            $("#lecturerInput").autocomplete({ minLength: 0 }, {
 
+                source: function (request, response) {
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "Request.aspx/GetLecturers",
+                        data: "{'term':'" + $("#lecturerInput").val() + "'}",
+                        dataType: "json",
+                        success: function (data) {
+                            response(data.d);
+                        },
+                        error: function (result) {
+                            alert("Error");
+                        }
+                    });
+                }
+            });
+
+          
             //autocomplete function for module name
             //minimum number of characters = 3, before search begins
             $("#modnameInput").autocomplete({ minLength: 3 }, {
@@ -1326,8 +1352,8 @@ td input[type="submit"], td input[type="button"], td button{
             }
 
             /*
-                Submits the request.
-                Also, performs validation before submitting the request, to ensure required fields entered are valid and non empty.
+              
+              performs validation before submitting the request, to ensure required fields entered are valid and non empty.
             */
             $('#submitButton').click(function () {
                 var modcode = $('#modcodeInput').val().toUpperCase();
@@ -1398,6 +1424,17 @@ td input[type="submit"], td input[type="button"], td button{
                     document.getElementById("MainContent_startPeriodLabel").style.borderBottom = "";
                     document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "";
                 }
+
+                /* if the lecturer does not match the db */
+                if (validateLecturer() == false) {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li><b>'Lecturer Name'</b> is incorrect. Please try selecting from the autosuggested list.</li>");
+                    document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                } else {
+                    document.getElementById("MainContent_lecturerLabel").style.borderBottom = "";
+                }
+                
 
                 /*if the capacity input is empty*/
                 if (numRooms == 1) {
@@ -1559,10 +1596,20 @@ td input[type="submit"], td input[type="button"], td button{
                 }
             }); //submit action closing tag
 
+
+
             //actually sends the submission variables to c# code via ajax. Where sql query written to db.
             $('#submitRequest').click(function () {
                 closeConfirmation();
                 //variables to send
+
+                var lecturer = $('#lecturerInput').val();
+                var lecturerName = lecturer;
+
+                if (lecturer.indexOf('(') != -1) {
+                    lecturerName = lecturer.substring(0, lecturer.indexOf('('));
+                }
+
                 var modcode = $('#modcodeInput').val().toUpperCase();   //i.e. COA101
                 var modname = $('#modnameInput').val(); //i.e. Fine Art
 
@@ -1593,7 +1640,7 @@ td input[type="submit"], td input[type="button"], td button{
                     url: "Request.aspx/SubmitRequest",
                     data: JSON.stringify({
                         modname: modname, modcode: modcode, day: day, startTime: startTime, endTime: endTime,
-                        numRooms: numRooms, roomCap1: roomCap1, roomCap2: roomCap2, roomCap3: roomCap3, capacity: capacity
+                        numRooms: numRooms, roomCap1: roomCap1, roomCap2: roomCap2, roomCap3: roomCap3, capacity: capacity, lecturerName: lecturerName
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -1607,6 +1654,39 @@ td input[type="submit"], td input[type="button"], td button{
                     }
                 });
             });
+
+         
+            /*
+                returns true if a match exists in the db. False otherwise.
+            */
+            
+            function validateLecturer() {
+                var lecturer = $('#lecturerInput').val();
+                var lecturerName = lecturer;
+                flag = false;
+
+                if (lecturer.indexOf('(') != -1) {
+                    lecturerName = lecturer.substring(0, lecturer.indexOf('('));
+                }
+                
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: "Request.aspx/ValidateLecturer",
+                    data: JSON.stringify({lecturerName: lecturerName}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("ERROR \n" + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        if (result.d != "") {
+                            flag = true;
+                        }
+                    }
+                });
+                return flag;
+            }
 
             /* 
                 disables, or re-enables user input into the form
@@ -1643,6 +1723,7 @@ td input[type="submit"], td input[type="button"], td button{
 
         <div id="contentContainer" style="background-color:white; position:relative; top:1%; height:90%; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
             <table id="modDetails">
+            
                 <tr>
                     <!-- module code input with validator-->
                     <td>
@@ -1673,6 +1754,13 @@ td input[type="submit"], td input[type="button"], td button{
                     </td>
                 </tr>
 
+                <!--
+                <tr>
+                   
+                   
+                 
+                </tr>
+                    -->
                 <tr>
                     <td>
                         <asp:Label ID="daySelectLabel" runat="server" Text="DAY" ToolTip="Select the day that you would like to make the booking for"></asp:Label>
@@ -1761,11 +1849,43 @@ td input[type="submit"], td input[type="button"], td button{
                             <label for="defaultWeeksNo">No</label>
                         </div>
                     </td>
-                    
-                    <td colspan="2">
-                        <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; width: 60%; display:block;"/>
-                        <input type="button" id="submitButton" value="Submit" style="margin-bottom:0px; width:60%; position:relative; top:10px;" class="greenButton"/>
+
+                     <td>
+                         <asp:Label ID="priorityLabel" ToolTip="Is this a priority request?" runat="server" Text="PRIORITY"></asp:Label>
                     </td>
+                    <td>
+                        <div class="divClass">
+                             <input type="radio" name="priority" id="priorityNo" class="radio" checked />
+                            
+                            <label for="priorityNo">No</label>
+                        </div>
+                        <div class="divClass">
+                            <input type="radio" name="priority" id="priorityYes" class="radio"  />
+                           
+                            <label for="priorityYes">Yes</label>
+                        </div>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td>
+                        <asp:Label ID="lecturerLabel" ToolTip="Enter the name of the lecturer i.e. John Smith" runat="server" Text="LECTURER"></asp:Label>
+                    </td>
+                    <td>
+                        <input id="lecturerInput" type="text" style="width:200%; margin-left:0px" placeholder="e.g. John Smith"/>
+                    </td>
+
+                    <td>
+                        <!-- empty -->
+                    </td>
+                    <td>
+                        <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; width: 120%; display:block; margin-left: 30%"/>
+                        
+                    </td>
+                    <td>
+                        <input type="button" id="submitButton" value="Submit" style="margin-bottom:0px; width:120%; position:relative; margin-left: 60%; top: -2px;"  class="greenButton"/>
+                    </td>
+                   
                 </tr>
 
             </table>
