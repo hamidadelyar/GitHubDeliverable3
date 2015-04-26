@@ -676,6 +676,94 @@ namespace WebApplication4_0
             return result;
         }
 
+         [System.Web.Services.WebMethod]
+        public static string SubmitRequest(string modname, string modcode, int day, int startTime, int endTime, int numRooms, int roomCap1,
+                                            int roomCap2, int roomCap3, int capacity)
+        {
+       
+            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+
+            string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
+            string dep = username.ToUpper().Substring(0, 2);
+
+            int requestID = -1;
+            bool newRequest = false;
+             /*
+              * Checks to see if this request already exists in the db. If it does, then the user is notified.
+
+              */
+
+            //gets Request_Id of the submitted request.
+            //if request is not exactly the same, then is allowed?
+            string query = "select Request_ID from [Requests] where Module_Code = '" + modcode + "' and Day = " + day;
+            query += " and Start_Time = " + startTime + " and End_Time = " + endTime + " and Semester = " + 1 + " and Year = " + DateTime.Now.Year;
+            query += " and Round = " + 1 + " and Priority = " + 0 + " and Number_Rooms = " + numRooms + " and Number_Students = " + capacity;
+
+            connection.Open(); //opening connection with the DB
+            SqlCommand comm = new SqlCommand(query, connection);  //1st argument is query, 2nd argument is connection with DB
+            SqlDataReader reader = comm.ExecuteReader();
+            while (reader.Read())
+            {
+                requestID = reader.GetInt32(0);
+            }
+
+            connection.Close();
+
+      
+            if (requestID == -1)    //if the requestID does not already exist, then can write to the db
+            {
+                newRequest = true;  //it is a new request
+                using (connection)
+                {
+                    string command = "Insert into [Requests]  (Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students, Dept_ID)";
+                    command += " VALUES (@Module_Code, @Day, @Start_Time, @End_Time, @Semester, @Year, @Round, @Priority, @Number_Rooms, @Number_Students, @Dept_ID)";
+
+                    SqlCommand cmd = new SqlCommand(command);
+                    cmd.CommandType = CommandType.Text;
+
+                    cmd.Parameters.AddWithValue("@Module_Code", modcode);
+                    cmd.Parameters.AddWithValue("@Day", day);
+                    cmd.Parameters.AddWithValue("@Start_Time", startTime);
+                    cmd.Parameters.AddWithValue("@End_Time", endTime);
+                    cmd.Parameters.AddWithValue("@Semester", 1);    //need to write function to work this out
+                    cmd.Parameters.AddWithValue("@Year", DateTime.Now.Year);     //year
+                    cmd.Parameters.AddWithValue("@Round", 1);       //need to check db to see what round it is
+                    cmd.Parameters.AddWithValue("@Priority", 0);    //
+                    cmd.Parameters.AddWithValue("@Number_Rooms", numRooms);
+                    cmd.Parameters.AddWithValue("@Number_Students", capacity);
+                    cmd.Parameters.AddWithValue("@Dept_ID", dep);
+                    cmd.Connection = connection;
+                    connection.Open(); //opening connection with the DB
+                    cmd.ExecuteNonQuery();
+
+                  
+                    SqlCommand comm2 = new SqlCommand(query, connection);  //1st argument is query, 2nd argument is connection with DB
+                    SqlDataReader reader2 = comm.ExecuteReader();
+                    while (reader2.Read())
+                    {
+                        requestID = reader2.GetInt32(0); //new request id
+                    }
+                }
+
+            }
+           
+
+            
+            connection.Close();
+           // return requestID;
+            string result = "Sorry, this request has already been submitted, with Request ID: " + requestID + ".";
+            result += "<br /> Please try again.";
+            if (newRequest == true)
+            {
+
+                result = "<strong><h2 style='margin:0'>Success</h2></strong>";
+                result += "<br />Your request has been submitted, thank you! Your Request ID is: " + requestID;
+                result += "<br />Please make a note of your Request ID, so that you can track its progress.";
+            }
+          
+            return result;
+        }
+
 
 
 
