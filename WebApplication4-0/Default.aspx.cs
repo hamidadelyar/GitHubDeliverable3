@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Data;
+using System.Net;
 
 namespace WebApplication4_0
 {
@@ -53,14 +55,44 @@ namespace WebApplication4_0
                     {
                         Session["Username"] = username;
                         Session["LoggedIn"] = true;
-                        Response.Redirect("Timetable.aspx");
+                        if (Request.QueryString["prevPage"] != null) // if prev page is set we dont want to go to timetable we want to go to where the user was
+                        {
+                            string url = Request.QueryString["prevPage"]; //gets the prevPage
+                            if(FileExists(url)) // checks the file exists on the server before attempting to access it
+                            {
+                                Response.Redirect(url); // redirects to the prevPage the user was on
+                            }
+                            else
+                            {
+                                Response.Redirect("Timetable.aspx"); // redirects to timetable if the page wasn't existant
+                            }
+                        }
+                        else
+                        {
+                            Response.Redirect("Timetable.aspx"); // redirects to timetable if the user didnt come from a previous page
+                        }
                         LoginErrorMessage.InnerHtml = "";   //no error message with successful password
                     }
                     else //if admin logs in, then they are redirected to a different view of the website
                     {
                         Session["Username"] = username;
                         Session["LoggedIn"] = true;
-                        Response.Redirect("AdminFolder/Admin.aspx");
+                        if (Request.QueryString["prevPage"] != null) // if prev page is set we dont want to go to timetable we want to go to where the user was
+                        {
+                            string url = Request.QueryString["prevPage"]; //gets the prevPage
+                            if (FileExists(url)) // checks the file exists on the server before attempting to access it
+                            {
+                                Response.Redirect(url); // redirects to the prevPage the user was on
+                            }
+                            else
+                            {
+                                Response.Redirect("Timetable.aspx"); // redirects to admin home if the page wasn't existant
+                            }
+                        }
+                        else
+                        {
+                            Response.Redirect("AdminFolder/Admin.aspx"); // redirects to admin home if the user didnt come from a previous page
+                        }
                         LoginErrorMessage.InnerHtml = "";   //no error message with successful password
                     }
                 }
@@ -78,7 +110,20 @@ namespace WebApplication4_0
 
 
         }
-
-
+        private bool FileExists(string url)
+        {
+            try
+            {
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest; //Creating the HttpWebRequest
+                request.Method = "HEAD"; //sets the request method to just get the head
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse; // gets the response of the page
+                return (response.StatusCode == HttpStatusCode.OK); //Returns TRUE if it loads
+            }
+            catch
+            {
+                //Any exception will returns false.
+                return false;
+            }
+        }
     }
 }
