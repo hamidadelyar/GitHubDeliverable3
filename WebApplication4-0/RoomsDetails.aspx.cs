@@ -19,6 +19,7 @@ namespace WebApplication4_0
         public string type = "";
         public string park = "";
         public string facs = "";
+        public string img = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             if(Request.QueryString["roomCode"] != null)
@@ -48,6 +49,7 @@ namespace WebApplication4_0
                         capacity = roomDet[2];
                         type = roomDet[3];
                         park = roomDet[4];
+                        img = code.Replace(".", "");
                     }
                 }
             }

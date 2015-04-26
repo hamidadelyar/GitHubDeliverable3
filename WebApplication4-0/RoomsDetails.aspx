@@ -7,10 +7,16 @@
     <script>
         var facs = <%= this.facs %>;
         $(document).ready(function(){
+            $('.noImg').hide();
             for(var i = 0; i < facs.length; i++)
             {
                 $('#'+facs[i]['Facility_ID']).addClass('selected')
             }
+            $.get('<%= this.img %>.jpg').fail(function() {
+                $('.dataHolder img').hide();
+                $('.noImg').show();
+                $('.noImg img').show();
+            })
         });
     </script>
     <style>
@@ -32,6 +38,25 @@
             height:173px;
             width:250px;
             margin-right:25px;
+        }
+        .noImg
+        {
+            float:left;
+            display:inline;
+            height:173px;
+            width:250px;
+            margin-right:25px;
+            background-color:#999;
+        }
+        .noImg img
+        {
+            position:relative;
+            top:50%;
+            margin-top:-32px;
+            left:50%;
+            margin-left:-32px;
+            height:64px;
+            width:64px;
         }
         .detHolder
         {
@@ -108,7 +133,8 @@
         }
     </style>
         <div class="dataHolder" >
-            <img src="Images/Room Pictures/A001.jpg" />
+            <img src="Images/Room Pictures/<%= this.img %>.jpg" />
+            <span class="noImg" ><img src="Images/Room Pictures/noImage.png" /></span>
             <span class="detHolder" >
                 <b class="hdr" >ROOM: <%= this.code %></b><br /><br />
                 <b>BUILDING: <%= this.building %></b><br />
