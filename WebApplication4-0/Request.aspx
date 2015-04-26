@@ -1228,8 +1228,8 @@ td input[type="submit"], td input[type="button"], td button{
                  if the user selects a start time which is later then the end time, will not be allowed, user will be notified.
             */
             $('#select_startTime, #select_endTime').change(function () {
-                var startTime = document.getElementById('select_startTime').value;
-                var endTime = document.getElementById('select_endTime').value;
+                var startTime = +document.getElementById('select_startTime').value;
+                var endTime = +document.getElementById('select_endTime').value;
                 if (startTime >= endTime) {
                     showValidation();                    
                     //showValidation("The <b>'Start time'</b> cannot finish after <b>'End Time'</b>, it must be before.");   //opens up validation message box
@@ -1309,6 +1309,22 @@ td input[type="submit"], td input[type="button"], td button{
                 $('header').removeClass('blur-in');
             });
 
+            function closeConfirmation() {
+                formInputEnabled("true");
+                $('#confirmationContainer').hide();
+
+                $('#requestContainer').addClass('blur-out');
+                $('#requestContainer').removeClass('blur-in');
+
+                //unblurs the text in the footer
+                $('footer .float-left').addClass('blur-out');
+                $('footer .float-left').removeClass('blur-in');
+
+                //unblurs header content
+                $('header').addClass('blur-out');
+                $('header').removeClass('blur-in');
+            }
+
             /*
                 Submits the request.
                 Also, performs validation before submitting the request, to ensure required fields entered are valid and non empty.
@@ -1322,8 +1338,8 @@ td input[type="submit"], td input[type="button"], td button{
 
                 var startTimeString = document.getElementById('select_startTime').options[document.getElementById('select_startTime').value - 1].text;//i.e. 10:00 instead of 2
                 var endTimeString = document.getElementById('select_endTime').options[document.getElementById('select_endTime').value - 2].text;//i.e. 10:00 instead of 2
-                var startTime = document.getElementById('select_startTime').value; //1-9
-                var endTime = document.getElementById('select_endTime').value; //2-10
+                var startTime = +document.getElementById('select_startTime').value; //1-9
+                var endTime = +document.getElementById('select_endTime').value; //2-10
 
                 var numRooms = $('#numRooms').val();
                 var roomCap1 = $('#capacityInput').val();
@@ -1542,6 +1558,55 @@ td input[type="submit"], td input[type="button"], td button{
 
                 }
             }); //submit action closing tag
+
+            //actually sends the submission variables to c# code via ajax. Where sql query written to db.
+            $('#submitRequest').click(function () {
+                closeConfirmation();
+                //variables to send
+                var modcode = $('#modcodeInput').val().toUpperCase();   //i.e. COA101
+                var modname = $('#modnameInput').val(); //i.e. Fine Art
+
+                var day = $('#daySelect').val();    //i.e. 1
+                var dayString = document.getElementById('daySelect').options[document.getElementById('daySelect').value - 1].text; //i.e. monday instead of 1
+
+                var startTimeString = document.getElementById('select_startTime').options[document.getElementById('select_startTime').value - 1].text;//i.e. 10:00 instead of 2
+                var endTimeString = document.getElementById('select_endTime').options[document.getElementById('select_endTime').value - 2].text;//i.e. 10:00 instead of 2
+                var startTime = document.getElementById('select_startTime').value; //1-9
+                var endTime = document.getElementById('select_endTime').value; //2-10
+
+                var numRooms = $('#numRooms').val();
+                var roomCap1 = $('#capacityInput').val();
+                var roomCap2 = $('#capacityInput2').val();
+                var roomCap3 = $('#capacityInput3').val();
+                //var weeks array is an array containing the weeks selected. Declared later on.
+                var capacity = +roomCap1;
+
+                if (numRooms == 2) {
+                    capacity = +roomCap1 + +roomCap2;
+                }
+                if (numRooms == 3) {
+                    capacity = +roomCap1 + +roomCap2 + +roomCap3;   //unary plus operator, converts string to number                }
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "Request.aspx/SubmitRequest",
+                    data: JSON.stringify({
+                        modname: modname, modcode: modcode, day: day, startTime: startTime, endTime: endTime,
+                        numRooms: numRooms, roomCap1: roomCap1, roomCap2: roomCap2, roomCap3: roomCap3, capacity: capacity
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("There has been an error with your request \n\nRequest: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        //alert(result.d);   //have to write as result.d for some reason
+                        showValidation();
+                        $('#messageContents').html(result.d);
+                    }
+                });
+            });
 
             /* 
                 disables, or re-enables user input into the form
