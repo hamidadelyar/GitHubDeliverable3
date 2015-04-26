@@ -74,7 +74,7 @@ namespace WebApplication4_0
             //if not logged in, then redirect to login page
             if ((Session["LoggedIn"]) == null || (bool)(Session["LoggedIn"]) == false)  //checks to see if it has been set or not or if it is false
             {   //if not Logged in
-                Response.Redirect("Default.aspx");
+                Response.Redirect("Default.aspx?prevPage="+HttpContext.Current.Request.Url.AbsolutePath); //redirects to the login page and adds the page url as prevPage
             }
 
             string username = (string)(Session["username"]);
