@@ -585,6 +585,13 @@ td input[type="submit"], td input[type="button"], td button{
   -webkit-box-shadow: 30px 30px 70px black;
 }
 
+table tr td ul li {
+	display:inline-block;
+	vertical-align: top;
+	width: 30%; /*width of each list item*/
+    float:left;
+}
+
 </style>
 
 
@@ -1356,6 +1363,13 @@ td input[type="submit"], td input[type="button"], td button{
               performs validation before submitting the request, to ensure required fields entered are valid and non empty.
             */
             $('#submitButton').click(function () {
+                var lecturer = $('#lecturerInput').val();
+                var lecturerName = lecturer;
+
+                if (lecturer.indexOf('(') != -1) {
+                    lecturerName = lecturer.substring(0, lecturer.indexOf('('));
+                }
+
                 var modcode = $('#modcodeInput').val().toUpperCase();
                 var modname = $('#modnameInput').val();
 
@@ -1371,6 +1385,11 @@ td input[type="submit"], td input[type="button"], td button{
                 var roomCap1 = $('#capacityInput').val();
                 var roomCap2 = $('#capacityInput2').val();
                 var roomCap3 = $('#capacityInput3').val();
+
+                var priorityString = "No";
+                if (document.getElementById('priorityYes').checked) {
+                    priorityString = "Yes";
+                }
                 //var weeks array is an array containing the weeks selected. Declared later on.
                 var capacity = +roomCap1;
 
@@ -1547,12 +1566,15 @@ td input[type="submit"], td input[type="button"], td button{
                     formInputEnabled("false");  //cannot change data once in submission mode
                     showConfirmation(); //brings up confirmation pop up
                     $('#confirmationContents').html(""); //clears previous added content
+                    $('#confirmationContents').append("<strong>Lecturer:</strong> " + lecturerName + "<br />");
                     $('#confirmationContents').append("<strong>Module:</strong> " + modname + " (" + modcode + ")" + "<br />");
                     //$('#confirmationContents').append("<strong>Module Code:</strong> " + modcode + "<br />");
                     $('#confirmationContents').append("<strong>Day:</strong> " + dayString + "<br />");
                     $('#confirmationContents').append("<strong>Start Time:</strong> " + startTimeString + " (Period " + startTime + ")" + "<br />");
                     $('#confirmationContents').append("<strong>End Time:</strong> " + endTimeString + " (Period " + endTime + ")" + "<br />");
                     $('#confirmationContents').append("<strong>Weeks:</strong> " + weeksString + "<br />");
+                    $('#confirmationContents').append("<strong>Priority:</strong> " + priorityString + "<br />");
+                    
                     if (numRooms == 1) { //if user has requested just 1 room
                         if (document.getElementById('select_room').value != 0) {    //if a room has been chosen
                             $('#confirmationContents').append("<strong>Room:</strong> " + document.getElementById('select_room').value + "<br />");
@@ -1710,9 +1732,42 @@ td input[type="submit"], td input[type="button"], td button{
                 document.getElementById('preferencesButton').disabled = status;
             }
 
+           
+           
+
         }); //document.ready closing tag
+      
+        function addLecturer(){
+            var input = $('#lecturerInput').val();
+            if ($('#lecturer1').html() == "") { //if slot empty
+                $('#lecturer1').html(input);
+                $('#lecturer1').show();
+            }
+            else if ($('#lecturer2').html() == "") {    //if lecturer2 slot empty
+                $('#lecturer2').html(input);
+                $('#lecturer2').show();
+            }
+            else{    //if lecturer3 slot empty
+                $('#lecturer3').html(input);
+                $('#lecturer3').show();
+            }
+        }
 
-
+        function removeLecturer() {
+            if ($('#lecturer3').html() != "") { //if slot not empty
+                $('#lecturer3').html("");
+                $('#lecturer3').hide();
+            }
+            else if ($('#lecturer2').html() != "") { //if slot not empty
+                $('#lecturer2').html("");
+                $('#lecturer2').hide();
+            } else {
+                $('#lecturer1').html("");
+                $('#lecturer1').hide();
+            }
+        }
+       
+      
  
       
         
@@ -1871,12 +1926,19 @@ td input[type="submit"], td input[type="button"], td button{
                     <td>
                         <asp:Label ID="lecturerLabel" ToolTip="Enter the name of the lecturer i.e. John Smith" runat="server" Text="LECTURER"></asp:Label>
                     </td>
-                    <td>
-                        <input id="lecturerInput" type="text" style="width:200%; margin-left:0px" placeholder="e.g. John Smith"/>
+
+                    <td style="width:150%">
+                        <input id="lecturerInput" type="text" style="width:150%; margin-left:0px; margin-bottom:0px" placeholder="e.g. John Smith"/>
+                        
+                      
                     </td>
 
                     <td>
-                        <!-- empty -->
+                       <img src="Images/AddCircle.png" style="width:30px; height:30px; margin-left:30px; cursor: pointer;" onclick="addLecturer();"/>
+                        <br />
+                        <img src="Images/MinusCircle.png" style="width:30px; height:30px; margin-left:30px; cursor:pointer;" onclick="removeLecturer();"/>
+                      
+                       
                     </td>
                     <td>
                         <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; width: 120%; display:block; margin-left: 30%"/>
@@ -1996,6 +2058,20 @@ td input[type="submit"], td input[type="button"], td button{
                 </td>
             </tr>
         </table>
+            <table id="lecturerRow" style="width:95%; margin-top:0px; table-layout: fixed; margin-left:2.5%">
+                <tr>
+                      <td colspan="3">
+                         <ul style="width:100%; padding:0;">
+                            <li id="lecturer1" style="display:none"></li>
+                            <li id="lecturer2" style="display:none"></li>
+                            <li id="lecturer3" style="display:none"></li>
+                        </ul> 
+                    </td>
+                    <td colspan="1">
+
+                    </td>
+                </tr>
+            </table>
 
         <!-- preferences for 2nd room selection. Only selectable if user selects that they want to book 2 rooms.  -->
          <table id="preferenceTable2" class="preferenceTable" style="display:none">
