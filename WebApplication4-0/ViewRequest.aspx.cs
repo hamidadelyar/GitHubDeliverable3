@@ -21,7 +21,7 @@ namespace WebApplication4_0
         {
             
             string[] cols = { "Request No.", "Module Code", "Day", "Start Time", "End Time", "Semester", "Year", "Round", "Priority", "No. of Rooms", "No. of Students" };
-            DataTable dt = this.GetData();
+            DataTable dt = this.GetData("Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students", "Requests", "" );
 
             StringBuilder html = new StringBuilder();
 
@@ -29,7 +29,8 @@ namespace WebApplication4_0
 
             List<string> rows1 = new List<string>();
 
-            html.Append("<table border = 2>");
+            html.Append("<table border = 2 id='requestTable' class='tablesorter'>");
+            html.Append("<thead>");
 
             html.Append("<tr>");
             for(int i=0;i<cols.Length;i++)
@@ -39,6 +40,7 @@ namespace WebApplication4_0
                 html.Append("</th>");
             }
             html.Append("</tr>");
+            html.Append("</thead>");
 
             int req = 0;
             string mod = "";
@@ -89,6 +91,7 @@ namespace WebApplication4_0
                 //html.Append("</tr>");
             }
 
+            html.Append("<tbody>");
             for(int i=0;i<rows.Count;i++)
             {
                 html.Append("<tr>");
@@ -144,7 +147,7 @@ namespace WebApplication4_0
                 }
                 html.Append("</tr>");
             }
-            
+            html.Append("</tbody>");
           
 
 
@@ -176,10 +179,10 @@ namespace WebApplication4_0
         */
         }
 
-        private DataTable GetData()
+        private DataTable GetData(string select, string from, string where)
         {
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
-            string vreqQuery = "SELECT Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students FROM Requests";
+            string vreqQuery = "SELECT " + select + " FROM " + from + where;
             SqlCommand comm = new SqlCommand(vreqQuery, conn);
             SqlDataAdapter da = new SqlDataAdapter(comm);
             //conn.Open();
