@@ -29,7 +29,8 @@ namespace WebApplication4_0
 
             List<string> rows1 = new List<string>();
 
-            html.Append("<table border = 2>");
+            html.Append("<table border = 2 id='requestTable' class='tablesorter'>");
+            html.Append("<thead>");
 
             html.Append("<tr>");
             for(int i=0;i<cols.Length;i++)
@@ -39,6 +40,7 @@ namespace WebApplication4_0
                 html.Append("</th>");
             }
             html.Append("</tr>");
+            html.Append("</thead>");
 
             int req = 0;
             string mod = "";
@@ -89,6 +91,7 @@ namespace WebApplication4_0
                 //html.Append("</tr>");
             }
 
+            html.Append("<tbody>");
             for(int i=0;i<rows.Count;i++)
             {
                 html.Append("<tr>");
@@ -144,7 +147,7 @@ namespace WebApplication4_0
                 }
                 html.Append("</tr>");
             }
-            
+            html.Append("</tbody>");
           
 
 

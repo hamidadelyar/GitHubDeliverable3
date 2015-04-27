@@ -2,7 +2,7 @@
 
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
 <hgroup class="header">
     <h1>Your Requests</h1>
 </hgroup>
@@ -29,5 +29,15 @@
         </asp:TableRow>
     </asp:Table>-->
 </section>
+    <script type="text/javascript" src="Scripts/jquery-latest.js"></script> 
+<script type="text/javascript" src="Scripts/jquery.tablesorter.js"></script> 
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function ()
+    {
+        $("#requestTable").tablesorter({ sortList: [[0, 0], [1, 0]] });
+    }
+);
+</script>
 
 </asp:Content>
