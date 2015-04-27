@@ -12,8 +12,10 @@
     <script src="Scripts/Loading.js" type="text/javascript" ></script>
     <script src="Scripts/Timetable.js" type="text/javascript" ></script>
     <link rel="stylesheet" href="Content/Timetable.css" />
+    <div class="switchView" onclick="window.location.href = 'FindRoom.aspx'" >FIND FREE ROOM <img src="/Images/RightArrow.png" height="11" width="6" /></div>
+    <div class="topSpacer" >&nbsp;</div>
     <div class="timetblHolder" >
-        <table class="timetbl" >
+        <table class="timetbl">
             <tr>
                 <td colspan="2" class="nonSelect" ><span class="leftWk weekBtn"></span></td>
                 <td colspan="2" class="select" ><b class="centWk"></b></td>
@@ -40,7 +42,7 @@
                 <td colspan="2" ></td>
             </tr>
             <tr>
-                <td>&nbsp;</td>
+                <td class="allWks" ><b>ALL WEEKS</b></td>
                 <td class="days" ><b>MON</b></td>
                 <td class="days" ><b>TUE</b></td>
                 <td class="days" ><b>WED</b></td>
@@ -125,7 +127,7 @@
     <div class="toolsHolder" >
         <div class="hdr" ><b>TOOLS</b></div>
         <div class="options" ><span class="roomChoice choice" >ROOM</span> | <span class="modChoice choice" >MODULE</span> | <span class="lectChoice choice" >LECTURER</span></div>
-        <div class="rooms" ><b>ROOM</b><br /><input style="text-transform:uppercase" autocomplete="off" type="text" class="roomTxt" id="roomTxt" name="roomTxt" /><img id="clearImg" src="Images/clear.png" width="23" height="15" /></div>
+        <div class="rooms" ><b>ROOM</b><br /><input style="text-transform:uppercase" autocomplete="off" type="text" class="roomTxt" id="roomTxt" name="roomTxt" value="<%= this.code %>" /><img id="clearImg" src="Images/clear.png" width="23" height="15" /></div>
         <div class="suggest" >
             <table class="suggestTbl">
             </table>
@@ -133,5 +135,4 @@
         <div class="semesters" ><b>SEMESTERS</b><br /><span class="semOne semBtn" >ONE</span><span class="splitter" ></span><span class="semTwo semBtn" >TWO</span></div>
     </div>
     <div class="whiteSpace" ></div>
-    <div class="switchView" onclick="window.location.href = 'FindRoom.aspx'" >FIND FREE ROOM <img src="/Images/RightArrow.png" height="11" width="6" /></div>
 </asp:Content>

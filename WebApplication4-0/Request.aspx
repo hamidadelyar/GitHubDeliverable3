@@ -73,6 +73,32 @@ input[type="text"]:hover, #active
 }
 
 
+textarea{
+	padding: 9px;
+	width: 90%;
+	font-size: 1.1em;
+	margin: 18px 0px;
+	border: 2px solid#EAEEF1;
+	color: #666666;
+	background:#EAEEF1;
+	font-family: 'Open Sans', sans-serif;
+	font-weight:600;
+	margin-left: 5px;
+	outline:none;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+
+textarea:hover, #active
+{
+	background:#fff;
+	border:2px solid #609EC3;
+	outline:none;
+}
+
 /*
     orange
 input[type="text"]{
@@ -480,7 +506,7 @@ td input[type="submit"], td input[type="button"], td button{
      -webkit-box-shadow: 10px 10px 40px grey; 
 }
 
-.submitButton {
+.greenButton {
 	-moz-box-shadow: 0px 10px 14px -7px #3e7327;
 	-webkit-box-shadow: 0px 10px 14px -7px #3e7327;
 	box-shadow: 0px 10px 14px -7px #3e7327;
@@ -506,7 +532,7 @@ td input[type="submit"], td input[type="button"], td button{
 	text-decoration:none;
 	text-shadow:0px 1px 0px #5b8a3c;
 }
-.submitButton:hover {
+.greenButton:hover {
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3e7327), color-stop(1, #77b55a));
 	background:-moz-linear-gradient(top, #3e7327 5%, #77b55a 100%);
 	background:-webkit-linear-gradient(top, #3e7327 5%, #77b55a 100%);
@@ -516,11 +542,55 @@ td input[type="submit"], td input[type="button"], td button{
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3e7327', endColorstr='#77b55a',GradientType=0);
 	background-color:#3e7327;
 }
-.submitButton:active {
+.greenButton:active {
 	position:relative;
 	top:1px;
 }
 
+
+
+#confirmationContainer{
+  position:fixed;
+  top:20%;
+  left:30%;
+  width:40%;
+  /*height:30%; taking this out allows height to adjust*/ 
+  border-radius:8px;
+  background:white;
+  border: solid 5px black;
+  font-size: 1em;
+  color:black;
+  font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+  box-shadow: 30px 30px 70px black;
+  -moz-box-shadow: 30px 30px 70px black;
+  -webkit-box-shadow: 30px 30px 70px black;
+  
+}
+
+#validationContainer{
+  /*display:none;*/
+  position:fixed;
+  top:35%;
+  left:30%;
+  width:40%;
+  /*height:30%; taking this out allows height to adjust*/ 
+  border-radius:8px;
+  background:white;
+  border: solid 5px black;
+  font-size: 1em;
+  color:black;
+  font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+  box-shadow: 30px 30px 70px black;
+  -moz-box-shadow: 30px 30px 70px black;
+  -webkit-box-shadow: 30px 30px 70px black;
+}
+
+table tr td ul li {
+	display:inline-block;
+	vertical-align: top;
+	width: 30%; /*width of each list item*/
+    float:left;
+}
 
 </style>
 
@@ -592,8 +662,34 @@ td input[type="submit"], td input[type="button"], td button{
                 $('#title').html("MODULE DETAILS");
             });
 
+            /*
+                autocomplete function for lecturer input
+                minimum number of characters = 0, before search begins
+                can search for either lecturer name, or lecturer id
+            */
+            
 
+            $("#lecturerInput").autocomplete({ minLength: 0 }, {
 
+                source: function (request, response) {
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "Request.aspx/GetLecturers",
+                        data: "{'term':'" + $("#lecturerInput").val() + "'}",
+                        dataType: "json",
+                        success: function (data) {
+                            response(data.d);
+                        },
+                        error: function (result) {
+                            alert("Error");
+                        }
+                    });
+                }
+            });
+
+          
             //autocomplete function for module name
             //minimum number of characters = 3, before search begins
             $("#modnameInput").autocomplete({ minLength: 3 }, {
@@ -1129,12 +1225,549 @@ td input[type="submit"], td input[type="button"], td button{
 
 
             $('#changeTime').click(function () {
+                if (document.getElementById('select_startTime').options[0].text != '1') { //if not already set to period, then set to period
+                    //change label to say period
+                    $('#MainContent_startPeriodLabel').show();
+                    $('#MainContent_startTimeLabel').hide();
+                    $('#MainContent_endPeriodLabel').show();
+                    $('#MainContent_endTimeLabel').hide();
 
+                    for (i = 0; i < 9; i++) {
+                        document.getElementById('select_startTime').options[i].text = i + 1;
+                        document.getElementById('select_endTime').options[i].text = i + 2;
+                    }
 
+                } else {    //if it has been set to period, now changes back to normal time
+
+                    //change label to say time
+                    $('#MainContent_startPeriodLabel').hide();
+                    $('#MainContent_startTimeLabel').show();
+                    $('#MainContent_endPeriodLabel').hide();
+                    $('#MainContent_endTimeLabel').show();
+                    for (i = 0; i < 9; i++) { //sets back to normal time form rather than periods i.e. 09:00:00 instead of 1
+                        //document.getElementById('select_startTime').options[i].text = (document.getElementById('select_startTime').options[i].value).substring(0, 5);
+                        //document.getElementById('select_endTime').options[i].text = (document.getElementById('select_endTime').options[i].value).substring(0, 5);
+                        document.getElementById('select_startTime').options[i].text = i + 9 + ":00";
+                        document.getElementById('select_endTime').options[i].text = i + 10 + ":00";
+                    }
+                 
+                }
             });
+
+         
+
+            /*
+                 VALIDATION FOR TIME SELECTION
+                 if the user selects a start time which is later then the end time, will not be allowed, user will be notified.
+            */
+            $('#select_startTime, #select_endTime').change(function () {
+                var startTime = +document.getElementById('select_startTime').value;
+                var endTime = +document.getElementById('select_endTime').value;
+                if (startTime >= endTime) {
+                    showValidation();                    
+                    //showValidation("The <b>'Start time'</b> cannot finish after <b>'End Time'</b>, it must be before.");   //opens up validation message box
+                    $('#messageContents').html("The <b>'Start time'</b> must be before the <b>'End Time'</b>.");
+                    //Sets red to bottom border of the corresponding labels, highlighting user of the location of the error.
+                    document.getElementById("MainContent_startTimeLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_endTimeLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_startPeriodLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "3px solid red";
+                } else { //gets rid of the red border
+                    document.getElementById("MainContent_startTimeLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_endTimeLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_startPeriodLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "";
+                }
+            });
+
+            function showValidation() {
+                $('#validationContainer').show();
+                formInputEnabled('false');  //disable changing of input until this is closed.
+                $('#requestContainer').removeClass('blur-out');
+                $('#requestContainer').addClass('blur-in');
+
+                //only blurs the text in the footer
+                $('footer .float-left').removeClass('blur-out');
+                $('footer .float-left').addClass('blur-in');
+
+                //blurs header content, i.e. navigation
+                $('header').removeClass('blur-out');
+                $('header').addClass('blur-in');
+            }
+
+
+            $('#closeValidation').click(function () {
+                $('#validationContainer').hide();
+                formInputEnabled('true');
+                $('#requestContainer').addClass('blur-out');
+                $('#requestContainer').removeClass('blur-in');
+
+                //unblurs the text in the footer
+                $('footer .float-left').addClass('blur-out');
+                $('footer .float-left').removeClass('blur-in');
+
+                //unblurs header content
+                $('header').addClass('blur-out');
+                $('header').removeClass('blur-in');
+            });
+
+            /* brings up confirmation box */
+            function showConfirmation() {
+                $('#confirmationContainer').show();
+                $('#requestContainer').removeClass('blur-out');
+                $('#requestContainer').addClass('blur-in');
+
+                //only blurs the text in the footer
+                $('footer .float-left').removeClass('blur-out');
+                $('footer .float-left').addClass('blur-in');
+
+                //blurs header content, i.e. navigation
+                $('header').removeClass('blur-out');
+                $('header').addClass('blur-in');
+            }
+
+            $('#cancelRequest').click(function () {
+                formInputEnabled("true");
+                $('#confirmationContainer').hide();
+                
+                $('#requestContainer').addClass('blur-out');
+                $('#requestContainer').removeClass('blur-in');
+
+                //unblurs the text in the footer
+                $('footer .float-left').addClass('blur-out');
+                $('footer .float-left').removeClass('blur-in');
+
+                //unblurs header content
+                $('header').addClass('blur-out');
+                $('header').removeClass('blur-in');
+            });
+
+            function closeConfirmation() {
+                formInputEnabled("true");
+                $('#confirmationContainer').hide();
+
+                $('#requestContainer').addClass('blur-out');
+                $('#requestContainer').removeClass('blur-in');
+
+                //unblurs the text in the footer
+                $('footer .float-left').addClass('blur-out');
+                $('footer .float-left').removeClass('blur-in');
+
+                //unblurs header content
+                $('header').addClass('blur-out');
+                $('header').removeClass('blur-in');
+            }
+
+            /*
+              
+              performs validation before submitting the request, to ensure required fields entered are valid and non empty.
+            */
+            $('#submitButton').click(function () {
+                var lecturer = $('#lecturerInput').val();
+                var lecturerName = lecturer;
+
+                if (lecturer.indexOf('(') != -1) {
+                    lecturerName = lecturer.substring(0, lecturer.indexOf('('));
+                }
+
+                var modcode = $('#modcodeInput').val().toUpperCase();
+                var modname = $('#modnameInput').val();
+
+                var day = $('#daySelect').val();
+                var dayString = document.getElementById('daySelect').options[document.getElementById('daySelect').value - 1].text; //i.e. monday instead of 1
+
+                var startTimeString = document.getElementById('select_startTime').options[document.getElementById('select_startTime').value - 1].text;//i.e. 10:00 instead of 2
+                var endTimeString = document.getElementById('select_endTime').options[document.getElementById('select_endTime').value - 2].text;//i.e. 10:00 instead of 2
+                var startTime = +document.getElementById('select_startTime').value; //1-9
+                var endTime = +document.getElementById('select_endTime').value; //2-10
+
+                var numRooms = $('#numRooms').val();
+                var roomCap1 = $('#capacityInput').val();
+                var roomCap2 = $('#capacityInput2').val();
+                var roomCap3 = $('#capacityInput3').val();
+
+                var priorityString = "No";
+                if (document.getElementById('priorityYes').checked) {
+                    priorityString = "Yes";
+                }
+                //var weeks array is an array containing the weeks selected. Declared later on.
+                var capacity = +roomCap1;
+
+                if(numRooms == 2){
+                    capacity = +roomCap1 + +roomCap2;
+                }
+                if(numRooms == 3){
+                    capacity = +roomCap1 + +roomCap2 + +roomCap3;   //unary plus operator, converts string to number                }
+                }
+
+                var flag = true; // if on clicking submit, no errors occur, can complete submission. Else will notify user of the errors to fix.
+
+                $('#messageContents').html("<ul id='errorList'></ul>");
+                $('#messageContents').append("Cannot submit until you correct the above error(s)");
+
+                /*if module code is empty*/
+
+                if (modcode == "") {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li><b>'Module Code'</b> is empty. Please enter a value</li>");
+                    document.getElementById("MainContent_modcodeLabel").style.borderBottom = "3px solid red";
+                } else { //error corrected
+                    document.getElementById("MainContent_modcodeLabel").style.borderBottom = "";
+                }
+
+                /*if module name is empty*/
+
+                if (modname == "") {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li><b>'Module Name'</b> is empty. Please enter a value</li>");
+                    document.getElementById("MainContent_modnameLabel").style.borderBottom = "3px solid red";
+                } else { //error corrected
+                    document.getElementById("MainContent_modnameLabel").style.borderBottom = "";
+                }
+
+                /*if module name is empty */
+
+                if (startTime > endTime) {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li><b>'Start Time'</b> must be before <b>'End Time'</b>.  Please change desired times.</li>");
+                    document.getElementById("MainContent_startTimeLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_endTimeLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_startPeriodLabel").style.borderBottom = "3px solid red";
+                    document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "3px solid red";
+                } else { //gets rid of the red border
+                    document.getElementById("MainContent_startTimeLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_endTimeLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_startPeriodLabel").style.borderBottom = "";
+                    document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "";
+                }
+
+                /* if the lecturer does not match the db */
+                if (validateLecturer() == false) {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li><b>'Lecturer Name'</b> is incorrect. Please try selecting from the autosuggested list.</li>");
+                    document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                } else {
+                    document.getElementById("MainContent_lecturerLabel").style.borderBottom = "";
+                }
+                
+
+                /*if the capacity input is empty*/
+                if (numRooms == 1) {
+                    if (roomCap1 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 1. Can be found in <b>'Preferences'</b> for Room 1 </li>");
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "";
+                    }
+                }
+
+                if (numRooms == 2) {
+                    if (roomCap1 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 1. Can be found in <b>'Preferences'</b> for Room 1 </li>");
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "";
+                    }
+                    if (roomCap2 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 2. Can be found in <b>'Preferences'</b> for Room 2 </li>");
+                        document.getElementById("MainContent_capacity2Label").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacity2Label").style.borderBottom = "";
+                    }
+                }
+
+                if (numRooms == 3) {
+                    if (roomCap1 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 1. Can be found in <b>'Preferences'</b> for Room 1 </li>");
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacityLabel").style.borderBottom = "";
+                    }
+                    if (roomCap2 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 2. Can be found in <b>'Preferences'</b> for Room 2 </li>");
+                        document.getElementById("MainContent_capacity2Label").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacity2Label").style.borderBottom = "";
+                    }
+                    if (roomCap3 == "") {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>Please enter a <b>'Capacity'</b> for Room 3. Can be found in <b>'Preferences'</b> for Room 3 </li>");
+                        document.getElementById("MainContent_capacity3Label").style.borderBottom = "3px solid red";
+                    } else {  //gets rid of the red border
+                        document.getElementById("MainContent_capacity3Label").style.borderBottom = "";
+                    }
+                }// numRooms 3 closing tag
+
+                var defaultWeeks = document.getElementById('defaultWeeksYes').checked; //if false, then user has selected to choose own weeks
+                
+              
+                //var weeks = []; //creates empty array
+              
+                /*
+                    Check if any weeks have been selected when user selects to choose his/her own weeks.
+                */
+         
+                var weeks = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+                var weekChecked = 15; //15 weeks checked automatically
+
+                if (document.getElementById('defaultWeeksNo').checked == true) {    //if user has selected to choose own weeks
+                    //check to see if any weeks have been selected.
+                    weeks = []; //sets the weeks array to empty, so can add the specific weeks user chooses.
+                    var weekChecked = 0;
+                    for (i = 1; i < 16; i++) {
+                        if (document.getElementById('week' + i).checked == true) {
+                            weekChecked = weekChecked + 1; //if at least 1 week has been checked, then weekChecked set to true
+                            weeks.push(i); //corresponding week number will be added to the array if it has been checked
+                            /*
+                              If at least 1 week has been checked, then checked weeks set to true.
+                              Otherwise, no weeks have been selected. User must be notified.
+                          */
+                        }
+                     }
+                }
+
+                //if user selects to choose own weeks, must select at least 1 week.
+                if (weekChecked == 0) {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li>No weeks have been selected. Please select at least 1 week to continue or set <b>'Default Weeks'</b> to <b>'Yes'</b></li>");
+                    document.getElementById("MainContent_defaultWeeksLabel").style.borderBottom = "3px solid red";
+                } else {  //gets rid of the red border
+                    document.getElementById("MainContent_defaultWeeksLabel").style.borderBottom = "";
+                }
+               
+
+                /*
+                    If the flag is still true, that means all errors have been handled, can now submit the request to the DB.
+                */
+
+                var weeksString = "";
+                //iterates through the weeks array, to find out which weeks have been selected
+                for (i = 0; i<weeks.length; i++) {
+                    weeksString += weeks[i] + ", "  //puts contents of the array into the form 1, 2, 3 etc.
+                }
+                weeksString = weeksString.substring(0, weeksString.length - 2); //gets rid of the ',' at the end.
+                if (flag == true) {
+                    formInputEnabled("false");  //cannot change data once in submission mode
+                    showConfirmation(); //brings up confirmation pop up
+                    $('#confirmationContents').html(""); //clears previous added content
+                    $('#confirmationContents').append("<strong>Lecturer:</strong> " + lecturerName + "<br />");
+                    $('#confirmationContents').append("<strong>Module:</strong> " + modname + " (" + modcode + ")" + "<br />");
+                    //$('#confirmationContents').append("<strong>Module Code:</strong> " + modcode + "<br />");
+                    $('#confirmationContents').append("<strong>Day:</strong> " + dayString + "<br />");
+                    $('#confirmationContents').append("<strong>Start Time:</strong> " + startTimeString + " (Period " + startTime + ")" + "<br />");
+                    $('#confirmationContents').append("<strong>End Time:</strong> " + endTimeString + " (Period " + endTime + ")" + "<br />");
+                    $('#confirmationContents').append("<strong>Weeks:</strong> " + weeksString + "<br />");
+                    $('#confirmationContents').append("<strong>Priority:</strong> " + priorityString + "<br />");
+                    
+                    if (numRooms == 1) { //if user has requested just 1 room
+                        if (document.getElementById('select_room').value != 0) {    //if a room has been chosen
+                            $('#confirmationContents').append("<strong>Room:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room:</strong> n/a <br />");
+                        }
+                        $('#confirmationContents').append("<strong>Total number of students:</strong> " + capacity + "<br />");  
+                    }
+                    if (numRooms == 2) {    //if user has requested 2 rooms
+                        if (document.getElementById('select_room').value != 0) {    //if a room has been chosen
+                            $('#confirmationContents').append("<strong>Room 1:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room 1:</strong> n/a <br />");
+                        }
+                        if (document.getElementById('select_room2').value != 0) {    //if a room2 has been chosen
+                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room 2:</strong> n/a <br />");
+                        }
+                        $('#confirmationContents').append("<strong>Total number of students:</strong> " + capacity + "<br />");
+                    }
+                    if (numRooms == 3) {    //if user has requested 2 rooms
+                        if (document.getElementById('select_room').value != 0) {    //if a room has been chosen
+                            $('#confirmationContents').append("<strong>Room 1:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room 1:</strong> n/a <br />");
+                        }
+                        if (document.getElementById('select_room2').value != 0) {    //if a room2 has been chosen
+                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room 2:</strong> n/a <br />");
+                        }
+                        if (document.getElementById('select_room3').value != 0) {    //if a room2 has been chosen
+                            $('#confirmationContents').append("<strong>Room 3:</strong> " + document.getElementById('select_room').value + "<br />");
+                        } else {
+                            $('#confirmationContents').append("<strong>Room 3:</strong> n/a <br />");
+                        }
+                        $('#confirmationContents').append("<strong>Total number of students:</strong> " + capacity + "<br />");
+                    }
+
+                }
+            }); //submit action closing tag
+
+
+
+            //actually sends the submission variables to c# code via ajax. Where sql query written to db.
+            $('#submitRequest').click(function () {
+                closeConfirmation();
+                //variables to send
+
+                var lecturer = $('#lecturerInput').val();
+                var lecturerName = lecturer;
+
+                if (lecturer.indexOf('(') != -1) {
+                    lecturerName = lecturer.substring(0, lecturer.indexOf('('));
+                }
+
+                var modcode = $('#modcodeInput').val().toUpperCase();   //i.e. COA101
+                var modname = $('#modnameInput').val(); //i.e. Fine Art
+
+                var day = $('#daySelect').val();    //i.e. 1
+                var dayString = document.getElementById('daySelect').options[document.getElementById('daySelect').value - 1].text; //i.e. monday instead of 1
+
+                var startTimeString = document.getElementById('select_startTime').options[document.getElementById('select_startTime').value - 1].text;//i.e. 10:00 instead of 2
+                var endTimeString = document.getElementById('select_endTime').options[document.getElementById('select_endTime').value - 2].text;//i.e. 10:00 instead of 2
+                var startTime = document.getElementById('select_startTime').value; //1-9
+                var endTime = document.getElementById('select_endTime').value; //2-10
+
+                var numRooms = $('#numRooms').val();
+                var roomCap1 = $('#capacityInput').val();
+                var roomCap2 = $('#capacityInput2').val();
+                var roomCap3 = $('#capacityInput3').val();
+                //var weeks array is an array containing the weeks selected. Declared later on.
+                var capacity = +roomCap1;
+
+                if (numRooms == 2) {
+                    capacity = +roomCap1 + +roomCap2;
+                }
+                if (numRooms == 3) {
+                    capacity = +roomCap1 + +roomCap2 + +roomCap3;   //unary plus operator, converts string to number                }
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "Request.aspx/SubmitRequest",
+                    data: JSON.stringify({
+                        modname: modname, modcode: modcode, day: day, startTime: startTime, endTime: endTime,
+                        numRooms: numRooms, roomCap1: roomCap1, roomCap2: roomCap2, roomCap3: roomCap3, capacity: capacity, lecturerName: lecturerName
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("There has been an error with your request \n\nRequest: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        //alert(result.d);   //have to write as result.d for some reason
+                        showValidation();
+                        $('#messageContents').html(result.d);
+                    }
+                });
+            });
+
+         
+            /*
+                returns true if a match exists in the db. False otherwise.
+            */
+            
+            function validateLecturer() {
+                var lecturer = $('#lecturerInput').val();
+                var lecturerName = lecturer;
+                flag = false;
+
+                if (lecturer.indexOf('(') != -1) {
+                    lecturerName = lecturer.substring(0, lecturer.indexOf('('));
+                }
+                
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: "Request.aspx/ValidateLecturer",
+                    data: JSON.stringify({lecturerName: lecturerName}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("ERROR \n" + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        if (result.d != "") {
+                            flag = true;
+                        }
+                    }
+                });
+                return flag;
+            }
+
+            /* 
+                disables, or re-enables user input into the form
+                If parameter is 'true', input is enabled
+                if parameter is 'false', input is disabled
+            */
+            function formInputEnabled(decision) {
+                var status = false;
+                if (decision == "false") {
+                    status = true;
+                }
+                document.getElementById('modcodeInput').disabled = status;
+                document.getElementById('modnameInput').disabled = status;
+                document.getElementById('daySelect').disabled = status;
+                document.getElementById('select_startTime').disabled = status;
+                document.getElementById('select_endTime').disabled = status;
+                document.getElementById('numRooms').disabled = status;
+                document.getElementById('defaultWeeksYes').disabled = status;
+                document.getElementById('defaultWeeksNo').disabled = status;
+                document.getElementById('submitButton').disabled = status;
+                document.getElementById('preferencesButton').disabled = status;
+            }
+
+           
+           
+
         }); //document.ready closing tag
+      
+        function addLecturer(){
+            var input = $('#lecturerInput').val();
+            if ($('#lecturer1').html() == "") { //if slot empty
+                $('#lecturer1').html(input);
+                $('#lecturer1').show();
+            }
+            else if ($('#lecturer2').html() == "") {    //if lecturer2 slot empty
+                $('#lecturer2').html(input);
+                $('#lecturer2').show();
+            }
+            else{    //if lecturer3 slot empty
+                $('#lecturer3').html(input);
+                $('#lecturer3').show();
+            }
+        }
 
-
+        function removeLecturer() {
+            if ($('#lecturer3').html() != "") { //if slot not empty
+                $('#lecturer3').html("");
+                $('#lecturer3').hide();
+            }
+            else if ($('#lecturer2').html() != "") { //if slot not empty
+                $('#lecturer2').html("");
+                $('#lecturer2').hide();
+            } else {
+                $('#lecturer1').html("");
+                $('#lecturer1').hide();
+            }
+        }
+       
+      
  
       
         
@@ -1145,6 +1778,7 @@ td input[type="submit"], td input[type="button"], td button{
 
         <div id="contentContainer" style="background-color:white; position:relative; top:1%; height:90%; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
             <table id="modDetails">
+            
                 <tr>
                     <!-- module code input with validator-->
                     <td>
@@ -1175,9 +1809,16 @@ td input[type="submit"], td input[type="button"], td button{
                     </td>
                 </tr>
 
+                <!--
+                <tr>
+                   
+                   
+                 
+                </tr>
+                    -->
                 <tr>
                     <td>
-                        <asp:Label ID="daySelectLabel" runat="server" Text="DAY"></asp:Label>
+                        <asp:Label ID="daySelectLabel" runat="server" Text="DAY" ToolTip="Select the day that you would like to make the booking for"></asp:Label>
                     </td>
                     <td>
                         <div class="styled-select">
@@ -1192,40 +1833,43 @@ td input[type="submit"], td input[type="button"], td button{
                     </td>
 
                     <td>
-                        <asp:Label ID="Label1" runat="server" Text="START TIME"></asp:Label>
-                        <img id="changeTime" src="images/Change.png" style="width:20px; height:20px; margin-left:15px; cursor:pointer" />
+                        <asp:Label ID="startTimeLabel" runat="server" Text="START TIME" ToolTip="Select the time that you would like the lecture to start i.e. 10:00"></asp:Label>
+                        <asp:Label ID="startPeriodLabel" runat="server" Text="START PERIOD" style="display:none" ToolTip="Select the period that you would like the lecture to start i.e. 2"></asp:Label>
+                        <img id="changeTime" src="images/change.png" style="width:20px; height:20px; margin-left:5px; cursor:pointer"/>
+                        
                     </td>
                     <td>
                         <div class="styled-select">
                             <select id="select_startTime">
-                                <option value="9">09:00</option>
-                                <option value="10">10:00</option>
-                                <option value="11">11:00</option>
-                                <option value="12">12:00</option>
-                                <option value="13">13:00</option>
-                                <option value="14">14:00</option>
-                                <option value="15">15:00</option>
-                                <option value="16">16:00</option>
-                                <option value="17">17:00</option>
+                                <option value="1">9:00</option>
+                                <option value="2">10:00</option>
+                                <option value="3">11:00</option>
+                                <option value="4">12:00</option>
+                                <option value="5">13:00</option>
+                                <option value="6">14:00</option>
+                                <option value="7">15:00</option>
+                                <option value="8">16:00</option>
+                                <option value="9">17:00</option>
                             </select>
                         </div>
                     </td>
 
                     <td>
-                        <asp:Label ID="startTimeSelectLabel" runat="server" Text="END TIME"></asp:Label>
+                        <asp:Label ID="endTimeLabel" runat="server" Text="END TIME" ToolTip="Select the time that you would like the lecture to end i.e. 11:00"></asp:Label>
+                        <asp:Label ID="endPeriodLabel" runat="server" Text="END PERIOD" style="display:none" ToolTip="Select the period that you would like the lecture to end i.e. 5"></asp:Label>
                     </td>
                     <td>
                         <div class="styled-select">
                             <select id="select_endTime">
-                                <option value="10">10:00</option>
-                                <option value="11">11:00</option>
-                                <option value="12">12:00</option>
-                                <option value="13">13:00</option>
-                                <option value="14">14:00</option>
-                                <option value="15">15:00</option>
-                                <option value="16">16:00</option>
-                                <option value="17">17:00</option>
-                                <option value="18">18:00</option>
+                                <option value="2">10:00</option>
+                                <option value="3">11:00</option>
+                                <option value="4">12:00</option>
+                                <option value="5">13:00</option>
+                                <option value="6">14:00</option>
+                                <option value="7">15:00</option>
+                                <option value="8">16:00</option>
+                                <option value="9">17:00</option>
+                                <option value="10">18:00</option>
                             </select>
                         </div>
                     </td>
@@ -1234,7 +1878,7 @@ td input[type="submit"], td input[type="button"], td button{
 
                 <tr>
                     <td>
-                        <asp:Label ID="Label2" runat="server" Text="NUMBER OF ROOMS"></asp:Label>
+                        <asp:Label ID="Label2" runat="server" Text="NUMBER OF ROOMS" ToolTip="Select the number of rooms that you would like for this booking."></asp:Label>
                     </td>
                     <td>
                         <div class="styled-select">
@@ -1247,7 +1891,7 @@ td input[type="submit"], td input[type="button"], td button{
                     </td>
 
                     <td>
-                        <asp:Label ID="Label3" runat="server" Text="DEFAULT WEEKS?" ToolTip="Default weeks are weeks 1 to 12"></asp:Label>
+                        <asp:Label ID="defaultWeeksLabel" runat="server" Text="DEFAULT WEEKS?" ToolTip="Default weeks are weeks 1 to 12. if you wish to choose the specific weeks yourself, select 'No'."></asp:Label>
                     </td>
                     <td>
                         <div class="divClass">
@@ -1260,11 +1904,50 @@ td input[type="submit"], td input[type="button"], td button{
                             <label for="defaultWeeksNo">No</label>
                         </div>
                     </td>
-                    
-                    <td colspan="2">
-                        <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; width: 60%; display:block;"/>
-                        <input type="button" value="Submit" style="margin-bottom:0px; width:60%; position:relative; top:10px;" class="submitButton"/>
+
+                     <td>
+                         <asp:Label ID="priorityLabel" ToolTip="Is this a priority request?" runat="server" Text="PRIORITY"></asp:Label>
                     </td>
+                    <td>
+                        <div class="divClass">
+                             <input type="radio" name="priority" id="priorityNo" class="radio" checked />
+                            
+                            <label for="priorityNo">No</label>
+                        </div>
+                        <div class="divClass">
+                            <input type="radio" name="priority" id="priorityYes" class="radio"  />
+                           
+                            <label for="priorityYes">Yes</label>
+                        </div>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td>
+                        <asp:Label ID="lecturerLabel" ToolTip="Enter the name of the lecturer i.e. John Smith" runat="server" Text="LECTURER"></asp:Label>
+                    </td>
+
+                    <td style="width:150%">
+                        <input id="lecturerInput" type="text" style="width:150%; margin-left:0px; margin-bottom:0px" placeholder="e.g. John Smith"/>
+                        
+                      
+                    </td>
+
+                    <td>
+                       <img src="Images/AddCircle.png" style="width:30px; height:30px; margin-left:30px; cursor: pointer;" onclick="addLecturer();"/>
+                        <br />
+                        <img src="Images/MinusCircle.png" style="width:30px; height:30px; margin-left:30px; cursor:pointer;" onclick="removeLecturer();"/>
+                      
+                       
+                    </td>
+                    <td>
+                        <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; width: 120%; display:block; margin-left: 30%"/>
+                        
+                    </td>
+                    <td>
+                        <input type="button" id="submitButton" value="Submit" style="margin-bottom:0px; width:120%; position:relative; margin-left: 60%; top: -2px;"  class="greenButton"/>
+                    </td>
+                   
                 </tr>
 
             </table>
@@ -1278,7 +1961,7 @@ td input[type="submit"], td input[type="button"], td button{
                     <asp:Label ID="capacityLabel" for="capacityInput" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
                 </td>
                 <td>
-                    <input type="text" id="capacityInput" placeholder="e.g. 50" />
+                    <input type="text" id="capacityInput" value='30'/>
                 </td>
                 <td>
                     <asp:Label ID="roomType" runat="server" Text="ROOM TYPE" ToolTip="Select the room type you would like to book"></asp:Label>
@@ -1375,15 +2058,29 @@ td input[type="submit"], td input[type="button"], td button{
                 </td>
             </tr>
         </table>
+            <table id="lecturerRow" style="width:95%; margin-top:0px; table-layout: fixed; margin-left:2.5%">
+                <tr>
+                      <td colspan="3">
+                         <ul style="width:100%; padding:0;">
+                            <li id="lecturer1" style="display:none"></li>
+                            <li id="lecturer2" style="display:none"></li>
+                            <li id="lecturer3" style="display:none"></li>
+                        </ul> 
+                    </td>
+                    <td colspan="1">
+
+                    </td>
+                </tr>
+            </table>
 
         <!-- preferences for 2nd room selection. Only selectable if user selects that they want to book 2 rooms.  -->
          <table id="preferenceTable2" class="preferenceTable" style="display:none">
            <tr>
                  <td>
-                    <asp:Label ID="Label6" for="capacityInput2" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
+                    <asp:Label ID="capacity2Label" for="capacityInput2" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
                 </td>
                 <td>
-                    <input type="text" id="capacityInput2" />
+                    <input type="text" id="capacityInput2"  value="30" />
                 </td>
                 <td>
                     <asp:Label ID="Label9" runat="server" Text="ROOM TYPE" ToolTip="Select the room type you would like to book"></asp:Label>
@@ -1486,10 +2183,10 @@ td input[type="submit"], td input[type="button"], td button{
          <table id="preferenceTable3" class="preferenceTable" style="display:none">
            <tr>
                  <td>
-                    <asp:Label ID="Label14" for="capacityInput3" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
+                    <asp:Label ID="capacity3Label" for="capacityInput3" runat="server" Text="NUMBER OF STUDENTS" ToolTip="Enter total number of students on the module"></asp:Label>
                 </td>
                 <td>
-                    <input type="text" id="capacityInput3" />
+                    <input type="text" id="capacityInput3" value='30' placeholder="e.g. 50"  />
                 </td>
                 <td>
                     <asp:Label ID="Label15" runat="server" Text="ROOM TYPE" ToolTip="Select the room type you would like to book"></asp:Label>
@@ -1759,10 +2456,10 @@ td input[type="submit"], td input[type="button"], td button{
                 </td>
 
                 <td>
-                    <input type="button" value="Reset" id="resetWeeks" style="margin-left:10px; background-color:white; width: 90%; border-radius:8px"/>
+                    <input type="button" value="Reset" id="resetWeeks" style="margin-left:10px; background-color:white; width: 90%; font-size: 1em; border-radius:8px"/>
                 </td>
                <td>
-                    <input type="button" value="Select All" id="selectAllWeeks" style="background-color:white; width: 100%; border-radius:8px"/>
+                    <input type="button" value="Select All" id="selectAllWeeks" style="background-color:white; width: 100%; font-size: 1em; border-radius:8px"/>
                </td>
             </tr>
         </table>
@@ -2183,4 +2880,56 @@ td input[type="submit"], td input[type="button"], td button{
         </table>
     </div>
 </div>
+ 
+    <!-- box to show validation errors -->
+    <div id="validationContainer" style="display:none">
+
+            <table style="table-layout:fixed; width:100%; height:90%; position:relative; color:black;text-align:center">
+                <tr>
+                    <td id="messageContents" style="font-size: 1em;">
+                        <!-- filled in with js depending on error -->
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="button" id="closeValidation" class="orangeButton" style="width:30%;" value="OK"/>
+                    </td>
+                </tr>
+            </table>
+    
+    </div>
+
+    <!-- box to show validation errors -->
+    <div id="confirmationContainer" style="display:none">
+
+            <table style="table-layout:fixed; width:100%; left:10px; height:90%; position:relative; color:black;text-align:center">
+                <tr>
+                    <td style="font-size: 1em; text-align:center" colspan="2">
+                        
+                    </td>
+                </tr>
+                <tr>
+                     <td id="confirmationContents" style="font-size: 1em; text-align:center" colspan="2">
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <textarea style="max-height:100px; max-width:92%; min-width:40%; color: black; position:relative; text-align:center;"  wrap="soft" placeholder="Please enter any 'Special Requirements' here."></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        Please double check the details above to ensure that they are correct. If you are happy, click 'Yes' to submit.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="button" id="submitRequest" class="greenButton" style="width:30%; float:right;" value="Yes"/>
+                    </td>
+                    <td>
+                        <input type="button" id="cancelRequest" class="orangeButton" style="width:30%; float:left;" value="No" />
+                    </td>
+                </tr>
+            </table>
+    
+    </div>
 </asp:Content>

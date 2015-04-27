@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.Security;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
 using System.Web.Providers.Entities;
+
 
 
 namespace WebApplication4_0
@@ -35,13 +37,18 @@ namespace WebApplication4_0
             SqlCommand comm = new SqlCommand(query, conn);  //1st argument is query, 2nd argument is connection with DB
             if (comm.ExecuteScalar() != null)   //if it does return something
             {
+                if (HttpContext.Current.Session == null)
+                {
+                    Redirect("Default.aspx");
+                }
                 string username = HttpContext.Current.Session["Username"].ToString();
                 string result = comm.ExecuteScalar().ToString();
                 // string result = comm.ExecuteScalar().ToString();
                 modname = result;
                 if (modcode.ToLower().Substring(0, 2) != username.ToLower().Substring(0, 2))   //if request is for module from another department
                 {
-                    modname = "Sorry, you do not have access to this module";
+                    //modname = "Sorry, you do not have access to this module";
+                    modname = "";
                 }
             }
             else //if it doesnt return anything, it means that there is no such module code, hence no such module name
@@ -66,13 +73,18 @@ namespace WebApplication4_0
             SqlCommand comm2 = new SqlCommand(query, conn);  //1st argument is query, 2nd argument is connection with DB
             if (comm2.ExecuteScalar() != null)   //if it does return something
             {
+                if (HttpContext.Current.Session == null)
+                {
+                    Redirect("Default.aspx");
+                }
                 string username = HttpContext.Current.Session["Username"].ToString();
                 string result = comm2.ExecuteScalar().ToString();
            
                 modcode = result;
                 if (modcode.ToLower().Substring(0, 2) != username.ToLower().Substring(0,2))   //if request is for module from another department
                 {
-                    modcode = "Sorry, you do not have access to this module";
+                    //modcode = "Sorry, you do not have access to this module";
+                    modcode = "";
                 }
 
             }
@@ -99,6 +111,10 @@ namespace WebApplication4_0
            
             SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             {
+                if (HttpContext.Current.Session == null)
+                {
+                    Redirect("Default.aspx");
+                }
                 string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
                 string dep = username.ToLower().Substring(0, 2); //this makes sure only module names from the logged in department come up as autocomplete options
                 string query = string.Format("select Module_Title from [Modules] where Module_Code like '" + dep + "%' AND Module_Title Like '%{0}%'", term);
@@ -125,6 +141,11 @@ namespace WebApplication4_0
 
             SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             {
+                if (HttpContext.Current.Session == null)
+                {
+                    Redirect("Default.aspx");
+                }
+
                 string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
                 string dep = username.ToLower().Substring(0, 2); //this makes sure only module names from the logged in department come up as autocomplete options
                 string query = string.Format("select Module_Code from [Modules] where Module_Code like '" + dep + "%' AND Module_Code Like '%{0}%'", term);
@@ -143,6 +164,43 @@ namespace WebApplication4_0
             return retCategory.ToArray();
         }
 
+        /*
+         on input in the lecturerInput text box, this method will provide suggestions for autocompletion.
+         */
+        [System.Web.Services.WebMethod]
+        public static string[] GetLecturers(string term)
+        {
+            List<string> retCategory = new List<string>();
+
+            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+            {
+                if (HttpContext.Current.Session == null)
+                {
+                    Redirect("Default.aspx");
+                }
+                string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
+                string dep = username.ToLower().Substring(0, 2); //this makes sure only module names from the logged in department come up as autocomplete options
+                string query = string.Format("select Lecturer_Name, Lecturer_ID from [Lecturers] where Lecturer_ID like '" + dep + "%' AND (Lecturer_ID like '%" + term + "%'" + "or Lecturer_Name Like '%" + term + "%')");
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        retCategory.Add(reader.GetString(0) + " (" + reader.GetString(1) + ")");
+                        
+                    }
+                }
+                con.Close();
+            }
+            return retCategory.ToArray();
+        }
+
+        private static void Redirect(string p)
+        {
+            throw new NotImplementedException();
+        }
         [System.Web.Services.WebMethod]
         public static string ShowBuildingSelect(bool central, bool east, bool west)
         {
@@ -676,6 +734,159 @@ namespace WebApplication4_0
             return result;
         }
 
+         [System.Web.Services.WebMethod]
+        public static string SubmitRequest(string modname, string modcode, int day, int startTime, int endTime, int numRooms, int roomCap1,
+                                            int roomCap2, int roomCap3, int capacity, string lecturerName)
+        {
+       
+            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+            if (HttpContext.Current.Session == null)
+            {
+                Redirect("Default.aspx");
+            }
+            string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
+            string dep = username.ToUpper().Substring(0, 2);
+
+            string lecturerID = "";
+            int requestID = -1;
+            bool newRequest = false;
+             /*
+              * Checks to see if this request already exists in the db. If it does, then the user is notified.
+
+              */
+
+            //gets Request_Id of the submitted request.
+            //if request is not exactly the same, then is allowed?
+            string query = "select Request_ID from [Requests] where Module_Code = '" + modcode + "' and Day = " + day;
+            query += " and Start_Time = " + startTime + " and End_Time = " + endTime + " and Semester = " + 1 + " and Year = " + DateTime.Now.Year;
+            query += " and Round = " + 1 + " and Priority = " + 0 + " and Number_Rooms = " + numRooms + " and Number_Students = " + capacity;
+
+            connection.Open(); //opening connection with the DB
+            SqlCommand comm = new SqlCommand(query, connection);  //1st argument is query, 2nd argument is connection with DB
+            SqlDataReader reader = comm.ExecuteReader();
+            while (reader.Read())
+            {
+                requestID = reader.GetInt32(0);
+            }
+            connection.Close();
+            /*
+             gets Lecturer_ID since we have Lecturer_Name
+                 SqlCommand comm2 = new SqlCommand(query, conn);  //1st argument is query, 2nd argument is connection with DB
+                 if (comm2.ExecuteScalar() != null)   //if it does return something
+           {
+             */
+
+            string query3 = "select Lecturer_ID from [Lecturers] where Lecturer_Name = '" + lecturerName + "'";
+            connection.Open();
+            SqlCommand comm3 = new SqlCommand(query3, connection);  //1st argument is query, 2nd argument is connection with DB
+
+            if (comm3.ExecuteScalar() != null)  //if it does return something
+            {   
+                lecturerID = comm3.ExecuteScalar().ToString();
+            }
+            connection.Close();
+
+             /*
+              * if the request ID does not already exist then we will now write all info into db.
+              * Will write to [Requests] table
+              *             [Request_Lecturers] table
+              */
+      
+            if (requestID == -1)    //if the requestID does not already exist, then can write to the db
+            {
+                newRequest = true;  //it is a new request
+               
+                using (connection)
+                {
+                    /* Writes to the [Requests] table*/
+                    string command = "Insert into [Requests]  (Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students, Dept_ID)";
+                    command += " VALUES (@Module_Code, @Day, @Start_Time, @End_Time, @Semester, @Year, @Round, @Priority, @Number_Rooms, @Number_Students, @Dept_ID)";
+
+                    SqlCommand cmd = new SqlCommand(command);
+                    cmd.CommandType = CommandType.Text;
+
+                    cmd.Parameters.AddWithValue("@Module_Code", modcode);
+                    cmd.Parameters.AddWithValue("@Day", day);
+                    cmd.Parameters.AddWithValue("@Start_Time", startTime);
+                    cmd.Parameters.AddWithValue("@End_Time", endTime);
+                    cmd.Parameters.AddWithValue("@Semester", 1);    //need to write function to work this out
+                    cmd.Parameters.AddWithValue("@Year", DateTime.Now.Year);     //year
+                    cmd.Parameters.AddWithValue("@Round", 1);       //need to check db to see what round it is
+                    cmd.Parameters.AddWithValue("@Priority", 0);    //
+                    cmd.Parameters.AddWithValue("@Number_Rooms", numRooms);
+                    cmd.Parameters.AddWithValue("@Number_Students", capacity);
+                    cmd.Parameters.AddWithValue("@Dept_ID", dep);
+                    cmd.Connection = connection;
+                    connection.Open(); //opening connection with the DB
+                    cmd.ExecuteNonQuery();
+
+                  
+                    SqlCommand comm2 = new SqlCommand(query, connection);  //1st argument is query, 2nd argument is connection with DB
+                    SqlDataReader reader2 = comm.ExecuteReader();
+                    while (reader2.Read())
+                    {
+                        requestID = reader2.GetInt32(0); //this generates the new request id for the request that is being submitted
+                    }
+                    connection.Close();
+                    /* writes to the [Request_Lecturers] if the Lecturer_ID has been obtained */
+                    if (lecturerID != "")
+                    {
+                        string command2 = "insert into [Request_Lecturers] (Request_ID, Lecturer_ID) Values (@Request_ID, @Lecturer_ID)";
+                        SqlCommand cmd2 = new SqlCommand(command2);
+                        cmd2.CommandType = CommandType.Text;
+                        cmd2.Parameters.AddWithValue("@Request_ID", requestID);
+                        cmd2.Parameters.AddWithValue("@Lecturer_ID", lecturerID);
+                        cmd2.Connection = connection;
+                        connection.Open(); //opening connection with the DB
+                        cmd2.ExecuteNonQuery();
+                    }
+                    
+                    
+                }
+
+            }
+           
+
+            
+            connection.Close();
+           // return requestID;
+            string result = "Sorry, this request has already been submitted, with Request ID: " + requestID + ".";
+            result += "<br /> Please try again.";
+            if (newRequest == true)
+            {
+
+                result = "<strong><h2 style='margin:0'>Success</h2></strong>";
+                result += "<br />Your request has been submitted, thank you! Your Request ID is: " + requestID;
+                result += "<br />Please make a note of your Request ID, so that you can track its progress.";
+            }
+          
+            return result;
+        }
+
+          [System.Web.Services.WebMethod]
+         public static string ValidateLecturer(string lecturerName)
+         {
+             string result = "";
+             string query = "";
+             if (HttpContext.Current.Session == null)
+             {
+                Redirect("Default.aspx");
+             }
+             string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
+             string dep = username.ToUpper().Substring(0, 2);
+             query += "select Lecturer_Name from [Lecturers] where Lecturer_Name = '" + lecturerName + "' and Lecturer_ID like '" + dep + "%'" ;
+             SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+             connection.Open(); //opening connection with the DB
+             SqlCommand comm = new SqlCommand(query, connection);  //1st argument is query, 2nd argument is connection with DB
+             SqlDataReader reader = comm.ExecuteReader();
+             while (reader.Read())
+             {
+                 result = reader.GetString(0);
+             }
+
+             connection.Close();
+             return result;
+         }
 
 
 

@@ -192,8 +192,10 @@
     <Content Include="FindRoom.aspx" />
     <Content Include="Home.aspx" />
     <Content Include="Images\accent.png" />
+    <Content Include="Images\AddCircle.png" />
     <Content Include="Images\bullet.png" />
     <Content Include="Images\heroAccent.png" />
+    <Content Include="Images\MinusCircle.png" />
     <Content Include="Images\orderedList0.png" />
     <Content Include="Images\orderedList1.png" />
     <Content Include="Images\orderedList2.png" />
@@ -208,12 +210,98 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\RightArrow.png" />
+    <Content Include="Images\Room Pictures\A001.jpg" />
+    <Content Include="Images\Room Pictures\A201.jpg" />
+    <Content Include="Images\Room Pictures\A203.jpg" />
+    <Content Include="Images\Room Pictures\B111.jpg" />
+    <Content Include="Images\Room Pictures\CC011.jpg" />
+    <Content Include="Images\Room Pictures\CC012.jpg" />
+    <Content Include="Images\Room Pictures\CC013.jpg" />
+    <Content Include="Images\Room Pictures\CC014.jpg" />
+    <Content Include="Images\Room Pictures\CC021.jpg" />
+    <Content Include="Images\Room Pictures\CC029a.jpg" />
+    <Content Include="Images\Room Pictures\CC109.jpg" />
+    <Content Include="Images\Room Pictures\CC110.jpg" />
+    <Content Include="Images\Room Pictures\CC111.jpg" />
+    <Content Include="Images\Room Pictures\D002.jpg" />
+    <Content Include="Images\Room Pictures\D102.jpg" />
+    <Content Include="Images\Room Pictures\D109.jpg" />
+    <Content Include="Images\Room Pictures\D201.jpg" />
+    <Content Include="Images\Room Pictures\D202.jpg" />
+    <Content Include="Images\Room Pictures\G002.jpg" />
+    <Content Include="Images\Room Pictures\G003.jpg" />
+    <Content Include="Images\Room Pictures\G004.jpg" />
+    <Content Include="Images\Room Pictures\G006.jpg" />
+    <Content Include="Images\Room Pictures\G007.jpg" />
+    <Content Include="Images\Room Pictures\GGB001.jpg" />
+    <Content Include="Images\Room Pictures\HE010.jpg" />
+    <Content Include="Images\Room Pictures\HE021.jpg" />
+    <Content Include="Images\Room Pictures\HE023.jpg" />
+    <Content Include="Images\Room Pictures\HE026.jpg" />
+    <Content Include="Images\Room Pictures\HH023.jpg" />
+    <Content Include="Images\Room Pictures\HH023a.jpg" />
+    <Content Include="Images\Room Pictures\J001.jpg" />
+    <Content Include="Images\Room Pictures\J002.jpg" />
+    <Content Include="Images\Room Pictures\J104.jpg" />
+    <Content Include="Images\Room Pictures\JB021.jpg" />
+    <Content Include="Images\Room Pictures\JJ004.jpg" />
+    <Content Include="Images\Room Pictures\JJ017.jpg" />
+    <Content Include="Images\Room Pictures\JJ018.jpg" />
+    <Content Include="Images\Room Pictures\KG107.jpg" />
+    <Content Include="Images\Room Pictures\KG109.jpg" />
+    <Content Include="Images\Room Pictures\KG111.jpg" />
+    <Content Include="Images\Room Pictures\KG112.jpg" />
+    <Content Include="Images\Room Pictures\LDS003.jpg" />
+    <Content Include="Images\Room Pictures\LDS017.jpg" />
+    <Content Include="Images\Room Pictures\LDS018.jpg" />
+    <Content Include="Images\Room Pictures\LUSAD63107.jpg" />
+    <Content Include="Images\Room Pictures\LUSAD63108.jpg" />
+    <Content Include="Images\Room Pictures\LUSADCope.jpg" />
+    <Content Include="Images\Room Pictures\noImage.png" />
+    <Content Include="Images\Room Pictures\RT027.jpg" />
+    <Content Include="Images\Room Pictures\RT033.jpg" />
+    <Content Include="Images\Room Pictures\RT037.jpg" />
+    <Content Include="Images\Room Pictures\RT040.jpg" />
+    <Content Include="Images\Room Pictures\S004.jpg" />
+    <Content Include="Images\Room Pictures\S006.jpg" />
+    <Content Include="Images\Room Pictures\S173.jpg" />
+    <Content Include="Images\Room Pictures\S174.jpg" />
+    <Content Include="Images\Room Pictures\S177.jpg" />
+    <Content Include="Images\Room Pictures\SMB002.jpg" />
+    <Content Include="Images\Room Pictures\SMB008.jpg" />
+    <Content Include="Images\Room Pictures\SMB010.jpg" />
+    <Content Include="Images\Room Pictures\SMB014.jpg" />
+    <Content Include="Images\Room Pictures\SMB017.jpg" />
+    <Content Include="Images\Room Pictures\SMB102.jpg" />
+    <Content Include="Images\Room Pictures\SMB104.jpg" />
+    <Content Include="Images\Room Pictures\SMB105.jpg" />
+    <Content Include="Images\Room Pictures\SMB108.jpg" />
+    <Content Include="Images\Room Pictures\SMB109.jpg" />
+    <Content Include="Images\Room Pictures\T003.jpg" />
+    <Content Include="Images\Room Pictures\U020.jpg" />
+    <Content Include="Images\Room Pictures\U112.jpg" />
+    <Content Include="Images\Room Pictures\W001.jpg" />
+    <Content Include="Images\Room Pictures\W002.jpg" />
+    <Content Include="Images\Room Pictures\W003.jpg" />
+    <Content Include="Images\Room Pictures\W004.jpg" />
+    <Content Include="Images\Room Pictures\W005a.jpg" />
+    <Content Include="Images\Room Pictures\W005b.jpg" />
+    <Content Include="Images\Room Pictures\W005c.jpg" />
+    <Content Include="Images\Room Pictures\W005d.jpg" />
+    <Content Include="Images\Room Pictures\W005e.jpg" />
+    <Content Include="Images\Room Pictures\W005f.jpg" />
+    <Content Include="Images\Room Pictures\YY001.jpg" />
+    <Content Include="Images\Room Pictures\YY009.jpg" />
+    <Content Include="Images\Room Pictures\YY009a.jpg" />
+    <Content Include="Images\Room Pictures\ZZ103.jpg" />
+    <Content Include="Images\Room Pictures\ZZ105.jpg" />
+    <Content Include="Images\Room Pictures\ZZ106.jpg" />
     <Content Include="packages.config" />
     <Content Include="AdminFolder\AdminSite.master" />
     <Content Include="AdminFolder\js\.DS_Store" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Request.aspx" />
-    <Content Include="RoomData.aspx" />
+    <Content Include="RoomsDetails.aspx" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <Content Include="Scripts\jquery-latest.js" />
@@ -368,12 +456,12 @@
     <Compile Include="Request.aspx.designer.cs">
       <DependentUpon>Request.aspx</DependentUpon>
     </Compile>
-    <Compile Include="RoomData.aspx.cs">
-      <DependentUpon>RoomData.aspx</DependentUpon>
+    <Compile Include="RoomsDetails.aspx.cs">
+      <DependentUpon>RoomsDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="RoomData.aspx.designer.cs">
-      <DependentUpon>RoomData.aspx</DependentUpon>
+    <Compile Include="RoomsDetails.aspx.designer.cs">
+      <DependentUpon>RoomsDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

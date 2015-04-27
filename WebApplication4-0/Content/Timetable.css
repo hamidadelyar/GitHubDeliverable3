@@ -253,6 +253,27 @@ td
     border-radius:10px;
     font-weight:bold;
     cursor:pointer;
+    margin-top:20px;
+}
+.topSpacer
+{
+    float:right;
+    padding:10px;
+    color:#FFFFFF;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:20px;
+    width:50%;
+}
+.allWks
+{
+    color:#999;
+    cursor:pointer;
+}
+.allWks
+{
+    color:#FF8060;
 }
 .switchView:hover
 {
