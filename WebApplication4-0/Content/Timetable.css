@@ -8,6 +8,15 @@
     background-color:#FFF;
     float:left;
 }
+.allWks
+{
+    color:#999;
+    cursor:pointer;
+}
+.allWks:hover
+{
+    color:#FF8060;
+}
 .timetbl
 {
     margin-left:2.5%;
@@ -265,15 +274,6 @@ td
     cursor:pointer;
     margin-top:20px;
     width:50%;
-}
-.allWks
-{
-    color:#999;
-    cursor:pointer;
-}
-.allWks
-{
-    color:#FF8060;
 }
 .switchView:hover
 {
