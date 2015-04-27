@@ -12,6 +12,8 @@
     <script src="Scripts/Loading.js" type="text/javascript" ></script>
     <script src="Scripts/Timetable.js" type="text/javascript" ></script>
     <link rel="stylesheet" href="Content/Timetable.css" />
+    <div class="switchView" onclick="window.location.href = 'FindRoom.aspx'" >FIND FREE ROOM <img src="/Images/RightArrow.png" height="11" width="6" /></div>
+    <div class="topSpacer" >&nbsp;</div>
     <div class="timetblHolder" >
         <table class="timetbl">
             <tr>
@@ -40,7 +42,7 @@
                 <td colspan="2" ></td>
             </tr>
             <tr>
-                <td>&nbsp;</td>
+                <td class="allWks" ><b>ALL WEEKS</b></td>
                 <td class="days" ><b>MON</b></td>
                 <td class="days" ><b>TUE</b></td>
                 <td class="days" ><b>WED</b></td>
@@ -133,5 +135,4 @@
         <div class="semesters" ><b>SEMESTERS</b><br /><span class="semOne semBtn" >ONE</span><span class="splitter" ></span><span class="semTwo semBtn" >TWO</span></div>
     </div>
     <div class="whiteSpace" ></div>
-    <div class="switchView" onclick="window.location.href = 'FindRoom.aspx'" >FIND FREE ROOM <img src="/Images/RightArrow.png" height="11" width="6" /></div>
 </asp:Content>

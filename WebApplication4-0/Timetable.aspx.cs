@@ -74,55 +74,84 @@ namespace WebApplication4_0
                             retData = retData.Substring(1, retData.Length - 2); // strips first and last character of the select result
                             string reqID = getValue(retData, 2); // calls get value which splits the data to an array and returns the second element of the sub array found in the element requested
                             string lecData = SQLSelect.Select("Lecturers", "Lecturer_Name, Lecturers.Lecturer_ID", "Request_Lecturers.Request_ID = " + reqID, "LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID"); // selects the details of the lecturer timetabled for the module
+                            
+                            //this block removes uneenede symbols from lecData
                             lecData = lecData.Replace("[", "");
                             lecData = lecData.Replace("]", "");
                             lecData = lecData.Replace("},", "");
                             lecData = lecData.Replace("}", "");
                             lecData = lecData.Replace("\"", "");
-                            string[] lecArr = lecData.Split('{');
+
+                            string[] lecArr = lecData.Split('{'); // splits the lecturer data into arrays to account for modules with multiple lecturers
                             string lecNames = "";
                             string lecID = "";
-                            for(int k = 0; k < lecArr.Length; k++)
+                            for(int k = 0; k < lecArr.Length; k++) // loops through all the arrays of lecturers
                             {
-                                if (lecArr[k] != "")
+                                if (lecArr[k] != "") // checks if they arent blank to avoid out of range exception
                                 {
-                                    List<string> tmp = lecArr[k].Split(',').ToList<string>();
-                                    List<string> tmp2 = tmp[0].Split(':').ToList<string>();
-                                    List<string> tmp3 = tmp[1].Split(':').ToList<string>();
-                                    lecNames += tmp2[1] + ", ";
-                                    lecID += tmp3[1] + ", ";
+                                    List<string> tmp = lecArr[k].Split(',').ToList<string>(); // splits the lecturer array on comma into two with the first being the lec name and second lec id
+                                    List<string> tmp2 = tmp[0].Split(':').ToList<string>(); // splits the string of lec name in two to remove "Lecturer_Name"
+                                    List<string> tmp3 = tmp[1].Split(':').ToList<string>(); // splits the string of lec name in two to remove "Lecturer_Name"
+                                    lecNames += tmp2[1] + ", "; // adds the lecturers name and a comma to end
+                                    lecID += tmp3[1] + ", "; // adds the lecturers id and comma to end
                                 }
                             }
-                            String lecDets = "\"Lecturer_Name\":\"" + lecNames.Substring(0, lecNames.Length - 2) + "\",\"Lecturer_ID\":\"" + lecID.Substring(0, lecID.Length - 2) + "\"";
-                            string[] test = retData.Split('{');
-                            test[1] = test[1].Replace("},", "");
-                            test[1] = test[1].Replace("}", "");
-                            string fullData = "[{" + test[1] + "," + lecDets + "}]";
-                            modSel += "," + fullData;
+                            String lecDets = "\"Lecturer_Name\":\"" + lecNames.Substring(0, lecNames.Length - 2) + "\",\"Lecturer_ID\":\"" + lecID.Substring(0, lecID.Length - 2) + "\""; // creates a new JSON compatible string with all the lect ids and lect names
+                            string[] modDataNotLect = retData.Split('{'); // splits retData into array as with multiple lects the string is duplicated e.g {bookingData},{bookingData} for as nany times as there are lects
+                            modDataNotLect[1] = modDataNotLect[1].Replace("},", ""); // selects the second element as first is blank and replaces the splitting comma at end as }, appears if more than one lect. Put blank in so concats with lecDets in JSON format
+                            modDataNotLect[1] = modDataNotLect[1].Replace("}", ""); // selects the second element as first is blankand replaces the end } with blank so that it concats with lecDets in JSON format
+                            string fullData = "[{" + modDataNotLect[1] + "," + lecDets + "}]"; // concats the two sets of data into JSON format for jquery use on main page
+                            modSel += "," + fullData; // concats to modSel
                         }
                         else
                         {
-                            modSel += "," + "[{}]";
+                            modSel += "," + "[{}]"; // concats empty to modSel if none found
                         }
                     }
                     else
                     {
-                        retData = retData.Substring(1, retData.Length - 2);
-                        string reqID = getValue(retData, 2);
-                        string lecData = SQLSelect.Select("Lecturers", "Lecturer_Name, Lecturers.Lecturer_ID", "Request_Lecturers.Request_ID = " + reqID, "LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID");
-                        string fullData = "[" + retData.Substring(0, retData.Length - 1) + "," + lecData.Substring(2, lecData.Length - 3) + "]";
-                        modSel += "," + fullData;
+                        retData = retData.Substring(1, retData.Length - 2); // strips first and last character of the select result
+                        string reqID = getValue(retData, 2); // calls get value which splits the data to an array and returns the second element of the sub array found in the element requested
+                        string lecData = SQLSelect.Select("Lecturers", "Lecturer_Name, Lecturers.Lecturer_ID", "Request_Lecturers.Request_ID = " + reqID, "LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID"); // selects the details of the lecturer timetabled for the module
+
+                        //this block removes uneenede symbols from lecData
+                        lecData = lecData.Replace("[", "");
+                        lecData = lecData.Replace("]", "");
+                        lecData = lecData.Replace("},", "");
+                        lecData = lecData.Replace("}", "");
+                        lecData = lecData.Replace("\"", "");
+
+                        string[] lecArr = lecData.Split('{'); // splits the lecturer data into arrays to account for modules with multiple lecturers
+                        string lecNames = "";
+                        string lecID = "";
+                        for (int k = 0; k < lecArr.Length; k++) // loops through all the arrays of lecturers
+                        {
+                            if (lecArr[k] != "") // checks if they arent blank to avoid out of range exception
+                            {
+                                List<string> tmp = lecArr[k].Split(',').ToList<string>(); // splits the lecturer array on comma into two with the first being the lec name and second lec id
+                                List<string> tmp2 = tmp[0].Split(':').ToList<string>(); // splits the string of lec name in two to remove "Lecturer_Name"
+                                List<string> tmp3 = tmp[1].Split(':').ToList<string>(); // splits the string of lec name in two to remove "Lecturer_Name"
+                                lecNames += tmp2[1] + ", "; // adds the lecturers name and a comma to end
+                                lecID += tmp3[1] + ", "; // adds the lecturers id and comma to end
+                            }
+                        }
+                        String lecDets = "\"Lecturer_Name\":\"" + lecNames.Substring(0, lecNames.Length - 2) + "\",\"Lecturer_ID\":\"" + lecID.Substring(0, lecID.Length - 2) + "\""; // creates a new JSON compatible string with all the lect ids and lect names
+                        string[] modDataNotLect = retData.Split('{'); // splits retData into array as with multiple lects the string is duplicated e.g {bookingData},{bookingData} for as nany times as there are lects
+                        modDataNotLect[1] = modDataNotLect[1].Replace("},", ""); // selects the second element as first is blank and replaces the splitting comma at end as }, appears if more than one lect. Put blank in so concats with lecDets in JSON format
+                        modDataNotLect[1] = modDataNotLect[1].Replace("}", ""); // selects the second element as first is blankand replaces the end } with blank so that it concats with lecDets in JSON format
+                        string fullData = "[{" + modDataNotLect[1] + "," + lecDets + "}]"; // concats the two sets of data into JSON format for jquery use on main page
+                        modSel += "," + fullData; // concats to modSel
                     }
                 }
             }
-            modSel = modSel.Remove(0,1);
-            return "[" + modSel + "]";
+            modSel = modSel.Remove(0,1); // removes the comma at the start to keep in JSON format
+            return "[" + modSel + "]"; // adds square brackets for JSON purposes
         }
         public static string getValue(string variable, int i)
         {
-            List<string> newList = variable.Split(',').ToList<string>();
-            List<string> elList = newList[i].Split(':').ToList<string>();
-            return elList[1];
+            List<string> newList = variable.Split(',').ToList<string>(); // splits into array on comma
+            List<string> elList = newList[i].Split(':').ToList<string>(); // splits desired element into array on colon
+            return elList[1]; // returns text after colon in desired element
         }
     }
     public class SQLSelect
