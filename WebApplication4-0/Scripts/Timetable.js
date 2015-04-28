@@ -259,6 +259,31 @@ function escapeRegExp(string) {
 function replaceAll(string, find, replace) {
     return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
+function checkType(type, booking)
+{
+    if(type == 1)
+    {
+        var data = booking['roomCode'].toUpperCase();
+        if(data.indexOf($('.roomTxt').val()) != -1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    if (type == 2) {
+        var data = booking['lectCode'].toUpperCase()
+        if (data.indexOf($('.roomTxt').val()) != -1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    return true;
+}
 function insertData(result)
 {
     hideLoader();
@@ -285,15 +310,6 @@ function insertData(result)
                 {
                     if (currWeek == bookings[j]['week'][k])
                     {
-                        var table = $(".timetbl")[0];
-                        var cell = table.rows[row].cells[cell]; // This is a DOM "TD" element
-                        var $cell = $(cell);// Now it's a jQuery object.
-                        for (var l = 1; l < bookings[j]['end'] - bookings[j]['start'] + 1; l++)
-                        {
-                            var cell = table.rows[row + l].cells[col];
-                            var $cell = $(cell);
-                            $(cell).hide();
-                        }
                         var weekData = replaceAll(bookings[j]['week'].toString(), ',', '|');
                         bookings[j]['roomCode'] += '[' + weekData + ']';
                         if (prevBooking['modCode'] == bookings[j]['modCode'] && prevBooking['start'] == bookings[j]['start'] && prevBooking['day'] == bookings[j]['day'])
@@ -329,10 +345,21 @@ function insertData(result)
                             roomSpans += '<span class="roomId">' + roomData + '</span> [' + weekSpan.substring(0, weekSpan.length - 2) + '],<br />';
                         }
                         roomSpans = roomSpans.substring(0, roomSpans.length - 7);
-                        $(slot).attr('rowspan', bookings[j]['end'] - bookings[j]['start'] + 1);
-                        $(slot).html(bookings[j]['modCode'] + '<span class="bookingSpan" ><span class="modCode" >' + bookings[j]['modCode'] + '<br />' + bookings[j]['modName'] + '</span><br />' + lecSpans + '<br />' + roomSpans + '<br /></span>').addClass('booking');
-                        $('.bookingSpan').hide();
-                        bookingHover();
+                        if(checkType(type, bookings[j]))
+                        {
+                            $(slot).attr('rowspan', bookings[j]['end'] - bookings[j]['start'] + 1);
+                            $(slot).html(bookings[j]['modCode'] + '<span class="bookingSpan" ><span class="modCode" >' + bookings[j]['modCode'] + '<br />' + bookings[j]['modName'] + '</span><br />' + lecSpans + '<br />' + roomSpans + '<br /></span>').addClass('booking');
+                            $('.bookingSpan').hide();
+                            bookingHover();
+                            var table = $(".timetbl")[0];
+                            var cell = table.rows[row].cells[cell]; // This is a DOM "TD" element
+                            var $cell = $(cell);// Now it's a jQuery object.
+                            for (var l = 1; l < bookings[j]['end'] - bookings[j]['start'] + 1; l++) {
+                                var cell = table.rows[row + l].cells[col];
+                                var $cell = $(cell);
+                                $(cell).hide();
+                            }
+                        }
                     }
                 }
             }
