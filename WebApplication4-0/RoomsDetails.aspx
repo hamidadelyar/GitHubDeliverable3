@@ -12,12 +12,15 @@
             {
                 $('#'+facs[i]['Facility_ID']).addClass('selected')
             }
-            $.get('<%= this.img %>.jpg').fail(function() {
-                $('.dataHolder img').hide();
-                $('.noImg').show();
-                $('.noImg img').show();
-            })
         });
+        function imgError(image)
+        {
+            image.onerror = "";
+            $('.dataHolder img').hide();
+            $('.noImg').show();
+            $('.noImg img').show();
+            return true;
+        }
     </script>
     <style>
         .dataHolder
@@ -133,7 +136,7 @@
         }
     </style>
         <div class="dataHolder" >
-            <img src="Images/Room Pictures/<%= this.img %>.jpg" />
+            <img src="Images/Room Pictures/<%= this.img %>.jpg" onerror="imgError(this)"/>
             <span class="noImg" ><img src="Images/Room Pictures/noImage.png" /></span>
             <span class="detHolder" >
                 <b class="hdr" >ROOM: <%= this.code %></b><br /><br />

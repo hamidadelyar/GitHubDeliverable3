@@ -222,8 +222,8 @@ function getBooking() // uses ajax to run the code behind and then put the data 
     var week = currWeek;
     $.ajax({
         type: "POST",
-        url: "Timetable.aspx/SearchRoom",
-        data: JSON.stringify({search: search, week: week, semester:semester, type:type}),
+        url: "Timetable.aspx/SearchAll",
+        data: JSON.stringify({search: search, semester: semester, type: type}),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -234,6 +234,56 @@ function getBooking() // uses ajax to run the code behind and then put the data 
         }
     });
 }
+function arraysEqual(arr1, arr2) {
+    if (arr1.length !== arr2.length)
+    {
+        return false;
+    }
+    for(var i = arr1.length; i--;) {
+        if(arr1[i] !== arr2[i])
+            return false;
+    }
+
+    return true;
+}
+function unique(list) {
+    var result = [];
+    $.each(list, function(i, e) {
+        if ($.inArray(e, result) == -1) result.push(e);
+    });
+    return result;
+}
+function escapeRegExp(string) {
+    return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+}
+function replaceAll(string, find, replace) {
+    return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+}
+function checkType(type, booking)
+{
+    if(type == 1)
+    {
+        var data = booking['roomCode'].toUpperCase();
+        if(data.indexOf($('.roomTxt').val()) != -1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    if (type == 3) {
+        var data = booking['lectCode'].toUpperCase()
+        if (data.indexOf($('.roomTxt').val()) != -1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    return true;
+}
 function insertData(result)
 {
     hideLoader();
@@ -241,34 +291,79 @@ function insertData(result)
     showing = false;
     finAnim();
     var bookings = $.parseJSON(result.d);
-    var i = 0
+    var col = 0;
+    var row = 0;
     $('.slot').each(function () {
-        if (typeof bookings[i][0]['Module_Code'] != 'undefined') {
-            var innerData = bookings[i][0];
-            var lecCodes = innerData['Lecturer_ID'].split(",");
-            var lecNames = innerData['Lecturer_Name'].split(",");
-            var lecSpans = "";
-            for (var j = 0; j < lecCodes.length; j++)
+        $(this).attr('rowspan', 1);
+        $(this).html('').removeClass('booking');
+    });
+    $('.slot').each(function () {
+        var slot = $(this);
+        var col = $(this).parent().children().index($(this));
+        var row = $(this).parent().parent().children().index($(this).parent());
+        var prevBooking = [];
+        for (var j = 0; j < bookings.length; j++)
+        {
+            if (bookings[j]['day'] == col && bookings[j]['start'] == row - 2)
             {
-                lecSpans += '<span class="lectName">' + lecCodes[j].toUpperCase() + ' ' + lecNames[j] + '</span>,<br />';
+                for (var k = 0; k < bookings[j]['week'].length; k++)
+                {
+                    if (currWeek == bookings[j]['week'][k])
+                    {
+                        var weekData = replaceAll(bookings[j]['week'].toString(), ',', '|');
+                        bookings[j]['roomCode'] += '[' + weekData + ']';
+                        if (prevBooking['modCode'] == bookings[j]['modCode'] && prevBooking['start'] == bookings[j]['start'] && prevBooking['day'] == bookings[j]['day'])
+                        {
+                            bookings[j]['lectCode'] += ',' + prevBooking['lectCode'];
+                            bookings[j]['lectName'] += ',' + prevBooking['lectName'];
+                            bookings[j]['roomCode'] += ',' + prevBooking['roomCode'];
+                        }
+                        prevBooking = bookings[j];
+                        var lecSpans = "";
+                        var lecCodes = bookings[j]['lectCode'].split(',');
+                        lecCodes = unique(lecCodes);
+                        var lecNames = bookings[j]['lectName'].split(',');
+                        lecNames = unique(lecNames);
+                        for (var l = 0; l < lecCodes.length; l++)
+                        {
+                            lecSpans += '<span class="lectName">' + lecCodes[l].toUpperCase() + ' ' + lecNames[l] + '</span>,<br />';
+                        }
+                        lecSpans = lecSpans.substring(0, lecSpans.length - 7);
+                        var roomSpans = "";
+                        var roomCodes = bookings[j]['roomCode'].split(',');
+                        roomCodes = unique(roomCodes);
+                        for (var l = 0; l < roomCodes.length; l++)
+                        {
+                            var weekData = roomCodes[l].substring(roomCodes[l].indexOf('[') + 1, roomCodes[l].indexOf(']'));
+                            var roomData = roomCodes[l].substring(0, roomCodes[l].indexOf('['));
+                            weekData = weekData.split('|');
+                            var weekSpan = "";
+                            for (var m = 0; m < weekData.length; m++)
+                            {
+                                weekSpan += '<span class="weekSpan" >' + weekData[m] + '</span>, ';
+                            }
+                            roomSpans += '<span class="roomId">' + roomData + '</span> [' + weekSpan.substring(0, weekSpan.length - 2) + '],<br />';
+                        }
+                        roomSpans = roomSpans.substring(0, roomSpans.length - 7);
+                        if(checkType(type, bookings[j]))
+                        {
+                            $(slot).attr('rowspan', bookings[j]['end'] - bookings[j]['start'] + 1);
+                            $(slot).html(bookings[j]['modCode'] + '<span class="bookingSpan" ><span class="modCode" >' + bookings[j]['modCode'] + '<br />' + bookings[j]['modName'] + '</span><br />' + lecSpans + '<br />' + roomSpans + '<br /></span>').addClass('booking');
+                            $('.bookingSpan').hide();
+                            bookingHover();
+                            var table = $(".timetbl")[0];
+                            var cell = table.rows[row].cells[cell]; // This is a DOM "TD" element
+                            var $cell = $(cell);// Now it's a jQuery object.
+                            for (var l = 1; l < bookings[j]['end'] - bookings[j]['start'] + 1; l++) {
+                                var cell = table.rows[row + l].cells[col];
+                                var $cell = $(cell);
+                                $(cell).hide();
+                            }
+                        }
+                    }
+                }
             }
-            lecSpans = lecSpans.substring(0, lecSpans.length - 7);
-            $(this).html(innerData['Module_Code'] + '<span class="bookingSpan" ><span class="modCode" >' + innerData['Module_Code'] + '<br />' + innerData['Module_Title'] + '</span><br />'+lecSpans+'<br /><span class="roomId">' + innerData['Room_ID'] + '</span></span>').addClass('booking');
-            var cellIndex = $(this).index();
-            var $currCell = $(this);
-            for (var j = 0; j < innerData['End_Time'] - innerData['Start_Time'] - 1; j++) {
-                $currCell = $currCell.closest('tr').next().children().eq(cellIndex)
-                $currCell.hide();
-            }
-            $(this).attr('rowSpan', innerData['End_Time'] - innerData['Start_Time']);
-            $('.bookingSpan').hide();
-            bookingHover();
         }
-        else {
-            $(this).html('').removeClass('booking');
-            $(this).attr('rowSpan', 1);
-        }
-        i++;
     })
 }
 function bookingHover() // adds the booking hover features to bookings added after the initial page load
@@ -310,6 +405,12 @@ function bookingHover() // adds the booking hover features to bookings added aft
         fillTable();
         getBooking();
     })
+    $('.weekSpan').click(function() {
+       currWeek = parseInt($(this).html());
+       updateWeeks();
+       $('.bookingSpan').remove();
+       getBooking();
+    });
 }
 function updateWeeks() { // sets the week labels to be correct after selection is changed
     $('.leftWk').html(weeksArray[currWeek - 1].substring(5));

@@ -8,6 +8,15 @@
     background-color:#FFF;
     float:left;
 }
+.allWks
+{
+    color:#999;
+    cursor:pointer;
+}
+.allWks:hover
+{
+    color:#FF8060;
+}
 .timetbl
 {
     margin-left:2.5%;
@@ -253,6 +262,18 @@ td
     border-radius:10px;
     font-weight:bold;
     cursor:pointer;
+    margin-top:20px;
+}
+.topSpacer
+{
+    float:right;
+    padding:10px;
+    color:#FFFFFF;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:20px;
+    width:50%;
 }
 .switchView:hover
 {
