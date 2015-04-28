@@ -287,48 +287,6 @@ function insertData(result)
         $(this).attr('rowspan', 1);
         $(this).html('').removeClass('booking');
     });
-    if (type == 1)
-    {
-        for(var i = 0; i < bookings.length - 1; i++)
-        {
-            for (var j = 1; j < bookings.length; j++)
-            {
-                if(bookings[i]['modCode'] == bookings[j]['modCode'] && bookings[i]['start'] == bookings[j]['start'] && arraysEqual(bookings[i]['week'], bookings[j]['week']))
-                {
-                    bookings[i]['lectCode'] += ',' + bookings[j]['lectCode'];
-                    bookings[i]['lectName'] += ',' + bookings[j]['lectName'];
-                    bookings.splice(j, 1);
-                }
-            }
-        }
-    }
-    else if (type == 2)
-    {
-        for (var i = 0; i < bookings.length - 1; i++)
-        {
-            for (var j = 1; j < bookings.length; j++)
-            {
-                if (bookings[i]['modCode'] == bookings[j]['modCode'] && bookings[i]['start'] == bookings[j]['start'] && arraysEqual(bookings[i]['week'], bookings[j]['week']))
-                {
-                    bookings[i]['lectCode'] += ',' + bookings[j]['lectCode'];
-                    bookings[i]['lectName'] += ',' + bookings[j]['lectName'];
-                    bookings[i]['roomCode'] += ',' + bookings[j]['roomCode'];
-                    bookings.splice(j, 1);
-                }
-            }
-        }
-    }
-    else if (type == 3) {
-        for (var i = 0; i < bookings.length - 1; i++) {
-            for (var j = 1; j < bookings.length; j++) {
-                if (bookings[i]['modCode'] == bookings[j]['modCode'] && bookings[i]['start'] == bookings[j]['start'] && arraysEqual(bookings[i]['week'], bookings[j]['week']))
-                {
-                    bookings[i]['roomCode'] += ',' + bookings[j]['roomCode'];
-                    bookings.splice(j, 1);
-                }
-            }
-        }
-    }
     $('.slot').each(function () {
         var slot = $(this);
         var col = $(this).parent().children().index($(this));
@@ -353,15 +311,9 @@ function insertData(result)
                         }
                         if (prevBooking['modCode'] == bookings[j]['modCode'] && prevBooking['start'] == bookings[j]['start'] && prevBooking['day'] == bookings[j]['day'])
                         {
-                            if (type != 3)
-                            {
-                                bookings[j]['lectCode'] += ',' + prevBooking['lectCode'];
-                                bookings[j]['lectName'] += ',' + prevBooking['lectName'];
-                            }
-                            if (type != 1)
-                            {
-                                bookings[j]['roomCode'] += ',' + prevBooking['roomCode'];
-                            }
+                            bookings[j]['lectCode'] += ',' + prevBooking['lectCode'];
+                            bookings[j]['lectName'] += ',' + prevBooking['lectName'];
+                            bookings[j]['roomCode'] += ',' + prevBooking['roomCode'];
                         }
                         prevBooking = bookings[j];
                         var lecSpans = "";
