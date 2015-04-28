@@ -736,8 +736,9 @@ namespace WebApplication4_0
 
          [System.Web.Services.WebMethod]
         public static string SubmitRequest(string modname, string modcode, int day, int startTime, int endTime, int numRooms, int roomCap1,
-                                            int roomCap2, int roomCap3, int capacity, string lecturerName1, string lecturerName2, string lecturerName3, 
-                                            string specialR)
+                                            int roomCap2, int roomCap3, int capacity, string lecturerName1, string lecturerName2, string lecturerName3,
+                                            string specialR, int priority, string parkID1, string parkID2, string parkID3, string room1, string room2,
+                                            string room3, string buildingID1, string buildingID2, string buildingID3, string roomType1, string roomType2, string roomType3)
         {
        
             SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
@@ -843,7 +844,7 @@ namespace WebApplication4_0
                     cmd.Parameters.AddWithValue("@Semester", 1);    //need to write function to work this out
                     cmd.Parameters.AddWithValue("@Year", DateTime.Now.Year);     //year
                     cmd.Parameters.AddWithValue("@Round", 1);       //need to check db to see what round it is
-                    cmd.Parameters.AddWithValue("@Priority", 0);    //
+                    cmd.Parameters.AddWithValue("@Priority", priority);    //
                     cmd.Parameters.AddWithValue("@Number_Rooms", numRooms);
                     cmd.Parameters.AddWithValue("@Number_Students", capacity);
                     cmd.Parameters.AddWithValue("@Dept_ID", dep);
@@ -895,6 +896,190 @@ namespace WebApplication4_0
                         cmd4.Connection = connection;
                         connection.Open(); //opening connection with the DB
                         cmd4.ExecuteNonQuery();
+                        connection.Close();
+                    }
+
+                    if (room1 == "" || room1 == "0")
+                    {
+                        room1 = "";
+                    }
+                    if (buildingID1 == "")
+                    {
+                        buildingID1 = "";
+                    }
+                    /* writes to the [Request_Preferences] Table */
+                    //if room and building specified
+                    if (room1 != "" && room1 != "0" && buildingID1 != "0")
+                    {
+                        string command5 = "insert into [Request_Preferences] (Request_ID, Room_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                        SqlCommand cmd5 = new SqlCommand(command5);
+                        cmd5.CommandType = CommandType.Text;
+                        cmd5.Parameters.AddWithValue("@Request_ID", requestID);
+                        cmd5.Parameters.AddWithValue("@Room_ID", room1);
+                        cmd5.Parameters.AddWithValue("@Building_ID", buildingID1);
+                        cmd5.Parameters.AddWithValue("@Room_Type", roomType1);
+                        cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
+                        cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
+                        cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
+                        cmd5.Parameters.AddWithValue("@Weeks", 0);
+                        cmd5.Connection = connection;
+                        connection.Open(); //opening connection with the DB
+                        cmd5.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    //if room not specified, but building is
+                    if ((room1 == "" && room1 == "0") && buildingID1 != "0")
+                    {
+                        string command5 = "insert into [Request_Preferences] (Request_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                        SqlCommand cmd5 = new SqlCommand(command5);
+                        cmd5.CommandType = CommandType.Text;
+                        cmd5.Parameters.AddWithValue("@Request_ID", requestID);
+                        cmd5.Parameters.AddWithValue("@Building_ID", buildingID1);
+                        cmd5.Parameters.AddWithValue("@Room_Type", roomType1);
+                        cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
+                        cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
+                        cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
+                        cmd5.Parameters.AddWithValue("@Weeks", 0);
+                        cmd5.Connection = connection;
+                        connection.Open(); //opening connection with the DB
+                        cmd5.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    //if neither room or building is specified
+                    if ((room1 == "" || room1 == "0") && buildingID1 == "0")
+                    {
+                        string command5 = "insert into [Request_Preferences] (Request_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                        SqlCommand cmd5 = new SqlCommand(command5);
+                        cmd5.CommandType = CommandType.Text;
+                        cmd5.Parameters.AddWithValue("@Request_ID", requestID);
+                        cmd5.Parameters.AddWithValue("@Room_Type", roomType1);
+                        cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
+                        cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
+                        cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
+                        cmd5.Parameters.AddWithValue("@Weeks", 0);
+                        cmd5.Connection = connection;
+                        connection.Open(); //opening connection with the DB
+                        cmd5.ExecuteNonQuery();
+                        connection.Close();
+                    
+                    }
+                    if (numRooms > 1)
+                    {
+                        //if room and building specified
+                        if (room2 != "" && room2 != "0" && buildingID2 != "0")
+                        {
+                            string command6 = "insert into [Request_Preferences] (Request_ID, Room_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd6 = new SqlCommand(command6);
+                            cmd6.CommandType = CommandType.Text;
+                            cmd6.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd6.Parameters.AddWithValue("@Room_ID", room2);
+                            cmd6.Parameters.AddWithValue("@Building_ID", buildingID2);
+                            cmd6.Parameters.AddWithValue("@Room_Type", roomType2);
+                            cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
+                            cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
+                            cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd6.Parameters.AddWithValue("@Weeks", 0);
+                            cmd6.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd6.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                        //if room not specified, but building is
+                        if ((room2 == "" && room2 == "0") && buildingID2 != "0")
+                        {
+                            string command6 = "insert into [Request_Preferences] (Request_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd6 = new SqlCommand(command6);
+                            cmd6.CommandType = CommandType.Text;
+                            cmd6.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd6.Parameters.AddWithValue("@Building_ID", buildingID2);
+                            cmd6.Parameters.AddWithValue("@Room_Type", roomType2);
+                            cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
+                            cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
+                            cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd6.Parameters.AddWithValue("@Weeks", 0);
+                            cmd6.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd6.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                        //if neither room or building is specified
+                        if ((room2 == "" || room2 == "0") && buildingID2 == "0")
+                        {
+                            string command6 = "insert into [Request_Preferences] (Request_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd6 = new SqlCommand(command6);
+                            cmd6.CommandType = CommandType.Text;
+                            cmd6.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd6.Parameters.AddWithValue("@Room_Type", roomType2);
+                            cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
+                            cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
+                            cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd6.Parameters.AddWithValue("@Weeks", 0);
+                            cmd6.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd6.ExecuteNonQuery();
+                            connection.Close();
+
+                        }
+                    }
+
+                    //if 3 rooms selected
+                    if (numRooms > 2)
+                    {
+                        //if room and building specified
+                        if (room3 != "" && room3 != "0" && buildingID3 != "0")
+                        {
+                            string command7 = "insert into [Request_Preferences] (Request_ID, Room_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd7 = new SqlCommand(command7);
+                            cmd7.CommandType = CommandType.Text;
+                            cmd7.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd7.Parameters.AddWithValue("@Room_ID", room3);
+                            cmd7.Parameters.AddWithValue("@Building_ID", buildingID3);
+                            cmd7.Parameters.AddWithValue("@Room_Type", roomType3);
+                            cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
+                            cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
+                            cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd7.Parameters.AddWithValue("@Weeks", 0);
+                            cmd7.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd7.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                        //if room not specified, but building is
+                        if ((room3 == "" && room3 == "0") && buildingID3 != "0")
+                        {
+                            string command7 = "insert into [Request_Preferences] (Request_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd7 = new SqlCommand(command7);
+                            cmd7.CommandType = CommandType.Text;
+                            cmd7.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd7.Parameters.AddWithValue("@Building_ID", buildingID3);
+                            cmd7.Parameters.AddWithValue("@Room_Type", roomType3);
+                            cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
+                            cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
+                            cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd7.Parameters.AddWithValue("@Weeks", 0);
+                            cmd7.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd7.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                        //if neither room or building is specified
+                        if ((room3 == "" || room3 == "0") && buildingID3 == "0")
+                        {
+                            string command7 = "insert into [Request_Preferences] (Request_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd7 = new SqlCommand(command7);
+                            cmd7.CommandType = CommandType.Text;
+                            cmd7.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd7.Parameters.AddWithValue("@Room_Type", roomType3);
+                            cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
+                            cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
+                            cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd7.Parameters.AddWithValue("@Weeks", 0);
+                            cmd7.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd7.ExecuteNonQuery();
+                            connection.Close();
+
+                        }
                     }
 
                     

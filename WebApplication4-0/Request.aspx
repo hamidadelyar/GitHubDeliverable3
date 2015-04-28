@@ -597,6 +597,7 @@ td input[type="submit"], td input[type="button"], td button{
 
 lecturerRowTable{
     font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+    color: #86b4cc;
 }
 
 </style>
@@ -1700,7 +1701,7 @@ lecturerRowTable{
                             $('#confirmationContents').append("<strong>Room 1:</strong> n/a <br />");
                         }
                         if (document.getElementById('select_room2').value != 0) {    //if a room2 has been chosen
-                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room').value + "<br />");
+                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room2').value + "<br />");
                         } else {
                             $('#confirmationContents').append("<strong>Room 2:</strong> n/a <br />");
                         }
@@ -1713,12 +1714,12 @@ lecturerRowTable{
                             $('#confirmationContents').append("<strong>Room 1:</strong> n/a <br />");
                         }
                         if (document.getElementById('select_room2').value != 0) {    //if a room2 has been chosen
-                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room').value + "<br />");
+                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room2').value + "<br />");
                         } else {
                             $('#confirmationContents').append("<strong>Room 2:</strong> n/a <br />");
                         }
-                        if (document.getElementById('select_room3').value != 0) {    //if a room2 has been chosen
-                            $('#confirmationContents').append("<strong>Room 3:</strong> " + document.getElementById('select_room').value + "<br />");
+                        if (document.getElementById('select_room3').value != 0) {    //if a room3 has been chosen
+                            $('#confirmationContents').append("<strong>Room 3:</strong> " + document.getElementById('select_room3').value + "<br />");
                         } else {
                             $('#confirmationContents').append("<strong>Room 3:</strong> n/a <br />");
                         }
@@ -1741,8 +1742,76 @@ lecturerRowTable{
                 if (document.getElementById('priorityYes').checked) {
                     priority = 1;
                 }
+
                 var specialR = $('#specialR').val();
-            
+                var room1 = document.getElementById('select_room').value;
+                var room2 = document.getElementById('select_room2').value;
+                var room3 = document.getElementById('select_room3').value;
+                
+                var parkID1 = "";
+                var parkID2 = "";
+                var parkID3 = "";
+                if (document.getElementById('checkbox_centralPark').checked) {
+                    parkID1 = "C";
+                }
+                if (document.getElementById('checkbox_westPark').checked) {
+                    parkID1 = "W";
+                }
+                if (document.getElementById('checkbox_eastPark').checked) {
+                    parkID1 = "E";
+                }
+                if (document.getElementById('checkbox_centralPark2').checked) {
+                    parkID2 = "C";
+                }
+                if (document.getElementById('checkbox_westPark2').checked) {
+                    parkID2 = "W";
+                }
+                if (document.getElementById('checkbox_eastPark2').checked) {
+                    parkID2 = "E";
+                }
+                if (document.getElementById('checkbox_centralPark3').checked) {
+                    parkID3 = "C";
+                }
+                if (document.getElementById('checkbox_westPark3').checked) {
+                    parkID3 = "W";
+                }
+                if (document.getElementById('checkbox_eastPark3').checked) {
+                    parkID3 = "E";
+                }
+                var buildingID1 = document.getElementById('select_building').value;
+                var buildingID2 = document.getElementById('select_building2').value;
+                var buildingID3 = document.getElementById('select_building3').value;
+
+                roomType1 = "";
+                roomType2 = "";
+                roomType3 = "";
+                if (document.getElementById('checkbox_Lecture').checked) {
+                    roomType1 = "T"
+                }
+                if (document.getElementById('checkbox_Seminar').checked) {
+                    roomType1 = "S"
+                }
+                if (document.getElementById('checkbox_Lab').checked) {
+                    roomType1 = "L"
+                }
+                if (document.getElementById('checkbox_Lecture2').checked) {
+                    roomType2 = "T"
+                }
+                if (document.getElementById('checkbox_Seminar2').checked) {
+                    roomType2 = "S"
+                }
+                if (document.getElementById('checkbox_Lab2').checked) {
+                    roomType2 = "L"
+                }
+                if (document.getElementById('checkbox_Lecture3').checked) {
+                    roomType3 = "T"
+                }
+                if (document.getElementById('checkbox_Seminar3').checked) {
+                    roomType3 = "S"
+                }
+                if (document.getElementById('checkbox_Lab3').checked) {
+                    roomType3 = "L"
+                }
 
                 var modcode = $('#modcodeInput').val().toUpperCase();   //i.e. COA101
                 var modname = $('#modnameInput').val(); //i.e. Fine Art
@@ -1775,7 +1844,10 @@ lecturerRowTable{
                     data: JSON.stringify({
                         modname: modname, modcode: modcode, day: day, startTime: startTime, endTime: endTime,
                         numRooms: numRooms, roomCap1: roomCap1, roomCap2: roomCap2, roomCap3: roomCap3, capacity: capacity,
-                        lecturerName1: lecturerName1, lecturerName2: lecturerName2, lecturerName3: lecturerName3, specialR: specialR
+                        lecturerName1: lecturerName1, lecturerName2: lecturerName2, lecturerName3: lecturerName3, specialR: specialR,
+                        priority: priority, parkID1: parkID1, parkID2: parkID2, parkID3: parkID3, room1: room1, room2: room2, room3: room3,
+                        buildingID1: buildingID1, buildingID2: buildingID2, buildingID3: buildingID3, roomType1: roomType1, roomType2: roomType2,
+                        roomType3: roomType3
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -1848,7 +1920,6 @@ lecturerRowTable{
 
             }
 
-           
            
 
         }); //document.ready closing tag
@@ -2099,15 +2170,15 @@ lecturerRowTable{
                  <td>
                      
                      <div class="divClassCheckbox roomTypeClass">
-                         <input type="checkbox" id="checkbox_Lecture" class="radio" checked /> <!-- all checked by default -->
+                         <input type="radio" id="checkbox_Lecture" name="roomType1" class="radio" checked /> <!-- all checked by default -->
                          <label for="checkbox_Lecture">Lecture</label>
                      </div>
                      <div class="divClassCheckbox roomTypeClass">
-                         <input type="checkbox" id="checkbox_Seminar" class="radio" />
+                         <input type="radio" id="checkbox_Seminar" name="roomType1" class="radio" />
                          <label for="checkbox_Seminar">Seminar</label>
                      </div>
                       <div class="divClassCheckbox roomTypeClass">
-                         <input type="checkbox" id="checkbox_Lab" class="radio" />
+                         <input type="radio" id="checkbox_Lab" name="roomType1" class="radio" />
                          <label for="checkbox_Lab">Lab</label>
                      </div>
                  </td>  
@@ -2118,15 +2189,15 @@ lecturerRowTable{
 
                  <td>
                      <div class="divClassCheckbox parkClass">  
-                         <input type="checkbox" name="park" id="checkbox_centralPark" class="radio" checked/>
+                         <input type="radio" name="park1" id="checkbox_centralPark"  class="radio" checked/>
                          <label for="checkbox_centralPark">Central</label>
                      </div>
                      <div class="divClassCheckbox parkClass">  
-                         <input type="checkbox" name="park" id="checkbox_westPark" class="radio" checked/>
+                         <input type="radio" name="park1" id="checkbox_westPark" class="radio"/>
                          <label for="checkbox_westPark">West</label>
                      </div>
                      <div class="divClassCheckbox parkClass">  
-                         <input type="checkbox" name="park" id="checkbox_eastPark" class="radio" checked/>
+                         <input type="radio" name="park1" id="checkbox_eastPark" class="radio"/>
                          <label for="checkbox_eastPark">East</label>
                      </div>
                  </td>
@@ -2216,15 +2287,15 @@ lecturerRowTable{
                  <td>
                      
                      <div class="divClassCheckbox roomTypeClass2">
-                         <input type="checkbox" id="checkbox_Lecture2" class="radio" checked /> <!-- all checked by default -->
+                         <input type="radio" id="checkbox_Lecture2" class="radio" name="roomType2" checked /> 
                          <label for="checkbox_Lecture2">Lecture</label>
                      </div>
                      <div class="divClassCheckbox roomTypeClass2">
-                         <input type="checkbox" id="checkbox_Seminar2" class="radio" />
+                         <input type="radio" id="checkbox_Seminar2" name="roomType2" class="radio" />
                          <label for="checkbox_Seminar2">Seminar</label>
                      </div>
                       <div class="divClassCheckbox roomTypeClass2">
-                         <input type="checkbox" id="checkbox_Lab2" class="radio" />
+                         <input type="radio" id="checkbox_Lab2" name="roomType2" class="radio" />
                          <label for="checkbox_Lab2">Lab</label>
                      </div>
                  </td>  
@@ -2235,15 +2306,15 @@ lecturerRowTable{
 
                  <td>
                      <div class="divClassCheckbox parkClass2">  
-                         <input type="checkbox" name="park" id="checkbox_centralPark2" class="radio" checked/>
+                         <input type="radio" name="park2" id="checkbox_centralPark2" class="radio" checked/>
                          <label for="checkbox_centralPark2">Central</label>
                      </div>
                      <div class="divClassCheckbox parkClass2">  
-                         <input type="checkbox" name="park" id="checkbox_westPark2" class="radio" checked/>
+                         <input type="radio" name="park2" id="checkbox_westPark2" class="radio"/>
                          <label for="checkbox_westPark2">West</label>
                      </div>
                      <div class="divClassCheckbox parkClass2">  
-                         <input type="checkbox" name="park" id="checkbox_eastPark2" class="radio" checked/>
+                         <input type="radio" name="park2" id="checkbox_eastPark2" class="radio"/>
                          <label for="checkbox_eastPark2">East</label>
                      </div>
                  </td>
@@ -2322,15 +2393,15 @@ lecturerRowTable{
                  <td>
                      
                      <div class="divClassCheckbox roomTypeClass3">
-                         <input type="checkbox" id="checkbox_Lecture3" class="radio" checked /> <!-- all checked by default -->
+                         <input type="radio" id="checkbox_Lecture3" name="roomType3" class="radio" checked /> <!-- all checked by default -->
                          <label for="checkbox_Lecture3">Lecture</label>
                      </div>
                      <div class="divClassCheckbox roomTypeClass3">
-                         <input type="checkbox" id="checkbox_Seminar3" class="radio" />
+                         <input type="radio" id="checkbox_Seminar3" name="roomType3" class="radio" />
                          <label for="checkbox_Seminar3">Seminar</label>
                      </div>
                       <div class="divClassCheckbox roomTypeClass3">
-                         <input type="checkbox" id="checkbox_Lab3" class="radio" />
+                         <input type="radio" id="checkbox_Lab3" name="roomType3" class="radio" />
                          <label for="checkbox_Lab3">Lab</label>
                      </div>
                  </td>  
@@ -2341,15 +2412,15 @@ lecturerRowTable{
 
                  <td>
                      <div class="divClassCheckbox parkClass3">  
-                         <input type="checkbox" name="park" id="checkbox_centralPark3" class="radio" checked/>
+                         <input type="radio" name="park3" id="checkbox_centralPark3" class="radio" checked/>
                          <label for="checkbox_centralPark3">Central</label>
                      </div>
                      <div class="divClassCheckbox parkClass3">  
-                         <input type="checkbox" name="park" id="checkbox_westPark3" class="radio" checked/>
+                         <input type="radio" name="park3" id="checkbox_westPark3" class="radio" />
                          <label for="checkbox_westPark3">West</label>
                      </div>
                      <div class="divClassCheckbox parkClass3">  
-                         <input type="checkbox" name="park" id="checkbox_eastPark3" class="radio" checked/>
+                         <input type="radio" name="park3" id="checkbox_eastPark3" class="radio" />
                          <label for="checkbox_eastPark3">East</label>
                      </div>
                  </td>
