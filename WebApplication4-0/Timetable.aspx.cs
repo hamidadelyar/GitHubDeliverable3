@@ -40,7 +40,7 @@ namespace WebApplication4_0
 
             if (type == 1) // if type is set to 1 this indicates the user is searching rooms
             {
-                searchColumn = " AND Request_Preferences.Room_ID = '" + search + "'"; // sets the searchColumn to search for rooms matching the search
+                searchColumn = "AND Request_Preferences.Request_ID IN (SELECT Request_ID FROM Request_Preferences WHERE Request_Preferences.Room_ID = '" + search + "')"; // sets the searchColumn to search for modules in rooms matching the search
             }
             else if (type == 2) // if type is set to 2 this indicates the user is searching modules
             {
@@ -50,7 +50,7 @@ namespace WebApplication4_0
             else
             {
                 search = search.Substring(0, search.IndexOf(' ')); // strips the search to only contain the lecturer id not their name too
-                searchColumn = "AND Request_Lecturers.Lecturer_ID = '" + search + "'"; // sets the searchColumn to search for lecturers matching the search
+                searchColumn = "AND Request_Preferences.Request_ID IN (SELECT Request_ID FROM Request_Lecturers WHERE Request_Lecturers.Lecturer_ID = '" + search + "')"; // sets the searchColumn to search for lecturers matching the search
             }
             string where = "Bookings.Confirmed = 'Allocated' " + searchColumn + " AND Requests.Semester = " + semester; // sets the where to find all bookings that have their booking request set to allocated and match the time and date of this search
             string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Lecturers ON Lecturers.Lecturer_ID = Request_Lecturers.Lecturer_ID"; // sets the left join to include all the tables needed for the search
