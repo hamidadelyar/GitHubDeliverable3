@@ -20,6 +20,9 @@ namespace WebApplication4_0
         public string park = "";
         public string facs = "";
         public string img = "";
+        public string roomData = "";
+        public string modData = "";
+        public string lectData = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             if(Request.QueryString["roomCode"] != null)
@@ -52,15 +55,23 @@ namespace WebApplication4_0
                         img = code.Replace(".", "");
                     }
                 }
+                roomData = SQLSelect.Select("Rooms", "Room_ID", "1=1", ""); // runs a select to get all the room ids stored in the DB for use in jquery for room prediction
+                if ((Session["LoggedIn"]) != null)
+                {  // checks the user is logged in to remove error of trying to get a null session variable
+                    modData = SQLSelect.Select("Modules", "Module_Code + ' ' + Module_Title AS Module_Code", "LEFT(Module_Code, 2) = '" + Session["Username"].ToString().Substring(0, 2) + "'", ""); // runs a select to get all the module codes that are from the user's department
+                    lectData = SQLSelect.Select("Lecturers", "Lecturer_ID + ' ' + Lecturer_Name AS Lecturer_ID", "LEFT(Lecturer_ID, 2) = '" + Session["Username"].ToString().Substring(0, 2) + "'", ""); // runs a select to get all the lecturers from the user's department
+                }
+                if (Request.QueryString["roomCode"] != null) // checks if the url bar has been sent a roomCode variable
+                {
+                    code = Request.QueryString["roomCode"]; // sets the value of code to the roomCode sent. This will be used in jQuery to set as a value in the room search textbox and for data submital on load so the loaded timetable appears in RoomsDetails.aspx
+                }
             }
             else
             {
-                code = "Unknown";
-                building = "Unknown";
-                capacity = "Unknown";
-                type = "Unknown";
-                park = "Unknown";
-                facs = "[]";
+                if ((Session["LoggedIn"]) != null)
+                {
+                    Response.Redirect("SearchRooms.aspx");
+                }
             }
         }
         public static string Select(string table, string columns, string where, string leftJoin)
