@@ -273,7 +273,7 @@ function checkType(type, booking)
             return false;
         }
     }
-    if (type == 2) {
+    if (type == 3) {
         var data = booking['lectCode'].toUpperCase()
         if (data.indexOf($('.roomTxt').val()) != -1) {
             return true;
