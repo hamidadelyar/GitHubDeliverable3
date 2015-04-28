@@ -3,7 +3,6 @@ var currWeek = 1;
 var semester = 1;
 var showing = false;
 var type = 1;
-var all = false;
 $(document).ready(function () {
     if ($('.roomTxt').val() != "")
     {
@@ -74,7 +73,6 @@ $(document).ready(function () {
     });
 
     $('.weekBtn').click(function () { // updates timetable when week is changed
-        all = false;
         $('.allWks').css('color', '#999');
         $('.select').css('color', '#3E454D');
         $('.nonSelect').css('color', '#FF8060');
@@ -132,22 +130,6 @@ $(document).ready(function () {
         $('.roomTxt').val('');
         $('.rooms b').html('LECTURER');
     });
-    $('.allWks').click(function () {
-        if(all)
-        {
-            $('.allWks').css('color', '#999');
-            $('.select').css('color', '#3E454D');
-            $('.nonSelect').css('color', '#FF8060');
-        }
-        else
-        {
-            $('.allWks').css('color', '#FF8060');
-            $('.select').css('color', '#999');
-            $('.nonSelect').css('color', '#999');
-        }
-        all = !all;
-        getBooking();
-    })
 });
 function fillTable() // fills the rooms suggestion table with data that matches the input
 {
@@ -334,8 +316,14 @@ function insertData(result)
                             roomSpans += '<span class="roomId">' + roomCodes[l] + '</span>,<br />';
                         }
                         roomSpans = roomSpans.substring(0, roomSpans.length - 7);
+                        var weekSpans = "";
+                        var weekCodes = bookings[j]['week'];
+                        for(var l = 0; l < roomCodes.length; l++)
+                        {
+                            weekSpans += '<span class="weekBtn weekSpan">' + weekCodes[l] + '</span>,<br />';
+                        }
                         $(slot).attr('rowspan', bookings[j]['end'] - bookings[j]['start'] + 1);
-                        $(slot).html(bookings[j]['modCode'] + '<span class="bookingSpan" ><span class="modCode" >' + bookings[j]['modCode'] + '<br />' + bookings[j]['modName'] + '</span><br />' + lecSpans + '<br />' + roomSpans + '</span>').addClass('booking');
+                        $(slot).html(bookings[j]['modCode'] + '<span class="bookingSpan" ><span class="modCode" >' + bookings[j]['modCode'] + '<br />' + bookings[j]['modName'] + '</span><br />' + lecSpans + '<br />' + roomSpans + '<br />'+weekSpans+'</span>').addClass('booking');
                         $('.bookingSpan').hide();
                         bookingHover();
                     }
@@ -383,6 +371,10 @@ function bookingHover() // adds the booking hover features to bookings added aft
         fillTable();
         getBooking();
     })
+    $('.weekSpan').click(function() {
+       currWeek = parseInt($(this).html());
+       updateWeeks();
+    });
 }
 function updateWeeks() { // sets the week labels to be correct after selection is changed
     $('.leftWk').html(weeksArray[currWeek - 1].substring(5));
