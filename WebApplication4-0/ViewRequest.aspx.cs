@@ -24,7 +24,7 @@ namespace WebApplication4_0
             DataTable dt = GetData("Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students", "Requests", "");
             if ((Session["LoggedIn"]) != null)
             {
-                dt = GetData("Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students", "Requests", "WHERE LEFT(Module_Code,2) = '" + Session["Username"].ToString().Substring(0, 2) + "'");
+                dt = GetData("Requests.Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students, Confirmed", "Requests, Bookings", "WHERE LEFT(Module_Code,2) = '" + Session["Username"].ToString().Substring(0, 2) + "' AND Requests.Request_ID = Bookings.Request_ID");
             }
 
             /*
@@ -36,7 +36,7 @@ namespace WebApplication4_0
                 }
             }*/
 
-            string[] cols = { "Request No.", "Module Code", "Day", "Start Time", "End Time", "Semester", "Year", "Round", "Priority", "No. of Rooms", "No. of Students" };
+            string[] cols = { "Request No.", "Module Code", "Day", "Start Time", "End Time", "Semester", "Year", "Round", "Priority", "No. of Rooms", "No. of Students", "Status" };
             //DataTable dt = GetData("Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students", "Requests", "" );
 
             StringBuilder html = new StringBuilder();
@@ -69,6 +69,7 @@ namespace WebApplication4_0
             bool pr = true;
             int rms = 0;
             int stu = 0;
+            string stat = "";
 
             foreach (DataRow row in dt.Rows)
             {
@@ -96,6 +97,7 @@ namespace WebApplication4_0
                                 case 8: pr = Convert.ToBoolean(rows1[i]); break;
                                 case 9: rms = Convert.ToInt32(rows1[i]); break;
                                 case 10: stu = Convert.ToInt32(rows1[i]); break;
+                                case 11: stat = rows1[i]; break;
                                 default: mod = rows1[i]; break;
 
                             }
@@ -105,7 +107,7 @@ namespace WebApplication4_0
                 }
                 if (rows1.Count() != 0)
                 {
-                    Rows rows2 = new Rows(req, mod, days, st, ed, sem, y, rnd, pr, rms, stu);
+                    Rows rows2 = new Rows(req, mod, days, st, ed, sem, y, rnd, pr, rms, stu, stat);
                     rows.Add(rows2);
                     rows1.Clear();
                     //html.Append("</tr>");
@@ -116,7 +118,7 @@ namespace WebApplication4_0
             for(int i=0;i<rows.Count;i++)
             {
                 html.Append("<tr>");
-                for (int j = 0; j <= 10; j++)
+                for (int j = 0; j <= 11; j++)
                 {
                     switch(j)
                     {
@@ -164,6 +166,27 @@ namespace WebApplication4_0
                                     html.Append(rows[i].getStudents());
                                     html.Append("</td>");
                                     break;
+                            case 11: if (rows[i].getStatus() == "Allocated")
+                                    {
+                                        html.Append("<td style='color:#00FF00'>");
+                                        html.Append(rows[i].getStatus());
+                                        html.Append("</td>");
+                                        break;
+                                    }
+                                    else if (rows[i].getStatus() == "Pending")
+                                    {
+                                        html.Append("<td style='color:#FFFF00'>");
+                                        html.Append(rows[i].getStatus());
+                                        html.Append("</td>");
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        html.Append("<td style='color:#FF0000'>");
+                                        html.Append(rows[i].getStatus());
+                                        html.Append("</td>");
+                                        break;
+                                    }
                     }
                 }
                 html.Append("</tr>");
@@ -294,8 +317,9 @@ namespace WebApplication4_0
             private string priority;
             private int rooms_no;
             private int students_no;
+            private string status;
 
-            public Rows (int request_no, string module, int day, int start, int end, bool semester, int year, int round, bool priority, int rooms_no, int students_no)
+            public Rows (int request_no, string module, int day, int start, int end, bool semester, int year, int round, bool priority, int rooms_no, int students_no, string status)
             {
                 this.request_no = request_no;
                 this.module = module;
@@ -351,6 +375,7 @@ namespace WebApplication4_0
                 }
                 this.rooms_no = rooms_no;
                 this.students_no = students_no;
+                this.status = status;
 
             }
 
@@ -407,6 +432,11 @@ namespace WebApplication4_0
             public int getStudents()
             {
                 return students_no;
+            }
+
+            public string getStatus()
+            {
+                return status;
             }
         }
 
