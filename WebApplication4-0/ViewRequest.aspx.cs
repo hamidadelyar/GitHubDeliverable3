@@ -8,6 +8,8 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
 using System.Text;
+using System.Web.Providers.Entities;
+using System.Web.Script.Serialization;
 
 
 namespace WebApplication4_0
@@ -15,13 +17,27 @@ namespace WebApplication4_0
     public partial class ViewRequest : System.Web.UI.Page
     {
         //static SqlConnection conn;
-        //DataTable dt = new DataTable();
+        //DataTable dt;
         //public String data = "";
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            DataTable dt = GetData("Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students", "Requests", "");
+            if ((Session["LoggedIn"]) != null)
+            {
+                dt = GetData("Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students", "Requests", "WHERE LEFT(Module_Code,2) = '" + Session["Username"].ToString().Substring(0, 2) + "'");
+            }
+
+            /*
+            foreach(DataRow row1 in user.Rows)
+            {
+                foreach(DataColumn col1 in user.Columns)
+                {
+                    string deptid = row1[col1.ColumnName].ToString();
+                }
+            }*/
+
             string[] cols = { "Request No.", "Module Code", "Day", "Start Time", "End Time", "Semester", "Year", "Round", "Priority", "No. of Rooms", "No. of Students" };
-            DataTable dt = this.GetData("Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students", "Requests", "" );
+            //DataTable dt = GetData("Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students", "Requests", "" );
 
             StringBuilder html = new StringBuilder();
 
@@ -64,31 +80,36 @@ namespace WebApplication4_0
                     //Rows newRow = new Rows(row["Request_ID"], row["Module_Code"], row["Day"], row["Start_Time"], row["End_Time"], row["Semester"], row["Year"], row["Round"], row["Priority"], row["Number_Rooms"], row["Number_Students"]); 
                     string s = row[column.ColumnName].ToString();
                     rows1.Add(s);
+
                     for (int i = 0; i < rows1.Count; i++)
                     {
-                        switch (i)
-                        {
-                            case 0: req = Convert.ToInt32(rows1[i]); break;
-                            case 1: mod = rows1[i]; break;
-                            case 2: days = Convert.ToInt32(rows1[i]); break;
-                            case 3: st = Convert.ToInt32(rows1[i]); break;
-                            case 4: ed = Convert.ToInt32(rows1[i]); break;
-                            case 5: sem = Convert.ToBoolean(rows1[i]); break;
-                            case 6: y = Convert.ToInt32(rows1[i]); break;
-                            case 7: rnd = Convert.ToInt32(rows1[i]); break;
-                            case 8: pr = Convert.ToBoolean(rows1[i]); break;
-                            case 9: rms = Convert.ToInt32(rows1[i]); break;
-                            case 10: stu = Convert.ToInt32(rows1[i]); break;
-                            default: mod = rows1[i]; break;
+                            switch (i)
+                            {
+                                case 0: req = Convert.ToInt32(rows1[i]); break;
+                                case 1: mod = rows1[i]; break;
+                                case 2: days = Convert.ToInt32(rows1[i]); break;
+                                case 3: st = Convert.ToInt32(rows1[i]); break;
+                                case 4: ed = Convert.ToInt32(rows1[i]); break;
+                                case 5: sem = Convert.ToBoolean(rows1[i]); break;
+                                case 6: y = Convert.ToInt32(rows1[i]); break;
+                                case 7: rnd = Convert.ToInt32(rows1[i]); break;
+                                case 8: pr = Convert.ToBoolean(rows1[i]); break;
+                                case 9: rms = Convert.ToInt32(rows1[i]); break;
+                                case 10: stu = Convert.ToInt32(rows1[i]); break;
+                                default: mod = rows1[i]; break;
 
-                        }
+                            }
                     }
+                  
 
                 }
-                Rows rows2 = new Rows(req, mod, days, st, ed, sem, y, rnd, pr, rms, stu);
-                rows.Add(rows2);
-                rows1.Clear();
-                //html.Append("</tr>");
+                if (rows1.Count() != 0)
+                {
+                    Rows rows2 = new Rows(req, mod, days, st, ed, sem, y, rnd, pr, rms, stu);
+                    rows.Add(rows2);
+                    rows1.Clear();
+                    //html.Append("</tr>");
+                }
             }
 
             html.Append("<tbody>");
@@ -179,10 +200,30 @@ namespace WebApplication4_0
         */
         }
 
-        private DataTable GetData(string select, string from, string where)
+        
+        /*public string GetUsername()
+        {
+            string username = "";
+            if (HttpContext.Current.Session == null)
+            {
+                Redirect("Default.aspx");
+            }
+            else
+            {
+                username = HttpContext.Current.Session["Username"].ToString();
+            }
+            return username;
+        }
+        
+        private static void Redirect(string p)
+        {
+            throw new NotImplementedException();
+        }
+        */
+        public DataTable GetData(string select, string from, string where)
         {
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
-            string vreqQuery = "SELECT " + select + " FROM " + from + where;
+            string vreqQuery = "SELECT " + select + " FROM " + from + " " + where;
             SqlCommand comm = new SqlCommand(vreqQuery, conn);
             SqlDataAdapter da = new SqlDataAdapter(comm);
             //conn.Open();
@@ -204,7 +245,42 @@ namespace WebApplication4_0
                 }
             }
         }
+        
+        /*
+        public class SQLSelect
+        {
+            public SQLSelect()
+            {
 
+            }
+            
+            public static DataTable GetData(string select, string from, string where)
+            {
+                SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+                string vreqQuery = "SELECT " + select + " FROM " + from + where;
+                SqlCommand comm = new SqlCommand(vreqQuery, conn);
+                SqlDataAdapter da = new SqlDataAdapter(comm);
+                //conn.Open();
+
+                using (conn)
+                {
+                    using (comm)
+                    {
+                        using (da)
+                        {
+                            comm.Connection = conn;
+                            da.SelectCommand = comm;
+                            using (DataTable dts = new DataTable())
+                            {
+                            da.Fill(dts);
+                            return dts;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        */
         public class Rows
         {
             private int request_no;
