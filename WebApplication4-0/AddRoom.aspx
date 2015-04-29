@@ -9,7 +9,15 @@
         var parkSet = -1;
         var buildings = <%= this.buildings %>;
         var facs = <%= this.facs %>;
+        var buildName = "";
+        var rooms = <%= this.rooms %>;
+        var department = <%= this.department %>;
+        department = department[0]['Dept_ID'];
+        var edit = false;
+        var capacity = 0;
+        var type = "";
         $(document).ready(function () {
+            $('.addEdit').hide();
             var cols = 1;
             var facCells = "";
             for(var i = 0; i < facs.length; i++)
@@ -56,42 +64,94 @@
                 $(this).addClass('selectRad');
                 typeSet = $(this).siblings('.typeCheck').val();
             });
-            $('.buildTxt').focusin(function(){
-                fillBuilds();
-            });
-            $('.buildTxt').on('input propertychange paste', function () { // Finds suggestion to put in table that match the users input everytime they alter the text
-                fillBuilds();
-            });
             $(document).click(function (event) { // Clear table when anywhere else on page click
                 if (event.target.id !== 'buildTxt') {
                     $(".buildRes").html('');
                 }
             })
         });
-        function fillBuilds()
+        function validateRoomCode()
         {
-            var buildTxt = $('.buildTxt').val().toUpperCase();
-            if($('.buildTxt').val() == "")
+            if($('.roomTxt').val() == "")
             {
-                $('.buildRes').html('');
-                for (var i = 0; i < buildings.length; i++) {
-                    $('.buildRes').append("<span class='buildName'>" + buildings[i]['Building_Name'] + "</span>, ");
-                }
+                $('.roomTit').html('<b>ROOM CODE</b><span class="alert" >&nbsp;You muust eneter a room code.</span>')
+            }
+            else if($('.roomTxt').val().indexOf('.') == -1)
+            {
+                $('.roomTit').html('<b>ROOM CODE</b><span class="alert" >&nbsp;Your room code must contain a dot e.g. A.0.01</span>')
+            }
+            else if(!permission())
+            {
+                $('.roomTit').html('<b>ROOM CODE</b><span class="alert" >&nbsp;You do not have permission to modify this room.</span>')
+            }
+            else if(!hasCode())
+            {
+                $('.roomTit').html('<b>ROOM CODE</b><span class="alert" >&nbsp;Your room code must contain a valid building code at the start. <a href="AddBuilding" >Add building</a></span>')
             }
             else
             {
-                $('.buildRes').html('');
-                for (var i = 0; i < buildings.length; i++) {
-                    var searchTxt = buildings[i]['Building_Name'].toUpperCase();
-                    if (searchTxt.indexOf(buildTxt) != -1) {
-                        $('.buildRes').append("<span class='buildName'>" + buildings[i]['Building_Name'] + "</span>, ");
-                    }
+                if(exists())
+                {
+                    edit = true;
+                    $('.buildTxt').val(buildName);
+                    $('.buildTxt').attr('disabled', 'true');
+                    $('.roomHolder').hide();
+                    $('.addEdit').show();
+                    $('.addHdr').html('<b>EDIT '+$('.roomTxt').val().toUpperCase()+'</b>');
+                    $('.addBtn').html('<b>UPDATE</b>');
+                    $('.noStuds').val(capacity);
+                    $('#'+type).addClass('selectRad')
+                    typeSet = ('#'+type).val();
+                }
+                else
+                {
+                    edit = false;
+                    $('.buildTxt').val(buildName);
+                    $('.buildTxt').attr('disabled', 'true');
+                    $('.roomHolder').hide();
+                    $('.addEdit').show();
                 }
             }
-            $('.buildName').click(function()
+            
+        }
+        function permission()
+        {
+            var subst = $('.roomTxt').val().toUpperCase();
+            for(var i = 0; i < rooms.length; i++)
             {
-                $('.buildTxt').val($(this).html());
-            });
+                if(rooms[i]['Room_ID'].toUpperCase() == subst && rooms[i]['Dept_ID'] != department)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        function hasCode()
+        {
+            var subst = $('.roomTxt').val().substring(0, $('.roomTxt').val().indexOf('.')).toUpperCase();
+            for(var i = 0; i < buildings.length; i++)
+            {
+                if(subst == buildings[i]['Building_ID'])
+                {
+                    buildName = buildings[i]['Building_Name'];
+                    return true;
+                }
+            }
+            return false;
+        }
+        function exists()
+        {
+            var subst = $('.roomTxt').val().toUpperCase();
+            for(var i = 0; i < rooms.length; i++)
+            {
+                if(rooms[i]['Room_ID'].toUpperCase() == subst)
+                {
+                    capacity = rooms[i]['Capacity'];
+                    type = rooms[i]['Room_Type']
+                    return true;
+                }
+            }
+            return false;
         }
         function isNumberKey(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode
@@ -105,9 +165,10 @@
         {
             color:#FFF!important;
             margin-top:50px;
-            width:100%;
+            width:95%;
             border-radius:10px;
             background-color:#3E454D;
+            padding:2.5%;
         }
         .hdr
         {
@@ -121,8 +182,8 @@
         }
         .tools
         {
-            width:95%;
-            margin-left:2.5%;
+            width:100%;
+            background-color:#F00;
             margin-top:15px;
             text-align:left!important;
             display:inline;
@@ -138,6 +199,26 @@
             margin-top:10px;
             color:#FFD800;
         }
+        .alert a:active
+        {
+            color:#FFD800;
+            text-decoration:underline;
+        }
+        .alert a:hover
+        {
+            text-decoration:none!important;
+            background-color:#3E454D!important;
+        }
+        .alert a:visited
+        {
+            color:#FFD800;
+            text-decoration:underline;
+        }
+        .alert a:link
+        {
+            color:#FFD800;
+            text-decoration:underline;
+        }
         .spc
         {
             height:15px;
@@ -149,8 +230,7 @@
         .facChecks
         {
             margin-top:35px;
-            margin-left:2.5%;
-            width:105%;
+            width:110%;
             table-layout:fixed;
         }
         .line
@@ -229,9 +309,15 @@
             border:1px #2B3036 solid;
             color:#FFF;
         }
-        .spacer
+        .roomTxt
         {
-            width:25px;
+            text-transform:uppercase;
+        }
+        .buildTxt
+        {
+            background-color:#55595E!important;
+            border:1px #55595E solid!important;
+            cursor:not-allowed;
         }
         .buildRes
         {
@@ -246,6 +332,7 @@
             font-size: 1.2em;
             margin-left:25px;
             white-space:nowrap;
+            text-overflow:ellipsis;
             overflow:hidden;
         }
         .buildName
@@ -299,8 +386,25 @@
             background-color:#FF8060;
         }
     </style>
-    <div class="toolsHolder" >
-        <div class="hdr" ><b>ADD A ROOM</b></div>
+    <div class="toolsHolder roomHolder" >
+        <div class="hdr" ><b>ADD/EDIT A ROOM</b></div>
+        <table class="facChecks" >
+            <tr>
+                <td class="subHdr roomTit" id="room" colspan="8"><b>ROOM CODE</b><span class="alert" ></span></td>
+            </tr>
+            <tr class="roomRw">
+                <td colspan="8"><input type="text" class="inp roomTxt" id="roomTxt" /></td>
+            </tr>
+            <tr>
+                <td colspan="8" class="spc"></td>
+            </tr>
+            <tr>
+                <td colspan="8"><span class="clearAllBtn" onclick="location.reload()"><b>CLEAR ALL</b></span><span class="searchBtn" onclick="validateRoomCode()"><b>NEXT</b></span></td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolsHolder addEdit" >
+        <div class="hdr addHdr" ><b>ADD A ROOM</b></div>
         <div class="tools" >
             <table class="facChecks" >
                 <tr>
@@ -316,9 +420,9 @@
                     <td class="subHdr" colspan="8"><b>ROOM TYPE</b></td>
                 </tr>
                 <tr class="facRw">
-                    <td><b>LECTURE</b></td><td> <span class="outCirc" ></span><span class="inCirc"  ></span><input class="typeCheck" type="hidden" value="1" /></td>
-                    <td><b>SEMINAR</b></td><td> <span class="outCirc" ></span><span class="inCirc" ></span><input class="typeCheck" type="hidden" value="2" /></td>
-                    <td><b>IT LAB</b></td><td> <span class="outCirc" ></span><span class="inCirc" ></span><input class="typeCheck" type="hidden" value="3" /></td>
+                    <td><b>LECTURE</b></td><td> <span class="outCirc" ></span><span id="T" class="inCirc"  ></span><input class="typeCheck" type="hidden" value="1" /></td>
+                    <td><b>SEMINAR</b></td><td> <span class="outCirc" ></span><span id="S" class="inCirc" ></span><input class="typeCheck" type="hidden" value="2" /></td>
+                    <td><b>IT LAB</b></td><td> <span class="outCirc" ></span><span id="L" class="inCirc" ></span><input class="typeCheck" type="hidden" value="3" /></td>
                     <td colspan="2"></td>
                 </tr>
                 <tr>
@@ -340,7 +444,7 @@
                     <td colspan="8" class="spc"></td>
                 </tr>
                 <tr>
-                    <td colspan="8"><span class="clearAllBtn" onclick="location.reload()"><b>CLEAR ALL</b></span><span class="searchBtn" onclick="validation()"><b>ADD</b></span></td>
+                    <td colspan="8"><span class="clearAllBtn" onclick="location.reload()"><b>CLEAR ALL</b></span><span class="searchBtn addBtn" onclick="validation()"><b>ADD</b></span></td>
                 </tr>
             </table>
         </div>
