@@ -119,6 +119,7 @@
     <Content Include="Account\OpenAuthProviders.ascx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
+    <Content Include="AddRoom.aspx" />
     <Content Include="AdminFolder\Admin.aspx" />
     <Content Include="AdminFolder\css\AdminStyle.css" />
     <Content Include="AdminFolder\css\reset.css" />
@@ -194,6 +195,7 @@
     <Content Include="Images\accent.png" />
     <Content Include="Images\AddCircle.png" />
     <Content Include="Images\bullet.png" />
+    <Content Include="Images\change.png" />
     <Content Include="Images\heroAccent.png" />
     <Content Include="Images\MinusCircle.png" />
     <Content Include="Images\orderedList0.png" />
@@ -313,6 +315,7 @@
     <Content Include="Scripts\Loading.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Timetable.js" />
+    <Content Include="SearchRooms.aspx" />
     <Content Include="Timetable.aspx" />
     <Content Include="ViewRequest.aspx" />
     <Content Include="ViewSwitcher.ascx" />
@@ -331,6 +334,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddRoom.aspx.cs">
+      <DependentUpon>AddRoom.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AddRoom.aspx.designer.cs">
+      <DependentUpon>AddRoom.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AdminFolder\Admin.aspx.cs">
       <DependentUpon>Admin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -462,6 +471,13 @@
     </Compile>
     <Compile Include="RoomsDetails.aspx.designer.cs">
       <DependentUpon>RoomsDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SearchRooms.aspx.cs">
+      <DependentUpon>SearchRooms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SearchRooms.aspx.designer.cs">
+      <DependentUpon>SearchRooms.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

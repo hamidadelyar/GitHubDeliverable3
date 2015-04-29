@@ -593,11 +593,13 @@ td input[type="submit"], td input[type="button"], td button{
 	width: 30%; /*width of each list item*/
     float:left;
     font-weight:600;
+    color: #86b4cc;
 }
 
 lecturerRowTable{
     font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
     color: #86b4cc;
+
 }
 
 </style>
@@ -1625,8 +1627,8 @@ lecturerRowTable{
                     Check if any weeks have been selected when user selects to choose his/her own weeks.
                 */
          
-                var weeks = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-                var weekChecked = 15; //15 weeks checked automatically
+                var weeks = [1,2,3,4,5,6,7,8,9,10,11,12];
+                var weekChecked = 12; //12 weeks checked automatically
 
                 if (document.getElementById('defaultWeeksNo').checked == true) {    //if user has selected to choose own weeks
                     //check to see if any weeks have been selected.
@@ -1743,6 +1745,114 @@ lecturerRowTable{
                     priority = 1;
                 }
 
+                //room1 facility options
+                if (document.getElementById('checkbox_noPreferences').checked) {// if user selects 'no' facilities required, then all set to default false 
+                    var comp = false; //computer
+                    var ddp = false;    //Dual Data projection
+                    var dp = false;    //Data Projection
+                    var il = false;    //Induction Loop
+                    var mp = false;    //Media Player
+                    var pa = false;    //PA
+                    var plasma = false;  //Plasma
+                    var rev = false;    //ReView
+                    var mic = false;     //Radio Microphone
+                    var vis = false;    //Visualiser
+                    var wc = false;  //Wheelchair Access
+                    var wb = false;      //Whiteboard
+                } else {    //if user selects 'yes' they do want to specify facilities
+                    //room preference selections, such as whiteboard
+                    var comp = document.getElementById('checkbox_COMP').checked;    //computer 
+                    var ddp = document.getElementById('checkbox_DDP').checked;     //Dual Data projection
+                    var dp = document.getElementById('checkbox_DP').checked;      //Data Projection
+                    var il = document.getElementById('checkbox_IL').checked;      //Induction Loop
+                    var mp = document.getElementById('checkbox_MP').checked;      //Media Player
+                    var pa = document.getElementById('checkbox_PA').checked;      //PA
+                    var plasma = document.getElementById('checkbox_PLASMA').checked;  //Plasma
+                    var rev = document.getElementById('checkbox_REV').checked;     //ReView
+                    var mic = document.getElementById('checkbox_MIC').checked;      //Radio Microphone
+                    var vis = document.getElementById('checkbox_VIS').checked;     //Visualiser
+                    var wc = document.getElementById('checkbox_Wchair').checked;  //Wheelchair Access
+                    var wb = document.getElementById('checkbox_WB').checked;      //Whiteboard
+                }
+
+                //room2 facility options
+                if (document.getElementById('checkbox_noPreferences2').checked) {// if user selects 'no' facilities required, then all set to default false 
+                    var comp2 = false; //computer
+                    var ddp2 = false;    //Dual Data projection
+                    var dp2 = false;    //Data Projection
+                    var il2 = false;    //Induction Loop
+                    var mp2 = false;    //Media Player
+                    var pa2 = false;    //PA
+                    var plasma2 = false;  //Plasma
+                    var rev2 = false;    //ReView
+                    var mic2 = false;     //Radio Microphone
+                    var vis2 = false;    //Visualiser
+                    var wc2 = false;  //Wheelchair Access
+                    var wb2 = false;      //Whiteboard
+                } else {    //if user selects 'yes' they do want to specify facilities
+                    //room preference selections, such as whiteboard
+                    var comp2 = document.getElementById('checkbox_COMP2').checked;    //computer 
+                    var ddp2 = document.getElementById('checkbox_DDP2').checked;     //Dual Data projection
+                    var dp2 = document.getElementById('checkbox_DP2').checked;      //Data Projection
+                    var il2 = document.getElementById('checkbox_IL2').checked;      //Induction Loop
+                    var mp2 = document.getElementById('checkbox_MP2').checked;      //Media Player
+                    var pa2 = document.getElementById('checkbox_PA2').checked;      //PA
+                    var plasma2 = document.getElementById('checkbox_PLASMA2').checked;  //Plasma
+                    var rev2 = document.getElementById('checkbox_REV2').checked;     //ReView
+                    var mic2 = document.getElementById('checkbox_MIC2').checked;      //Radio Microphone
+                    var vis2 = document.getElementById('checkbox_VIS2').checked;     //Visualiser
+                    var wc2 = document.getElementById('checkbox_Wchair2').checked;  //Wheelchair Access
+                    var wb2 = document.getElementById('checkbox_WB2').checked;      //Whiteboard
+                }
+
+                //room3 facility options
+                if (document.getElementById('checkbox_noPreferences3').checked) {// if user selects 'no' facilities required, then all set to default false 
+                    var comp3 = false; //computer
+                    var ddp3 = false;    //Dual Data projection
+                    var dp3 = false;    //Data Projection
+                    var il3 = false;    //Induction Loop
+                    var mp3 = false;    //Media Player
+                    var pa3 = false;    //PA
+                    var plasma3 = false;  //Plasma
+                    var rev3 = false;    //ReView
+                    var mic3 = false;     //Radio Microphone
+                    var vis3 = false;    //Visualiser
+                    var wc3 = false;  //Wheelchair Access
+                    var wb3 = false;      //Whiteboard
+                } else {    //if user selects 'yes' they do want to specify facilities
+                    //room preference selections, such as whiteboard
+                    var comp3 = document.getElementById('checkbox_COMP3').checked;    //computer 
+                    var ddp3 = document.getElementById('checkbox_DDP3').checked;     //Dual Data projection
+                    var dp3 = document.getElementById('checkbox_DP3').checked;      //Data Projection
+                    var il3 = document.getElementById('checkbox_IL3').checked;      //Induction Loop
+                    var mp3 = document.getElementById('checkbox_MP3').checked;      //Media Player
+                    var pa3 = document.getElementById('checkbox_PA3').checked;      //PA
+                    var plasma3 = document.getElementById('checkbox_PLASMA3').checked;  //Plasma
+                    var rev3 = document.getElementById('checkbox_REV3').checked;     //ReView
+                    var mic3 = document.getElementById('checkbox_MIC3').checked;      //Radio Microphone
+                    var vis3 = document.getElementById('checkbox_VIS3').checked;     //Visualiser
+                    var wc3 = document.getElementById('checkbox_Wchair3').checked;  //Wheelchair Access
+                    var wb3 = document.getElementById('checkbox_WB3').checked;      //Whiteboard
+                }
+                var weeks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                var weekChecked = 12; //12 weeks checked automatically
+
+                if (document.getElementById('defaultWeeksNo').checked == true) {    //if user has selected to choose own weeks
+                    //check to see if any weeks have been selected.
+                    weeks = []; //sets the weeks array to empty, so can add the specific weeks user chooses.
+                    var weekChecked = 0;
+                    for (i = 1; i < 16; i++) {
+                        if (document.getElementById('week' + i).checked == true) {
+                            weekChecked = weekChecked + 1; //if at least 1 week has been checked, then weekChecked set to true
+                            weeks.push(i); //corresponding week number will be added to the array if it has been checked
+                            /*
+                              If at least 1 week has been checked, then checked weeks set to true.
+                              Otherwise, no weeks have been selected. User must be notified.
+                          */
+                        }
+                    }
+                }
+
                 var specialR = $('#specialR').val();
                 var room1 = document.getElementById('select_room').value;
                 var room2 = document.getElementById('select_room2').value;
@@ -1751,6 +1861,7 @@ lecturerRowTable{
                 var parkID1 = "";
                 var parkID2 = "";
                 var parkID3 = "";
+
                 if (document.getElementById('checkbox_centralPark').checked) {
                     parkID1 = "C";
                 }
@@ -1828,7 +1939,7 @@ lecturerRowTable{
                 var roomCap1 = $('#capacityInput').val();
                 var roomCap2 = $('#capacityInput2').val();
                 var roomCap3 = $('#capacityInput3').val();
-                //var weeks array is an array containing the weeks selected. Declared later on.
+               
                 var capacity = +roomCap1;
 
                 if (numRooms == 2) {
@@ -1838,6 +1949,25 @@ lecturerRowTable{
                     capacity = +roomCap1 + +roomCap2 + +roomCap3;   //unary plus operator, converts string to number                }
                 }
 
+                var defaultWeeks = 1;
+                if (document.getElementById('defaultWeeksNo').checked) {    //if user selects to check own custom weeks, does not want default weeks
+                    defaultWeeks = 0;
+                }
+                /*
+                     var comp = false; //computer
+                    var ddp = false;    //Dual Data projection
+                    var dp = false;    //Data Projection
+                    var il = false;    //Induction Loop
+                    var mp = false;    //Media Player
+                    var pa = false;    //PA
+                    var plasma = false;  //Plasma
+                    var rev = false;    //ReView
+                    var mic = false;     //Radio Microphone
+                    var vis = false;    //Visualiser
+                    var wc = false;  //Wheelchair Access
+                    var wb = false;      //Whiteboard
+                */
+                
                 $.ajax({
                     type: "POST",
                     url: "Request.aspx/SubmitRequest",
@@ -1847,7 +1977,10 @@ lecturerRowTable{
                         lecturerName1: lecturerName1, lecturerName2: lecturerName2, lecturerName3: lecturerName3, specialR: specialR,
                         priority: priority, parkID1: parkID1, parkID2: parkID2, parkID3: parkID3, room1: room1, room2: room2, room3: room3,
                         buildingID1: buildingID1, buildingID2: buildingID2, buildingID3: buildingID3, roomType1: roomType1, roomType2: roomType2,
-                        roomType3: roomType3
+                        roomType3: roomType3, defaultWeeks: defaultWeeks, weeks: weeks,
+                        comp: comp, ddp: ddp, dp: dp, il: il, mp: mp, pa: pa, plasma: plasma, rev: rev, mic: mic, vis: vis, wc: wc, wb: wb,
+                        comp2: comp2, ddp2: ddp2, dp2: dp2, il2: il2, mp2: mp2, pa2: pa2, plasma2: plasma2, rev2: rev2, mic2: mic2, vis2: vis2, wc2: wc2, wb2: wb2,
+                        comp3: comp3, ddp3: ddp3, dp3: dp3, il3: il3, mp3: mp3, pa3: pa3, plasma3: plasma3, rev3: rev3, mic3: mic3, vis3: vis3, wc3: wc3, wb3: wb3,
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -2035,7 +2168,7 @@ lecturerRowTable{
                     <td>
                         <asp:Label ID="startTimeLabel" runat="server" Text="START TIME" ToolTip="Select the time that you would like the lecture to start i.e. 10:00"></asp:Label>
                         <asp:Label ID="startPeriodLabel" runat="server" Text="START PERIOD" style="display:none" ToolTip="Select the period that you would like the lecture to start i.e. 2"></asp:Label>
-                        <img id="changeTime" src="images/change.png" style="width:20px; height:20px; margin-left:5px; cursor:pointer"/>
+                        <img id="changeTime" src="/Images/change.png" style="width:20px; height:20px; margin-left:5px; cursor:pointer"/>
                         
                     </td>
                     <td>

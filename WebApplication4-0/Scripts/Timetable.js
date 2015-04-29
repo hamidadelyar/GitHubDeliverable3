@@ -275,7 +275,7 @@ function checkType(type, booking)
     }
     if (type == 3) {
         var data = booking['lectCode'].toUpperCase()
-        if (data.indexOf($('.roomTxt').val()) != -1) {
+        if (data.indexOf($('.roomTxt').val().split(' ')[0]) != -1) {
             return true;
         }
         else {
@@ -345,6 +345,7 @@ function insertData(result)
                             roomSpans += '<span class="roomId">' + roomData + '</span> [' + weekSpan.substring(0, weekSpan.length - 2) + '],<br />';
                         }
                         roomSpans = roomSpans.substring(0, roomSpans.length - 7);
+
                         if(checkType(type, bookings[j]))
                         {
                             $(slot).attr('rowspan', bookings[j]['end'] - bookings[j]['start'] + 1);
