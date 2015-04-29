@@ -315,6 +315,7 @@
     <Content Include="Scripts\Loading.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Timetable.js" />
+    <Content Include="SearchRooms.aspx" />
     <Content Include="Timetable.aspx" />
     <Content Include="ViewRequest.aspx" />
     <Content Include="ViewSwitcher.ascx" />
@@ -470,6 +471,13 @@
     </Compile>
     <Compile Include="RoomsDetails.aspx.designer.cs">
       <DependentUpon>RoomsDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SearchRooms.aspx.cs">
+      <DependentUpon>SearchRooms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SearchRooms.aspx.designer.cs">
+      <DependentUpon>SearchRooms.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

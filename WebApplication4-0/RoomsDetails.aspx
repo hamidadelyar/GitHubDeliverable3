@@ -12,7 +12,25 @@
     <link rel="stylesheet" href="Content/Timetable.css" />
     <script>
         var facs = <%= this.facs %>;
+        var facData = <%= this.facData %>;
         $(document).ready(function(){
+            var cols = 1;
+            var facCells = "";
+            for (var i = 0; i < facData.length; i++) {
+                if (cols == 1) {
+                    facCells += '<tr class="facRw" >'
+                }
+                facCells += '<td><b>'+facData[i]['Facility_Name'].toUpperCase()+'</b></td><td> <span class="line" ></span><span class="circ" id="'+facData[i]['Facility_ID'].toUpperCase()+'"></span></td>'
+                if (cols == 4) {
+                    facCells += '</tr>';
+                    cols = 0;
+                }
+                cols++;
+            }
+            if (facCells.substr(facCells.length - 5) != '<tr/>') {
+                facCells += '</tr>';
+            }
+            $(facCells).insertAfter('.facHd');
             $('.noImg').hide();
             for(var i = 0; i < facs.length; i++)
             {
@@ -92,7 +110,7 @@
         }
         .facChecks
         {
-            width:105%;
+            width:102.5%;
             color:#FFF;
         }
         .subHdr
@@ -142,26 +160,8 @@
         </div>
         <div class="facHolder" >
             <table class="facChecks">
-                <tr>
+                <tr class="facHd">
                     <td class="subHdr" colspan="8"><b>FACILITIES</b></td>
-                </tr>
-                <tr class="facRw">
-                    <td><b>COMPUTER</b></td><td> <span class="line" ></span><span class="circ" id="C"></span></td>
-                    <td><b>MEDIA PLAYER</b></td><td> <span class="line" ></span><span class="circ" id="MP"></span></td>
-                    <td><b>MICROPHONE</b></td><td > <span class="line" ></span><span class="circ" id="RM"></span></td>
-                    <td><b>DATA PROJECTOR</b></td><td> <span class="line" ></span><span class="circ" id="DP"></span></td>
-                </tr>
-                <tr class="facRw">
-                    <td><b>PLASMA SCREEN</b></td><td> <span class="line" ></span><span class="circ" id="PS"></span></td>
-                    <td><b>VISUALISER</b></td><td> <span class="line" ></span><span class="circ" id="V"></span></td>
-                    <td><b>PA</b></td><td> <span class="line" ></span><span class="circ" id="PA"></span></td>
-                    <td><b>DUAL DATA PROJECTION</b></td><td> <span class="line" ></span><span class="circ" id="DDP"></span></td>
-                </tr>
-                <tr class="facRw">
-                    <td><b>WHEELCHAIR</b></td><td> <span class="line" ></span><span class="circ" id="W"></span></td>
-                    <td><b>WHITEBOARD</b></td><td> <span class="line" ></span><span class="circ" id="WB"></span></td>
-                    <td><b>REVIEW</b></td><td> <span class="line" ></span><span class="circ" id="RLC"></span></td>
-                    <td><b>INDUCTION LOOP</b></td><td> <span class="line" ></span><span class="circ" id="I"></span></td>
                 </tr>
             </table>
         </div>

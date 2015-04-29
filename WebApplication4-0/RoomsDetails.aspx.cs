@@ -23,17 +23,19 @@ namespace WebApplication4_0
         public string roomData = "";
         public string modData = "";
         public string lectData = "";
+        public string facData = ""; 
         protected void Page_Load(object sender, EventArgs e)
         {
             if(Request.QueryString["roomCode"] != null)
             {
                 string data = "";
                 string roomCode = Request.QueryString["roomCode"];
-                data = Select("Rooms", "Rooms.Room_ID, Buildings.Building_Name, Rooms.Capacity, Room_Types.Type_Name, Parks.Park_Name", "Rooms.Room_ID = '" + roomCode + "'", "LEFT JOIN Buildings ON Buildings.Building_ID = Rooms.Building_ID LEFT JOIN Parks ON Parks.Park_ID = Buildings.Park_ID LEFT JOIN Room_Types ON Room_Types.Room_Type = Rooms.Room_Type");
-                facs = Select("Room_Facilities", "Facility_ID", "Room_ID = '" + roomCode + "'", "");
+                data = SQLSelect.Select("Rooms", "Rooms.Room_ID, Buildings.Building_Name, Rooms.Capacity, Room_Types.Type_Name, Parks.Park_Name", "Rooms.Room_ID = '" + roomCode + "'", "LEFT JOIN Buildings ON Buildings.Building_ID = Rooms.Building_ID LEFT JOIN Parks ON Parks.Park_ID = Buildings.Park_ID LEFT JOIN Room_Types ON Room_Types.Room_Type = Rooms.Room_Type");
+                facs = SQLSelect.Select("Room_Facilities", "Facility_ID", "Room_ID = '" + roomCode + "'", "");
                 data = data.Replace("\"", "");
                 data = data.Replace("[", "");
                 data = data.Replace("]", "");
+                facData = SQLSelect.Select("Facilities", "Facility_Name, Facility_ID", "1=1", "");
                 string[] fndRooms = data.Split('{');
                 for (int n = 0; n < fndRooms.Length; n++)
                 {
@@ -73,35 +75,6 @@ namespace WebApplication4_0
                     Response.Redirect("SearchRooms.aspx");
                 }
             }
-        }
-        public static string Select(string table, string columns, string where, string leftJoin)
-        {
-            SqlConnection conn;
-            DataTable dt = new DataTable();
-            string result = "";
-            //where "myConnectionString" is the connection string in the web.config file
-            conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
-            conn.Open(); //opening connection with the DB
-            //prepare query
-            string roomQuery = "Select " + columns + " FROM " + table + " " + leftJoin + " WHERE " + where;   //deptName is deptCode for some reason in the DB, vice versa
-            SqlCommand comm = new SqlCommand(roomQuery, conn);  //1st argument is query, 2nd argument is connection with DB
-
-            SqlDataAdapter da = new SqlDataAdapter(comm);
-            da.Fill(dt);
-            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
-            Dictionary<string, object> row;
-            foreach (DataRow dr in dt.Rows)
-            {
-                row = new Dictionary<string, object>();
-                foreach (DataColumn col in dt.Columns)
-                {
-                    row.Add(col.ColumnName, dr[col]);
-                }
-                rows.Add(row);
-            }
-            conn.Close();
-            return result = serializer.Serialize(rows);
         }
     }
 }
