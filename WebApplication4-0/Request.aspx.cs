@@ -39,7 +39,8 @@ namespace WebApplication4_0
             {
                 if (HttpContext.Current.Session == null)
                 {
-                    Redirect("Default.aspx");
+                    //Redirect("Default.aspx");
+                    HttpContext.Current.Response.Redirect("Default.aspx");     
                 }
                 string username = HttpContext.Current.Session["Username"].ToString();
                 string result = comm.ExecuteScalar().ToString();
@@ -75,7 +76,8 @@ namespace WebApplication4_0
             {
                 if (HttpContext.Current.Session == null)
                 {
-                    Redirect("Default.aspx");
+                    //Redirect("Default.aspx");
+                    HttpContext.Current.Response.Redirect("Default.aspx");     
                 }
                 string username = HttpContext.Current.Session["Username"].ToString();
                 string result = comm2.ExecuteScalar().ToString();
@@ -113,7 +115,8 @@ namespace WebApplication4_0
             {
                 if (HttpContext.Current.Session == null)
                 {
-                    Redirect("Default.aspx");
+                    //Redirect("Default.aspx");
+                    HttpContext.Current.Response.Redirect("Default.aspx");     
                 }
                 string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
                 string dep = username.ToLower().Substring(0, 2); //this makes sure only module names from the logged in department come up as autocomplete options
@@ -143,7 +146,8 @@ namespace WebApplication4_0
             {
                 if (HttpContext.Current.Session == null)
                 {
-                    Redirect("Default.aspx");
+                    //Redirect("Default.aspx");
+                    HttpContext.Current.Response.Redirect("Default.aspx");     
                 }
 
                 string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
@@ -176,7 +180,8 @@ namespace WebApplication4_0
             {
                 if (HttpContext.Current.Session == null)
                 {
-                    Redirect("Default.aspx");
+                    //Redirect("Default.aspx");
+                    HttpContext.Current.Response.Redirect("Default.aspx");     
                 }
                 string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
                 string dep = username.ToLower().Substring(0, 2); //this makes sure only module names from the logged in department come up as autocomplete options
@@ -738,13 +743,15 @@ namespace WebApplication4_0
         public static string SubmitRequest(string modname, string modcode, int day, int startTime, int endTime, int numRooms, int roomCap1,
                                             int roomCap2, int roomCap3, int capacity, string lecturerName1, string lecturerName2, string lecturerName3,
                                             string specialR, int priority, string parkID1, string parkID2, string parkID3, string room1, string room2,
-                                            string room3, string buildingID1, string buildingID2, string buildingID3, string roomType1, string roomType2, string roomType3)
+                                            string room3, string buildingID1, string buildingID2, string buildingID3, string roomType1, string roomType2, 
+                                            string roomType3, int defaultWeeks)
         {
        
             SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             if (HttpContext.Current.Session == null)
             {
-                Redirect("Default.aspx");
+                //Redirect("Default.aspx");
+                HttpContext.Current.Response.Redirect("Default.aspx");     
             }
             string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
             string dep = username.ToUpper().Substring(0, 2);
@@ -763,7 +770,7 @@ namespace WebApplication4_0
             //if request is not exactly the same, then is allowed?
             string query = "select Request_ID from [Requests] where Module_Code = '" + modcode + "' and Day = " + day;
             query += " and Start_Time = " + startTime + " and End_Time = " + endTime + " and Semester = " + 1 + " and Year = " + DateTime.Now.Year;
-            query += " and Round = " + 1 + " and Priority = " + 0 + " and Number_Rooms = " + numRooms + " and Number_Students = " + capacity;
+            query += " and Round = " + 1 + " and Priority = " + priority + " and Number_Rooms = " + numRooms + " and Number_Students = " + capacity;
 
             connection.Open(); //opening connection with the DB
             SqlCommand comm = new SqlCommand(query, connection);  //1st argument is query, 2nd argument is connection with DB
@@ -921,7 +928,7 @@ namespace WebApplication4_0
                         cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
                         cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
                         cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
-                        cmd5.Parameters.AddWithValue("@Weeks", 0);
+                        cmd5.Parameters.AddWithValue("@Weeks", defaultWeeks);
                         cmd5.Connection = connection;
                         connection.Open(); //opening connection with the DB
                         cmd5.ExecuteNonQuery();
@@ -939,7 +946,7 @@ namespace WebApplication4_0
                         cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
                         cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
                         cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
-                        cmd5.Parameters.AddWithValue("@Weeks", 0);
+                        cmd5.Parameters.AddWithValue("@Weeks", defaultWeeks);
                         cmd5.Connection = connection;
                         connection.Open(); //opening connection with the DB
                         cmd5.ExecuteNonQuery();
@@ -956,7 +963,7 @@ namespace WebApplication4_0
                         cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
                         cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
                         cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
-                        cmd5.Parameters.AddWithValue("@Weeks", 0);
+                        cmd5.Parameters.AddWithValue("@Weeks", defaultWeeks);
                         cmd5.Connection = connection;
                         connection.Open(); //opening connection with the DB
                         cmd5.ExecuteNonQuery();
@@ -978,7 +985,7 @@ namespace WebApplication4_0
                             cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
                             cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
                             cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd6.Parameters.AddWithValue("@Weeks", 0);
+                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks);
                             cmd6.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd6.ExecuteNonQuery();
@@ -996,7 +1003,7 @@ namespace WebApplication4_0
                             cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
                             cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
                             cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd6.Parameters.AddWithValue("@Weeks", 0);
+                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks);
                             cmd6.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd6.ExecuteNonQuery();
@@ -1013,7 +1020,7 @@ namespace WebApplication4_0
                             cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
                             cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
                             cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd6.Parameters.AddWithValue("@Weeks", 0);
+                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks);
                             cmd6.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd6.ExecuteNonQuery();
@@ -1038,7 +1045,7 @@ namespace WebApplication4_0
                             cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
                             cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
                             cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd7.Parameters.AddWithValue("@Weeks", 0);
+                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks);
                             cmd7.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd7.ExecuteNonQuery();
@@ -1056,7 +1063,7 @@ namespace WebApplication4_0
                             cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
                             cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
                             cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd7.Parameters.AddWithValue("@Weeks", 0);
+                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks);
                             cmd7.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd7.ExecuteNonQuery();
@@ -1073,7 +1080,7 @@ namespace WebApplication4_0
                             cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
                             cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
                             cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd7.Parameters.AddWithValue("@Weeks", 0);
+                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks); //if default weeks, then 1, otherwise 0
                             cmd7.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd7.ExecuteNonQuery();
@@ -1112,7 +1119,8 @@ namespace WebApplication4_0
              string query = "";
              if (HttpContext.Current.Session == null)
              {
-                Redirect("Default.aspx");
+                 //Redirect("Default.aspx");
+                 HttpContext.Current.Response.Redirect("Default.aspx");                    
              }
              string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
              string dep = username.ToUpper().Substring(0, 2);
