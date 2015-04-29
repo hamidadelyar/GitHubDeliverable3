@@ -119,6 +119,7 @@
     <Content Include="Account\OpenAuthProviders.ascx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
+    <Content Include="AddRoom.aspx" />
     <Content Include="AdminFolder\Admin.aspx" />
     <Content Include="AdminFolder\css\AdminStyle.css" />
     <Content Include="AdminFolder\css\reset.css" />
@@ -332,6 +333,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddRoom.aspx.cs">
+      <DependentUpon>AddRoom.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AddRoom.aspx.designer.cs">
+      <DependentUpon>AddRoom.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AdminFolder\Admin.aspx.cs">
       <DependentUpon>Admin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
