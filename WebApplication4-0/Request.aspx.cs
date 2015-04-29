@@ -39,7 +39,8 @@ namespace WebApplication4_0
             {
                 if (HttpContext.Current.Session == null)
                 {
-                    Redirect("Default.aspx");
+                    //Redirect("Default.aspx");
+                    HttpContext.Current.Response.Redirect("Default.aspx");     
                 }
                 string username = HttpContext.Current.Session["Username"].ToString();
                 string result = comm.ExecuteScalar().ToString();
@@ -75,7 +76,8 @@ namespace WebApplication4_0
             {
                 if (HttpContext.Current.Session == null)
                 {
-                    Redirect("Default.aspx");
+                    //Redirect("Default.aspx");
+                    HttpContext.Current.Response.Redirect("Default.aspx");     
                 }
                 string username = HttpContext.Current.Session["Username"].ToString();
                 string result = comm2.ExecuteScalar().ToString();
@@ -113,7 +115,8 @@ namespace WebApplication4_0
             {
                 if (HttpContext.Current.Session == null)
                 {
-                    Redirect("Default.aspx");
+                    //Redirect("Default.aspx");
+                    HttpContext.Current.Response.Redirect("Default.aspx");     
                 }
                 string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
                 string dep = username.ToLower().Substring(0, 2); //this makes sure only module names from the logged in department come up as autocomplete options
@@ -143,7 +146,8 @@ namespace WebApplication4_0
             {
                 if (HttpContext.Current.Session == null)
                 {
-                    Redirect("Default.aspx");
+                    //Redirect("Default.aspx");
+                    HttpContext.Current.Response.Redirect("Default.aspx");     
                 }
 
                 string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
@@ -176,11 +180,12 @@ namespace WebApplication4_0
             {
                 if (HttpContext.Current.Session == null)
                 {
-                    Redirect("Default.aspx");
+                    //Redirect("Default.aspx");
+                    HttpContext.Current.Response.Redirect("Default.aspx");     
                 }
                 string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
                 string dep = username.ToLower().Substring(0, 2); //this makes sure only module names from the logged in department come up as autocomplete options
-                string query = string.Format("select Lecturer_Name, Lecturer_ID from [Lecturers] where Lecturer_ID like '" + dep + "%' AND (Lecturer_ID like '%" + term + "%'" + "or Lecturer_Name Like '%" + term + "%')");
+                string query = string.Format("select Lecturer_Name from [Lecturers] where Lecturer_ID like '" + dep + "%' AND Lecturer_Name Like '%{0}%'", term);
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     con.Open();
@@ -188,8 +193,8 @@ namespace WebApplication4_0
 
                     while (reader.Read())
                     {
-                        retCategory.Add(reader.GetString(0) + " (" + reader.GetString(1) + ")");
-                        
+                        //retCategory.Add(reader.GetString(0) + " (" + reader.GetString(1) + ")");
+                        retCategory.Add(reader.GetString(0));
                     }
                 }
                 con.Close();
@@ -736,18 +741,24 @@ namespace WebApplication4_0
 
          [System.Web.Services.WebMethod]
         public static string SubmitRequest(string modname, string modcode, int day, int startTime, int endTime, int numRooms, int roomCap1,
-                                            int roomCap2, int roomCap3, int capacity, string lecturerName)
+                                            int roomCap2, int roomCap3, int capacity, string lecturerName1, string lecturerName2, string lecturerName3,
+                                            string specialR, int priority, string parkID1, string parkID2, string parkID3, string room1, string room2,
+                                            string room3, string buildingID1, string buildingID2, string buildingID3, string roomType1, string roomType2, 
+                                            string roomType3, int defaultWeeks)
         {
        
             SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             if (HttpContext.Current.Session == null)
             {
-                Redirect("Default.aspx");
+                //Redirect("Default.aspx");
+                HttpContext.Current.Response.Redirect("Default.aspx");     
             }
             string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
             string dep = username.ToUpper().Substring(0, 2);
 
             string lecturerID = "";
+            string lecturer2ID = "";
+            string lecturer3ID = "";
             int requestID = -1;
             bool newRequest = false;
              /*
@@ -759,7 +770,7 @@ namespace WebApplication4_0
             //if request is not exactly the same, then is allowed?
             string query = "select Request_ID from [Requests] where Module_Code = '" + modcode + "' and Day = " + day;
             query += " and Start_Time = " + startTime + " and End_Time = " + endTime + " and Semester = " + 1 + " and Year = " + DateTime.Now.Year;
-            query += " and Round = " + 1 + " and Priority = " + 0 + " and Number_Rooms = " + numRooms + " and Number_Students = " + capacity;
+            query += " and Round = " + 1 + " and Priority = " + priority + " and Number_Rooms = " + numRooms + " and Number_Students = " + capacity;
 
             connection.Open(); //opening connection with the DB
             SqlCommand comm = new SqlCommand(query, connection);  //1st argument is query, 2nd argument is connection with DB
@@ -770,13 +781,13 @@ namespace WebApplication4_0
             }
             connection.Close();
             /*
-             gets Lecturer_ID since we have Lecturer_Name
+             gets Lecturer_ID since we have Lecturer_Name1
                  SqlCommand comm2 = new SqlCommand(query, conn);  //1st argument is query, 2nd argument is connection with DB
                  if (comm2.ExecuteScalar() != null)   //if it does return something
            {
              */
 
-            string query3 = "select Lecturer_ID from [Lecturers] where Lecturer_Name = '" + lecturerName + "'";
+            string query3 = "select Lecturer_ID from [Lecturers] where Lecturer_Name = '" + lecturerName1 + "'";
             connection.Open();
             SqlCommand comm3 = new SqlCommand(query3, connection);  //1st argument is query, 2nd argument is connection with DB
 
@@ -785,6 +796,34 @@ namespace WebApplication4_0
                 lecturerID = comm3.ExecuteScalar().ToString();
             }
             connection.Close();
+
+             /* gets Lecturer_ID for the 2nd lecturer (only if it has been assigned) */
+            if (lecturerName2 != "")
+            {
+                string query5 = "select Lecturer_ID from [Lecturers] where Lecturer_Name = '" + lecturerName2 + "'";
+                connection.Open();
+                SqlCommand comm5 = new SqlCommand(query5, connection);  //1st argument is query, 2nd argument is connection with DB
+
+                if (comm5.ExecuteScalar() != null)  //if it does return something
+                {
+                    lecturer2ID = comm5.ExecuteScalar().ToString();
+                }
+                connection.Close();
+            }
+
+            /* gets Lecturer_ID for the 3rd lecturer (only if it has been assigned) */
+            if (lecturerName3 != "")
+            {
+                string query6 = "select Lecturer_ID from [Lecturers] where Lecturer_Name = '" + lecturerName3 + "'";
+                connection.Open();
+                SqlCommand comm6 = new SqlCommand(query6, connection);  //1st argument is query, 2nd argument is connection with DB
+
+                if (comm6.ExecuteScalar() != null)  //if it does return something
+                {
+                    lecturer3ID = comm6.ExecuteScalar().ToString();
+                }
+                connection.Close();
+            }
 
              /*
               * if the request ID does not already exist then we will now write all info into db.
@@ -812,7 +851,7 @@ namespace WebApplication4_0
                     cmd.Parameters.AddWithValue("@Semester", 1);    //need to write function to work this out
                     cmd.Parameters.AddWithValue("@Year", DateTime.Now.Year);     //year
                     cmd.Parameters.AddWithValue("@Round", 1);       //need to check db to see what round it is
-                    cmd.Parameters.AddWithValue("@Priority", 0);    //
+                    cmd.Parameters.AddWithValue("@Priority", priority);    //
                     cmd.Parameters.AddWithValue("@Number_Rooms", numRooms);
                     cmd.Parameters.AddWithValue("@Number_Students", capacity);
                     cmd.Parameters.AddWithValue("@Dept_ID", dep);
@@ -839,7 +878,217 @@ namespace WebApplication4_0
                         cmd2.Connection = connection;
                         connection.Open(); //opening connection with the DB
                         cmd2.ExecuteNonQuery();
+                        connection.Close();
                     }
+                    /* writes to the [Request_Lecturers] if the Lecturer_ID for 2nd lecturer has been obtained */
+                    if (lecturer2ID != "")
+                    {
+                        string command3 = "insert into [Request_Lecturers] (Request_ID, Lecturer_ID) Values (@Request_ID, @Lecturer_ID)";
+                        SqlCommand cmd3 = new SqlCommand(command3);
+                        cmd3.CommandType = CommandType.Text;
+                        cmd3.Parameters.AddWithValue("@Request_ID", requestID);
+                        cmd3.Parameters.AddWithValue("@Lecturer_ID", lecturer2ID);
+                        cmd3.Connection = connection;
+                        connection.Open(); //opening connection with the DB
+                        cmd3.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    if (lecturer3ID != "")
+                    {
+                        string command4 = "insert into [Request_Lecturers] (Request_ID, Lecturer_ID) Values (@Request_ID, @Lecturer_ID)";
+                        SqlCommand cmd4 = new SqlCommand(command4);
+                        cmd4.CommandType = CommandType.Text;
+                        cmd4.Parameters.AddWithValue("@Request_ID", requestID);
+                        cmd4.Parameters.AddWithValue("@Lecturer_ID", lecturer3ID);
+                        cmd4.Connection = connection;
+                        connection.Open(); //opening connection with the DB
+                        cmd4.ExecuteNonQuery();
+                        connection.Close();
+                    }
+
+                    if (room1 == "" || room1 == "0")
+                    {
+                        room1 = "";
+                    }
+                    if (buildingID1 == "")
+                    {
+                        buildingID1 = "";
+                    }
+                    /* writes to the [Request_Preferences] Table */
+                    //if room and building specified
+                    if (room1 != "" && room1 != "0" && buildingID1 != "0")
+                    {
+                        string command5 = "insert into [Request_Preferences] (Request_ID, Room_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                        SqlCommand cmd5 = new SqlCommand(command5);
+                        cmd5.CommandType = CommandType.Text;
+                        cmd5.Parameters.AddWithValue("@Request_ID", requestID);
+                        cmd5.Parameters.AddWithValue("@Room_ID", room1);
+                        cmd5.Parameters.AddWithValue("@Building_ID", buildingID1);
+                        cmd5.Parameters.AddWithValue("@Room_Type", roomType1);
+                        cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
+                        cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
+                        cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
+                        cmd5.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                        cmd5.Connection = connection;
+                        connection.Open(); //opening connection with the DB
+                        cmd5.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    //if room not specified, but building is
+                    if ((room1 == "" && room1 == "0") && buildingID1 != "0")
+                    {
+                        string command5 = "insert into [Request_Preferences] (Request_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                        SqlCommand cmd5 = new SqlCommand(command5);
+                        cmd5.CommandType = CommandType.Text;
+                        cmd5.Parameters.AddWithValue("@Request_ID", requestID);
+                        cmd5.Parameters.AddWithValue("@Building_ID", buildingID1);
+                        cmd5.Parameters.AddWithValue("@Room_Type", roomType1);
+                        cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
+                        cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
+                        cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
+                        cmd5.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                        cmd5.Connection = connection;
+                        connection.Open(); //opening connection with the DB
+                        cmd5.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    //if neither room or building is specified
+                    if ((room1 == "" || room1 == "0") && buildingID1 == "0")
+                    {
+                        string command5 = "insert into [Request_Preferences] (Request_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                        SqlCommand cmd5 = new SqlCommand(command5);
+                        cmd5.CommandType = CommandType.Text;
+                        cmd5.Parameters.AddWithValue("@Request_ID", requestID);
+                        cmd5.Parameters.AddWithValue("@Room_Type", roomType1);
+                        cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
+                        cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
+                        cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
+                        cmd5.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                        cmd5.Connection = connection;
+                        connection.Open(); //opening connection with the DB
+                        cmd5.ExecuteNonQuery();
+                        connection.Close();
+                    
+                    }
+                    if (numRooms > 1)
+                    {
+                        //if room and building specified
+                        if (room2 != "" && room2 != "0" && buildingID2 != "0")
+                        {
+                            string command6 = "insert into [Request_Preferences] (Request_ID, Room_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd6 = new SqlCommand(command6);
+                            cmd6.CommandType = CommandType.Text;
+                            cmd6.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd6.Parameters.AddWithValue("@Room_ID", room2);
+                            cmd6.Parameters.AddWithValue("@Building_ID", buildingID2);
+                            cmd6.Parameters.AddWithValue("@Room_Type", roomType2);
+                            cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
+                            cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
+                            cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                            cmd6.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd6.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                        //if room not specified, but building is
+                        if ((room2 == "" && room2 == "0") && buildingID2 != "0")
+                        {
+                            string command6 = "insert into [Request_Preferences] (Request_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd6 = new SqlCommand(command6);
+                            cmd6.CommandType = CommandType.Text;
+                            cmd6.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd6.Parameters.AddWithValue("@Building_ID", buildingID2);
+                            cmd6.Parameters.AddWithValue("@Room_Type", roomType2);
+                            cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
+                            cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
+                            cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                            cmd6.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd6.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                        //if neither room or building is specified
+                        if ((room2 == "" || room2 == "0") && buildingID2 == "0")
+                        {
+                            string command6 = "insert into [Request_Preferences] (Request_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd6 = new SqlCommand(command6);
+                            cmd6.CommandType = CommandType.Text;
+                            cmd6.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd6.Parameters.AddWithValue("@Room_Type", roomType2);
+                            cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
+                            cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
+                            cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                            cmd6.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd6.ExecuteNonQuery();
+                            connection.Close();
+
+                        }
+                    }
+
+                    //if 3 rooms selected
+                    if (numRooms > 2)
+                    {
+                        //if room and building specified
+                        if (room3 != "" && room3 != "0" && buildingID3 != "0")
+                        {
+                            string command7 = "insert into [Request_Preferences] (Request_ID, Room_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd7 = new SqlCommand(command7);
+                            cmd7.CommandType = CommandType.Text;
+                            cmd7.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd7.Parameters.AddWithValue("@Room_ID", room3);
+                            cmd7.Parameters.AddWithValue("@Building_ID", buildingID3);
+                            cmd7.Parameters.AddWithValue("@Room_Type", roomType3);
+                            cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
+                            cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
+                            cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                            cmd7.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd7.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                        //if room not specified, but building is
+                        if ((room3 == "" && room3 == "0") && buildingID3 != "0")
+                        {
+                            string command7 = "insert into [Request_Preferences] (Request_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd7 = new SqlCommand(command7);
+                            cmd7.CommandType = CommandType.Text;
+                            cmd7.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd7.Parameters.AddWithValue("@Building_ID", buildingID3);
+                            cmd7.Parameters.AddWithValue("@Room_Type", roomType3);
+                            cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
+                            cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
+                            cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                            cmd7.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd7.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                        //if neither room or building is specified
+                        if ((room3 == "" || room3 == "0") && buildingID3 == "0")
+                        {
+                            string command7 = "insert into [Request_Preferences] (Request_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                            SqlCommand cmd7 = new SqlCommand(command7);
+                            cmd7.CommandType = CommandType.Text;
+                            cmd7.Parameters.AddWithValue("@Request_ID", requestID);
+                            cmd7.Parameters.AddWithValue("@Room_Type", roomType3);
+                            cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
+                            cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
+                            cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
+                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks); //if default weeks, then 1, otherwise 0
+                            cmd7.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmd7.ExecuteNonQuery();
+                            connection.Close();
+
+                        }
+                    }
+
                     
                     
                 }
@@ -870,7 +1119,8 @@ namespace WebApplication4_0
              string query = "";
              if (HttpContext.Current.Session == null)
              {
-                Redirect("Default.aspx");
+                 //Redirect("Default.aspx");
+                 HttpContext.Current.Response.Redirect("Default.aspx");                    
              }
              string username = HttpContext.Current.Session["Username"].ToString();   //retrieves the username from the logged in session, i.e. cord
              string dep = username.ToUpper().Substring(0, 2);

@@ -42,7 +42,7 @@
                 <td colspan="2" ></td>
             </tr>
             <tr>
-                <td class="allWks" ><b>ALL WEEKS</b></td>
+                <td>&nbsp;</td>
                 <td class="days" ><b>MON</b></td>
                 <td class="days" ><b>TUE</b></td>
                 <td class="days" ><b>WED</b></td>

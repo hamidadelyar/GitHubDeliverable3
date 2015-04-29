@@ -567,6 +567,8 @@ td input[type="submit"], td input[type="button"], td button{
   
 }
 
+
+
 #validationContainer{
   /*display:none;*/
   position:fixed;
@@ -585,11 +587,19 @@ td input[type="submit"], td input[type="button"], td button{
   -webkit-box-shadow: 30px 30px 70px black;
 }
 
-table tr td ul li {
+#lecturerRowTable tr td ul li {
 	display:inline-block;
 	vertical-align: top;
 	width: 30%; /*width of each list item*/
     float:left;
+    font-weight:600;
+    color: #86b4cc;
+}
+
+lecturerRowTable{
+    font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+    color: #86b4cc;
+
 }
 
 </style>
@@ -652,6 +662,7 @@ table tr td ul li {
             $('#preferencesButton').click(function () {
                 document.getElementById("modDetails").style.display = "none";
                 document.getElementById("preferenceTable").style.display = "";
+                document.getElementById("lecturerRowTable").style.display = "none";
                 $('#title').html("FACILITY OPTIONS (ROOM 1)");
             });
             $('#preferencesDoneButton, #preferencesDoneButton2, #preferencesDoneButton3').click(function () {
@@ -660,6 +671,7 @@ table tr td ul li {
                 document.getElementById("preferenceTable2").style.display = "none";
                 document.getElementById("preferenceTable3").style.display = "none";
                 $('#title').html("MODULE DETAILS");
+                document.getElementById("lecturerRowTable").style.display = "";
             });
 
             /*
@@ -1363,12 +1375,10 @@ table tr td ul li {
               performs validation before submitting the request, to ensure required fields entered are valid and non empty.
             */
             $('#submitButton').click(function () {
-                var lecturer = $('#lecturerInput').val();
-                var lecturerName = lecturer;
-
-                if (lecturer.indexOf('(') != -1) {
-                    lecturerName = lecturer.substring(0, lecturer.indexOf('('));
-                }
+                var lecturerName = $('#lecturer1').html();
+                //var lecturerName = lecturer;
+                var lecturerName2 = $('#lecturer2').html();
+                var lecturerName3 = $('#lecturer3').html();
 
                 var modcode = $('#modcodeInput').val().toUpperCase();
                 var modname = $('#modnameInput').val();
@@ -1444,15 +1454,110 @@ table tr td ul li {
                     document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "";
                 }
 
-                /* if the lecturer does not match the db */
-                if (validateLecturer() == false) {
+                /* if the lecturers names do not match the db */
+                //if no lecturers added
+                if (numLecturer == 0) {
                     flag = false;
                     showValidation();
-                    $('#errorList').append("<li><b>'Lecturer Name'</b> is incorrect. Please try selecting from the autosuggested list.</li>");
+                    $('#errorList').append("<li>Please assign a <b>'Lecturer'</b> to the module.</li>");
                     document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
                 } else {
                     document.getElementById("MainContent_lecturerLabel").style.borderBottom = "";
                 }
+
+                //Performs validation if 1 lecturer assigned
+                if (numLecturer == 1) {
+                    if (validateLecturer(1) == false) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li><b>'Lecturer Name'</b> is incorrect. Please try selecting from the autosuggested list.</li>");
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                    } else {
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "";
+                    }
+                }
+                //Performs validation if 2 lecturers assigned
+                if (numLecturer == 2) {
+                    if (validateLecturer(1) == false) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li><b>'Lecturer Name'</b> for Lecturer #1 is incorrect. Please try selecting from the autosuggested list.</li>");
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                    } 
+
+                    if (validateLecturer(2) == false) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li><b>'Lecturer Name'</b> for Lecturer #2 is incorrect. Please try selecting from the autosuggested list.</li>");
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                    }
+
+                    if (lecturerName == lecturerName2) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>You cannot assign the Lecturer (" + lecturerName + ")to this module <b>twice</b>. Please correct the error.</li>");
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                    }
+
+                    if (flag != false) {
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "";
+                    }
+                }
+                //Performs validation if 3 lecturers assigned
+                if (numLecturer == 3) {
+                    if (validateLecturer(1) == false) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li><b>'Lecturer Name'</b> for Lecturer #1 is incorrect. Please try selecting from the autosuggested list.</li>");
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                    } 
+
+                    if (validateLecturer(2) == false) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li><b>'Lecturer Name'</b> for Lecturer #2 is incorrect. Please try selecting from the autosuggested list.</li>");
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                    }
+
+                    if (validateLecturer(3) == false) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li><b>'Lecturer Name'</b> for Lecturer #3 is incorrect. Please try selecting from the autosuggested list.</li>");
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                    }
+
+                    if (lecturerName == lecturerName2 && lecturerName != lecturerName3) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>You cannot assign the Lecturer (" + lecturerName + ") to this module <b>twice</b>. Please correct the error.</li>");
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                    }
+                    if (lecturerName == lecturerName3 && lecturerName != lecturerName2) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>You cannot assign the Lecturer (" + lecturerName + ") to this module <b>twice</b>. Please correct the error.</li>");
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                    }
+                    if (lecturerName3 == lecturerName2 && lecturerName3 != lecturerName) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>You cannot assign the Lecturer (" + lecturerName2 + ") to this module <b>twice</b>. Please correct the error.</li>");
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                    }
+                    if (lecturerName == lecturerName2 && lecturerName == lecturerName3) {
+                        flag = false;
+                        showValidation();
+                        $('#errorList').append("<li>You cannot assign the Lecturer (" + lecturerName2 + ") to this module <b>three</b> times. Please correct the error.</li>");
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "3px solid red";
+                    }
+
+                    if (flag != false) {
+                        document.getElementById("MainContent_lecturerLabel").style.borderBottom = "";
+                    }
+                        
+                    
+                }
+               
                 
 
                 /*if the capacity input is empty*/
@@ -1566,7 +1671,15 @@ table tr td ul li {
                     formInputEnabled("false");  //cannot change data once in submission mode
                     showConfirmation(); //brings up confirmation pop up
                     $('#confirmationContents').html(""); //clears previous added content
-                    $('#confirmationContents').append("<strong>Lecturer:</strong> " + lecturerName + "<br />");
+                    if (numLecturer == 1) {
+                        $('#confirmationContents').append("<strong>Lecturer:</strong> " + lecturerName + "<br />");
+                    }
+                    if (numLecturer == 2) {
+                        $('#confirmationContents').append("<strong>Lecturers:</strong> " + lecturerName + ", " + lecturerName2 + "<br />");
+                    }
+                    if (numLecturer == 3) {
+                        $('#confirmationContents').append("<strong>Lecturers:</strong> " + lecturerName + ", " + lecturerName2 + ", " + lecturerName3 + "<br />");
+                    }
                     $('#confirmationContents').append("<strong>Module:</strong> " + modname + " (" + modcode + ")" + "<br />");
                     //$('#confirmationContents').append("<strong>Module Code:</strong> " + modcode + "<br />");
                     $('#confirmationContents').append("<strong>Day:</strong> " + dayString + "<br />");
@@ -1590,7 +1703,7 @@ table tr td ul li {
                             $('#confirmationContents').append("<strong>Room 1:</strong> n/a <br />");
                         }
                         if (document.getElementById('select_room2').value != 0) {    //if a room2 has been chosen
-                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room').value + "<br />");
+                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room2').value + "<br />");
                         } else {
                             $('#confirmationContents').append("<strong>Room 2:</strong> n/a <br />");
                         }
@@ -1603,12 +1716,12 @@ table tr td ul li {
                             $('#confirmationContents').append("<strong>Room 1:</strong> n/a <br />");
                         }
                         if (document.getElementById('select_room2').value != 0) {    //if a room2 has been chosen
-                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room').value + "<br />");
+                            $('#confirmationContents').append("<strong>Room 2:</strong> " + document.getElementById('select_room2').value + "<br />");
                         } else {
                             $('#confirmationContents').append("<strong>Room 2:</strong> n/a <br />");
                         }
-                        if (document.getElementById('select_room3').value != 0) {    //if a room2 has been chosen
-                            $('#confirmationContents').append("<strong>Room 3:</strong> " + document.getElementById('select_room').value + "<br />");
+                        if (document.getElementById('select_room3').value != 0) {    //if a room3 has been chosen
+                            $('#confirmationContents').append("<strong>Room 3:</strong> " + document.getElementById('select_room3').value + "<br />");
                         } else {
                             $('#confirmationContents').append("<strong>Room 3:</strong> n/a <br />");
                         }
@@ -1624,12 +1737,82 @@ table tr td ul li {
             $('#submitRequest').click(function () {
                 closeConfirmation();
                 //variables to send
+                var lecturerName1 = $('#lecturer1').html();
+                var lecturerName2 = $('#lecturer2').html();
+                var lecturerName3 = $('#lecturer3').html();
+                var priority = 0;
+                if (document.getElementById('priorityYes').checked) {
+                    priority = 1;
+                }
 
-                var lecturer = $('#lecturerInput').val();
-                var lecturerName = lecturer;
+                var specialR = $('#specialR').val();
+                var room1 = document.getElementById('select_room').value;
+                var room2 = document.getElementById('select_room2').value;
+                var room3 = document.getElementById('select_room3').value;
+                
+                var parkID1 = "";
+                var parkID2 = "";
+                var parkID3 = "";
+                if (document.getElementById('checkbox_centralPark').checked) {
+                    parkID1 = "C";
+                }
+                if (document.getElementById('checkbox_westPark').checked) {
+                    parkID1 = "W";
+                }
+                if (document.getElementById('checkbox_eastPark').checked) {
+                    parkID1 = "E";
+                }
+                if (document.getElementById('checkbox_centralPark2').checked) {
+                    parkID2 = "C";
+                }
+                if (document.getElementById('checkbox_westPark2').checked) {
+                    parkID2 = "W";
+                }
+                if (document.getElementById('checkbox_eastPark2').checked) {
+                    parkID2 = "E";
+                }
+                if (document.getElementById('checkbox_centralPark3').checked) {
+                    parkID3 = "C";
+                }
+                if (document.getElementById('checkbox_westPark3').checked) {
+                    parkID3 = "W";
+                }
+                if (document.getElementById('checkbox_eastPark3').checked) {
+                    parkID3 = "E";
+                }
+                var buildingID1 = document.getElementById('select_building').value;
+                var buildingID2 = document.getElementById('select_building2').value;
+                var buildingID3 = document.getElementById('select_building3').value;
 
-                if (lecturer.indexOf('(') != -1) {
-                    lecturerName = lecturer.substring(0, lecturer.indexOf('('));
+                roomType1 = "";
+                roomType2 = "";
+                roomType3 = "";
+                if (document.getElementById('checkbox_Lecture').checked) {
+                    roomType1 = "T"
+                }
+                if (document.getElementById('checkbox_Seminar').checked) {
+                    roomType1 = "S"
+                }
+                if (document.getElementById('checkbox_Lab').checked) {
+                    roomType1 = "L"
+                }
+                if (document.getElementById('checkbox_Lecture2').checked) {
+                    roomType2 = "T"
+                }
+                if (document.getElementById('checkbox_Seminar2').checked) {
+                    roomType2 = "S"
+                }
+                if (document.getElementById('checkbox_Lab2').checked) {
+                    roomType2 = "L"
+                }
+                if (document.getElementById('checkbox_Lecture3').checked) {
+                    roomType3 = "T"
+                }
+                if (document.getElementById('checkbox_Seminar3').checked) {
+                    roomType3 = "S"
+                }
+                if (document.getElementById('checkbox_Lab3').checked) {
+                    roomType3 = "L"
                 }
 
                 var modcode = $('#modcodeInput').val().toUpperCase();   //i.e. COA101
@@ -1657,12 +1840,21 @@ table tr td ul li {
                     capacity = +roomCap1 + +roomCap2 + +roomCap3;   //unary plus operator, converts string to number                }
                 }
 
+                var defaultWeeks = 1;
+                if (document.getElementById('defaultWeeksNo').checked) {    //if user selects to check own custom weeks, does not want default weeks
+                    defaultWeeks = 0;
+                }
+                
                 $.ajax({
                     type: "POST",
                     url: "Request.aspx/SubmitRequest",
                     data: JSON.stringify({
                         modname: modname, modcode: modcode, day: day, startTime: startTime, endTime: endTime,
-                        numRooms: numRooms, roomCap1: roomCap1, roomCap2: roomCap2, roomCap3: roomCap3, capacity: capacity, lecturerName: lecturerName
+                        numRooms: numRooms, roomCap1: roomCap1, roomCap2: roomCap2, roomCap3: roomCap3, capacity: capacity,
+                        lecturerName1: lecturerName1, lecturerName2: lecturerName2, lecturerName3: lecturerName3, specialR: specialR,
+                        priority: priority, parkID1: parkID1, parkID2: parkID2, parkID3: parkID3, room1: room1, room2: room2, room3: room3,
+                        buildingID1: buildingID1, buildingID2: buildingID2, buildingID3: buildingID3, roomType1: roomType1, roomType2: roomType2,
+                        roomType3: roomType3, defaultWeeks: defaultWeeks
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -1682,8 +1874,10 @@ table tr td ul li {
                 returns true if a match exists in the db. False otherwise.
             */
             
-            function validateLecturer() {
-                var lecturer = $('#lecturerInput').val();
+            function validateLecturer(number) {
+                //var lecturer = $('#lecturerInput').val();
+                var lecturer = $('#lecturer' + number).html();
+                
                 var lecturerName = lecturer;
                 flag = false;
 
@@ -1730,26 +1924,33 @@ table tr td ul li {
                 document.getElementById('defaultWeeksNo').disabled = status;
                 document.getElementById('submitButton').disabled = status;
                 document.getElementById('preferencesButton').disabled = status;
+
             }
 
-           
            
 
         }); //document.ready closing tag
       
+        var numLecturer = 0;
         function addLecturer(){
             var input = $('#lecturerInput').val();
             if ($('#lecturer1').html() == "") { //if slot empty
                 $('#lecturer1').html(input);
                 $('#lecturer1').show();
+                numLecturer = 1;
+        
             }
             else if ($('#lecturer2').html() == "") {    //if lecturer2 slot empty
                 $('#lecturer2').html(input);
                 $('#lecturer2').show();
+                numLecturer = 2;
+          
             }
             else{    //if lecturer3 slot empty
                 $('#lecturer3').html(input);
                 $('#lecturer3').show();
+                numLecturer = 3;
+              
             }
         }
 
@@ -1757,13 +1958,19 @@ table tr td ul li {
             if ($('#lecturer3').html() != "") { //if slot not empty
                 $('#lecturer3').html("");
                 $('#lecturer3').hide();
+                numLecturer = 2;
+                
             }
             else if ($('#lecturer2').html() != "") { //if slot not empty
                 $('#lecturer2').html("");
                 $('#lecturer2').hide();
+                numLecturer = 1;
+              
             } else {
                 $('#lecturer1').html("");
                 $('#lecturer1').hide();
+                numLecturer = 0;
+               
             }
         }
        
@@ -1835,7 +2042,7 @@ table tr td ul li {
                     <td>
                         <asp:Label ID="startTimeLabel" runat="server" Text="START TIME" ToolTip="Select the time that you would like the lecture to start i.e. 10:00"></asp:Label>
                         <asp:Label ID="startPeriodLabel" runat="server" Text="START PERIOD" style="display:none" ToolTip="Select the period that you would like the lecture to start i.e. 2"></asp:Label>
-                        <img id="changeTime" src="images/change.png" style="width:20px; height:20px; margin-left:5px; cursor:pointer"/>
+                        <img id="changeTime" src="/Images/change.png" style="width:20px; height:20px; margin-left:5px; cursor:pointer"/>
                         
                     </td>
                     <td>
@@ -1928,15 +2135,15 @@ table tr td ul li {
                     </td>
 
                     <td style="width:150%">
-                        <input id="lecturerInput" type="text" style="width:150%; margin-left:0px; margin-bottom:0px" placeholder="e.g. John Smith"/>
+                        <input id="lecturerInput" type="text" style="width:150%; margin-left:0px; " placeholder="e.g. John Smith"/>
                         
                       
                     </td>
 
                     <td>
-                       <img src="Images/AddCircle.png" style="width:30px; height:30px; margin-left:30px; cursor: pointer;" onclick="addLecturer();"/>
+                       <img id="lecturerAdd" src="Images/AddCircle.png" style="width:30px; height:30px; margin-left:30px; cursor: pointer;" onclick="addLecturer();"/>
                         <br />
-                        <img src="Images/MinusCircle.png" style="width:30px; height:30px; margin-left:30px; cursor:pointer;" onclick="removeLecturer();"/>
+                        <img id="lecturerRemove" src="Images/MinusCircle.png" style="width:30px; height:30px; margin-left:30px; cursor:pointer;" onclick="removeLecturer();"/>
                       
                        
                     </td>
@@ -1970,15 +2177,15 @@ table tr td ul li {
                  <td>
                      
                      <div class="divClassCheckbox roomTypeClass">
-                         <input type="checkbox" id="checkbox_Lecture" class="radio" checked /> <!-- all checked by default -->
+                         <input type="radio" id="checkbox_Lecture" name="roomType1" class="radio" checked /> <!-- all checked by default -->
                          <label for="checkbox_Lecture">Lecture</label>
                      </div>
                      <div class="divClassCheckbox roomTypeClass">
-                         <input type="checkbox" id="checkbox_Seminar" class="radio" />
+                         <input type="radio" id="checkbox_Seminar" name="roomType1" class="radio" />
                          <label for="checkbox_Seminar">Seminar</label>
                      </div>
                       <div class="divClassCheckbox roomTypeClass">
-                         <input type="checkbox" id="checkbox_Lab" class="radio" />
+                         <input type="radio" id="checkbox_Lab" name="roomType1" class="radio" />
                          <label for="checkbox_Lab">Lab</label>
                      </div>
                  </td>  
@@ -1989,15 +2196,15 @@ table tr td ul li {
 
                  <td>
                      <div class="divClassCheckbox parkClass">  
-                         <input type="checkbox" name="park" id="checkbox_centralPark" class="radio" checked/>
+                         <input type="radio" name="park1" id="checkbox_centralPark"  class="radio" checked/>
                          <label for="checkbox_centralPark">Central</label>
                      </div>
                      <div class="divClassCheckbox parkClass">  
-                         <input type="checkbox" name="park" id="checkbox_westPark" class="radio" checked/>
+                         <input type="radio" name="park1" id="checkbox_westPark" class="radio"/>
                          <label for="checkbox_westPark">West</label>
                      </div>
                      <div class="divClassCheckbox parkClass">  
-                         <input type="checkbox" name="park" id="checkbox_eastPark" class="radio" checked/>
+                         <input type="radio" name="park1" id="checkbox_eastPark" class="radio"/>
                          <label for="checkbox_eastPark">East</label>
                      </div>
                  </td>
@@ -2058,7 +2265,7 @@ table tr td ul li {
                 </td>
             </tr>
         </table>
-            <table id="lecturerRow" style="width:95%; margin-top:0px; table-layout: fixed; margin-left:2.5%">
+            <table id="lecturerRowTable" style="width:95%; margin-top:0px; table-layout: fixed; margin-left:2.5%; font-weight:100; text-align:center">
                 <tr>
                       <td colspan="3">
                          <ul style="width:100%; padding:0;">
@@ -2067,9 +2274,7 @@ table tr td ul li {
                             <li id="lecturer3" style="display:none"></li>
                         </ul> 
                     </td>
-                    <td colspan="1">
-
-                    </td>
+                   
                 </tr>
             </table>
 
@@ -2089,15 +2294,15 @@ table tr td ul li {
                  <td>
                      
                      <div class="divClassCheckbox roomTypeClass2">
-                         <input type="checkbox" id="checkbox_Lecture2" class="radio" checked /> <!-- all checked by default -->
+                         <input type="radio" id="checkbox_Lecture2" class="radio" name="roomType2" checked /> 
                          <label for="checkbox_Lecture2">Lecture</label>
                      </div>
                      <div class="divClassCheckbox roomTypeClass2">
-                         <input type="checkbox" id="checkbox_Seminar2" class="radio" />
+                         <input type="radio" id="checkbox_Seminar2" name="roomType2" class="radio" />
                          <label for="checkbox_Seminar2">Seminar</label>
                      </div>
                       <div class="divClassCheckbox roomTypeClass2">
-                         <input type="checkbox" id="checkbox_Lab2" class="radio" />
+                         <input type="radio" id="checkbox_Lab2" name="roomType2" class="radio" />
                          <label for="checkbox_Lab2">Lab</label>
                      </div>
                  </td>  
@@ -2108,15 +2313,15 @@ table tr td ul li {
 
                  <td>
                      <div class="divClassCheckbox parkClass2">  
-                         <input type="checkbox" name="park" id="checkbox_centralPark2" class="radio" checked/>
+                         <input type="radio" name="park2" id="checkbox_centralPark2" class="radio" checked/>
                          <label for="checkbox_centralPark2">Central</label>
                      </div>
                      <div class="divClassCheckbox parkClass2">  
-                         <input type="checkbox" name="park" id="checkbox_westPark2" class="radio" checked/>
+                         <input type="radio" name="park2" id="checkbox_westPark2" class="radio"/>
                          <label for="checkbox_westPark2">West</label>
                      </div>
                      <div class="divClassCheckbox parkClass2">  
-                         <input type="checkbox" name="park" id="checkbox_eastPark2" class="radio" checked/>
+                         <input type="radio" name="park2" id="checkbox_eastPark2" class="radio"/>
                          <label for="checkbox_eastPark2">East</label>
                      </div>
                  </td>
@@ -2195,15 +2400,15 @@ table tr td ul li {
                  <td>
                      
                      <div class="divClassCheckbox roomTypeClass3">
-                         <input type="checkbox" id="checkbox_Lecture3" class="radio" checked /> <!-- all checked by default -->
+                         <input type="radio" id="checkbox_Lecture3" name="roomType3" class="radio" checked /> <!-- all checked by default -->
                          <label for="checkbox_Lecture3">Lecture</label>
                      </div>
                      <div class="divClassCheckbox roomTypeClass3">
-                         <input type="checkbox" id="checkbox_Seminar3" class="radio" />
+                         <input type="radio" id="checkbox_Seminar3" name="roomType3" class="radio" />
                          <label for="checkbox_Seminar3">Seminar</label>
                      </div>
                       <div class="divClassCheckbox roomTypeClass3">
-                         <input type="checkbox" id="checkbox_Lab3" class="radio" />
+                         <input type="radio" id="checkbox_Lab3" name="roomType3" class="radio" />
                          <label for="checkbox_Lab3">Lab</label>
                      </div>
                  </td>  
@@ -2214,15 +2419,15 @@ table tr td ul li {
 
                  <td>
                      <div class="divClassCheckbox parkClass3">  
-                         <input type="checkbox" name="park" id="checkbox_centralPark3" class="radio" checked/>
+                         <input type="radio" name="park3" id="checkbox_centralPark3" class="radio" checked/>
                          <label for="checkbox_centralPark3">Central</label>
                      </div>
                      <div class="divClassCheckbox parkClass3">  
-                         <input type="checkbox" name="park" id="checkbox_westPark3" class="radio" checked/>
+                         <input type="radio" name="park3" id="checkbox_westPark3" class="radio" />
                          <label for="checkbox_westPark3">West</label>
                      </div>
                      <div class="divClassCheckbox parkClass3">  
-                         <input type="checkbox" name="park" id="checkbox_eastPark3" class="radio" checked/>
+                         <input type="radio" name="park3" id="checkbox_eastPark3" class="radio" />
                          <label for="checkbox_eastPark3">East</label>
                      </div>
                  </td>
@@ -2913,7 +3118,7 @@ table tr td ul li {
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <textarea style="max-height:100px; max-width:92%; min-width:40%; color: black; position:relative; text-align:center;"  wrap="soft" placeholder="Please enter any 'Special Requirements' here."></textarea>
+                        <textarea id="specialR"style="max-height:100px; max-width:92%; min-width:40%; color: black; position:relative; text-align:center;"  wrap="soft" placeholder="Please enter any 'Special Requirements' here."></textarea>
                     </td>
                 </tr>
                 <tr>

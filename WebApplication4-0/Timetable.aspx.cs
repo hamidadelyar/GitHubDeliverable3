@@ -30,128 +30,136 @@ namespace WebApplication4_0
                 code = Request.QueryString["roomCode"]; // sets the value of code to the roomCode sent. This will be used in jQuery to set as a value in the room search textbox and for data submital on load so the loaded timetable appears in RoomsDetails.aspx
             }
         }
-        [System.Web.Services.WebMethod] // sets up a function as web method so that it can be called by ajax
-        public static string SearchRoom(string search, int week, int semester, int type)
+        [System.Web.Services.WebMethod]
+        public static string SearchAll(string search, int semester, int type)
         {
-            string modSel = "";
-            string retData = "";
+            string weekData = "";
             string searchColumn = "";
-            if(type == 1) // if type is set to 1 this indicates the user is searching rooms
+            List<List<string>> retData = new List<List<String>>();
+            List<Modules> modList = new List<Modules>();
+
+            if (type == 1) // if type is set to 1 this indicates the user is searching rooms
             {
-                searchColumn =  " AND Request_Preferences.Room_ID = '" + search + "'"; // sets the searchColumn to search for rooms matching the search
+                searchColumn = "AND Request_Preferences.Request_ID IN (SELECT Request_ID FROM Request_Preferences WHERE Request_Preferences.Room_ID = '" + search + "')"; // sets the searchColumn to search for modules in rooms matching the search
             }
             else if (type == 2) // if type is set to 2 this indicates the user is searching modules
             {
                 search = search.Substring(0, search.IndexOf(' ')); // strips the search to only contain the module code not the title too
-                searchColumn =  " AND Requests.Module_Code = '" + search + "'"; // sets the searchColumn to search for modules matching the search
+                searchColumn = " AND Requests.Module_Code = '" + search + "'"; // sets the searchColumn to search for modules matching the search
             }
             else
             {
                 search = search.Substring(0, search.IndexOf(' ')); // strips the search to only contain the lecturer id not their name too
-                searchColumn = "AND Request_Lecturers.Lecturer_ID = '" + search + "'"; // sets the searchColumn to search for lecturers matching the search
+                searchColumn = "AND Request_Preferences.Request_ID IN (SELECT Request_ID FROM Request_Lecturers WHERE Request_Lecturers.Lecturer_ID = '" + search + "')"; // sets the searchColumn to search for lecturers matching the search
             }
-            for (int i = 1; i < 10; i++) // loop to go through all the periods
+            string where = "Bookings.Confirmed = 'Allocated' " + searchColumn + " AND Requests.Semester = " + semester; // sets the where to find all bookings that have their booking request set to allocated and match the time and date of this search
+            string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Lecturers ON Lecturers.Lecturer_ID = Request_Lecturers.Lecturer_ID"; // sets the left join to include all the tables needed for the search
+            retData = SQLSelect.SelectList("Requests", "DISTINCT Requests.Module_Code, Requests.Start_Time, Requests.End_Time, Request_Preferences.Room_ID, Request_Preferences.Weeks, Request_Weeks.Week_ID, Request_Lecturers.Lecturer_ID, Lecturers.Lecturer_Name, Requests.Day, Modules.Module_Title", where, leftJoin); // runs select to get the details of matching bookings         
+            int lastNum = -1;
+            for(int j = 0; j < retData.Count; j++)
             {
-                for (int j = 1; j < 6; j++) // loop to go through all the days
+                for (int i = 1; i < 16; i++)
                 {
-                    if (week < 13) // check to see whether it is worth searching for default week set bookings
+                    if(i < 13)
                     {
-                        string where = "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + searchColumn + " AND Requests.Semester = " + semester + " AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true')"; // sets the where to find all bookings that have their booking request set to allocated and match the time and date of this search and have default weeks
-                        string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID"; // sets the left join to include all the tables needed for the search
-                        retData = SQLSelect.Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time, Request_Preferences.Room_ID", where, leftJoin); // runs select to get the details of matching bookings                 
-                    }
-                    else
-                    {
-                        retData = "[]"; // sets the search result to blank
-                    }
-                    if (retData == "[]") // if the select returned nothing
-                    {
-                        string where = "Bookings.Confirmed = 'Allocated' AND Requests.Start_Time = " + i + " AND Requests.Day = " + j + searchColumn + " AND Requests.Semester = " + semester + " AND Request_Weeks.Week_ID = " + week; // sets the where to find all bookings that have their booking request set to allocated and match the time, date and weeks of this search
-                        string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID"; // sets the left join to include all the tables needed for the search same as above left join but includes week table
-                        retData = SQLSelect.Select("Requests", "Requests.Module_Code, Modules.Module_Title, Requests.Request_ID, Requests.Start_Time, Requests.End_Time, Request_Preferences.Room_ID", where, leftJoin); // runs select to get the details of matching bookings
-                        if (retData != "[]") // if the select result was non empty
+                        if (retData[j][4] == "True")
                         {
-                            retData = retData.Substring(1, retData.Length - 2); // strips first and last character of the select result
-                            string reqID = getValue(retData, 2); // calls get value which splits the data to an array and returns the second element of the sub array found in the element requested
-                            string lecData = SQLSelect.Select("Lecturers", "Lecturer_Name, Lecturers.Lecturer_ID", "Request_Lecturers.Request_ID = " + reqID, "LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID"); // selects the details of the lecturer timetabled for the module
-                            
-                            //this block removes uneenede symbols from lecData
-                            lecData = lecData.Replace("[", "");
-                            lecData = lecData.Replace("]", "");
-                            lecData = lecData.Replace("},", "");
-                            lecData = lecData.Replace("}", "");
-                            lecData = lecData.Replace("\"", "");
-
-                            string[] lecArr = lecData.Split('{'); // splits the lecturer data into arrays to account for modules with multiple lecturers
-                            string lecNames = "";
-                            string lecID = "";
-                            for(int k = 0; k < lecArr.Length; k++) // loops through all the arrays of lecturers
+                            if (modList.Count == 0)
                             {
-                                if (lecArr[k] != "") // checks if they arent blank to avoid out of range exception
+                                Modules newMod = new Modules(retData[j][0], retData[j][1], retData[j][2], retData[j][3], i, retData[j][6], retData[j][7], retData[j][8], retData[j][9]);
+                                modList.Add(newMod);
+                            }
+                            else
+                            {
+                                for (int k = 0; k < modList.Count; k++)
                                 {
-                                    List<string> tmp = lecArr[k].Split(',').ToList<string>(); // splits the lecturer array on comma into two with the first being the lec name and second lec id
-                                    List<string> tmp2 = tmp[0].Split(':').ToList<string>(); // splits the string of lec name in two to remove "Lecturer_Name"
-                                    List<string> tmp3 = tmp[1].Split(':').ToList<string>(); // splits the string of lec name in two to remove "Lecturer_Name"
-                                    lecNames += tmp2[1] + ", "; // adds the lecturers name and a comma to end
-                                    lecID += tmp3[1] + ", "; // adds the lecturers id and comma to end
+                                    if (modList[k].modCode == retData[j][0] && modList[k].start == retData[j][1] && modList[k].end == retData[j][2] && modList[k].roomCode == retData[j][3] && modList[k].lectCode == retData[j][6])
+                                    {
+                                        if(lastNum != i)
+                                        {
+                                            modList[k].addWeek(i);
+                                            lastNum = i;
+                                        }
+                                        break;
+                                    }
+                                    else if (k == modList.Count - 1)
+                                    {
+                                        Modules newMod = new Modules(retData[j][0], retData[j][1], retData[j][2], retData[j][3], i, retData[j][6], retData[j][7], retData[j][8], retData[j][9]);
+                                        modList.Add(newMod);
+                                        break;
+                                    }
                                 }
                             }
-                            String lecDets = "\"Lecturer_Name\":\"" + lecNames.Substring(0, lecNames.Length - 2) + "\",\"Lecturer_ID\":\"" + lecID.Substring(0, lecID.Length - 2) + "\""; // creates a new JSON compatible string with all the lect ids and lect names
-                            string[] modDataNotLect = retData.Split('{'); // splits retData into array as with multiple lects the string is duplicated e.g {bookingData},{bookingData} for as nany times as there are lects
-                            modDataNotLect[1] = modDataNotLect[1].Replace("},", ""); // selects the second element as first is blank and replaces the splitting comma at end as }, appears if more than one lect. Put blank in so concats with lecDets in JSON format
-                            modDataNotLect[1] = modDataNotLect[1].Replace("}", ""); // selects the second element as first is blankand replaces the end } with blank so that it concats with lecDets in JSON format
-                            string fullData = "[{" + modDataNotLect[1] + "," + lecDets + "}]"; // concats the two sets of data into JSON format for jquery use on main page
-                            modSel += "," + fullData; // concats to modSel
+                        }
+                    }
+                    if (retData[j][4] == "False")
+                    {
+                        if (modList.Count == 0)
+                        {
+                            Modules newMod = new Modules(retData[j][0], retData[j][1], retData[j][2], retData[j][3], i, retData[j][6], retData[j][7], retData[j][8], retData[j][9]);
+                            modList.Add(newMod);
                         }
                         else
                         {
-                            modSel += "," + "[{}]"; // concats empty to modSel if none found
-                        }
-                    }
-                    else
-                    {
-                        retData = retData.Substring(1, retData.Length - 2); // strips first and last character of the select result
-                        string reqID = getValue(retData, 2); // calls get value which splits the data to an array and returns the second element of the sub array found in the element requested
-                        string lecData = SQLSelect.Select("Lecturers", "Lecturer_Name, Lecturers.Lecturer_ID", "Request_Lecturers.Request_ID = " + reqID, "LEFT JOIN Request_Lecturers ON Request_Lecturers.Lecturer_ID = Lecturers.Lecturer_ID"); // selects the details of the lecturer timetabled for the module
-
-                        //this block removes uneenede symbols from lecData
-                        lecData = lecData.Replace("[", "");
-                        lecData = lecData.Replace("]", "");
-                        lecData = lecData.Replace("},", "");
-                        lecData = lecData.Replace("}", "");
-                        lecData = lecData.Replace("\"", "");
-
-                        string[] lecArr = lecData.Split('{'); // splits the lecturer data into arrays to account for modules with multiple lecturers
-                        string lecNames = "";
-                        string lecID = "";
-                        for (int k = 0; k < lecArr.Length; k++) // loops through all the arrays of lecturers
-                        {
-                            if (lecArr[k] != "") // checks if they arent blank to avoid out of range exception
+                            for (int k = 0; k < modList.Count; k++)
                             {
-                                List<string> tmp = lecArr[k].Split(',').ToList<string>(); // splits the lecturer array on comma into two with the first being the lec name and second lec id
-                                List<string> tmp2 = tmp[0].Split(':').ToList<string>(); // splits the string of lec name in two to remove "Lecturer_Name"
-                                List<string> tmp3 = tmp[1].Split(':').ToList<string>(); // splits the string of lec name in two to remove "Lecturer_Name"
-                                lecNames += tmp2[1] + ", "; // adds the lecturers name and a comma to end
-                                lecID += tmp3[1] + ", "; // adds the lecturers id and comma to end
+                                if (modList[k].modCode == retData[j][0] && modList[k].start == retData[j][1] && modList[k].end == retData[j][2] && modList[k].roomCode == retData[j][3] && retData[j][5] == i.ToString() && modList[k].lectCode == retData[j][6])
+                                {
+                                    if (lastNum != i)
+                                    {
+                                        modList[k].addWeek(i);
+                                        lastNum = i;
+                                    }
+                                    break;
+                                }
+                                else if (k == modList.Count - 1 && retData[j][5] == i.ToString())
+                                {
+                                    Modules newMod = new Modules(retData[j][0], retData[j][1], retData[j][2], retData[j][3], i, retData[j][6], retData[j][7], retData[j][8], retData[j][9]);
+                                    modList.Add(newMod);
+                                    break;
+                                }
                             }
                         }
-                        String lecDets = "\"Lecturer_Name\":\"" + lecNames.Substring(0, lecNames.Length - 2) + "\",\"Lecturer_ID\":\"" + lecID.Substring(0, lecID.Length - 2) + "\""; // creates a new JSON compatible string with all the lect ids and lect names
-                        string[] modDataNotLect = retData.Split('{'); // splits retData into array as with multiple lects the string is duplicated e.g {bookingData},{bookingData} for as nany times as there are lects
-                        modDataNotLect[1] = modDataNotLect[1].Replace("},", ""); // selects the second element as first is blank and replaces the splitting comma at end as }, appears if more than one lect. Put blank in so concats with lecDets in JSON format
-                        modDataNotLect[1] = modDataNotLect[1].Replace("}", ""); // selects the second element as first is blankand replaces the end } with blank so that it concats with lecDets in JSON format
-                        string fullData = "[{" + modDataNotLect[1] + "," + lecDets + "}]"; // concats the two sets of data into JSON format for jquery use on main page
-                        modSel += "," + fullData; // concats to modSel
                     }
                 }
+                lastNum = -1;
             }
-            modSel = modSel.Remove(0,1); // removes the comma at the start to keep in JSON format
-            return "[" + modSel + "]"; // adds square brackets for JSON purposes
+            return new JavaScriptSerializer().Serialize(modList);
         }
         public static string getValue(string variable, int i)
         {
             List<string> newList = variable.Split(',').ToList<string>(); // splits into array on comma
             List<string> elList = newList[i].Split(':').ToList<string>(); // splits desired element into array on colon
             return elList[1]; // returns text after colon in desired element
+        }
+    }
+    public class Modules
+    {
+        public string modCode = "";
+        public string modName = "";
+        public string start = "";
+        public string end = "";
+        public string roomCode = "";
+        public List<int> week = new List<int>();
+        public string lectCode = "";
+        public string lectName = "";
+        public string day = "";
+        public Modules(string modCode, string start, string end, string roomCode, int week, string lectCode, string lectName, string day, string modName)
+        {
+            this.modCode = modCode;
+            this.start = start;
+            this.end = end;
+            this.roomCode = roomCode;
+            this.week.Add(week);
+            this.lectCode = lectCode;
+            this.lectName = lectName;
+            this.day = day;
+            this.modName = modName;
+        }
+
+        public void addWeek(int i)
+        {
+            week.Add(i);
         }
     }
     public class SQLSelect
@@ -188,6 +196,33 @@ namespace WebApplication4_0
             }
             conn.Close();
             return result = serializer.Serialize(rows); // turns the list returned into a JSON array
+        }
+
+        public static List<List<string>> SelectList(string table, string columns, string where, string leftJoin)
+        {
+            SqlConnection conn;
+            List<List<string>> result = new List<List<string>>();
+            //where "myConnectionString" is the connection string in the web.config file
+            conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+            conn.Open(); //opening connection with the DB
+            //prepare query
+            string roomQuery = "Select " + columns + " FROM " + table + " " + leftJoin + " WHERE " + where;   //produces a select statement from the parameters passed to the function
+            System.Diagnostics.Debug.WriteLine(roomQuery);
+            SqlCommand comm = new SqlCommand(roomQuery, conn);  //1st argument is query, 2nd argument is connection with DB
+            SqlDataReader reader = comm.ExecuteReader();
+            while (reader.Read())
+            {
+                List<string> rowData = new List<string>();
+                // Iterate over each of the fields (columns) in the datareader's current record
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    String value = reader[i].ToString();
+                    rowData.Add(value);
+                }
+                result.Add(rowData);
+            }
+            conn.Close();//Close the connection
+            return result;
         }
     }
 }
