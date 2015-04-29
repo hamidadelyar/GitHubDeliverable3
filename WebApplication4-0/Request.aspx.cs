@@ -744,9 +744,12 @@ namespace WebApplication4_0
                                             int roomCap2, int roomCap3, int capacity, string lecturerName1, string lecturerName2, string lecturerName3,
                                             string specialR, int priority, string parkID1, string parkID2, string parkID3, string room1, string room2,
                                             string room3, string buildingID1, string buildingID2, string buildingID3, string roomType1, string roomType2, 
-                                            string roomType3, int defaultWeeks, int[] weeks)
+                                            string roomType3, int defaultWeeks, int[] weeks, bool comp, bool comp2, bool comp3, bool ddp, bool ddp2, bool ddp3,
+                                            bool dp, bool dp2, bool dp3, bool il, bool il2, bool il3, bool mp, bool mp2, bool mp3, bool pa, bool pa2, bool pa3,
+                                            bool plasma, bool plasma2, bool plasma3, bool rev, bool rev2, bool rev3, bool mic, bool mic2, bool mic3,
+                                            bool vis, bool vis2, bool vis3, bool wc, bool wc2, bool wc3, bool wb, bool wb2, bool wb3)
         {
-       
+   
             SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             if (HttpContext.Current.Session == null)
             {
@@ -1172,7 +1175,107 @@ namespace WebApplication4_0
                         }
 
                     }
-         
+
+                    /*
+    comp: comp, ddp: ddp, dp: dp, il: il, mp: mp, pa: pa, plasma: plasma, rev: rev, mic: mic, vis: vis, wc: wc, wb: wb,
+    */
+                    /*
+                     * 
+                      <-- WRITES TO THE [REQUEST_FACILITIES] TABLE --> 
+                     * 
+                     */
+                    string roomFacilityQuery1 = "";
+                    if(comp == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'C') ";
+                    if (ddp == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'DDP') ";
+                    if (dp == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'DP') ";
+                    if (il == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'I') ";
+                    if (mp == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'MP') ";
+                    if (pa == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'PA') ";
+                    if (plasma == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'PS') ";
+                    if (rev == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'RLC') ";
+                    if (mic == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'RM') ";
+                    if (vis == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'V') ";
+                    if (wc == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'W') ";
+                    if (wb == true)
+                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'WB') ";
+
+                    if (numRooms > 1)
+                    {
+                        if (comp2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'C') ";
+                        if (ddp2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'DDP') ";
+                        if (dp2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'DP') ";
+                        if (il2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'I') ";
+                        if (mp2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'MP') ";
+                        if (pa2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'PA') ";
+                        if (plasma2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'PS') ";
+                        if (rev2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'RLC') ";
+                        if (mic2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'RM') ";
+                        if (vis2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'V') ";
+                        if (wc2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'W') ";
+                        if (wb2 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID2 + ", 'WB') ";
+                    }
+                    if (numRooms > 2)
+                    {
+                        if (comp3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'C') ";
+                        if (ddp3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'DDP') ";
+                        if (dp3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'DP') ";
+                        if (il3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'I') ";
+                        if (mp3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'MP') ";
+                        if (pa3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'PA') ";
+                        if (plasma3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'PS') ";
+                        if (rev3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'RLC') ";
+                        if (mic3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'RM') ";
+                        if (vis3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'V') ";
+                        if (wc3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'W') ";
+                        if (wb3 == true)
+                            roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID3 + ", 'WB') ";
+                    }
+
+                    //if query is not empty then carry it out
+                    if (roomFacilityQuery1 != "")
+                    {
+                            SqlCommand cmdF = new SqlCommand(roomFacilityQuery1);
+                            cmdF.CommandType = CommandType.Text;
+                            cmdF.Connection = connection;
+                            connection.Open(); //opening connection with the DB
+                            cmdF.ExecuteNonQuery();
+                            connection.Close();
+                    }
+
                     
                 }
 
