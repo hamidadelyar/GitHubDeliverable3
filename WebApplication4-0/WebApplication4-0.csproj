@@ -194,6 +194,7 @@
     <Content Include="Images\accent.png" />
     <Content Include="Images\AddCircle.png" />
     <Content Include="Images\bullet.png" />
+    <Content Include="Images\change.png" />
     <Content Include="Images\heroAccent.png" />
     <Content Include="Images\MinusCircle.png" />
     <Content Include="Images\orderedList0.png" />

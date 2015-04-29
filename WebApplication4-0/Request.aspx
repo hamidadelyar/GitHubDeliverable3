@@ -593,11 +593,13 @@ td input[type="submit"], td input[type="button"], td button{
 	width: 30%; /*width of each list item*/
     float:left;
     font-weight:600;
+    color: #86b4cc;
 }
 
 lecturerRowTable{
     font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
     color: #86b4cc;
+
 }
 
 </style>
@@ -1838,6 +1840,11 @@ lecturerRowTable{
                     capacity = +roomCap1 + +roomCap2 + +roomCap3;   //unary plus operator, converts string to number                }
                 }
 
+                var defaultWeeks = 1;
+                if (document.getElementById('defaultWeeksNo').checked) {    //if user selects to check own custom weeks, does not want default weeks
+                    defaultWeeks = 0;
+                }
+                
                 $.ajax({
                     type: "POST",
                     url: "Request.aspx/SubmitRequest",
@@ -1847,7 +1854,7 @@ lecturerRowTable{
                         lecturerName1: lecturerName1, lecturerName2: lecturerName2, lecturerName3: lecturerName3, specialR: specialR,
                         priority: priority, parkID1: parkID1, parkID2: parkID2, parkID3: parkID3, room1: room1, room2: room2, room3: room3,
                         buildingID1: buildingID1, buildingID2: buildingID2, buildingID3: buildingID3, roomType1: roomType1, roomType2: roomType2,
-                        roomType3: roomType3
+                        roomType3: roomType3, defaultWeeks: defaultWeeks
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -2035,7 +2042,7 @@ lecturerRowTable{
                     <td>
                         <asp:Label ID="startTimeLabel" runat="server" Text="START TIME" ToolTip="Select the time that you would like the lecture to start i.e. 10:00"></asp:Label>
                         <asp:Label ID="startPeriodLabel" runat="server" Text="START PERIOD" style="display:none" ToolTip="Select the period that you would like the lecture to start i.e. 2"></asp:Label>
-                        <img id="changeTime" src="images/change.png" style="width:20px; height:20px; margin-left:5px; cursor:pointer"/>
+                        <img id="changeTime" src="/Images/change.png" style="width:20px; height:20px; margin-left:5px; cursor:pointer"/>
                         
                     </td>
                     <td>
