@@ -4,6 +4,12 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
+    <script>var roomsArray = <%= this.roomData %>;</script>
+    <script>var modsArray = <%= this.modData %>;</script>
+    <script>var lectsArray = <%= this.lectData %>;</script>
+    <script src="Scripts/Loading.js" type="text/javascript" ></script>
+    <script src="Scripts/Timetable.js" type="text/javascript" ></script>
+    <link rel="stylesheet" href="Content/Timetable.css" />
     <script>
         var facs = <%= this.facs %>;
         $(document).ready(function(){
@@ -21,6 +27,10 @@
             $('.noImg img').show();
             return true;
         }
+        function scrollFrame()
+        {
+
+        }
     </script>
     <style>
         .dataHolder
@@ -31,7 +41,6 @@
             padding:2.5%;
             border-radius:10px;
             background-color:#FFF;
-            min-width:800px;
             height:173px;
         }
         .dataHolder img
@@ -119,21 +128,6 @@
             left:-7px;
             background-color:#FF8060;
         }
-        .timeHolder
-        {
-            margin-top:50px;
-            width:100%;
-            height:600px;
-            overflow:hidden;
-            min-width:800px;
-        }
-        .timetbl
-        {
-            width:1024px;
-            height:768px;
-            border:0;
-            margin-left:-37px;
-        }
     </style>
         <div class="dataHolder" >
             <img src="Images/Room Pictures/<%= this.img %>.jpg" onerror="imgError(this)"/>
@@ -171,7 +165,124 @@
                 </tr>
             </table>
         </div>
-        <div class="timeHolder" >
-            <iframe class="timetbl" id="ab" onload="document.getElementById('ab').contentWindow.scrollTo(0, 174)" scrolling="no" src="Timetable.aspx?roomCode=<%= this.code %>"></iframe>
+        <div class="timetblHolder" >
+        <table class="timetbl">
+            <tr>
+                <td colspan="2" class="nonSelect" ><span class="leftWk weekBtn"></span></td>
+                <td colspan="2" class="select" ><b class="centWk"></b></td>
+                <td colspan="2" class="nonSelect" ><span class="rightWk weekBtn"></span></td>
+            </tr>
+            <tr class="weeksRw">
+                <td colspan="2" ></td>
+                <td colspan="2" >
+                    <table class="weeksTbl">
+                        <tr>
+                            <td><span class="weekBtn" >1</span></td><td><span class="weekBtn" >2</span></td><td><span class="weekBtn" >3</span></td><td><span class="weekBtn" >4</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="weekBtn" >5</span></td><td><span class="weekBtn" >6</span></td><td><span class="weekBtn" >7</span></td><td><span class="weekBtn" >8</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="weekBtn" >9</span></td><td><span class="weekBtn" >10</span></td><td><span class="weekBtn" >11</span></td><td><span class="weekBtn" >12</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="weekBtn" >13</span></td><td><span class="weekBtn" >14</span></td><td><span class="weekBtn" >15</span></td><td></td>
+                        </tr>
+                    </table>
+                </td>
+                <td colspan="2" ></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td class="days" ><b>MON</b></td>
+                <td class="days" ><b>TUE</b></td>
+                <td class="days" ><b>WED</b></td>
+                <td class="days" ><b>THUR</b></td>
+                <td class="days" ><b>FRI</b></td>
+            </tr>
+            <tr>
+                <td class="btmBdr rightBdr" >09:00</td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
+            </tr>
+            <tr>
+                <td class="btmBdr rightBdr" >10:00</td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
+            </tr>
+            <tr>
+                <td class="btmBdr rightBdr" >11:00</td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
+            </tr>
+            <tr>
+                <td class="btmBdr rightBdr" >12:00</td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
+            </tr>
+            <tr>
+                <td class="btmBdr rightBdr" >13:00</td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
+            </tr>
+            <tr>
+                <td class="btmBdr rightBdr" >14:00</td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
+            </tr>
+            <tr>
+                <td class="btmBdr rightBdr" >15:00</td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr slot" ></td>
+            </tr>
+            <tr>
+                <td class="btmBdr rightBdr" >16:00</td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr slot" ></td>
+                <td class="btmBdr rightBdr" ></td>
+                <td class="btmBdr slot" ></td>
+            </tr>
+            <tr>
+                <td class="rightBdr" >17:00</td>
+                <td class="rightBdr slot" ></td>
+                <td class="rightBdr slot" ></td>
+                <td class="rightBdr slot" ></td>
+                <td class="rightBdr slot" ></td>
+                <td></td>
+            </tr>
+        </table>
+        <div class="greyOut" ><img src="Images/Loading.png" width="70" height="70" /></div>
+    </div>
+    <div class="toolsHolder" >
+        <div class="hdr" ><b>TOOLS</b></div>
+        <div class="options" ><span class="roomChoice choice" >ROOM</span> | <span class="modChoice choice" >MODULE</span> | <span class="lectChoice choice" >LECTURER</span></div>
+        <div class="rooms" ><b>ROOM</b><br /><input style="text-transform:uppercase" autocomplete="off" type="text" class="roomTxt" id="roomTxt" name="roomTxt" value="<%= this.code %>" /><img id="clearImg" src="Images/clear.png" width="23" height="15" /></div>
+        <div class="suggest" >
+            <table class="suggestTbl">
+            </table>
         </div>
+        <div class="semesters" ><b>SEMESTERS</b><br /><span class="semOne semBtn" >ONE</span><span class="splitter" ></span><span class="semTwo semBtn" >TWO</span></div>
+    </div>
 </asp:Content>
