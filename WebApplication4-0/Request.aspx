@@ -1627,8 +1627,8 @@ lecturerRowTable{
                     Check if any weeks have been selected when user selects to choose his/her own weeks.
                 */
          
-                var weeks = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-                var weekChecked = 15; //15 weeks checked automatically
+                var weeks = [1,2,3,4,5,6,7,8,9,10,11,12];
+                var weekChecked = 12; //12 weeks checked automatically
 
                 if (document.getElementById('defaultWeeksNo').checked == true) {    //if user has selected to choose own weeks
                     //check to see if any weeks have been selected.
@@ -1745,6 +1745,25 @@ lecturerRowTable{
                     priority = 1;
                 }
 
+                var weeks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                var weekChecked = 12; //12 weeks checked automatically
+
+                if (document.getElementById('defaultWeeksNo').checked == true) {    //if user has selected to choose own weeks
+                    //check to see if any weeks have been selected.
+                    weeks = []; //sets the weeks array to empty, so can add the specific weeks user chooses.
+                    var weekChecked = 0;
+                    for (i = 1; i < 16; i++) {
+                        if (document.getElementById('week' + i).checked == true) {
+                            weekChecked = weekChecked + 1; //if at least 1 week has been checked, then weekChecked set to true
+                            weeks.push(i); //corresponding week number will be added to the array if it has been checked
+                            /*
+                              If at least 1 week has been checked, then checked weeks set to true.
+                              Otherwise, no weeks have been selected. User must be notified.
+                          */
+                        }
+                    }
+                }
+
                 var specialR = $('#specialR').val();
                 var room1 = document.getElementById('select_room').value;
                 var room2 = document.getElementById('select_room2').value;
@@ -1753,6 +1772,7 @@ lecturerRowTable{
                 var parkID1 = "";
                 var parkID2 = "";
                 var parkID3 = "";
+
                 if (document.getElementById('checkbox_centralPark').checked) {
                     parkID1 = "C";
                 }
@@ -1830,7 +1850,7 @@ lecturerRowTable{
                 var roomCap1 = $('#capacityInput').val();
                 var roomCap2 = $('#capacityInput2').val();
                 var roomCap3 = $('#capacityInput3').val();
-                //var weeks array is an array containing the weeks selected. Declared later on.
+               
                 var capacity = +roomCap1;
 
                 if (numRooms == 2) {
@@ -1854,7 +1874,7 @@ lecturerRowTable{
                         lecturerName1: lecturerName1, lecturerName2: lecturerName2, lecturerName3: lecturerName3, specialR: specialR,
                         priority: priority, parkID1: parkID1, parkID2: parkID2, parkID3: parkID3, room1: room1, room2: room2, room3: room3,
                         buildingID1: buildingID1, buildingID2: buildingID2, buildingID3: buildingID3, roomType1: roomType1, roomType2: roomType2,
-                        roomType3: roomType3, defaultWeeks: defaultWeeks
+                        roomType3: roomType3, defaultWeeks: defaultWeeks, weeks: weeks
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
