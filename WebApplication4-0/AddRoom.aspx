@@ -18,6 +18,7 @@
         var type = "";
         $(document).ready(function () {
             $('.addEdit').hide();
+            $('.buildHolder').hide();
             var cols = 1;
             var facCells = "";
             for(var i = 0; i < facs.length; i++)
@@ -86,7 +87,11 @@
             }
             else if(!hasCode())
             {
-                $('.roomTit').html('<b>ROOM CODE</b><span class="alert" >&nbsp;Your room code must contain a valid building code at the start. <a href="AddBuilding" >Add building</a></span>')
+                $('.roomTit').html('<b>ROOM CODE</b><span class="alert" >&nbsp;Your room code must contain a valid building code at the start. <span class="addBuild" >Add building</span></span>')
+                $('.addBuild').click(function(){
+                    $('.buildHolder').show();
+                    $('.roomHolder').hide();
+                });
             }
             else
             {
@@ -153,10 +158,37 @@
             }
             return false;
         }
+        function validateBuilding()
+        {
+            var buildCode = $('.codeTxt').val().toUpperCase();
+            var buildName = $('.nameTxt').val().toUpperCase();
+            for(var i = 0; i < buildings.length; i++)
+            {
+                if(buildings[i]['Building_ID'] == buildCode)
+                {
+                    $('.codeTit').html('<b>BUILDING CODE</b><span class="alert" >&nbsp;Code already exists</span>');
+                }
+                if(buildings[i]['Building_Name'].toUpperCase() == buildName)
+                {
+                    $('.nameTit').html('<b>BUILDING CODE</b><span class="alert" >&nbsp;Name already exists</span>');
+                }
+            }
+        }
         function isNumberKey(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode
             if (charCode > 31 && (charCode < 48 || charCode > 57))
                 return false;
+            return true;
+        }
+        function isLetterKey(evt, t) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if(charCode < 65 /* a */ || charCode > 90 /* z */) {
+                if((charCode > 96 && charCode < 123))
+                {
+                    return true;
+                }
+                return false;
+            }
             return true;
         }
     </script>
@@ -199,25 +231,16 @@
             margin-top:10px;
             color:#FFD800;
         }
-        .alert a:active
+        .addBuild
         {
             color:#FFD800;
             text-decoration:underline;
+            cursor:pointer;
         }
-        .alert a:hover
+        .addBuild:hover
         {
             text-decoration:none!important;
             background-color:#3E454D!important;
-        }
-        .alert a:visited
-        {
-            color:#FFD800;
-            text-decoration:underline;
-        }
-        .alert a:link
-        {
-            color:#FFD800;
-            text-decoration:underline;
         }
         .spc
         {
@@ -313,6 +336,15 @@
         {
             text-transform:uppercase;
         }
+        .codetxt
+        {
+            text-transform:uppercase;
+        }
+        .nameTxt
+        {
+            text-transform:capitalize;
+            width:400px!important;
+        }
         .buildTxt
         {
             background-color:#55595E!important;
@@ -400,6 +432,25 @@
             </tr>
             <tr>
                 <td colspan="8"><span class="clearAllBtn" onclick="location.reload()"><b>CLEAR ALL</b></span><span class="searchBtn" onclick="validateRoomCode()"><b>NEXT</b></span></td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolsHolder buildHolder" >
+        <div class="hdr" ><b>ADD A BUILDING</b></div>
+        <table class="facChecks" >
+            <tr>
+                <td class="subHdr codeTit" id="buildCode" colspan="3"><b>BUILDING CODE</b><span class="alert" ></span></td>
+                <td class="subHdr nameTit" id="buildName" colspan="5"><b>BUILDING NAME</b><span class="alert" ></span></td>
+            </tr>
+            <tr class="roomRw">
+                <td colspan="3"><input type="text" class="inp codeTxt" id="codeTxt" onkeypress="return isLetterKey(event)" onkeyup="this.value = this.value.toUpperCase();" /></td>
+                <td colspan="5"><input type="text" class="inp nameTxt" id="nameTxt" /></td>
+            </tr>
+            <tr>
+                <td colspan="8" class="spc"></td>
+            </tr>
+            <tr>
+                <td colspan="8"><span class="searchBtn" onclick="validateBuilding()"><b>ADD</b></span></td>
             </tr>
         </table>
     </div>
