@@ -140,7 +140,7 @@
                     <asp:Repeater ID="Repeater1" runat="server" DataSourceID="SqlDataSource1">
                         <ItemTemplate>
                             <tr>
-                                <td><%#Eval("Title") %></td><td><%#Eval("postDate") %></td><td><input type="button" ID="respond<%#Eval("announcementID") %>" Value="Respond" onclick = "document.getElementById('light<%#Eval("announcementID") %>').style.display='block';document.getElementById('fade').style.display='block'" /></td>
+                                <td><%#Eval("Title") %></td><td><%#Eval("postDate") %></td><td><input type="button" ID="respond<%#Eval("announcementID") %>" Value="View" onclick = "document.getElementById('light<%#Eval("announcementID") %>').style.display='block';document.getElementById('fade').style.display='block'" /></td>
                             </tr>
                         </ItemTemplate>
                     </asp:Repeater>
