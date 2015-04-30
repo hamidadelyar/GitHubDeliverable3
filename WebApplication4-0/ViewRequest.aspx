@@ -38,6 +38,13 @@
         $("#requestTable").tablesorter({ sortList: [[0, 0], [1, 0]] });
     }
 );
+
+    function deleteRow(x)
+    {
+        var row = document.getElementById(x);
+        row.parentNode.removeChild(row);
+        _doPostBack('OnClick', 'button_ID');
+    }
 </script>
 
 </asp:Content>

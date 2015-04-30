@@ -36,7 +36,7 @@ namespace WebApplication4_0
                 }
             }*/
 
-            string[] cols = { "Request No.", "Module Code", "Day", "Start Time", "End Time", "Semester", "Year", "Round", "Priority", "No. of Rooms", "No. of Students", "Status" };
+            string[] cols = { "Request No.", "Module Code", "Day", "Start Time", "End Time", "Semester", "Year", "Round", "Priority", "No. of Rooms", "No. of Students", "Status", "Delete Row" };
             //DataTable dt = GetData("Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students", "Requests", "" );
 
             StringBuilder html = new StringBuilder();
@@ -117,7 +117,7 @@ namespace WebApplication4_0
             html.Append("<tbody>");
             for(int i=0;i<rows.Count;i++)
             {
-                html.Append("<tr>");
+                html.Append("<tr id='" + i + "'>");
                 for (int j = 0; j <= 11; j++)
                 {
                     switch(j)
@@ -188,7 +188,11 @@ namespace WebApplication4_0
                                         break;
                                     }
                     }
+
                 }
+                html.Append("<td>");
+                html.Append("<asp:Button runat='server' Text='Delete' OnClientClick='deleteRow(" + i + ")' OnClick='deleteRowClick()' visible=true></asp:Button>");
+                html.Append("</td>");
                 html.Append("</tr>");
             }
             html.Append("</tbody>");
@@ -243,6 +247,27 @@ namespace WebApplication4_0
             throw new NotImplementedException();
         }
         */
+
+        public void Delete(string id)
+        {
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+            string sql = "DELETE FROM Bookings, Requests WHERE Request_ID ='" + id + "'";
+
+            conn.Open();
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+        }
+       
+        protected void ButtonNew_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            string buttonID = button.ID;
+
+            Delete(buttonID);
+        }
+
         public DataTable GetData(string select, string from, string where)
         {
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
