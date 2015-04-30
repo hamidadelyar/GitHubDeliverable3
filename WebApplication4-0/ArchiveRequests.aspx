@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Previous Requests" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PreviousRequest.aspx.cs" Inherits="WebApplication4_0.PreviousRequest" %>
+﻿<%@ Page Title="Previous Requests" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ArchiveRequest.aspx.cs" Inherits="WebApplication4_0.PreviousRequest" %>
 
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
 
