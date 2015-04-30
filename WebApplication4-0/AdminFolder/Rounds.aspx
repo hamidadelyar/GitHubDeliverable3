@@ -25,9 +25,15 @@
         margin-left:5%;
     }
 
+    #leftDiv{
+        float:left;
+        margin-left:5%;
+    }
+
     #buttonsDiv{
         float:right;
         margin-right:5%;
+        margin-top:23px;
     }
 
         .black_overlay{
@@ -62,69 +68,110 @@
 </style>
 
 <div class="contentHolder">
+    
 
-    <h1 align="center">Rounds</h1>
+    <div id="leftDiv">
+        <h1 style="margin-top:23px;">Current Round: 3, Semester 2 2014/2015</h1>
+    </div>
     <div id="buttonsDiv">
+         <input type="button" ID="endRound" Value="End Current Round" />
          <input type="button" ID="addRound" Value="Add New Round" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
+         
 
     </div>
 
+    <asp:SqlDataSource ID="SqlDataSource3" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+        SelectCommand="SELECT * FROM [Announcements]">
 
+    </asp:SqlDataSource>
 
     <div id="light" class="white_content">
         <h1>New Round</h1>
         Round Number: <br />
         <asp:TextBox id="TextBox1" runat="server" /><br />
-        Start Date: <br />
+        Academic Year: <br />
         <asp:TextBox id="TextBox2" runat="server" /><br />
-        End Date: <br />
-        <asp:TextBox id="TextBox3" runat="server" />
+        Semester: <br />
+        <asp:TextBox id="TextBox3" runat="server" /><br />
+
 
         <br />
-        <asp:Button ID="Button1" runat="server" Text="Save"  /> 
+        <asp:Button ID="Button1" runat="server" Text="Save" OnClick="NewRound" /> 
         <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'" />
 
     </div>
     <div id="fade" class="black_overlay">
     </div>
 
+    <script runat="server">
+        private void NewRound (object source, EventArgs e) {
+          SqlDataSource2.Insert();
+        }
+    </script>
 
+    <asp:SqlDataSource 
+        ID="SqlDataSource2" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+        SelectCommand="SELECT DISTINCT [Year], [Semester] FROM [Rounds]"        
+        InsertCommand="INSERT INTO [Rounds] ([Year],[Semester],[Round_Name],[Start_Date],[End_Date],[Status]) VALUES (@yearDB,@semesterDB,@RoundDB,GETDATE(),'','closed')">
+            <InsertParameters>
+                <asp:ControlParameter name="RoundDB" ControlId="TextBox1" PropertyName="Text" />
+                <asp:ControlParameter name="yearDB" ControlId="TextBox2" PropertyName="Text" />
+                <asp:ControlParameter name="semesterDB" ControlId="TextBox3" PropertyName="Text" />
+            </InsertParameters>
+    </asp:SqlDataSource>
+    <asp:Repeater 
+        ID="Repeater1" 
+        runat="server" 
+        DataSourceID="SqlDataSource2">
 
+        <ItemTemplate>
 
-    <div class="semesterHeader" >
-        <h2 class="white">Semester 2 - 2014/2015</h2> 
-    </div>
+            <div class="semesterHeader" >
+                <h2 class="white">Semester <%#Eval("Semester") %> - <%#Eval("Year") %></h2> 
+            </div>
 
-    <table class="roundInfoTable">
-        <tr>
-            <th>Round No</th><th>Start Date</th><th>End Date</th>
-        </tr>
-        <tr>
-            <td>1</td><td>12/02/2015</td><td>13/03/2015</td><td>Edit</td><td>Remove</td>
-        </tr>
-        <tr>
-            <td>2</td><td>15/03/2015</td><td>20/04/2015</td><td>Edit</td><td>Remove</td>
-        </tr>
-        <tr>
-            <td>3</td><td>22/04/2015</td><td>09/05/2015</td><td>Edit</td><td>Remove</td>
-        </tr>
-    </table>
+            <table class="roundInfoTable">
+                <tr>
+                    <th>Round No</th><th>Start Date</th><th>End Date</th>
+                </tr>
+                <tr>
+                    <td>1</td><td>12/10/2014</td><td>12/11/2014</td><td>Edit</td><td>Remove</td>
+                </tr>
+                <tr>
+                    <td>2</td><td>14/11/2014</td><td>21/12/2014</td><td>Edit</td><td>Remove</td>
+                </tr>
+            </table>
 
-    <div class="semesterHeader" >
-        <h2 class="white">Semester 1 - 2014/2015</h2> 
-    </div>
+        </ItemTemplate>
 
-    <table class="roundInfoTable">
-        <tr>
-            <th>Round No</th><th>Start Date</th><th>End Date</th>
-        </tr>
-        <tr>
-            <td>1</td><td>12/10/2014</td><td>12/11/2014</td><td>Edit</td><td>Remove</td>
-        </tr>
-        <tr>
-            <td>2</td><td>14/11/2014</td><td>21/12/2014</td><td>Edit</td><td>Remove</td>
-        </tr>
-    </table>
+    </asp:Repeater>
+
+    <asp:SqlDataSource 
+        ID="SqlDataSource1" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+        SelectCommand="SELECT * FROM [Rounds]">
+
+    </asp:SqlDataSource>
+    <asp:GridView 
+        ID="GridView1" 
+        runat="server" 
+        AutoGenerateColumns="False" 
+        DataSourceID="SqlDataSource1">
+        <Columns>
+            <asp:BoundField DataField="RoundID" HeaderText="RoundID" InsertVisible="False" ReadOnly="True" SortExpression="RoundID" />
+            <asp:BoundField DataField="Year" HeaderText="Year" SortExpression="Year" />
+            <asp:BoundField DataField="Semester" HeaderText="Semester" SortExpression="Semester" />
+            <asp:BoundField DataField="Round_Name" HeaderText="Round_Name" SortExpression="Round_Name" />
+            <asp:BoundField DataField="Start_Date" HeaderText="Start_Date" SortExpression="Start_Date" />
+            <asp:BoundField DataField="End_Date" HeaderText="End_Date" SortExpression="End_Date" />
+            <asp:BoundField DataField="Status" HeaderText="Status" SortExpression="Status" />
+        </Columns>
+    </asp:GridView>
 
 </div> 
 
