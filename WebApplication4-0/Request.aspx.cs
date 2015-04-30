@@ -1296,6 +1296,7 @@ namespace WebApplication4_0
                     }
 
 
+               
                     /* 
                      * -- FINALLY, WRITES TO BOOKING TABLE -- 
                      *  If the request, requests a departmental room, then booking is allocated straight away
@@ -1303,17 +1304,21 @@ namespace WebApplication4_0
                      *  only set to allocated if all rooms requested are private rooms.
                      */
                     bool pool = true; //set to false by default, it is not a pool room, changed if not
+                    
+                   
                     //only carried out if room1 has been specified
                     if (room1 != "")
                     {
+                        bool result1 = true;
                         //finds whether the room requested is a pool room or not, if not pool room, then it is a private room, for a specific department
                         string poolQuery1 = "select Pool from [Rooms] where Room_ID = '" + room1 + "'";
                         connection.Open();
-                        SqlCommand getPool1 = new SqlCommand(poolQuery1, connection);  //gets Pool - 0 if private room, 1 if is a pool room
-                        string result1 = "";
-                        result1 = getPool1.ExecuteScalar().ToString();
+                        SqlCommand getPool1 = new SqlCommand(poolQuery1, connection);  //gets Pool - false if private room, true if is a pool room
+                        //getPool1.ExecuteScalar();
+                        result1 = Convert.ToBoolean(getPool1.ExecuteScalar());
+                        
                         connection.Close();
-                        if (result1 == "0")
+                        if (result1 == false)
                         {
                             pool = false;
                         }
@@ -1336,24 +1341,25 @@ namespace WebApplication4_0
                         }
                       
                     }
+
                  
                     if (numRooms > 1)
                     {
                         if (pool == false)  //only carried out if 1st room is private
                         {
                             //only carried out if room2 has been specified
-                            string result2 = "";
+                            bool result2 = true;
                             if (room2 != "")
                             {
                                 string poolQuery2 = "select Pool from [Rooms] where Room_ID = '" + room2 + "'";
                                 connection.Open();
-                                SqlCommand getPool2 = new SqlCommand(poolQuery2, connection);  //gets Pool - 0 if private room, 1 if is a pool room
-                                result2 = getPool2.ExecuteScalar().ToString();
+                                SqlCommand getPool2 = new SqlCommand(poolQuery2, connection);  //gets Pool - 0 (false) if private room, 1 (true) if is a pool room
+                                result2 = Convert.ToBoolean(getPool2.ExecuteScalar().ToString());
                                 connection.Close();
                             }
                       
 
-                            if (result2 == "0")
+                            if (result2 == false)
                             {
                                 pool = false;
                             }
@@ -1386,19 +1392,19 @@ namespace WebApplication4_0
                     {
                         if (pool == false)  //only carried out if 1st and 2nd room are private rooms
                         {
-                            string result3 = "";
+                            bool result3 = true;
                             //only carried out if room3 is specified
                             if (room3 != "")
                             {
                                 string poolQuery3 = "select Pool from [Rooms] where Room_ID = '" + room3 + "'";
                                 connection.Open();
-                                SqlCommand getPool3 = new SqlCommand(poolQuery3, connection);  //gets Pool - 0 if private room, 1 if is a pool room
-                                result3 = getPool3.ExecuteScalar().ToString();
+                                SqlCommand getPool3 = new SqlCommand(poolQuery3, connection);  //gets Pool - 0 (false) if private room, 1 (true) if is a pool room
+                                result3 = Convert.ToBoolean(getPool3.ExecuteScalar().ToString());
                                 connection.Close();
                             }
                    
 
-                            if (result3 == "0")
+                            if (result3 == false)
                             {
                                 pool = false;
                             }
