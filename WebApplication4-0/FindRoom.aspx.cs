@@ -14,9 +14,10 @@ namespace WebApplication4_0
 {
     public partial class FindRoom : System.Web.UI.Page
     {
+        public string tblFacs = "";
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            tblFacs = SQLSelect.Select("Facilities", "Facility_Name", "1=1", "");
         }
         [System.Web.Services.WebMethod]
         public static string SearchRooms(string parks, string semester,  string weeks, string periods, string students, string facs, string roomType) //Accepts all the data needed to outline what type and time of room the user needs
@@ -271,7 +272,12 @@ namespace WebApplication4_0
             string retRooms;
             string where;
             string leftJoin;
-            List<string> facilities = new List<string>() { "C", "MP", "RM", "DP", "PS", "V", "PA", "DDP", "W", "WB", "RLC", "I" }; // creates an array of facility ids in the same order they are shown in the tools so that the 0s and 1s in reqFacs match the order
+            List<string> facilities = new List<string>(); 
+            List<List<string>> facList = SQLSelect.SelectList("Facilities", "Facility_ID", "1=1", ""); // selects all the facility IDs from the DB 
+            for(int i = 0; i < facList.Count; i++)
+            {
+                facilities.Add(facList[i][0]); // loops through the facs found earlier and adds the ID to the list of facilities for use later
+            }
             int numRequests = 0; // set the int to store the number of facilities requested
             if (facs.Contains("1")) // if there is at least 1 facility requested
             {

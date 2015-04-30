@@ -178,6 +178,7 @@ namespace WebApplication4_0
             conn.Open(); //opening connection with the DB
             //prepare query
             string roomQuery = "Select " + columns + " FROM " + table + " " + leftJoin + " WHERE " + where;   //produces a select statement from the parameters passed to the function
+            System.Diagnostics.Debug.WriteLine(roomQuery);
             SqlCommand comm = new SqlCommand(roomQuery, conn);  //1st argument is query, 2nd argument is connection with DB
 
             SqlDataAdapter da = new SqlDataAdapter(comm);
