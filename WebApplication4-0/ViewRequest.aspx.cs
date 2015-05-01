@@ -191,7 +191,8 @@ namespace WebApplication4_0
 
                 }
                 html.Append("<td>");
-                html.Append("<asp:Button runat='server' Text='Delete' OnClientClick='deleteRow(" + i + ")' OnClick='deleteRowClick()' visible=true></asp:Button>");
+                html.Append("<input type='button' value='Delete' onclick=\"deleteRow('" + i + "')\"/>");
+                html.Append("<asp:Button runat='server' id='button" + i + "' Text='Delete' OnClick='deleteRow_Click()' />");
                 html.Append("</td>");
                 html.Append("</tr>");
             }
@@ -260,7 +261,7 @@ namespace WebApplication4_0
             conn.Dispose();
         }
        
-        protected void ButtonNew_Click(object sender, EventArgs e)
+        protected void deleteRow_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
             string buttonID = button.ID;
@@ -356,13 +357,17 @@ namespace WebApplication4_0
                     case 4: this.day = "Thursday"; break;
                     case 5: this.day = "Friday"; break;
                 }
-                if(start >= 9 && start <= 12)
+                switch(start)
                 {
-                    this.start = start + "am";
-                }
-                else
-                {
-                    this.start = start + "pm";
+                    case 1: this.start = "9am"; break;
+                    case 2: this.start = "10am"; break;
+                    case 3: this.start = "11am"; break;
+                    case 4: this.start = "12am"; break;
+                    case 5: this.start = "1pm"; break;
+                    case 6: this.start = "2pm"; break;
+                    case 7: this.start = "3pm"; break;
+                    case 8: this.start = "4pm"; break;
+                    case 9: this.start = "5pm"; break;
                 }
                 /*if(this.start < 12)
                 {
@@ -370,13 +375,18 @@ namespace WebApplication4_0
                     //this.start = start.ToString();
                     s = s ="pm";
                 }*/
-                if (end >= 10 && end <= 12)
+                switch (end)
                 {
-                    this.end = end + "am";
-                }
-                else
-                {
-                    this.end = end + "pm";
+                    case 1: this.end = "9am"; break;
+                    case 2: this.end = "10am"; break;
+                    case 3: this.end = "11am"; break;
+                    case 4: this.end = "12am"; break;
+                    case 5: this.end = "1pm"; break;
+                    case 6: this.end = "2pm"; break;
+                    case 7: this.end = "3pm"; break;
+                    case 8: this.end = "4pm"; break;
+                    case 9: this.end = "5pm"; break;
+                    case 10: this.end = "6pm"; break;
                 }
                 if(semester == true)
                 {
