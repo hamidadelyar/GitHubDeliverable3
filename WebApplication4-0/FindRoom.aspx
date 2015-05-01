@@ -11,6 +11,8 @@
         var semSet = 0;
         var showing = false;
         var facs = <%= this.tblFacs %>;
+        var department = <%= this.department %>;
+        department = department[0]['Dept_ID'];
         $(document).ready(function () {
             var cols = 1;
             var facCells = "";
@@ -400,7 +402,7 @@
             $.ajax({
                 type: "POST",
                 url: "FindRoom.aspx/SearchRooms",
-                data: JSON.stringify({ parks: parks, semester: semSet, weeks: weeks, periods: periods, students:students, facs:facs, roomType: typeSet}),
+                data: JSON.stringify({ parks: parks, semester: semSet, weeks: weeks, periods: periods, students:students, facs:facs, roomType: typeSet, department: department}),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
