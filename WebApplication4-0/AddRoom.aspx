@@ -286,6 +286,7 @@
                     success: function (result) {
                         if(result.d)
                         {
+                            alert("Room added.")
                             window.location.reload();
                         }
                         else
