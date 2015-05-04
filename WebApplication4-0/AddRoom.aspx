@@ -286,6 +286,7 @@
                     success: function (result) {
                         if(result.d)
                         {
+                            alert("Room added.")
                             window.location.reload();
                         }
                         else
@@ -793,7 +794,7 @@
                         <td class="subHdr buildTit" id="build" colspan="8"><b>BUILDING</b></td>
                     </tr>
                     <tr class="buildRw">
-                        <td colspan="8"><input type="text" class="inp buildTxt" id="buildTxt" /><span class="buildRes" ></span></td>
+                        <td colspan="8"><input type="text" readonly="readonly" class="inp buildTxt" id="buildTxt" /><span class="buildRes" ></span></td>
                     </tr>
                     <tr>
                         <td colspan="8" class="spc"></td>

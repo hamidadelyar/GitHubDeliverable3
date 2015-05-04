@@ -2267,9 +2267,9 @@ lecturerRowTable{
                     </td>
 
                     <td>
-                       <img id="lecturerAdd" src="Images/AddCircle.png" style="width:30px; height:30px; margin-left:30px; cursor: pointer;" onclick="addLecturer();"/>
+                       <img id="lecturerAdd" src="Images/add.png" style="width:30px; height:30px; margin-left:30px; cursor: pointer;" onclick="addLecturer();"/>
                         <br />
-                        <img id="lecturerRemove" src="Images/MinusCircle.png" style="width:30px; height:30px; margin-left:30px; cursor:pointer;" onclick="removeLecturer();"/>
+                        <img id="lecturerRemove" src="Images/minus.png" style="width:30px; height:30px; margin-left:30px; cursor:pointer;" onclick="removeLecturer();"/>
                       
                        
                     </td>

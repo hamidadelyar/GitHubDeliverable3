@@ -1,0 +1,251 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EditModule.aspx.cs" Inherits="WebApplication4_0.EditModule" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
+    <script>
+        var modules = <%= this.modules %>;
+        var currModule = <%= this.module %>;
+        var modCode = "";
+        var modTitle = "";
+        $(document).ready(function(){
+
+            var exists = false;
+            if(currModule.length == 0)
+            {
+                alert('Entered module doesn\'t exist. Add it by going to AddModule.aspx')
+                window.location.href = "Modules"
+            }
+            else
+            {
+                modCode = currModule[0]['Module_Code'];
+                modTitle = currModule[0]['Module_Title'];
+                $('.codeTxt').val(modCode);
+                $('.nameTxt').val(modTitle);
+            }
+        });
+        function validate()
+        {
+            var failed = false;
+            var exists = false;
+            for(var i = 0; i < modules.length; i++)
+            {
+                if($('.codeTxt').val() == modules[i]['Module_Code'])
+                {
+                    exists = true;
+                    break;
+                }
+            }
+            if(exists)
+            {
+                $('.codeTit').html('<b>MODULE CODE</b><span class="alert" ></span>');
+            }
+            else
+            {
+                failed = true;
+                $('.codeTit').html('<b>MODULE CODE</b><span class="alert" >This is not an existing module code.</span>');
+            }
+            if($('.nameTxt').val().trim() == "")
+            {
+                $('.nameTit').html('<b>MODULE NAME</b><span class="alert" >&nbsp;You must input a module name.</span>');
+                failed = true;
+            }
+            else
+            {
+                $('.nameTit').html('<b>MODULE NAME</b><span class="alert" ></span>');
+            }
+            if(!failed)
+            {
+                addRoom();
+            }
+        }
+        String.prototype.Capitalise = function()
+        { 
+            return this.toLowerCase().replace(/^.|\s\S/g, function(a) { return a.toUpperCase(); });
+        }
+        function addRoom()
+        {
+            $.ajax({
+                type: "POST",
+                url: "EditModule.aspx/UpdateModule",
+                data: JSON.stringify({ modCode: $('.codeTxt').val().toUpperCase().trim(),  modName: $('.nameTxt').val().Capitalise().trim()}),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("An error occurred. Please try again.");
+                    window.location.reload();
+                },
+                success: function (result) {
+                    alert("Module updated.");
+                    window.location.href = "Modules";
+                }
+            });
+        }
+        function maskInp(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            var codeTxt = $('.codeTxt').val();
+            if(codeTxt.length == 0 && (charCode == department.charCodeAt(0) || charCode == department.toLowerCase().charCodeAt(0)))
+            {
+                $('.codeTxt').val().toUpperCase();
+                return true
+            }
+            else if(codeTxt.length == 1 && (charCode == department.charCodeAt(1) || charCode == department.toLowerCase().charCodeAt(1)))
+            {
+                $('.codeTxt').val().toUpperCase();
+                return true
+            }
+            else if(codeTxt.length == 2)
+            {
+                if(charCode < 65 /* a */ || charCode > 90 /* z */) {
+                    if((charCode > 96 && charCode < 123))
+                    {
+                        $('.codeTxt').val().toUpperCase();
+                        return true;
+                    }
+                }
+            }
+            else if(codeTxt.length == 3 || codeTxt.length == 4 || codeTxt.length == 5)
+            {
+                if (charCode <= 31 || (charCode >= 48 && charCode <= 57))
+                    return true;
+            }
+            else if(codeTxt.length == 6 && (charCode == 109 || charCode == 77))
+            {
+                return true;
+            }
+            else if(codeTxt.length == 7 && (charCode == 101 || charCode == 69))
+            {
+                return true;
+            }
+            else if(codeTxt.length == 8 && (charCode == 116 || charCode == 84))
+            {
+                return true;
+            }
+            else if(codeTxt.length == 9 && (charCode == 97 || charCode == 65))
+            {
+                return true;
+            }
+            return false;
+        }
+    </script>
+    <style>
+        .toolsHolder
+        {
+            color:#FFF!important;
+            margin-top:50px;
+            width:95%;
+            border-radius:10px;
+            background-color:#3E454D;
+            padding:2.5%;
+        }
+        .hdr
+        {
+            margin-top:10px;
+            font-size:1.4em;
+            color:#FFF;
+            float:left;
+            text-align:center;
+            width:95%;
+            margin-left:2.5%;
+        }
+        .alert
+        {
+            margin-top:10px;
+            color:#FFD800;
+        }
+        .searchBtn:hover
+        {
+            background-color:#FF8060;
+        }
+        .searchBtn
+        {
+            margin-top:10px;
+            line-height:40px;
+            width:100px;
+            background-color:#2B3036;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            float:right;
+            margin-right:6.66%;
+        }
+        .clearAllBtn
+        {
+            margin-top:10px;
+            line-height:40px;
+            width:100px;
+            background-color:#2B3036;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            float:left;
+        }
+        .clearAllBtn:hover
+        {
+            background-color:#FF8060;
+        }
+        .spc
+        {
+            height:15px;
+        }
+        .smlSpc
+        {
+            height:5px;
+        }
+        .subHdr
+        {
+            color:#FF8060;
+            font-size:1.2em;
+            padding-top:15px;
+        }
+        .inp
+        {
+            line-height:17.5px;
+            width:200px;
+            background-color:#2B3036;
+            border-radius:3px;
+            border:1px #2B3036 solid;
+            color:#FFF;
+        }
+        .codeTxt
+        {
+            background-color:#55595E!important;
+            border:1px #55595E solid!important;
+            cursor:not-allowed;
+            text-transform:uppercase;
+        }
+        .nameTxt
+        {
+            text-transform:capitalize;
+            width:400px!important;
+        }
+        .facChecks
+        {
+            margin-top:35px;
+            width:110%;
+            table-layout:fixed;
+        }
+    </style>
+    <div class="toolsHolder roomHolder" >
+            <div class="hdr" ><b>EDIT A MODULE</b></div>
+            <table class="facChecks" >
+                <tr>
+                    <td class="subHdr codeTit" id="modCode" colspan="3"><b>MODULE CODE</b><span class="alert" ></span></td>
+                    <td class="subHdr nameTit" id="modName" colspan="5"><b>MODULE NAME</b><span class="alert" ></span></td>
+                </tr>
+                <tr class="roomRw">
+                    <td colspan="3"><input autocomplete="off" readonly="readonly" type="text" class="inp codeTxt" id="codeTxt" onkeypress="return maskInp(event)" onkeyup="this.value = this.value.toUpperCase();" /></td>
+                    <td colspan="5"><input autocomplete="off" type="text" class="inp nameTxt" id="nameTxt" /></td>
+                </tr>
+                <tr>
+                    <td colspan="8" class="spc"></td>
+                </tr>
+                <tr>
+                    <td colspan="8"><span class="clearAllBtn" onclick="location.reload()"><b>CLEAR ALL</b></span><span class="searchBtn" onclick="validate()"><b>UPDATE</b></span></td>
+                </tr>
+            </table>
+        </div>
+</asp:Content>

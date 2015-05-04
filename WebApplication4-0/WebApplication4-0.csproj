@@ -119,6 +119,7 @@
     <Content Include="Account\OpenAuthProviders.ascx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
+    <Content Include="AddModule.aspx" />
     <Content Include="AddRoom.aspx" />
     <Content Include="AdminFolder\Admin.aspx" />
     <Content Include="AdminFolder\css\AdminStyle.css" />
@@ -130,6 +131,7 @@
     <Content Include="AdminFolder\Requests.aspx" />
     <Content Include="AdminFolder\Rooms.aspx" />
     <Content Include="AdminFolder\Rounds.aspx" />
+    <Content Include="ArchiveModules.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\jq.css" />
     <Content Include="Content\LoginStyle.css" />
@@ -190,13 +192,16 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\Timetable.css" />
+    <Content Include="EditModule.aspx" />
     <Content Include="FindRoom.aspx" />
     <Content Include="Home.aspx" />
     <Content Include="Images\accent.png" />
+    <Content Include="Images\add.png" />
     <Content Include="Images\AddCircle.png" />
     <Content Include="Images\bullet.png" />
     <Content Include="Images\change.png" />
     <Content Include="Images\heroAccent.png" />
+    <Content Include="Images\minus.png" />
     <Content Include="Images\MinusCircle.png" />
     <Content Include="Images\orderedList0.png" />
     <Content Include="Images\orderedList1.png" />
@@ -298,12 +303,17 @@
     <Content Include="Images\Room Pictures\ZZ103.jpg" />
     <Content Include="Images\Room Pictures\ZZ105.jpg" />
     <Content Include="Images\Room Pictures\ZZ106.jpg" />
+    <Content Include="Modules.aspx" />
     <Content Include="packages.config" />
     <Content Include="AdminFolder\AdminSite.master" />
     <Content Include="AdminFolder\js\.DS_Store" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Request.aspx" />
     <Content Include="RoomsDetails.aspx" />
+    <Content Include="Scripts\dist\jquery.floatThead-slim.js" />
+    <Content Include="Scripts\dist\jquery.floatThead-slim.min.js" />
+    <Content Include="Scripts\dist\jquery.floatThead.js" />
+    <Content Include="Scripts\dist\jquery.floatThead.min.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <Content Include="Scripts\jquery-latest.js" />
@@ -334,8 +344,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddModule.aspx.cs">
+      <DependentUpon>AddModule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AddModule.aspx.designer.cs">
+      <DependentUpon>AddModule.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AddRoom.aspx.cs">
       <DependentUpon>AddRoom.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AddRoom.aspx.designer.cs">
       <DependentUpon>AddRoom.aspx</DependentUpon>
@@ -426,6 +444,13 @@
       <DependentUpon>RegisterExternalLogin.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="ArchiveModules.aspx.cs">
+      <DependentUpon>ArchiveModules.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ArchiveModules.aspx.designer.cs">
+      <DependentUpon>ArchiveModules.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -439,6 +464,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EditModule.aspx.cs">
+      <DependentUpon>EditModule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditModule.aspx.designer.cs">
+      <DependentUpon>EditModule.aspx</DependentUpon>
     </Compile>
     <Compile Include="FindRoom.aspx.cs">
       <DependentUpon>FindRoom.aspx</DependentUpon>
@@ -456,6 +488,13 @@
     </Compile>
     <Compile Include="Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Modules.aspx.cs">
+      <DependentUpon>Modules.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Modules.aspx.designer.cs">
+      <DependentUpon>Modules.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request.aspx.cs">
