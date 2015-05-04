@@ -191,8 +191,8 @@ namespace WebApplication4_0
 
                 }
                 html.Append("<td>");
-                html.Append("<input type='button' value='Delete' onclick=\"deleteRow('" + i + "')\"/>");
-                html.Append("<asp:Button runat='server' id='button" + i + "' Text='Delete' OnClick='deleteRow_Click()' />");
+                html.Append("<input type='button' id='button" + i + "' value='Delete' onclick=\"deleteRow(" + i + " )\"/>");
+                //html.Append("<asp:button runat='server' id='button" + i + "' Text='Delete' OnClick='deleteRow_Click' />");
                 html.Append("</td>");
                 html.Append("</tr>");
             }
@@ -249,18 +249,52 @@ namespace WebApplication4_0
         }
         */
 
-        public void Delete(string id)
+        [System.Web.Services.WebMethod]
+        public static string Delete(int id)
         {
+            string msg = string.Empty;
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
-            string sql = "DELETE FROM Bookings, Requests WHERE Request_ID ='" + id + "'";
+            using (conn)
+            {
+                string sql = "DELETE FROM Bookings WHERE Request_ID = @Request_ID";
+                string sql1 = "DELETE FROM Requests WHERE Request_ID = @Request_ID ";
 
-            conn.Open();
-            SqlCommand cmd = new SqlCommand(sql, conn);
-            cmd.ExecuteNonQuery();
-            conn.Close();
-            conn.Dispose();
+                //conn.Open();
+                SqlCommand cmd = new SqlCommand(sql);
+                cmd.CommandType = CommandType.Text;
+
+                //conn.Open();
+                cmd.Parameters.AddWithValue("@Request_ID", id);
+                cmd.Connection = conn;
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+
+                SqlCommand cmd1 = new SqlCommand(sql1);
+                cmd1.CommandType = CommandType.Text;
+
+                
+                cmd1.Parameters.AddWithValue("@Request_ID", id);
+                cmd1.Connection = conn;
+                conn.Open();
+                cmd1.ExecuteNonQuery();
+                conn.Close();
+                /*if (y == 1)
+                {
+                    msg = "true";
+                }
+                else
+                {
+                    msg = "false";
+                }
+                */
+            }
+            msg = "true";
+            return msg;
+                    //conn.Dispose();
         }
-       
+
+        /*[System.Web.Services.WebMethod]
         protected void deleteRow_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
@@ -268,7 +302,7 @@ namespace WebApplication4_0
 
             Delete(buttonID);
         }
-
+        */
         public DataTable GetData(string select, string from, string where)
         {
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);

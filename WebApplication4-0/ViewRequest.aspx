@@ -13,15 +13,57 @@
 );
 
     function deleteRow(x) {
-        var row = document.getElementById(x);
-        row.parentNode.removeChild(row);
 
-        var but = "button"
-        var buttonid = but.concat(x);
-        alert(buttonid);
-        var button = document.getElementById(buttonid);
-        alert(button);
-        button.click();
+        var result = confirm('Are you sure you want to delete this request?');
+
+        if(result)
+        {
+            obj = { id: x };
+            obj.myself = obj;
+
+            seen = [];
+
+            /*
+            }*/
+            
+            //var userid = document.getElementById(id);
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "ViewRequest.aspx/Delete",
+                data: JSON.stringify(obj, function (key, val) {
+                    if (typeof val == "object") {
+                        if (seen.indexOf(val) >= 0)
+                            return undefined;
+                        seen.push(val);
+                    }
+                    return val;
+                }),
+                dataType: "json",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("There has been an error with your request \n\nRequest: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                },
+                success: function (data) {
+                    //alert('success');
+                    if (data.d == 'true') {
+                        location.reload();
+                    }
+                }
+
+
+            }
+                );
+        }
+
+        //var row = document.getElementById(x);
+        //row.parentNode.removeChild(row);
+
+        //var but = "button"
+        //var buttonid = but.concat(x);
+        //alert(buttonid);
+        //var button = document.getElementById(buttonid);
+        //alert(button);
+        //button.click();
         //return true;
     }
 </script>
