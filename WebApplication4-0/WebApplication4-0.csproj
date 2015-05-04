@@ -131,6 +131,7 @@
     <Content Include="AdminFolder\Requests.aspx" />
     <Content Include="AdminFolder\Rooms.aspx" />
     <Content Include="AdminFolder\Rounds.aspx" />
+    <Content Include="ArchiveModules.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\jq.css" />
     <Content Include="Content\LoginStyle.css" />
@@ -443,6 +444,13 @@
       <DependentUpon>RegisterExternalLogin.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="ArchiveModules.aspx.cs">
+      <DependentUpon>ArchiveModules.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ArchiveModules.aspx.designer.cs">
+      <DependentUpon>ArchiveModules.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -537,7 +537,7 @@
         <span class="hdr" ><b>MODULES</b></span>
         <div class="menu" >
             <div class="addMods" onclick="window.location.href = 'AddModule'" >ADD MODULE</div>
-            <div class="archiveMods" onclick="window.location.href = 'AddModule'" >ARCHIVE MODULES</div>
+            <div class="archiveMods" onclick="window.location.href = 'ArchiveModules'" >ARCHIVE MODULES</div>
         </div><br />
         <div class="resTools" >
             <table class="resToolTbl" >

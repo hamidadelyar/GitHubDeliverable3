@@ -14,7 +14,7 @@
             var exists = false;
             if(currModule.length == 0)
             {
-                alert('Entered module doesn\'t exist.')
+                alert('Entered module doesn\'t exist. Add it by going to AddModule.aspx')
                 window.location.href = "Modules"
             }
             else
