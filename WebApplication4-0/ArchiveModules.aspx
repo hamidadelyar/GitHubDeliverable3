@@ -11,8 +11,8 @@
         var years = <%= this.years %>;
         var showing = false;
         $(document).ready(function(){
-            $('.delMultHolder').hide();
-            $('.confirmDel').hide();
+            $('.impMultHolder').hide();
+            $('.confirmImp').hide();
             $('.dark').hide();
             for(var i = 0; i < modules.length; i++)
             {
@@ -101,6 +101,71 @@
                         $(this).children('td:first').children('input').prop('checked', true)
                     })
                     checked = true;
+                }
+            });
+            var impCode = "";
+            var impType = 0;
+            $('.impBtn').click(function(){
+                $('.modHolder').addClass('blurHolder');
+                $('.confirmImp').show();
+                $('.dark').show();
+                impType = 0;
+                impCode = $(this).parent().siblings('.modTd').children('b').html();
+            });
+            $('.cclImp').click(function(){
+                $('.modHolder').removeClass('blurHolder');
+                $('.confirmImp').hide();
+                $('.txt').html('<b>Importing this module will overwrite the existing module if it exists. <br /> Are you sure you wish to proceed?</b>');
+                $('.dark').hide();
+                impCode = "";
+            });
+            $('.dark').click(function(){
+                $('.modHolder').removeClass('blurHolder');
+                $('.confirmImp').hide();
+                $('.txt').html('<b>Importing this module will overwrite the existing module if it exists. <br /> Are you sure you wish to proceed?</b>');
+                $('.dark').hide();
+                impCode = "";
+            });
+            $('.subImp').click(function(){
+                if(impType == 0)
+                {
+                    $.ajax({
+                        type: "POST",
+                        url: "ArchiveModules.aspx/ImportModule",
+                        data: JSON.stringify({ modCode: impCode}),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert("An error occurred. Please try again.");
+                            window.location.reload();
+                        },
+                        success: function (result) {
+                            alert('Module imported');
+                            window.location.reload();
+                        }
+                    });
+                }
+            });
+            $('.impMult').click(function(){
+                $('.modHolder').addClass('blurHolder');
+                $('.confirmImp').show();
+                impType = 1;
+                $('.txt').html('<b>Importing these modules will overwrite any modules of the same code currently in the database. <br /> Are you sure you wish to proceed?</b>');
+                $('.dark').show();
+                impCode = $(this).parent().siblings('.modTd').children('b').html();
+            });
+            $('input').click(function(){
+                $('.impMultHolder').css('width', $('.modTbl').width());
+                $('.impMultHolder').css('left', '50%');
+                $('.impMultHolder').css('margin-left', '-'+$('.modTbl').width()/2+'px');
+                if ($(".rwCheck:checked").length == 0)
+                {
+                    $('.selectAll').prop('checked', false);
+                    $('.impMultHolder').hide();
+                }
+                else
+                {
+                    $('.impMultHolder').show();
                 }
             });
         });
@@ -343,6 +408,103 @@
         {
             background-color:#2B3036;
         }
+        .blurHolder
+        {
+            -webkit-filter: blur(5px);
+            -moz-filter: blur(5px);
+            -o-filter: blur(5px);
+            -ms-filter: blur(5px);
+            filter: blur(5px);
+            opacity: 0.4;
+        }
+        .confirmImp
+        {
+            position:fixed;
+            padding:2.5%;
+            width:45%;
+            left:50%;
+            margin-left:-25%;
+            top:200px;
+            background-color:#2B3036;
+            border-radius:10px;
+        }
+        .txt
+        {
+            color:#FFF;
+        }
+        .cclImp
+        {
+            margin-top:25px;
+            line-height:40px;
+            width:100px;
+            background-color:#3E454D;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            float:left;
+            color:#FFF;
+        }
+        .cclImp:hover
+        {
+            background-color:#FF8060;
+        }
+        .subImp
+        {
+            margin-top:25px;
+            line-height:40px;
+            width:100px;
+            background-color:#FF8060;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            float:right;
+            color:#FFF;
+        }
+        .subImp:hover
+        {
+            background-color:#FF8060;
+        }
+        .dark
+        {
+            position:fixed;
+            top:0px;
+            left:0px;
+            width:100%;
+            height:100%;
+            background-color:#2B3036;
+            opacity:0.4;
+        }
+        .impMultHolder
+        {
+            position:fixed;
+            bottom:0;
+            border:1pt #3E454D solid;
+            padding-top:15px;
+            padding-bottom:15px;
+            background-color:#3E454D;
+            color:#FFF;
+        }
+        .msg
+        {
+            float:left;
+            margin-left:2.5%;
+        }
+        .impMult
+        {
+            float:right;
+            margin-right:2.5%;
+            line-height:30px;
+            width:75px;
+            background-color:#FF8060;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            padding:0px;
+            color:#FFF;
+        }
     </style>
     <div class="modHolder" >
         <span class="hdr" ><b>MODULES</b></span>
@@ -375,5 +537,16 @@
                 </thead>
             </table>
         </div>
-    <</div>
+        <div class="impMultHolder" >
+            <span class="msg">You have selected modules. Do you wish to import these? </span><span class="impMult" >IMPORT</span>
+        </div>
+    </div>
+    <div class="dark" >
+
+    </div>
+    <div class="confirmImp" >
+        <span class="subHdr" ><b>Import Module?</b></span><br /><br />
+        <span class="txt" ><b>Importing this module will overwrite the existing module if it exists. <br /> Are you sure you wish to proceed?</b></span><br />
+        <span class="cclImp" ><b>CANCEL</b></span><span class="subImp"><b>IMPORT</b></span>
+    </div>
 </asp:Content>

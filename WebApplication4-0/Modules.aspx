@@ -95,7 +95,8 @@
             });
             $('.cclDel').click(function(){
                 $('.modHolder').removeClass('blurHolder');
-                $('.confirmDel').hide()
+                $('.confirmDel').hide();
+                $('.txt').html('<b>Deleting this module will remove all references to the module from the database. <br /> Are you sure you wish to proceed?</b>');
                 $('.dark').hide();
                 delCode = "";
             });
@@ -584,7 +585,7 @@
 
     </div>
     <div class="confirmDel" >
-        <span class="subHdr" ><b>Delete Room?</b></span><br /><br />
+        <span class="subHdr" ><b>Delete Module?</b></span><br /><br />
         <span class="txt" ><b>Deleting this module will remove all references to the module from the database. <br /> Are you sure you wish to proceed?</b></span><br />
         <span class="cclDel" ><b>CANCEL</b></span><span class="subDel"><b>DELETE</b></span>
     </div>
