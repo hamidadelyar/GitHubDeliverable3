@@ -11,10 +11,11 @@ using System.Web.Script.Serialization;
 
 namespace WebApplication4_0
 {
-    public partial class AddModule : System.Web.UI.Page
+    public partial class EditModule : System.Web.UI.Page
     {
-        public string modules;
-        public string department;
+        public string module = "";
+        public string modules = "";
+        public string department = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             if ((Session["LoggedIn"]) != null) // checks the user is logged in to remove error of trying to get a null session variable
@@ -22,9 +23,18 @@ namespace WebApplication4_0
                 modules = SQLSelect.Select("Modules", "Module_Code", "LEFT(Module_Code, 2) = '" + Session["Username"].ToString().Substring(0, 2) + "'", ""); // runs a select to get all the module codes that are from the user's department
                 department = SQLSelect.Select("Users", "Dept_ID", "Username = '" + Session["Username"] + "'", "");
             }
+            if (Request.QueryString["modCode"] != null)
+            {
+                string modCode = Request.QueryString["modCode"];
+                module = SQLSelect.Select("Modules", "Module_Code, Module_Title", "Module_Code = '"+modCode+"'", "");
+            }
+            else
+            {
+                Response.Redirect("Modules");
+            }
         }
         [System.Web.Services.WebMethod]
-        public static bool InsertModule(string modCode, string modName)
+        public static bool UpdateModule(string modCode, string modName)
         {
             using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString))
             {
@@ -32,7 +42,7 @@ namespace WebApplication4_0
                 {
                     command.Connection = conn;
                     command.CommandType = CommandType.Text;
-                    command.CommandText = "INSERT INTO Modules (Module_Code, Module_Title) VALUES (@modCode, @modName)";
+                    command.CommandText = "UPDATE Modules SET Module_Title = @modName WHERE Module_Code = @modCode";
                     command.Parameters.Add("@modCode", SqlDbType.VarChar, 10).Value = modCode;
                     command.Parameters.Add("@modName", SqlDbType.VarChar, 255).Value = modName;
                     conn.Open();

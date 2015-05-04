@@ -191,6 +191,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\Timetable.css" />
+    <Content Include="EditModule.aspx" />
     <Content Include="FindRoom.aspx" />
     <Content Include="Home.aspx" />
     <Content Include="Images\accent.png" />
@@ -455,6 +456,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EditModule.aspx.cs">
+      <DependentUpon>EditModule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditModule.aspx.designer.cs">
+      <DependentUpon>EditModule.aspx</DependentUpon>
     </Compile>
     <Compile Include="FindRoom.aspx.cs">
       <DependentUpon>FindRoom.aspx</DependentUpon>

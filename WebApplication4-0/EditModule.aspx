@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Add Module" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AddModule.aspx.cs" Inherits="WebApplication4_0.AddModule" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EditModule.aspx.cs" Inherits="WebApplication4_0.EditModule" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
@@ -6,40 +6,45 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <script>
         var modules = <%= this.modules %>;
-        var department = <%= this.department %>;
-        department = department[0]['Dept_ID'];
-        function validate()
-        {
-            var failed = false;
-            var codeClr = true;
-            if($('.codeTxt').val().trim() == "")
+        var currModule = <%= this.module %>;
+        var modCode = "";
+        var modTitle = "";
+        $(document).ready(function(){
+
+            var exists = false;
+            if(currModule.length == 0)
             {
-                $('.codeTit').html('<b>MODULE CODE</b><span class="alert" >&nbsp;You must input a module code.</span>');
-                failed = true;
-                codeClr = false;
-            }
-            else if($('.codeTxt').val().length != 6 && $('.codeTxt').val().length != 10)
-            {
-                $('.codeTit').html('<b>MODULE CODE</b><span class="alert" >&nbsp;Module code in incorrect format.</span>');
-                failed = true;
-                codeClr =  false;
+                alert('Entered module doesn\'t exist.')
+                window.location.href = "Modules"
             }
             else
             {
-                for(var i = 0; i < modules.length; i++)
+                modCode = currModule[0]['Module_Code'];
+                modTitle = currModule[0]['Module_Title'];
+                $('.codeTxt').val(modCode);
+                $('.nameTxt').val(modTitle);
+            }
+        });
+        function validate()
+        {
+            var failed = false;
+            var exists = false;
+            for(var i = 0; i < modules.length; i++)
+            {
+                if($('.codeTxt').val() == modules[i]['Module_Code'])
                 {
-                    if($('.codeTxt').val() == modules[i]['Module_Code'])
-                    {
-                        $('.codeTit').html('<b>MODULE CODE</b><span class="alert" >&nbsp;Module code already exists</span>');
-                        failed = true;
-                        codeClr = false;
-                        break;
-                    }
+                    exists = true;
+                    break;
                 }
             }
-            if(codeClr)
+            if(exists)
             {
                 $('.codeTit').html('<b>MODULE CODE</b><span class="alert" ></span>');
+            }
+            else
+            {
+                failed = true;
+                $('.codeTit').html('<b>MODULE CODE</b><span class="alert" >This is not an existing module code.</span>');
             }
             if($('.nameTxt').val().trim() == "")
             {
@@ -63,7 +68,7 @@
         {
             $.ajax({
                 type: "POST",
-                url: "AddModule.aspx/InsertModule",
+                url: "EditModule.aspx/UpdateModule",
                 data: JSON.stringify({ modCode: $('.codeTxt').val().toUpperCase().trim(),  modName: $('.nameTxt').val().Capitalise().trim()}),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -72,8 +77,8 @@
                     window.location.reload();
                 },
                 success: function (result) {
-                    alert("Module added.");
-                    window.location.reload();
+                    alert("Module updated.");
+                    window.location.href = "Modules";
                 }
             });
         }
@@ -207,6 +212,9 @@
         }
         .codeTxt
         {
+            background-color:#55595E!important;
+            border:1px #55595E solid!important;
+            cursor:not-allowed;
             text-transform:uppercase;
         }
         .nameTxt
@@ -222,21 +230,21 @@
         }
     </style>
     <div class="toolsHolder roomHolder" >
-            <div class="hdr" ><b>ADD A MODULE</b></div>
+            <div class="hdr" ><b>EDIT A MODULE</b></div>
             <table class="facChecks" >
                 <tr>
                     <td class="subHdr codeTit" id="modCode" colspan="3"><b>MODULE CODE</b><span class="alert" ></span></td>
                     <td class="subHdr nameTit" id="modName" colspan="5"><b>MODULE NAME</b><span class="alert" ></span></td>
                 </tr>
                 <tr class="roomRw">
-                    <td colspan="3"><input autocomplete="off" type="text" class="inp codeTxt" id="codeTxt" onkeypress="return maskInp(event)" onkeyup="this.value = this.value.toUpperCase();" /></td>
+                    <td colspan="3"><input autocomplete="off" readonly="readonly" type="text" class="inp codeTxt" id="codeTxt" onkeypress="return maskInp(event)" onkeyup="this.value = this.value.toUpperCase();" /></td>
                     <td colspan="5"><input autocomplete="off" type="text" class="inp nameTxt" id="nameTxt" /></td>
                 </tr>
                 <tr>
                     <td colspan="8" class="spc"></td>
                 </tr>
                 <tr>
-                    <td colspan="8"><span class="clearAllBtn" onclick="location.reload()"><b>CLEAR ALL</b></span><span class="searchBtn" onclick="validate()"><b>ADD</b></span></td>
+                    <td colspan="8"><span class="clearAllBtn" onclick="location.reload()"><b>CLEAR ALL</b></span><span class="searchBtn" onclick="validate()"><b>UPDATE</b></span></td>
                 </tr>
             </table>
         </div>

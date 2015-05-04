@@ -81,6 +81,9 @@
                     checked = true;
                 }
             });
+            $('.editBtn').click(function(){
+                window.location.href = "EditModule?modCode=" + $(this).parent().siblings('.modTd').children('b').html();
+            });
             var delCode = "";
             var delType = 0;
             $('.delBtn').click(function(){
@@ -372,6 +375,7 @@
             text-decoration:underline;
             line-height:30px;
             float:left;
+            cursor:pointer;
         }
         .arr
         {
