@@ -16,7 +16,7 @@
             $('.dark').hide();
             for(var i = 0; i < modules.length; i++)
             {
-                $('.modTbl').append('<tr class="modules tblRw showing" ><td class="smlPadLeft rightLines"><input class="rwCheck" type="checkbox" /></td><td class="modTd padLeft rightLines" ><b>'+modules[i]['Module_Code']+'</b></td><td class="rightLines padLeft" >'+modules[i]['Module_Title']+'</b></td><td class="padLeft" ><span class="impBtn" >IMPORT</span></tr>');
+                $('.modTbl').append('<tr class="modules tblRw showing" ><td class="smlPadLeft rightLines"><input class="rwCheck" type="checkbox" /></td><td class="modTd padLeft rightLines" ><b>'+modules[i]['Module_Code']+'</b></td><td class="titTd rightLines padLeft" >'+modules[i]['Module_Title']+'</td><td class="padLeft" ><span class="impBtn" >IMPORT</span></tr>');
             }
             var yrCells = "";
             var cols = 1;
@@ -79,7 +79,7 @@
                         backgroundColor: '#999',
                         left: "-=30"
                     }, 500, function () {
-                        hideRows(this)
+                        hideRows(this);
                     });
                 }
             });
@@ -126,21 +126,43 @@
                 $('.dark').hide();
                 impCode = "";
             });
-            $('.subImp').click(function(){
-                if(impType == 0)
-                {
+            $('.subImp').click(function() {
+                if (impType == 0) {
                     $.ajax({
                         type: "POST",
                         url: "ArchiveModules.aspx/ImportModule",
-                        data: JSON.stringify({ modCode: impCode}),
+                        data: JSON.stringify({ modCode: impCode }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            alert("An error occurred. Please try again.");
+                            window.location.reload();
+                        },
+                        success: function(result) {
+                            alert('Module imported');
+                            window.location.reload();
+                        }
+                    });
+                } 
+                else {
+                    var selCodes = [];
+                    var selTits = [];
+                    $('.rwCheck').each(function() {
+                        if ($(this).prop('checked')) {
+                            selCodes.push($(this).parent().siblings('.modTd').children('b').html());
+                            selTits.push($(this).parent().siblings('.titTd').html());
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "ArchiveModules.aspx/ImportMultModules",
+                        data: JSON.stringify({ modCode: JSON.stringify(selCodes), modTit: JSON.stringify(selTits)}),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                             alert("An error occurred. Please try again.");
-                            window.location.reload();
                         },
                         success: function (result) {
-                            alert('Module imported');
                             window.location.reload();
                         }
                     });
@@ -171,26 +193,72 @@
         });
         function hideRows(obj)
         {
-            var id = $(obj).siblings('input').attr('id').substring(2,4);
+            var id = $(obj).siblings('input').attr('id');
+            if (id.length != 1) {
+                id = id.substring(2,4);
+            }
             $('.modules').each(function(){
                 var modCode = $(this).children('td').eq(1).html().split('');
-                if(modCode[3] == id[0] && modCode[4] == id[1])
+                if(modCode[3] == id[0] && modCode[4] == id[1] && id.length == 2)
+                {
+                    $(this).removeClass('showing');
+                    $(this).addClass('numHidden');
+                    $(this).hide();   
+                }
+                else if(modCode[7] == id && id.length == 1)
                 {
                     $(this).children('td:first').children('input').prop('checked', false);
                     $(this).removeClass('showing');
+                    $(this).addClass('partHidden');
                     $(this).hide();
+                }
+                if(id == 'O' && id.length == 1)
+                {
+                    if(modCode[7] != 'A' && modCode[5] != 'B' && modCode[7] != 'C' && modCode[7] != 'D' && modCode[7] != 'F' && modCode[7] != 'P')
+                    {
+                        $(this).children('td:first').children('input').prop('checked', false);
+                        $(this).removeClass('showing');
+                        $(this).addClass('partHidden');
+                        $(this).hide();
+                    }
                 }
             });
         }
-        function showRows(obj)
-        {
-            var id = $(obj).siblings('input').attr('id').substring(2,4);
+        function showRows(obj) {
+            var id = $(obj).siblings('input').attr('id');
+            if (id.length != 1) {
+                id = id.substring(2,4);
+            }
             $('.modules').each(function(){
                 var modCode = $(this).children('td').eq(1).html().split('');
-                if(modCode[3] == id[0] && modCode[4] == id[1])
+                if(modCode[3] == id[0] && modCode[4] == id[1] && id.length == 2)
                 {
                     $(this).addClass('showing');
-                    $(this).show();
+                    $(this).removeClass('numHidden');
+                    if (!$(this).hasClass('partHidden')) {
+                        $(this).show();   
+                    }
+                }
+                else if(modCode[7] == id && id.length == 1)
+                {
+                    $(this).children('td:first').children('input').prop('checked', false);
+                    $(this).addClass('showing');
+                    $(this).removeClass('partHidden');
+                    if (!$(this).hasClass('numHidden')) {
+                        $(this).show();   
+                    }
+                }
+                if(id == 'O' && id.length == 1)
+                {
+                    if(modCode[7] != 'A' && modCode[7] != 'B' && modCode[7] != 'C' && modCode[7] != 'D' && modCode[7] != 'F' && modCode[7] != 'P')
+                    {
+                        $(this).children('td:first').children('input').prop('checked', false);
+                        $(this).addClass('showing');
+                        $(this).removeClass('partHidden');
+                        if (!$(this).hasClass('numHidden')) {
+                            $(this).show();   
+                        }
+                    }
                 }
             });
         }
@@ -510,7 +578,7 @@
         <span class="hdr" ><b>MODULES</b></span>
         <div class="menu" >
             <div class="addMods" onclick="window.location.href = 'AddModule'" >ADD MODULE</div>
-            <div class="archiveMods" onclick="window.location.href = 'Module'" >MODULES</div>
+            <div class="archiveMods" onclick="window.location.href = 'Modules'" >MODULES</div>
         </div><br />
         <div class="resTools" >
             <table class="resToolTbl" >
@@ -519,6 +587,24 @@
                 </tr>
                 <tr class="yr">
                     <td class="subHdr" colspan="8"><b>YEAR</b></td>
+                </tr>
+                <tr>
+                    <td class="smlSpc" colspan="8"></td>
+                </tr>
+                <tr>
+                    <td class="subHdr" colspan="8"><b>PART</b></td>
+                </tr>
+                <tr class="typeRw">
+                    <td class="aFilt"><b>PART A</b></td><td class="aFilt"> <span class="line" ></span><span class="sel circ filtCirc"></span><input id="A" class="partCheck" type="hidden" value="1" /></td>
+                    <td class="bFilt"><b>PART B</b></td><td class="bFilt"> <span class="line" ></span><span class="sel circ filtCirc"></span><input id="B" class="partCheck" type="hidden" value="1" /></td>
+                    <td class="cFilt"><b>PART C</b></td><td class="cFilt"> <span class="line" ></span><span class="sel circ filtCirc"></span><input id="C" class="partCheck" type="hidden" value="1" /></td>
+                    <td class="dFilt"><b>PART D</b></td><td class="dFilt"> <span class="line" ></span><span class="sel circ filtCirc"></span><input id="D" class="partCheck" type="hidden" value="1" /></td>
+                </tr>
+                <tr class="typeRw">
+                    <td class="fFilt"><b>FOUNDATION</b></td><td class="aFilt"> <span class="line" ></span><span class="sel circ filtCirc"></span><input id="F" class="partCheck" type="hidden" value="1" /></td>
+                    <td class="pFilt"><b>POSTGRAD</b></td><td class="bFilt"> <span class="line" ></span><span class="sel circ filtCirc"></span><input id="P" class="partCheck" type="hidden" value="1" /></td>
+                    <td class="dFilt"><b>OTHER</b></td><td class="cFilt"> <span class="line" ></span><span class="sel circ filtCirc"></span><input id="O" class="partCheck" type="hidden" value="1" /></td>
+                    <td colspan="2"></td>
                 </tr>
                 <tr>
                     <td class="smlSpc" colspan="8"></td>
