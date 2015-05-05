@@ -53,7 +53,7 @@ $(document).ready(function () {
         document.getElementById("modDetails").style.display = "none";
         document.getElementById("preferenceTable").style.display = "";
         document.getElementById("lecturerRowTable").style.display = "none";
-        $('#title').html("FACILITY OPTIONS (ROOM 1)");
+        $('#title').html("PREFERENCES (ROOM 1)");
     });
     $('#preferencesDoneButton, #preferencesDoneButton2, #preferencesDoneButton3').click(function () {
         document.getElementById("modDetails").style.display = "";
@@ -317,25 +317,25 @@ $(document).ready(function () {
     $('#gotoRoom2').click(function () {
         $('#preferenceTable').hide();
         $('#preferenceTable2').show();
-        $('#title').html("FACILITY OPTIONS (ROOM 2)");
+        $('#title').html("PREFERENCES (ROOM 2)");
     });
 
     $('#gotoPrevRoom1').click(function () {
         $('#preferenceTable2').hide();
         $('#preferenceTable').show();
-        $('#title').html("FACILITY OPTIONS (ROOM 1)");
+        $('#title').html("PREFERENCES (ROOM 1)");
     });
 
     $('#gotoRoom3').click(function () {
         $('#preferenceTable2').hide();
         $('#preferenceTable3').show();
-        $('#title').html("FACILITY OPTIONS (ROOM 3)");
+        $('#title').html("PREFERENCES (ROOM 3)");
     });
 
     $('#gotoPrevRoom2').click(function () {
         $('#preferenceTable3').hide();
         $('#preferenceTable2').show();
-        $('#title').html("FACILITY OPTIONS (ROOM 2)");
+        $('#title').html("PREFERENCES (ROOM 2)");
     });
     /*
     On park checkbox selection, updates the buildings that the user can select from.
