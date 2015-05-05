@@ -68,7 +68,6 @@
         function resetPassword(user,email)
         {
             var password = Math.random().toString(36).slice(-8);
-            alert(password);
             $.ajax({
                 type: "POST",
                 url: "ForgotPassword.aspx/ChangePass",
