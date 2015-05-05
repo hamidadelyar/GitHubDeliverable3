@@ -130,6 +130,11 @@
     <Content Include="AdminFolder\Requests.aspx" />
     <Content Include="AdminFolder\Rooms.aspx" />
     <Content Include="AdminFolder\Rounds.aspx" />
+    <Content Include="ArchiveRequests.aspx" />
+    <Content Include="ArchiveRequests.aspx.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>ArchiveRequests.aspx</DependentUpon>
+    </Content>
     <Content Include="Contact.aspx" />
     <Content Include="Content\jq.css" />
     <Content Include="Content\LoginStyle.css" />
