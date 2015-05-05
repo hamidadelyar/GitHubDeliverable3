@@ -782,9 +782,14 @@ $(document).ready(function () {
         var endTime = +document.getElementById('select_endTime').value; //2-10
 
         var numRooms = $('#numRooms').val();
+
         var roomCap1 = $('#capacityInput').val();
         var roomCap2 = $('#capacityInput2').val();
         var roomCap3 = $('#capacityInput3').val();
+
+        var room1 = document.getElementById('select_room').value;
+        var room2 = document.getElementById('select_room2').value;
+        var room3 = document.getElementById('select_room3').value;
 
         var priorityString = "No";
         if (document.getElementById('priorityYes').checked) {
@@ -843,6 +848,8 @@ $(document).ready(function () {
             document.getElementById("MainContent_startPeriodLabel").style.borderBottom = "";
             document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "";
         }
+
+
 
         /* if the lecturers names do not match the db */
         //if no lecturers added
@@ -947,6 +954,66 @@ $(document).ready(function () {
 
 
         }
+
+
+        /* if the rooms selected are the same */
+
+
+        if (numRooms > 1) {
+            //if room 1 and room 2 are the same
+            if (room1 != "" && room1 != "0") { //only do this if a room has been actually selected, otherwise fine
+                if (room1 == room2) {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li><b>'Room 1'</b> cannot be the same as <b>'Room 2'.</b> Please change one of them</li>");
+                    document.getElementById("MainContent_room1_label").style.borderBottom = "3px solid red"; 
+                    document.getElementById("MainContent_room2_label").style.borderBottom = "3px solid red";
+                } else {
+                    document.getElementById("MainContent_room1_label").style.borderBottom = "";
+                    document.getElementById("MainContent_room2_label").style.borderBottom = "";
+                }
+            } else {
+                document.getElementById("MainContent_room1_label").style.borderBottom = "";
+                document.getElementById("MainContent_room2_label").style.borderBottom = "";
+            }
+        }
+
+        if (numRooms > 2) {
+            //if room 2 and room 3 are the same
+            if (room2 != "" && room2 != "0") { //only do this if a room has been actually selected, otherwise fine
+                if (room2 == room3) {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li><b>'Room 2'</b> cannot be the same as <b>'Room 3'.</b> Please change one of them</li>");
+                    document.getElementById("MainContent_room2_label").style.borderBottom = "3px solid red"; 
+                    document.getElementById("MainContent_room3_label").style.borderBottom = "3px solid red";
+                } else {
+                    document.getElementById("MainContent_room2_label").style.borderBottom = "";
+                    document.getElementById("MainContent_room3_label").style.borderBottom = "";
+                }
+            } else {
+                document.getElementById("MainContent_room2_label").style.borderBottom = "";
+                document.getElementById("MainContent_room3_label").style.borderBottom = "";
+            }
+
+            //if room 1 and room 3 are the same
+            if (room3 != "" && room3 != "0") { //only do this if a room has been actually selected, otherwise fine
+                if (room1 == room3) {
+                    flag = false;
+                    showValidation();
+                    $('#errorList').append("<li><b>'Room 1'</b> cannot be the same as <b>'Room 3'.</b> Please change one of them</li>");
+                    document.getElementById("MainContent_room1_label").style.borderBottom = "3px solid red"; 
+                    document.getElementById("MainContent_room3_label").style.borderBottom = "3px solid red";
+                } else {
+                    document.getElementById("MainContent_room1_label").style.borderBottom = "";
+                    document.getElementById("MainContent_room3_label").style.borderBottom = "";
+                }
+            } else {
+                document.getElementById("MainContent_room1_label").style.borderBottom = "";
+                document.getElementById("MainContent_room3_label").style.borderBottom = "";
+            }
+        }
+
 
 
 

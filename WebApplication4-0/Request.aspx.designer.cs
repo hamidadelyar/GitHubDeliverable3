@@ -31,15 +31,6 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label modnameLabel;
         
         /// <summary>
-        /// modnameInput control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox modnameInput;
-        
-        /// <summary>
         /// daySelectLabel control.
         /// </summary>
         /// <remarks>
@@ -166,13 +157,13 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label Label5;
         
         /// <summary>
-        /// Label7 control.
+        /// room1_label control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label7;
+        protected global::System.Web.UI.WebControls.Label room1_label;
         
         /// <summary>
         /// capacity2Label control.
@@ -220,13 +211,13 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label Label12;
         
         /// <summary>
-        /// Label13 control.
+        /// room2_label control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label13;
+        protected global::System.Web.UI.WebControls.Label room2_label;
         
         /// <summary>
         /// capacity3Label control.
@@ -274,12 +265,12 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label Label18;
         
         /// <summary>
-        /// Label19 control.
+        /// room3_label control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label19;
+        protected global::System.Web.UI.WebControls.Label room3_label;
     }
 }

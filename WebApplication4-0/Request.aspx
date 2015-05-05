@@ -260,7 +260,7 @@
                 <td>
                     <asp:Label ID="Label5" runat="server" Text="BUILDING"></asp:Label>
                     <br /><br /><br />
-                    <asp:Label ID="Label7" runat="server" Text="ROOM"></asp:Label>
+                    <asp:Label ID="room1_label" runat="server" Text="ROOM"></asp:Label>
                 </td>
 
                 <td>
@@ -377,7 +377,7 @@
                 <td>
                     <asp:Label ID="Label12" runat="server" Text="BUILDING"></asp:Label>
                     <br /><br /><br />
-                    <asp:Label ID="Label13" runat="server" Text="ROOM"></asp:Label>
+                    <asp:Label ID="room2_label" runat="server" Text="ROOM"></asp:Label>
                 </td>
 
                 <td>
@@ -483,7 +483,7 @@
                 <td>
                     <asp:Label ID="Label18" runat="server" Text="BUILDING"></asp:Label>
                     <br /><br /><br />
-                    <asp:Label ID="Label19" runat="server" Text="ROOM"></asp:Label>
+                    <asp:Label ID="room3_label" runat="server" Text="ROOM"></asp:Label>
                 </td>
 
                 <td>
