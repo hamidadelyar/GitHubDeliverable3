@@ -50,9 +50,9 @@
                         <li><a runat="server" href="~/Request">Request</a></li>
                         <li><a runat="server" href="~/Timetable">Timetable</a></li>
                         <li><a runat="server" href="~/ViewRequest">View Requests</a></li>
-                        <li><a runat="server" href="~/ArchiveRequest">Previous Requests</a></li>
+                        <!--<li><a runat="server" href="~/ArchiveRequest">Previous Requests</a></li>-->
                         <li><a runat="server" href="~/AddRoom">Add/Edit Room</a></li>
-                        <li><a runat="server" href="~/Contact">Contact</a></li>
+                        <li><a runat="server" href="~/Modules">Modules</a></li>
                     </ul>
                 </nav>
             </div>

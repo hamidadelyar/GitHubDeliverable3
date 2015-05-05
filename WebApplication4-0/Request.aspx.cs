@@ -764,15 +764,34 @@ namespace WebApplication4_0
             string lecturer3ID = "";
             int requestID = -1;
             bool newRequest = false;
+             int semester = 0;
+
+            //30 September 2013 - 31 January 2014
+            //3 February 2014 - 18 June 2014
+             //can send request for  semester1 - after 18 june  - before 30 september
+             //can send request for semester 2 - after 30 september - before 31 june
+            DateTime semester1Start = new DateTime(DateTime.Now.Year, 6, 18);
+            DateTime semester2Start = new DateTime(DateTime.Now.Year, 9, 30);
+            DateTime currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+             //if between June 18 and September 30
+            if(DateTime.Compare(currentDate, semester1Start) > 1 && DateTime.Compare(currentDate, semester2Start) < 0 ){
+                semester = 0;
+            }
+            else
+            {
+                semester = 1;
+            }
+
              /*
               * Checks to see if this request already exists in the db. If it does, then the user is notified.
 
               */
 
+
             //gets Request_Id of the submitted request.
             //if request is not exactly the same, then is allowed?
             string query = "select Request_ID from [Requests] where Module_Code = '" + modcode + "' and Day = " + day;
-            query += " and Start_Time = " + startTime + " and End_Time = " + endTime + " and Semester = " + 1 + " and Year = " + DateTime.Now.Year;
+            query += " and Start_Time = " + startTime + " and End_Time = " + endTime + " and Semester = " + semester + " and Year = " + DateTime.Now.Year;
             query += " and Round = " + 1 + " and Priority = " + priority + " and Number_Rooms = " + numRooms + " and Number_Students = " + capacity;
 
             connection.Open(); //opening connection with the DB
@@ -851,7 +870,7 @@ namespace WebApplication4_0
                     cmd.Parameters.AddWithValue("@Day", day);
                     cmd.Parameters.AddWithValue("@Start_Time", startTime);
                     cmd.Parameters.AddWithValue("@End_Time", endTime);
-                    cmd.Parameters.AddWithValue("@Semester", 1);    //need to write function to work this out
+                    cmd.Parameters.AddWithValue("@Semester", semester);    //need to write function to work this out
                     cmd.Parameters.AddWithValue("@Year", DateTime.Now.Year);     //year
                     cmd.Parameters.AddWithValue("@Round", 1);       //need to check db to see what round it is
                     cmd.Parameters.AddWithValue("@Priority", priority);    //
@@ -1276,7 +1295,170 @@ namespace WebApplication4_0
                             connection.Close();
                     }
 
+
+               
+                    /* 
+                     * -- FINALLY, WRITES TO BOOKING TABLE -- 
+                     *  If the request, requests a departmental room, then booking is allocated straight away
+                     *  otherwise, set to pending.
+                     *  only set to allocated if all rooms requested are private rooms.
+                     */
+                    bool pool = true; //set to false by default, it is not a pool room, changed if not
                     
+                   
+                    //only carried out if room1 has been specified
+                    if (room1 != "")
+                    {
+                        bool result1 = true;
+                        //finds whether the room requested is a pool room or not, if not pool room, then it is a private room, for a specific department
+                        string poolQuery1 = "select Pool from [Rooms] where Room_ID = '" + room1 + "'";
+                        connection.Open();
+                        SqlCommand getPool1 = new SqlCommand(poolQuery1, connection);  //gets Pool - false if private room, true if is a pool room
+                        //getPool1.ExecuteScalar();
+                        result1 = Convert.ToBoolean(getPool1.ExecuteScalar());
+                        
+                        connection.Close();
+                        if (result1 == false)
+                        {
+                            pool = false;
+                        }
+
+                        string roomDep1 = "";   //contains department of the room i.e. CO
+                        //finds out if the room belongs to the department making the request
+                        if (pool == false)
+                        {
+                            string roomDepQuery1 = "select Dept_ID from [Private_Rooms] where Room_ID = '" + room1 + "'";
+                            connection.Open();
+                            SqlCommand getDep1 = new SqlCommand(roomDepQuery1, connection);  //gets Pool - 0 if private room, 1 if is a pool room
+                            roomDep1 = getDep1.ExecuteScalar().ToString();
+                            connection.Close();
+                        }
+
+                        //if room department different to that of the department making the request, pool set to true
+                        if (roomDep1 != dep)
+                        {
+                            pool = true;
+                        }
+                      
+                    }
+
+                 
+                    if (numRooms > 1)
+                    {
+                        if (pool == false)  //only carried out if 1st room is private
+                        {
+                            //only carried out if room2 has been specified
+                            bool result2 = true;
+                            if (room2 != "")
+                            {
+                                string poolQuery2 = "select Pool from [Rooms] where Room_ID = '" + room2 + "'";
+                                connection.Open();
+                                SqlCommand getPool2 = new SqlCommand(poolQuery2, connection);  //gets Pool - 0 (false) if private room, 1 (true) if is a pool room
+                                result2 = Convert.ToBoolean(getPool2.ExecuteScalar().ToString());
+                                connection.Close();
+                            }
+                      
+
+                            if (result2 == false)
+                            {
+                                pool = false;
+                            }
+                            else
+                            {
+                                pool = true;    //sets pool back to true if 1st room is private room, but if 2nd room is pool
+                            }
+
+                            string roomDep2 = "";   //contains department of the room i.e. CO
+                            //finds out if the room belongs to the department making the request
+                            if (pool == false)
+                            {
+                                string roomDepQuery2 = "select Dept_ID from [Private_Rooms] where Room_ID = '" + room2 + "'";
+                                connection.Open();
+                                SqlCommand getDep2 = new SqlCommand(roomDepQuery2, connection);  //gets Pool - 0 if private room, 1 if is a pool room
+                                roomDep2 = getDep2.ExecuteScalar().ToString();
+                                connection.Close();
+                            }
+
+                            //if room department different to that of the department making the request, pool set to true
+                            if (roomDep2 != dep)
+                            {
+                                pool = true;
+                            }
+                          
+                        }            
+                    }
+
+                    if (numRooms > 2)
+                    {
+                        if (pool == false)  //only carried out if 1st and 2nd room are private rooms
+                        {
+                            bool result3 = true;
+                            //only carried out if room3 is specified
+                            if (room3 != "")
+                            {
+                                string poolQuery3 = "select Pool from [Rooms] where Room_ID = '" + room3 + "'";
+                                connection.Open();
+                                SqlCommand getPool3 = new SqlCommand(poolQuery3, connection);  //gets Pool - 0 (false) if private room, 1 (true) if is a pool room
+                                result3 = Convert.ToBoolean(getPool3.ExecuteScalar().ToString());
+                                connection.Close();
+                            }
+                   
+
+                            if (result3 == false)
+                            {
+                                pool = false;
+                            }
+                            else
+                            {
+                                pool = true;    //sets pool back to true if 1st room is private room, but if 2nd room is pool
+                            }
+
+                            string roomDep3 = "";   //contains department of the room i.e. CO
+                            //finds out if the room belongs to the department making the request
+                            if (pool == false)
+                            {
+                                string roomDepQuery3 = "select Dept_ID from [Private_Rooms] where Room_ID = '" + room3 + "'";
+                                connection.Open();
+                                SqlCommand getDep3 = new SqlCommand(roomDepQuery3, connection);  //gets Pool - 0 if private room, 1 if is a pool room
+                                roomDep3 = getDep3.ExecuteScalar().ToString();
+                                connection.Close();
+                            }
+
+                            //if room department different to that of the department making the request, pool set to true
+                            if (roomDep3 != dep)
+                            {
+                                pool = true;
+                            }
+                            
+                        }
+                    }
+
+                    //if it is a pool room, writes the request to [Bookings] as 'pending'
+                    
+                    if (pool == true)
+                    {
+                        string writeBooking = "insert into [Bookings] (Request_ID, Confirmed) Values (@Request_ID, @Confirmed) ";
+                        SqlCommand cmdWB = new SqlCommand(writeBooking);
+                        cmdWB.Parameters.AddWithValue("@Request_ID", requestID);
+                        cmdWB.Parameters.AddWithValue("@Confirmed", "Pending");
+                        cmdWB.CommandType = CommandType.Text;
+                        cmdWB.Connection = connection;
+                        connection.Open(); //opening connection with the DB
+                        cmdWB.ExecuteNonQuery();
+                        connection.Close();
+                    }else{
+                        string writeBooking = "insert into [Bookings] (Request_ID, Confirmed) Values (@Request_ID, @Confirmed) ";
+                        SqlCommand cmdWB = new SqlCommand(writeBooking);
+                        cmdWB.Parameters.AddWithValue("@Request_ID", requestID);
+                        cmdWB.Parameters.AddWithValue("@Confirmed", "Allocated");
+                        cmdWB.CommandType = CommandType.Text;
+                        cmdWB.Connection = connection;
+                        connection.Open(); //opening connection with the DB
+                        cmdWB.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    
+        
                 }
 
             }

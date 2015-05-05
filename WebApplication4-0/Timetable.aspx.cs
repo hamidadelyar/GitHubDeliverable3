@@ -56,18 +56,18 @@ namespace WebApplication4_0
             string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Lecturers ON Lecturers.Lecturer_ID = Request_Lecturers.Lecturer_ID"; // sets the left join to include all the tables needed for the search
             retData = SQLSelect.SelectList("Requests", "DISTINCT Requests.Module_Code, Requests.Start_Time, Requests.End_Time, Request_Preferences.Room_ID, Request_Preferences.Weeks, Request_Weeks.Week_ID, Request_Lecturers.Lecturer_ID, Lecturers.Lecturer_Name, Requests.Day, Modules.Module_Title", where, leftJoin); // runs select to get the details of matching bookings         
             int lastNum = -1;
-            for(int j = 0; j < retData.Count; j++)
+            for(int j = 0; j < retData.Count; j++) // loops through all the rows of returned data
             {
-                for (int i = 1; i < 16; i++)
+                for (int i = 1; i < 16; i++) // loops through all the weeks
                 {
-                    if(i < 13)
+                    if(i < 13) // check if the currewnt week is one of the default weeks
                     {
-                        if (retData[j][4] == "True")
+                        if (retData[j][4] == "True" || retData[j][4] == "1") // checks whether the room is set to having default weeks 
                         {
-                            if (modList.Count == 0)
+                            if (modList.Count == 0) // if the list of modules is empty
                             {
                                 Modules newMod = new Modules(retData[j][0], retData[j][1], retData[j][2], retData[j][3], i, retData[j][6], retData[j][7], retData[j][8], retData[j][9]);
-                                modList.Add(newMod);
+                                modList.Add(newMod); // create and add a new module to the list of modules
                             }
                             else
                             {
@@ -133,7 +133,7 @@ namespace WebApplication4_0
             return elList[1]; // returns text after colon in desired element
         }
     }
-    public class Modules
+    public class Modules // object to store all the data about a module when they are turned up in the search
     {
         public string modCode = "";
         public string modName = "";
@@ -159,7 +159,7 @@ namespace WebApplication4_0
 
         public void addWeek(int i)
         {
-            week.Add(i);
+            week.Add(i); // function to add a week to the list of weeks a module has
         }
     }
     public class SQLSelect
@@ -178,7 +178,6 @@ namespace WebApplication4_0
             conn.Open(); //opening connection with the DB
             //prepare query
             string roomQuery = "Select " + columns + " FROM " + table + " " + leftJoin + " WHERE " + where;   //produces a select statement from the parameters passed to the function
-            System.Diagnostics.Debug.WriteLine(roomQuery);
             SqlCommand comm = new SqlCommand(roomQuery, conn);  //1st argument is query, 2nd argument is connection with DB
 
             SqlDataAdapter da = new SqlDataAdapter(comm);

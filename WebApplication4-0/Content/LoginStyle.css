@@ -1,4 +1,4 @@
-﻿
+
 /* reset */
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,dl,dt,dd,ol,nav ul,nav li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}
 article, aside, details, figcaption, figure,footer, header, hgroup, menu, nav, section {display: block;}
@@ -35,6 +35,10 @@ body{
 	vertical-align: middle;
 	margin-right: 5.2em;
 }
+.user img {
+    position: relative;
+    top: 1em;
+}
 .login{
 	padding:2em 0;
 }
@@ -55,9 +59,10 @@ body{
 	border-top: 0 solid rgba(0, 0, 0, 0)!important;
 	border-right: 13px solid rgba(0, 0, 0, 0)!important;
 	border-left: 13px solid rgba(0, 0, 0, 0);
-	left: 77.1%;
-	top: -5.3%;
-	position: absolute;
+    top:-4.3em;
+    left:100%;
+    margin-left:-4.9em;
+	position: relative;
 }
 form span {
 	display: block;
@@ -69,7 +74,7 @@ form span {
 }
 input[type="text"],input[type="Password"] {
 	padding: 9px;
-	width: 90%;
+	width: 94%;
 	font-size: 1.1em;
 	margin: 18px 0px;
 	border: 2px solid#EAEEF1;
@@ -110,10 +115,10 @@ input[type="text"]:hover,input[type="Password"]:hover,#active{
 	font-family: 'Open Sans', sans-serif;
 	color: #FFF;
 	font-size: 0.9em;
-	border-radius: 1.3em;
-	-webkit-border-radius: 1.3em;
-	-moz-border-radius: 1.3em;
-	-o-border-radius: 1.3em;
+	border-radius: 0.7em;
+	-webkit-border-radius: 0.7em;
+	-moz-border-radius: 0.7em;
+	-o-border-radius: 0.7em;
 	transition: 0.5s all;
 	-webkit-transition: 0.5s all;
 	-moz-transition: 0.5s all;
@@ -175,8 +180,9 @@ input[type="text"]:hover,input[type="Password"]:hover,#active{
 		margin-right: 4.2em;
 	}
 	.inset:before {
-	left: 80%;
-	top: -5.3%;
+	    top:-4.3em;
+    left:100%;
+    margin-left:-4.9em;
 	}
 }
 @media (max-width:1366px){
@@ -184,8 +190,9 @@ input[type="text"]:hover,input[type="Password"]:hover,#active{
 		width:36%;
 	}
 	.inset:before {
-		left: 80%;
-		top: -5%;
+		    top:-4.3em;
+    left:100%;
+    margin-left:-4.9em;
 	}
 }
 @media (max-width:1280px){
@@ -196,8 +203,9 @@ input[type="text"]:hover,input[type="Password"]:hover,#active{
 	margin-right: 5.2em;
 	}
 	.inset:before {
-	left: 78.3%;
-	top: -5.4%;
+	    top:-4.3em;
+    left:100%;
+    margin-left:-4.9em;
 	}
 	input[type="text"], input[type="Password"] {
 	padding: 9px;
@@ -210,8 +218,9 @@ input[type="text"]:hover,input[type="Password"]:hover,#active{
 		margin: 8em auto 0;
 	}
 	.inset:before {
-		left: 77.2%;
-		top: -5.4%;
+		    top:-4.3em;
+    left:100%;
+    margin-left:-4.9em;
 	}
 }
 @media (max-width:768px){
@@ -219,8 +228,9 @@ input[type="text"]:hover,input[type="Password"]:hover,#active{
 		width:59%;
 	}
 	.inset:before {
-	left: 75.3%;
-	top: -5.4%;
+	    top:-4.3em;
+    left:100%;
+    margin-left:-4.9em;
 	}
 }
 @media (max-width:640px){
@@ -228,8 +238,9 @@ input[type="text"]:hover,input[type="Password"]:hover,#active{
 		width:67%;
 	}
 	.inset:before {
-	left: 74.2%;
-	top: -5.4%;
+	    top:-4.3em;
+    left:100%;
+    margin-left:-4.9em;
 	}
 }
 @media (max-width:480px){
@@ -241,8 +252,9 @@ input[type="text"]:hover,input[type="Password"]:hover,#active{
 	margin-right: 4.2em;
 	}
 	.inset:before {
-	left: 74.2%;
-	top: -5.4%;
+	    top:-4.3em;
+    left:100%;
+    margin-left:-4.9em;
 	}
 }
 @media (max-width:320px){
@@ -251,8 +263,9 @@ input[type="text"]:hover,input[type="Password"]:hover,#active{
 		margin: 2em auto 0;
 	}
 	.inset:before {
-	left: 67%;
-	top: -4.4%;
+	    top:-4.3em;
+    left:100%;
+    margin-left:-4.9em;
 	}	
 	.user {
 	margin-right: 4.2em;

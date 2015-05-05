@@ -15,18 +15,24 @@ namespace WebApplication4_0
     public partial class FindRoom : System.Web.UI.Page
     {
         public string tblFacs = "";
+        public string department = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             tblFacs = SQLSelect.Select("Facilities", "Facility_Name", "1=1", "");
+            if (Session["LoggedIn"] != null)
+            {
+                string username = Session["Username"].ToString();
+                department = SQLSelect.Select("Users", "Dept_ID", "Username = '"+username+"'","");
+            }
         }
         [System.Web.Services.WebMethod]
-        public static string SearchRooms(string parks, string semester,  string weeks, string periods, string students, string facs, string roomType) //Accepts all the data needed to outline what type and time of room the user needs
+        public static string SearchRooms(string parks, string semester,  string weeks, string periods, string students, string facs, string roomType, string department) //Accepts all the data needed to outline what type and time of room the user needs
         {
             List<Periods> times = new List<Periods>();
  
-            List<Rooms> parkRooms = SearchParks(parks, roomType, students); // Calls the function to find all the rooms that match the park, type and capacity request of the students.
-            List<Rooms> takenRooms = SearchPeriods(semester, weeks, periods, times); // Calls the function which finds all the rooms taken on the times and weeks that the user wants.
-            List<Rooms> facRooms = SearchFacs(facs); // Calls the function to find all the rooms that have all the facilities the user has said they need
+            List<Rooms> parkRooms = SearchParks(parks, roomType, students, department); // Calls the function to find all the rooms that match the park, type and capacity request of the students.
+            List<Rooms> takenRooms = SearchPeriods(semester, weeks, periods, times, department); // Calls the function which finds all the rooms taken on the times and weeks that the user wants.
+            List<Rooms> facRooms = SearchFacs(facs, department); // Calls the function to find all the rooms that have all the facilities the user has said they need
             
             List<Rooms> possRooms = new List<Rooms>();
 
@@ -108,7 +114,7 @@ namespace WebApplication4_0
             rooms = rooms.OrderBy(x => x.week).ThenBy(x => x.day).ThenBy(x => x.start).ThenBy(x => x.park).ThenBy(x => x.room).ToList(); // order the rooms into week, day, start, park and finally alphabetical order for easier use in javascript
             return json.Serialize(rooms); // return a json of the list
         } 
-        private static List<Rooms> SearchParks(string parkData, string typeData, string students) // Function to find the rooms that are in the right park, of the right type and have the needed capacity
+        private static List<Rooms> SearchParks(string parkData, string typeData, string students, string department) // Function to find the rooms that are in the right park, of the right type and have the needed capacity
         {
             JavaScriptSerializer json = new JavaScriptSerializer();
             List<int> parks = json.Deserialize<List<int>>(parkData); // turn the json of user selected parks to a list of ints
@@ -124,8 +130,8 @@ namespace WebApplication4_0
                 {
                     char parkID = parkList[i]; // create a char of the current selected park e.g C for central
                     
-                    retRooms = SQLSelect.Select("Rooms", "Room_ID, Room_Type, Park_ID", "Buildings.Park_ID = '" + parkID + "' AND Rooms.Room_Type LIKE '" + typeC + "' AND Rooms.Capacity >= " + students , "LEFT JOIN Buildings ON Rooms.Building_ID = Buildings.Building_ID");
-                    //Runs a select statement using left joins to get the rooms that match the park, type and has a capacity greater than or equal to what the user needs
+                    retRooms = SQLSelect.Select("Rooms", "Rooms.Room_ID, Room_Type, Park_ID", "Buildings.Park_ID = '" + parkID + "' AND Rooms.Room_Type LIKE '" + typeC + "' AND Rooms.Capacity >= " + students + " AND (Rooms.Pool = 1 OR Private_Rooms.Dept_ID = '" + department + "')" , "LEFT JOIN Buildings ON Rooms.Building_ID = Buildings.Building_ID LEFT JOIN Private_Rooms ON Private_Rooms.Room_ID = Rooms.Room_ID");
+                    //Runs a select statement using left joins to get the rooms that match the park, type, has a capacity greater than or equal to what the user needs and are pool or the departments private rooms
                     
                     //This block removes the uneeded symbols that are produced when the select returns as string as JSON
                     retRooms = retRooms.Replace("\"", "");
@@ -154,7 +160,7 @@ namespace WebApplication4_0
             rooms = rooms.OrderBy(x => x.roomNum).ToList(); // order the rooms list into alphabetical order on the room code.
             return rooms;
         }
-        private static List<Rooms> SearchPeriods(string semester, string weekData, string periodData, List<Periods> times)
+        private static List<Rooms> SearchPeriods(string semester, string weekData, string periodData, List<Periods> times, string department)
         {
             JavaScriptSerializer json = new JavaScriptSerializer();
             List<int> weeks = json.Deserialize<List<int>>(weekData); // turn the string of passed weeks to a list
@@ -209,9 +215,9 @@ namespace WebApplication4_0
                         int day = times[j - 1].getDay(); // set the int day to the day of current period element
                         if (weeks[i - 1] < 13) // if the week is less than 13 we look for default weeks
                         {
-                            leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID";
-                            where = "Requests.Day = " + day + " AND Requests.Semester = " + semester + " AND (Requests.Start_Time = " + startTime + " OR (Requests.Start_Time < " + startTime + " AND Requests.End_Time > " + startTime + ") OR (Requests.Start_Time < " + endTime + " AND Requests.End_Time > " + endTime + ") OR Requests.End_Time = " + endTime + ") AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true') AND Bookings.Confirmed = 'Allocated'";
-                            retRooms = SQLSelect.Select("Requests", "Request_Preferences.Room_ID", where, leftJoin); // select the room id of all rooms that have a booking at the same start time, are on during the start time selected or start before the selected period stops and have default weeks set
+                            leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Rooms ON Rooms.Room_ID = Request_Preferences.Room_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Private_Rooms ON Private_Rooms.Room_ID = Rooms.Room_ID";
+                            where = "Requests.Day = " + day + " AND Requests.Semester = " + semester + " AND (Requests.Start_Time = " + startTime + " OR (Requests.Start_Time < " + startTime + " AND Requests.End_Time > " + startTime + ") OR (Requests.Start_Time < " + endTime + " AND Requests.End_Time > " + endTime + ") OR Requests.End_Time = " + endTime + ") AND (Request_Preferences.Weeks = 1 OR Request_Preferences.Weeks = 'true') AND Bookings.Confirmed = 'Allocated' AND (Rooms.Pool = 1 OR Private_Rooms.Dept_ID = '" + department + "')";
+                            retRooms = SQLSelect.Select("Requests", "Request_Preferences.Room_ID", where, leftJoin); // select the room id of all rooms that have a booking at the same start time, are on during the start time selected or start before the selected period stops, have default weeks set and are either pool or private rooms
                         }
                         else
                         {
@@ -219,9 +225,9 @@ namespace WebApplication4_0
                         }
                         if (retRooms == "[]") // if nothing has been returned  search for those that dont have booking for default weeks e.g a booking may be made for one week only
                         {
-                            leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID";
-                            where = "Requests.Day = " + day + " AND Requests.Semester = " + semester + " AND (Requests.Start_Time = " + startTime + " OR (Requests.Start_Time < " + startTime + " AND Requests.End_Time > " + startTime + ") OR (Requests.Start_Time < " + endTime + " AND Requests.End_Time > " + endTime + ") OR Requests.End_Time = " + endTime + ") AND Request_Weeks.Week_ID = " + i + " AND Bookings.Confirmed = 'Allocated'";
-                            retRooms = SQLSelect.Select("Requests", "Request_Preferences.Room_ID", where, leftJoin); // select the room id of all rooms that have a booking at the same start time, are on during the start time selected or start before the selected period stops and match the current week
+                            leftJoin = "LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Rooms ON Rooms.Room_ID = Request_Preferences.Room_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Private_Rooms ON Private_Rooms.Room_ID = Rooms.Room_ID";
+                            where = "Requests.Day = " + day + " AND Requests.Semester = " + semester + " AND (Requests.Start_Time = " + startTime + " OR (Requests.Start_Time < " + startTime + " AND Requests.End_Time > " + startTime + ") OR (Requests.Start_Time < " + endTime + " AND Requests.End_Time > " + endTime + ") OR Requests.End_Time = " + endTime + ") AND Request_Weeks.Week_ID = " + i + " AND Bookings.Confirmed = 'Allocated' AND (Rooms.Pool = 1 OR Private_Rooms.Dept_ID = '" + department + "')";
+                            retRooms = SQLSelect.Select("Requests", "Request_Preferences.Room_ID", where, leftJoin); // select the room id of all rooms that have a booking at the same start time, are on during the start time selected or start before the selected period stops, match the current week and are either pool or private rooms
                             if (retRooms != "[]") // if something has been returned by the search
                             {
                                 // this block removes uneeded symbols from the string returned by the select statement
@@ -263,7 +269,7 @@ namespace WebApplication4_0
             }
             return bookedRooms;
         }
-        private static List<Rooms> SearchFacs(string facs)
+        private static List<Rooms> SearchFacs(string facs, string department)
         {
             JavaScriptSerializer json = new JavaScriptSerializer();
             List<int> reqFacs = json.Deserialize<List<int>>(facs); // convert the string of 0 and 1s representing facilities to a list of 0's and 1's
@@ -286,9 +292,9 @@ namespace WebApplication4_0
                     if (reqFacs[i] == 1) // if set to 1 the user has selected the facility
                     {
                         numRequests++; // increase the number of requests by 1
-                        leftJoin = "LEFT JOIN Rooms ON Rooms.Room_ID = Room_Facilities.Room_ID LEFT JOIN Buildings ON Buildings.Building_ID = Rooms.Building_ID";
-                        where = "Room_Facilities.Facility_ID = '" + facilities[i] + "'";
-                        retRooms = SQLSelect.Select("Room_Facilities", "Room_Facilities.Room_ID, Buildings.Park_ID, Rooms.Room_Type", where, leftJoin); // select all the rooms where the facilities match those requested. Get the parka nd type too to make object
+                        leftJoin = "LEFT JOIN Rooms ON Rooms.Room_ID = Room_Facilities.Room_ID LEFT JOIN Buildings ON Buildings.Building_ID = Rooms.Building_ID LEFT JOIN Private_Rooms ON Private_Rooms.Room_ID = Rooms.Room_ID";
+                        where = "Room_Facilities.Facility_ID = '" + facilities[i] + "' AND (Rooms.Pool = 1 OR Private_Rooms.Dept_ID = '" + department + "')";
+                        retRooms = SQLSelect.Select("Room_Facilities", "Room_Facilities.Room_ID, Buildings.Park_ID, Rooms.Room_Type", where, leftJoin); // select all the rooms where the facilities match those requested and are pool or the departments private rooms. Get the park and type too to make object
                         if (retRooms != "[]") // if result was non empty
                         {
                             // this block strips uneeded symbols from the string returned by the select statement
@@ -340,9 +346,9 @@ namespace WebApplication4_0
             }
             else
             {
-                leftJoin = "LEFT JOIN Buildings ON Buildings.Building_ID = Rooms.Building_ID";
+                leftJoin = "LEFT JOIN Buildings ON Buildings.Building_ID = Rooms.Building_ID LEFT JOIN Private_Rooms ON Private_Rooms.Room_ID = Rooms.Room_ID";
                 where = "1=1";
-                retRooms = SQLSelect.Select("Rooms", "Rooms.Room_ID, Buildings.Park_ID, Rooms.Room_Type", where, leftJoin); // select all rooms as no specific requirements
+                retRooms = SQLSelect.Select("Rooms", "Rooms.Room_ID, Buildings.Park_ID, Rooms.Room_Type", where, leftJoin); // select all rooms that are pool or the departments as no specific requirements
                 if (retRooms != "[]") // if resulkt is non empty
                 {
                     //this block strips uneeded symbols from the result

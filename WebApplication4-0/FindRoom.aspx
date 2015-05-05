@@ -11,6 +11,8 @@
         var semSet = 0;
         var showing = false;
         var facs = <%= this.tblFacs %>;
+        var department = <%= this.department %>;
+        department = department[0]['Dept_ID'];
         $(document).ready(function () {
             var cols = 1;
             var facCells = "";
@@ -247,14 +249,20 @@
             })
             $('.filtCirc').click(function () {
                 var id = $(this).attr('id');
+                var typeClick = $(this).attr('typeClass')
                 var currVal = $(this).siblings('input').val();
-                if (currVal == 0)
-                {
+                if (currVal == 0) {
+                    $('.' + id).addClass(typeClick);
                     $('.' + id).hide();
                 }
                 else
                 {
-                    $('.' + id).show();
+                    $('.' + id).removeClass(typeClick);
+                    $('.' + id).each(function() {
+                        if (!$(this).hasClass('typeHide')) {
+                            $(this).show();   
+                        }  
+                    })
                 }
             });
         });
@@ -400,7 +408,7 @@
             $.ajax({
                 type: "POST",
                 url: "FindRoom.aspx/SearchRooms",
-                data: JSON.stringify({ parks: parks, semester: semSet, weeks: weeks, periods: periods, students:students, facs:facs, roomType: typeSet}),
+                data: JSON.stringify({ parks: parks, semester: semSet, weeks: weeks, periods: periods, students:students, facs:facs, roomType: typeSet, department: department}),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -1076,9 +1084,9 @@
                         <td class="subHdr" colspan="8"><b>PARK</b></td>
                     </tr>
                     <tr class="parkRw">
-                        <td class="CentFilt" ><b>CENTRAL PARK</b></td><td class="CentFilt"> <span class="line" ></span><span class="park circ filtCirc" id="C"></span><input class="parkResCheck" type="hidden" value="1" /></td>
-                        <td class="WestFilt" ><b>WEST PARK</b></td><td class="WestFilt"> <span class="line" ></span><span class="park circ filtCirc" id="W"></span><input class="parkResCheck" type="hidden" value="1" /></td>
-                        <td class="EastFilt" ><b>EAST PARK</b></td><td class="EastFilt"> <span class="line" ></span><span class="park circ filtCirc" id="E"></span><input class="parkResCheck" type="hidden" value="1" /></td>
+                        <td class="CentFilt" ><b>CENTRAL PARK</b></td><td class="CentFilt"> <span class="line" ></span><span class="park circ filtCirc" typeClass="parkHide" id="C"></span><input class="parkResCheck" type="hidden" value="1" /></td>
+                        <td class="WestFilt" ><b>WEST PARK</b></td><td class="WestFilt"> <span class="line" ></span><span class="park circ filtCirc" typeClass="parkHide" id="W"></span><input class="parkResCheck" type="hidden" value="1" /></td>
+                        <td class="EastFilt" ><b>EAST PARK</b></td><td class="EastFilt"> <span class="line" ></span><span class="park circ filtCirc" typeClass="parkHide" id="E"></span><input class="parkResCheck" type="hidden" value="1" /></td>
                         <td class="noParkFilt" colspan="6">No park filters. You have only selected one park.</td>
                         <td colspan="2"></td>
                     </tr>
@@ -1086,9 +1094,9 @@
                         <td class="subHdr" colspan="8"><b>TYPE</b></td>
                     </tr>
                     <tr class="typeRw">
-                        <td class="typeFilt"><b>LECTURE</b></td><td class="typeFilt"> <span class="line" ></span><span class="park circ filtCirc" id="T"></span><input class="typeResCheck" type="hidden" value="1" /></td>
-                        <td class="typeFilt"><b>SEMINAR</b></td><td class="typeFilt"> <span class="line" ></span><span class="park circ filtCirc" id="S"></span><input class="typeResCheck" type="hidden" value="1" /></td>
-                        <td class="typeFilt"><b>IT LAB</b></td><td class="typeFilt"> <span class="line" ></span><span class="park circ filtCirc" id="L"></span><input class="typeResCheck" type="hidden" value="1" /></td>
+                        <td class="typeFilt"><b>LECTURE</b></td><td class="typeFilt"> <span class="line" ></span><span class="park circ filtCirc" typeClass="typeHide" id="T"></span><input class="typeResCheck" type="hidden" value="1" /></td>
+                        <td class="typeFilt"><b>SEMINAR</b></td><td class="typeFilt"> <span class="line" ></span><span class="park circ filtCirc" typeClass="typeHide" id="S"></span><input class="typeResCheck" type="hidden" value="1" /></td>
+                        <td class="typeFilt"><b>IT LAB</b></td><td class="typeFilt"> <span class="line" ></span><span class="park circ filtCirc" typeClass="typeHide" id="L"></span><input class="typeResCheck" type="hidden" value="1" /></td>
                         <td class="noTypeFilt" colspan="6">No type filters. You have selected a type.</td>
                         <td colspan="2"></td>
                     </tr>
