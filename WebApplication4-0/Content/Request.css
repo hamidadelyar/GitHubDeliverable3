@@ -1,0 +1,591 @@
+﻿    #requestContainer
+       {
+            margin-top:50px;
+            margin-bottom:5px;
+            width:100%;
+            height:500px;
+            border-radius:10px;
+            /*background-color:#FFF;*/
+            background-color: #3e454d;
+            float:left;
+
+            
+        }
+        
+     #modDetails
+        {
+            margin-left:2.5%;
+            width:95%;
+            height:90%;
+            table-layout:fixed;
+            text-align:center;
+            color:#3E454D;
+
+        }
+
+ 
+     .preferenceTable{
+            margin-left:2.5%;
+            width:95%;
+            height:90%;
+            table-layout:fixed;
+            text-align:center;
+            color:#3E454D;
+     }
+
+ 
+input[type="text"]{
+	padding: 9px;
+	width: 90%;
+	font-size: 1.1em;
+	margin: 18px 0px;
+	border: 2px solid#EAEEF1;
+	color: #666666;
+	background:#EAEEF1;
+	font-family: 'Open Sans', sans-serif;
+	font-weight:600;
+	margin-left: 5px;
+	outline:none;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+
+input[type="text"]:hover, #active
+{
+	background:#fff;
+	border:2px solid #609EC3;
+	outline:none;
+}
+
+
+textarea{
+	padding: 9px;
+	width: 90%;
+	font-size: 1.1em;
+	margin: 18px 0px;
+	border: 2px solid#EAEEF1;
+	color: #666666;
+	background:#EAEEF1;
+	font-family: 'Open Sans', sans-serif;
+	font-weight:600;
+	margin-left: 5px;
+	outline:none;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+
+textarea:hover, #active
+{
+	background:#fff;
+	border:2px solid #609EC3;
+	outline:none;
+}
+
+/*
+    orange
+input[type="text"]{
+	padding: 9px;
+	width: 90%;
+	font-size: 1.1em;
+	margin: 18px 0px;
+	border-bottom: 4px solid #ff8060;
+    border-top: 4px solid #ff8060;
+	color: #666666;
+	background:white;
+	font-family: 'Open Sans', sans-serif;
+	font-weight:600;
+	margin-left: 5px;
+	outline:none;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+
+input[type="text"]:hover, #active, input[type="text"]:focus
+{
+	background:#fff;
+	border-bottom:4px solid #609EC3;
+    border-top:4px solid #609EC3;
+
+	outline:none;
+}
+
+    */
+.line{
+    background: #3E454D;
+    float:left;
+    width:103%;
+    height:1px;
+}
+
+   
+
+.divClass {
+	clear: both;
+	margin: 0;
+    width: 140px;
+}
+
+.divClass label {
+  width: 140px;
+  border-radius: 3px;
+  border: 1px solid #D1D3D4
+}
+
+/* hide input */
+.divClass input.radio:empty {
+	margin-left: -999px;
+    display: none;
+}
+
+/* style label */
+.divClass input.radio:empty ~ label {
+	position: relative;
+	float: left;
+	line-height: 2.5em;
+	text-indent: 3.25em;
+	margin-top: 2em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+    font-family:"Segoe UI",Verdana,Helvetica,sans-serif;
+    font-size:0.85em; /* sets size of the actual label */
+}
+
+.divClass input.radio:empty ~ label:before {
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: '';
+	width: 2.5em;
+	background: #D1D3D4;
+	border-radius: 3px 0 0 3px;
+}
+
+/* toggle hover */
+.divClass input.radio:hover:not(:checked) ~ label:before {
+	/*content:'\03a7';*/
+    content: '\2713';
+	text-indent: .2em;
+	/*color: #C2C2C2;*/
+    color:#fff;
+}
+
+.divClass input.radio:hover:not(:checked) ~ label {
+	color: #888;
+}
+
+/* toggle on */
+.divClass input.radio:checked ~ label:before {
+	/*content:'\03a7';  X*/
+    content: '\2713';
+	text-indent: .2em;
+	color: white;
+	background-color: #4DCB6D;
+}
+
+.divClass input.radio:checked ~ label {
+	color: #777;
+}
+
+/* radio focus */
+.divClass input.radio:focus ~ label:before {
+	box-shadow: 0 0 0 3px #999;
+}
+
+/* checbox styling same as for radio button, but different colour */
+
+.divClassCheckbox {
+	clear: both;
+	margin: 0;
+    width: 140px;
+}
+
+.divClassCheckbox label {
+  width: 140px;
+  border-radius: 3px;
+  border: 1px solid #D1D3D4
+}
+
+/* hide input */
+.divClassCheckbox input.radio:empty {
+	margin-left: -999px;
+    display: none;
+}
+
+/* style label */
+.divClassCheckbox input.radio:empty ~ label {
+	position: relative;
+	float: left;
+	line-height: 2.5em;
+	text-indent: 3.25em;
+	margin-top: 2em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+    font-family:"Segoe UI",Verdana,Helvetica,sans-serif;
+    font-size:0.85em; /* sets size of the actual label */
+}
+
+.divClassCheckbox input.radio:empty ~ label:before {
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: '';
+	width: 2.5em;
+	background: #D1D3D4;
+	border-radius: 3px 0 0 3px;
+}
+
+/* toggle hover */
+.divClassCheckbox input.radio:hover:not(:checked) ~ label:before {
+	/*content:'\03a7';*/
+    content: '\2713';
+	text-indent: .2em;
+	/*color: #C2C2C2;*/
+    color:#fff;
+}
+
+.divClassCheckbox input.radio:hover:not(:checked) ~ label {
+	color: #888;
+}
+
+/* toggle on */
+.divClassCheckbox input.radio:checked ~ label:before {
+	/*content:'\03a7';  X*/
+    content: '\2713';
+	text-indent: .2em;
+	color: white; /*color of tick when checked*/
+	background-color: #86b4cc; /*color of box when checked*/
+}
+
+.divClassCheckbox input.radio:checked ~ label {
+	color: #777;
+}
+
+/* radio focus */
+.divClassCheckbox input.radio:focus ~ label:before {
+	box-shadow: 0 0 0 3px #999;
+}
+
+
+.bubble
+{
+position: relative;
+width: 130%;
+height: 50px;
+padding: 0px;
+background: #ff8060;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+margin-left:50px;
+color:white;
+}
+
+.bubble:after
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 15px 15px 15px 0;
+border-color: transparent #ff8060;
+display: block;
+width: 0;
+z-index: 1;
+left: -15px;
+top: 10px;
+}
+
+.styled-select select {
+   background: transparent;
+   width: 130%;
+   padding: 5px;
+   font-size: 1em;
+   line-height: 1;
+   border: 0;
+   border-radius: 0;
+   height: 34px;
+   -webkit-appearance: none;
+   font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+   cursor: pointer;
+   }
+
+.styled-select {
+   width: 105%;
+   height: 40px;
+   overflow: hidden;
+   background: url(Images/arrow.png) no-repeat right white;
+   border: 2px solid #D1D3D4;
+   border-radius:6px;
+   }
+
+label{
+    
+}
+
+.ui-autocomplete {
+            max-height: 150px;
+            overflow-y: auto;
+            /* prevent horizontal scrollbar */
+            overflow-x: hidden;
+            /* add padding to account for vertical scrollbar */
+            padding-right: 20px;
+            max-width: 200px;
+
+         
+    }
+    /* IE 6 doesn't support max-height
+     * we use height instead, but this forces the menu to always be this tall
+     */
+* html .ui-autocomplete {
+      height: 100px;
+      width: 2000px;
+ }
+
+.pop{
+  display:none;
+  position:fixed;
+  top:20%;
+  left:7.5%;
+  width:85%;
+  height:60%;
+  border-radius:8px;
+  background:#ff8060;
+  color:white;
+  font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+  
+}
+
+h1{
+  font-family:"Segoe UI",Verdana,Helvetica,sans-serif;
+}
+
+
+input[type=checkbox] {
+	visibility: hidden;
+}
+
+/**
+ * Create the slider bar
+ */
+.checkboxOne {
+	width: 50px;
+	height: 15px;
+	background: white;
+	position: relative;
+	border-radius: 3px;
+}
+
+/*text inside check box*/
+/*
+.checkboxOne:before {
+	content: 'Yes';
+	position: absolute;
+	top: 12px;
+	left: 13px;
+	height: 2px;
+	color: #26ca28;
+	font-size: 16px;
+}
+*/
+/**
+ * Create the slider from the label
+ */
+.checkboxOne label {
+	display: block;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+
+	-webkit-transition: all .5s ease;
+	-moz-transition: all .5s ease;
+	-o-transition: all .5s ease;
+	-ms-transition: all .5s ease;
+	transition: all .5s ease;
+	cursor: pointer;
+	position: absolute;
+	top: -10px;
+	left: -7px;
+
+	background: #999;
+}
+
+/**
+ * Move the slider in the correct position if the checkbox is clicked
+ */
+.checkboxOne input[type=checkbox]:checked + label {
+	left: 27px;
+    background: none repeat scroll 0 0 #4DCB6D;
+    content: 'on';
+}
+
+.pop table td input[type=button]{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+
+.orangeButton {
+	-moz-box-shadow: 0px 10px 14px -7px #ff8060;
+	-webkit-box-shadow: 0px 10px 14px -7px #ff8060;
+	box-shadow: 0px 10px 14px -7px #ff8060;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ff8060), color-stop(1, #fa7250));
+	background:-moz-linear-gradient(top, #ff8060 5%, #fa7250 100%);
+	background:-webkit-linear-gradient(top, #ff8060 5%, #fa7250 100%);
+	background:-o-linear-gradient(top, #ff8060 5%, #fa7250 100%);
+	background:-ms-linear-gradient(top, #ff8060 5%, #fa7250 100%);
+	background:linear-gradient(to bottom, #ff8060 5%, #fa7250 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff8060', endColorstr='#fa7250',GradientType=0);
+	background-color:#ff8060;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	border:1px solid #ff5126;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:11px 20px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ff8060;
+}
+.orangeButton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #e0512d), color-stop(1, #fa7250));
+	background:-moz-linear-gradient(top, #e0512d 5%, #fa7250 100%);
+	background:-webkit-linear-gradient(top, #e0512d 5%, #fa7250 100%);
+	background:-o-linear-gradient(top, #e0512d 5%, #fa7250 100%);
+	background:-ms-linear-gradient(top, #e0512d 5%, #fa7250 100%);
+	background:linear-gradient(to bottom, #e0512d 5%, #fa7250 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e0512d', endColorstr='#fa7250',GradientType=0);
+	background-color:#3e7327;
+}
+.orangeButton:active {
+	position:relative;
+	top:1px;
+}
+
+/*size of font inside buttons */
+td input[type="submit"], td input[type="button"], td button{
+    font-size:1.5em;
+}
+
+#contentContainer{
+     box-shadow: 10px 10px 40px grey; 
+     -moz-box-shadow: 10px 10px 40px grey; 
+     -webkit-box-shadow: 10px 10px 40px grey; 
+}
+
+.greenButton {
+	-moz-box-shadow: 0px 10px 14px -7px #3e7327;
+	-webkit-box-shadow: 0px 10px 14px -7px #3e7327;
+	box-shadow: 0px 10px 14px -7px #3e7327;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #77b55a), color-stop(1, #72b352));
+	background:-moz-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-webkit-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-o-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-ms-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77b55a', endColorstr='#72b352',GradientType=0);
+	background-color:#77b55a;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	border:1px solid #4b8f29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:11px 20px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #5b8a3c;
+}
+.greenButton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3e7327), color-stop(1, #77b55a));
+	background:-moz-linear-gradient(top, #3e7327 5%, #77b55a 100%);
+	background:-webkit-linear-gradient(top, #3e7327 5%, #77b55a 100%);
+	background:-o-linear-gradient(top, #3e7327 5%, #77b55a 100%);
+	background:-ms-linear-gradient(top, #3e7327 5%, #77b55a 100%);
+	background:linear-gradient(to bottom, #3e7327 5%, #77b55a 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3e7327', endColorstr='#77b55a',GradientType=0);
+	background-color:#3e7327;
+}
+.greenButton:active {
+	position:relative;
+	top:1px;
+}
+
+
+
+#confirmationContainer{
+  position:fixed;
+  top:20%;
+  left:30%;
+  width:40%;
+  /*height:30%; taking this out allows height to adjust*/ 
+  border-radius:8px;
+  background:white;
+  border: solid 5px black;
+  font-size: 1em;
+  color:black;
+  font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+  box-shadow: 30px 30px 70px black;
+  -moz-box-shadow: 30px 30px 70px black;
+  -webkit-box-shadow: 30px 30px 70px black;
+  
+}
+
+
+
+#validationContainer{
+  /*display:none;*/
+  position:fixed;
+  top:35%;
+  left:30%;
+  width:40%;
+  /*height:30%; taking this out allows height to adjust*/ 
+  border-radius:8px;
+  background:white;
+  border: solid 5px black;
+  font-size: 1em;
+  color:black;
+  font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+  box-shadow: 30px 30px 70px black;
+  -moz-box-shadow: 30px 30px 70px black;
+  -webkit-box-shadow: 30px 30px 70px black;
+}
+
+#lecturerRowTable tr td ul li {
+	display:inline-block;
+	vertical-align: top;
+	width: 30%; /*width of each list item*/
+    float:left;
+    font-weight:600;
+    color: #86b4cc;
+}
+
+lecturerRowTable{
+    font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+    color: #86b4cc;
+
+}
