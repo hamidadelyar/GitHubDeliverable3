@@ -14,7 +14,7 @@ using System.Web.Script.Serialization;
 
 namespace WebApplication4_0
 {
-    public partial class ViewRequest : System.Web.UI.Page
+    public partial class ArchiveRequests : System.Web.UI.Page
     {
         //static SqlConnection conn;
         //DataTable dt;
@@ -201,7 +201,7 @@ namespace WebApplication4_0
 
             html.Append("</table>");
 
-            PlaceHolder1.Controls.Add(new Literal { Text = html.ToString() });
+            //PlaceHolder1.Controls.Add(new Literal { Text = html.ToString() });
 
             /*conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             conn.Open();

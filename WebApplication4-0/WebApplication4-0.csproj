@@ -131,6 +131,7 @@
     <Content Include="AdminFolder\Requests.aspx" />
     <Content Include="AdminFolder\Rooms.aspx" />
     <Content Include="AdminFolder\Rounds.aspx" />
+    <Content Include="ArchiveModules.aspx" />
     <Content Include="ArchiveRequests.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\jq.css" />
