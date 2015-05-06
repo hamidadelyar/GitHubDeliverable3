@@ -72,27 +72,29 @@ namespace WebApplication4_0
             //no need to write this on every page as it is on master page
             //checks to see if the user has logged in
             //if not logged in, then redirect to login page
-            if ((Session["LoggedIn"]) == null || (bool)(Session["LoggedIn"]) == false)  //checks to see if it has been set or not or if it is false
+            if (((Session["LoggedIn"]) == null || (bool)(Session["LoggedIn"]) == false) && (Request.Url.AbsolutePath != "/ForgotPassword.aspx" && Request.Url.AbsolutePath != "/ForgotPassword"))  //checks to see if it has been set or not or if it is false
             {   //if not Logged in
-                Response.Redirect("Default.aspx?prevPage="+HttpContext.Current.Request.Url.AbsoluteUri); //redirects to the login page and adds the page url as prevPage
+                Response.Redirect("Default.aspx?prevPage=" + HttpContext.Current.Request.Url.AbsoluteUri); //redirects to the login page and adds the page url as prevPage
             }
+            else if ((Session["LoggedIn"]) != null)
+            {
+                string username = (string)(Session["username"]);
 
-            string username = (string)(Session["username"]);
-
-            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
-            conn.Open();
-            string getForename = "Select Forename from [Users] where Username='" + username + "'";
-            SqlCommand comm2 = new SqlCommand(getForename, conn);  //1st argument is query, 2nd argument is connection with DB
-            string forename = comm2.ExecuteScalar().ToString();
-            string getSurname = "Select Surname from [Users] where Username='" + username + "'";
-            SqlCommand comm3 = new SqlCommand(getSurname, conn);  //1st argument is query, 2nd argument is connection with DB
-            string surname = comm3.ExecuteScalar().ToString();
-            conn.Close();
-            LoginDetails.InnerHtml = "Logged in as: " + forename + " " + surname + " (" + username + ")";
+                SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+                conn.Open();
+                string getForename = "Select Forename from [Users] where Username='" + username + "'";
+                SqlCommand comm2 = new SqlCommand(getForename, conn);  //1st argument is query, 2nd argument is connection with DB
+                string forename = comm2.ExecuteScalar().ToString();
+                string getSurname = "Select Surname from [Users] where Username='" + username + "'";
+                SqlCommand comm3 = new SqlCommand(getSurname, conn);  //1st argument is query, 2nd argument is connection with DB
+                string surname = comm3.ExecuteScalar().ToString();
+                conn.Close();
+                LoginDetails.InnerHtml = "Logged in as: " + forename + " " + surname + " (" + username + ")";
+            }
 
         }
 
-        
+
         protected void logoutButton_Click(object sender, EventArgs e)
         {
             Session["LoggedIn"] = false;

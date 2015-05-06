@@ -121,6 +121,7 @@
     <Content Include="Account\RegisterExternalLogin.aspx" />
     <Content Include="AddModule.aspx" />
     <Content Include="AddRoom.aspx" />
+    <Content Include="AdminFolder\AddUser.aspx" />
     <Content Include="AdminFolder\Admin.aspx" />
     <Content Include="AdminFolder\css\AdminStyle.css" />
     <Content Include="AdminFolder\css\reset.css" />
@@ -132,10 +133,12 @@
     <Content Include="AdminFolder\Rooms.aspx" />
     <Content Include="AdminFolder\Rounds.aspx" />
     <Content Include="ArchiveModules.aspx" />
+    <Content Include="ArchiveRequests.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\jq.css" />
     <Content Include="Content\LoginStyle.css" />
     <Content Include="Content\PopupBlur.css" />
+    <Content Include="Content\Request.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -194,12 +197,14 @@
     <Content Include="Content\Timetable.css" />
     <Content Include="EditModule.aspx" />
     <Content Include="FindRoom.aspx" />
+    <Content Include="ForgotPassword.aspx" />
     <Content Include="Home.aspx" />
     <Content Include="Images\accent.png" />
     <Content Include="Images\add.png" />
     <Content Include="Images\AddCircle.png" />
     <Content Include="Images\bullet.png" />
     <Content Include="Images\change.png" />
+    <Content Include="Images\changeTime.png" />
     <Content Include="Images\heroAccent.png" />
     <Content Include="Images\minus.png" />
     <Content Include="Images\MinusCircle.png" />
@@ -324,6 +329,7 @@
     <Content Include="Scripts\jquery.tablesorter.min.js" />
     <Content Include="Scripts\Loading.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Request.js" />
     <Content Include="Scripts\Timetable.js" />
     <Content Include="SearchRooms.aspx" />
     <Content Include="Timetable.aspx" />
@@ -357,6 +363,13 @@
     </Compile>
     <Compile Include="AddRoom.aspx.designer.cs">
       <DependentUpon>AddRoom.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminFolder\AddUser.aspx.cs">
+      <DependentUpon>AddUser.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminFolder\AddUser.aspx.designer.cs">
+      <DependentUpon>AddUser.aspx</DependentUpon>
     </Compile>
     <Compile Include="AdminFolder\Admin.aspx.cs">
       <DependentUpon>Admin.aspx</DependentUpon>
@@ -451,6 +464,10 @@
     <Compile Include="ArchiveModules.aspx.designer.cs">
       <DependentUpon>ArchiveModules.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ArchiveRequests.aspx.cs">
+      <DependentUpon>ArchiveRequests.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -478,6 +495,13 @@
     </Compile>
     <Compile Include="FindRoom.aspx.designer.cs">
       <DependentUpon>FindRoom.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ForgotPassword.aspx.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ForgotPassword.aspx.designer.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
