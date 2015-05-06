@@ -136,6 +136,7 @@
     <Content Include="ArchiveModules.aspx" />
     <Content Include="ArchiveRequests.aspx" />
     <Content Include="ChangeEmail.aspx" />
+    <Content Include="ChangePassword.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\jq.css" />
     <Content Include="Content\LoginStyle.css" />
@@ -201,6 +202,7 @@
     <Content Include="FindRoom.aspx" />
     <Content Include="ForgotPassword.aspx" />
     <Content Include="Home.aspx" />
+    <Content Include="Images\processing.gif" />
     <Content Include="Images\Edit.png" />
     <Content Include="Images\accent.png" />
     <Content Include="Images\AccessColor1.png" />
@@ -490,6 +492,13 @@
     </Compile>
     <Compile Include="ChangeEmail.aspx.designer.cs">
       <DependentUpon>ChangeEmail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ChangePassword.aspx.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ChangePassword.aspx.designer.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
     </Compile>
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
