@@ -2,29 +2,37 @@
 
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
 
-<script type="text/css" src="Content/jq.css"></script>
+<link rel="stylesheet" href="Content/jq.css"/>
 <script type="text/javascript" src="Scripts/jquery-latest.js"></script>
-<script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script> 
+<script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script>
+<link rel="stylesheet" href="Content/PopupBlur.css" /> 
 <!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>-->
 <style>
-tr {
-    display: none;
-}
-
-tr.header {
-    display: table-row;
+    .pop{
+  display:none;
+  position:fixed;
+  top:20%;
+  left:7.5%;
+  width:85%;
+  height:60%;
+  border-radius:8px;
+  background:#ff8060;
+  color:white;
+  font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
+  
 }
 </style>
 <script type="text/javascript">
 
     $(document).ready(function () {
-
+        /*
         $('tr.header').click(function () {
 
             $(this).nextUntil('tr.header').css('display', function (i, v) {
                 return this.style.display === 'table-row' ? 'none' : 'table-row';
             });
         });
+        */
 
         $.tablesorter.addParser({
             // set a unique id 
@@ -99,6 +107,8 @@ tr.header {
                 );
         }
 
+       
+
         //var row = document.getElementById(x);
         //row.parentNode.removeChild(row);
 
@@ -110,13 +120,32 @@ tr.header {
         //button.click();
         //return true;
     }
+
+    function showDetails() {
+
+        $('#popupDetails').fadeIn(1000);
+        $('#requestTable').removeClass('blur-out');
+        $('#requestTable').removeClass('blur-in');
+
+        //only blurs the text in the footer
+        $('footer .float-left').removeClass('blur-out');
+        $('footer .float-left').addClass('blur-in');
+
+        //blurs header content, i.e. navigation
+        $('header').removeClass('blur-out');
+        $('header').addClass('blur-in');
+
+    }
 </script>
 <hgroup class="header">
     <h1>Your Requests</h1>
     <h2>Click on the Row Number to reveal more information about your request</h2>
 </hgroup>
 <section class ="tableOfRequests">
-<asp:PlaceHolder ID = "PlaceHolder1" runat="server" />
+    <asp:PlaceHolder ID = "PlaceHolder1" runat="server" />
+</section>
+<section class="detailsTable">
+    <asp:PlaceHolder ID = "PlaceHolder2" runat="server" />
 </section>
 
 

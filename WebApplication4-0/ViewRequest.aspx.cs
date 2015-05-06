@@ -71,7 +71,7 @@ namespace WebApplication4_0
             int rms = 0;
             int stu = 0;
             string stat = "";
-
+           
             foreach (DataRow row in dt.Rows)
             {
                 //html.Append("<tr>");
@@ -204,16 +204,20 @@ namespace WebApplication4_0
                     }
                 }
 
+               
+
+                
+
                 html.Append("<td>");
-                html.Append("<input type='button' id='button" + i + "' value='Delete' onclick=\"deleteRow(" + rows[i].getReq() + "," + p + ")\"/>");
+                html.Append("<input type='button' id='buttondel' value='Delete' onclick=\"deleteRow(" + rows[i].getReq() + "," + p + ")\"/>");
                 //html.Append("<asp:button runat='server' id='button" + i + "' Text='Delete' OnClick='deleteRow_Click' />");
                 html.Append("</td>");
-                html.Append("</tr>");
-                html.Append("<tr>");
                 html.Append("<td>");
-                html.Append("data");
-                html.Append("</td>");
+                html.Append("<input type='button' id='buttondet' value='Show Full Details' onclick='showDetails()'/>");
                 html.Append("</tr>");
+
+                StringBuilder html1 = getFullDetails(rows[i].getReq());
+                PlaceHolder2.Controls.Add(new Literal { Text = html1.ToString() });
             }
             html.Append("</tbody>");
           
@@ -221,7 +225,14 @@ namespace WebApplication4_0
 
             html.Append("</table>");
 
+            
+
             PlaceHolder1.Controls.Add(new Literal { Text = html.ToString() });
+            
+
+            
+
+
 
             /*conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             conn.Open();
@@ -357,6 +368,108 @@ namespace WebApplication4_0
                     //conn.Dispose();
         }
 
+        public static StringBuilder getFullDetails(int reqid)
+        {
+            StringBuilder html = new StringBuilder();
+
+            html.Append("<div class='pop' id='popupDetails'>");
+            html.Append("<span id='closePopupDetails' style='cursor: pointer; left: 15px; top: -10px; font-size: 2em; display:inline-block; position:relative; '>✖</span>");
+            html.Append("<h1 style='display:inline-block; left:140px; position:relative; color:white; top: -10px;'>Room Details</h1> ");
+
+            html.Append("<div style='width:100%; height:90%; top:10%; background-color:#3E454D; border-bottom-left-radius:8px; border-bottom-right-radius:8px;'>");
+            html.Append("<table>");
+
+
+            DataTable rooms = GetData("Room_ID, Building_Name, Type_Name, Park_Name, Special_Requirements", "Request_Preferences, Parks, Buildings, Room_Types", "WHERE Request_ID = " + reqid + " AND Parks.Park_ID = Request_Preferences.Park_ID AND Buildings.Building_ID = Request_Preferences.Building_ID AND Room_Types.Room_Type = Request_Preferences.Room_Type");
+            List<string> r = new List<string>();
+            List<RoomInfo> r1 = new List<RoomInfo>();
+
+            string rm = "";
+            string bd = "";
+            string rmt = "";
+            string pk = "";
+            string sp = "";
+
+
+            foreach (DataRow rowr in rooms.Rows)
+            {
+                //html.Append("<tr>");
+                foreach (DataColumn columnr in rooms.Columns)
+                {
+                    string rs = rowr[columnr.ColumnName].ToString();
+                    r.Add(rs);
+
+                    for (int k = 0; k < r.Count; k++)
+                    {
+                        switch (k)
+                        {
+                            case 0: rm = r[k]; break;
+                            case 1: bd = r[k]; break;
+                            case 2: rmt = r[k]; break;
+                            case 3: pk = r[k]; break;
+                            case 4: sp = r[k]; break;
+
+                        }
+                    }
+
+                }
+                if (r.Count() != 0)
+                {
+                    RoomInfo r2 = new RoomInfo(rm, bd, rmt, pk, sp);
+                    r1.Add(r2);
+                    r.Clear();
+                    //html.Append("</tr>");
+                }
+            }
+
+            for (int x = 0; x < r1.Count(); x++)
+            {
+
+                html.Append("<tr>");
+                html.Append("<td>");
+                html.Append("Room:");
+                html.Append("</td>");
+                html.Append("<td>");
+                html.Append(r1[x].getRoomID());
+                html.Append("</td>");
+                html.Append("<td>");
+                html.Append("Building:");
+                html.Append("</td>");
+                html.Append("<td>");
+                html.Append(r1[x].getBuildingID());
+                html.Append("</td>");
+                html.Append("</tr>");
+                html.Append("<tr>");
+                html.Append("<td>");
+                html.Append("Type of Room:");
+                html.Append("</td>");
+                html.Append("<td>");
+                html.Append(r1[x].getRoomType());
+                html.Append("</td>");
+                html.Append("<td>");
+                html.Append("Park:");
+                html.Append("</td>");
+                html.Append("<td>");
+                html.Append(r1[x].getParkID());
+                html.Append("</td>");
+                html.Append("</tr>");
+                html.Append("<tr>");
+                html.Append("<td>");
+                html.Append("Special Requirements:");
+                html.Append("</td>");
+                html.Append("<td>");
+                html.Append(r1[x].getSpecReqs());
+                html.Append("</td>");
+                html.Append("</tr>");
+                html.Append("<tr>");
+                html.Append("</tr>");
+            }
+
+            html.Append("</table>");
+
+            return html;
+        }
+
         /*[System.Web.Services.WebMethod]
         protected void deleteRow_Click(object sender, EventArgs e)
         {
@@ -366,7 +479,7 @@ namespace WebApplication4_0
             Delete(buttonID);
         }
         */
-        public DataTable GetData(string select, string from, string where)
+        public static DataTable GetData(string select, string from, string where)
         {
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             string vreqQuery = "SELECT " + select + " FROM " + from + " " + where;
@@ -571,6 +684,50 @@ namespace WebApplication4_0
                 return status;
             }
         }
+
+        public class RoomInfo
+        {
+            private string roomid;
+            private string buildingid;
+            private string roomtype;
+            private string parkid;
+            private string spec_reqs;
+
+            public RoomInfo(string roomid, string buildingid, string roomtype, string parkid, string spec_reqs)
+            {
+                this.roomid = roomid;
+                this.buildingid = buildingid;
+                this.roomtype = roomtype;
+                this.parkid = parkid;
+                this.spec_reqs = spec_reqs;
+            }
+
+            public string getRoomID()
+            {
+                return roomid;
+            }
+
+            public string getBuildingID()
+            {
+                return buildingid;
+            }
+
+            public string getRoomType()
+            {
+                return roomtype;
+            }
+
+            public string getParkID()
+            {
+                return parkid;
+            }
+
+            public string getSpecReqs()
+            {
+                return spec_reqs;
+            }
+        }
+
 
 
     }
