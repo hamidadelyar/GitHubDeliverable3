@@ -68,6 +68,7 @@
         function resetPassword(user,email)
         {
             var password = Math.random().toString(36).slice(-8);
+            $('.main').html('<span class="loader" ><img src="/Images/processing.gif" width="220" height="20" /></span>');
             $.ajax({
                 type: "POST",
                 url: "ForgotPassword.aspx/ChangePass",
@@ -80,6 +81,9 @@
                 },
                 success: function (result) {
                     $('.main').html('<div class="hdr" ><b>FORGOT PASSWORD</b></div><div class="conf" ><img src="/Images/Done.png" width="30" height="30" /><span>&nbsp;A new password has been sent to: '+email+'</span></div>');
+                    setTimeout(function () {
+                        window.location.href = "Default.aspx"; //will redirect to your blog page (an ex: blog.html)
+                    }, 2000);
                 }
             });
         }
@@ -184,6 +188,16 @@
             position:relative;
             top:-9px;
             font-size:1.2em;
+        }
+        .loader
+        {
+            position:relative;
+            left:50%;
+            margin-left:-110px;
+        }
+        .loader img 
+        {
+            margin-top: 3px;
         }
     </style>
     <div class="main" >
