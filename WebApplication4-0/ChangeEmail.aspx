@@ -31,7 +31,51 @@
             }
         }
         function checkPassword() {
-            
+            $.ajax({
+                type: "POST",
+                url: "ChangeEmail.aspx/CheckPassword",
+                data: JSON.stringify({password: $('.userTxt').val(), username:$('#LoginDetails').html().match(/\(([^)]+)\)/)[1] }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("An error occurred. Please try again.");
+                    window.location.reload();
+                },
+                success: function (result) {
+                    if(result.d)
+                    {
+                        changeEmail();
+                    }
+                    else
+                    {
+                        $('.userTit').html('<b>PASSWORD</b><span class="alert" >&nbsp; Incorrect password.</span>');
+                    }
+                }
+            });
+        }
+        function changeEmail()
+        {
+            var email = $('.emailTxt').val();
+            $('.main').html('<span class="loader" ><img src="/Images/processing.gif" width="220" height="20" /></span>');
+            $.ajax({
+                type: "POST",
+                url: "ChangeEmail.aspx/ChangeEmails",
+                data: JSON.stringify({ username: $('#LoginDetails').html().match(/\(([^)]+)\)/)[1], email: email }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("An error occurred. Please try again.");
+                    window.location.reload();
+                },
+                success: function (result) {
+                    if (result.d) {
+                        $('.main').html('<div class="hdr" ><b>CHANGE EMAIL</b></div><div class="conf" ><img src="/Images/Done.png" width="30" height="30" /><span>&nbsp;Email changed confirmation has been sent to: ' + email + '</span></div>');
+                        setTimeout(function () {
+                            window.location.href = "Profile.aspx"; //will redirect to your blog page (an ex: blog.html)
+                        }, 2000);
+                    }
+                }
+            });
         }
     </script>
         <style>
@@ -135,9 +179,19 @@
             top:-9px;
             font-size:1.2em;
         }
+        .loader
+        {
+            position:relative;
+            left:50%;
+            margin-left:-110px;
+        }
+        .loader img 
+        {
+            margin-top: 3px;
+        }
     </style>
     <div class="main" >
-        <div class="hdr" ><b>FORGOT PASSWORD</b></div>
+        <div class="hdr" ><b>CHANGE EMAIL</b></div>
         <table class="facChecks" >
             <tr>
                 <td class="subHdr userTit" id="username" colspan="3"><b>PASSWORD</b><span class="alert" ></span></td>

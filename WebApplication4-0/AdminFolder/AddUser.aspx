@@ -74,18 +74,27 @@
             function addUser() {
                 var username = generateUserName(0);
                 var password = Math.random().toString(36).slice(-8);
+                var fore = $('.foreTxt').val();
+                var sur = $('.surTxt').val();
+                var email = $('.emailTxt').val();
+                var dept = $('.deptTxt').val()[0] + $('.deptTxt').val()[1];
+                $('.main').html('<span class="loader" ><img src="/Images/processing.gif" width="220" height="20" /></span>');
                 $.ajax({
                     type: "POST",
                     url: "AddUser.aspx/InsertUser",
-                    data: JSON.stringify({ username: username, password: password, forename: $('.foreTxt').val(), surname: $('.surTxt').val(), email: $('.emailTxt').val(), dept: $('.deptTxt').val()[0] + $('.deptTxt').val()[1]}),
+                    data: JSON.stringify({ username: username, password: password, forename: fore, surname: sur, email: email, dept: dept}),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         alert("An error occurred. Please try again.");
+                        window.loaction.reload();
                     },
                     success: function (result) {
-                        alert("Added user.");
-                        window.location.href = "Users.aspx"                    }
+                        $('.main').html('<div class="hdr" ><b>ADD USER</b></div><div class="conf" ><img src="../Images/Done.png" width="30" height="30" /><span>&nbsp; User has been created. An email has been sent to: '+email+'</span></div>');
+                        setTimeout(function () {
+                            window.location.href = "Users.aspx"; //will redirect to your blog page (an ex: blog.html)
+                        }, 2000);
+                    }
                 });
             }
             function generateUserName(i) {
@@ -239,6 +248,16 @@
             border-width: 0 15px 15px 15px;
             border-color: transparent transparent #2b3036 transparent;
             top: 3.5px;
+        }
+        .loader
+        {
+            position:relative;
+            left:50%;
+            margin-left:-110px;
+        }
+        .loader img 
+        {
+            margin-top: 3px;
         }
     </style>
     <div class="main" >

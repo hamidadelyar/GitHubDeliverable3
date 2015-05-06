@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <span class="forget-pass">
-                        <a href="#">Forgot Password?</a>
+                        <a href="ForgotPassword.aspx">Forgot Password?</a>
                     </span>
                     <div class="clear"></div>
                     <p id="LoginErrorMessage" runat="server" style=""></p>

@@ -13,12 +13,12 @@ using System.Web.UI.WebControls;
 
 namespace WebApplication4_0
 {
-    public partial class ChangeEmail : System.Web.UI.Page
+    public partial class ChangePassword : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-        }
 
+        }
         [System.Web.Services.WebMethod]
         public static bool CheckPassword(string password, string username)
         {
@@ -34,13 +34,13 @@ namespace WebApplication4_0
             data = new System.Security.Cryptography.SHA256Managed().ComputeHash(data);
             String passwordEncr = System.Text.Encoding.ASCII.GetString(data);
 
-            string checkpass = "Select Count(*) from [Users] WHERE Username='" + username + "' AND Password = '" + passwordEncr +"'";
+            string checkpass = "Select Count(*) from [Users] WHERE Username='" + username + "' AND Password = '" + passwordEncr + "'";
 
             SqlCommand comm2 = new SqlCommand(checkpass, conn1);
 
             int count = Convert.ToInt32(comm2.ExecuteScalar());
 
-            if(count != 1)
+            if (count != 1)
             {
                 conn1.Close();
                 return false;
@@ -51,21 +51,30 @@ namespace WebApplication4_0
 
         }
         [System.Web.Services.WebMethod]
-        public static bool ChangeEmails(string username, string email)
+        public static bool UpdatePassword(string username, string password)
         {
             SqlConnection conn1 = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             conn1.Open();
+            string checksalt = "Select Salt from [Users] where Username='" + username + "'";
             string checkfore = "Select Forename from [Users] where Username='" + username + "'";
             string checksur = "Select Surname from [Users] where Username='" + username + "'";
-            string checkemail = "Select Email from [Users] where Username='" + username + "'";
+            string checkEmail = "Select Email from [Users] where Username='" + username + "'";
 
+            SqlCommand comm = new SqlCommand(checksalt, conn1);
             SqlCommand comm2 = new SqlCommand(checkfore, conn1);
             SqlCommand comm3 = new SqlCommand(checksur, conn1);
-            SqlCommand comm4 = new SqlCommand(checkemail, conn1);
+            SqlCommand comm4 = new SqlCommand(checkEmail, conn1);
 
+            string salt = comm.ExecuteScalar().ToString();
             string forename = comm2.ExecuteScalar().ToString();
             string surname = comm3.ExecuteScalar().ToString();
-            string oldEmail = comm4.ExecuteScalar().ToString();
+            string email = comm4.ExecuteScalar().ToString();
+
+            byte[] data = System.Text.Encoding.ASCII.GetBytes(password + salt);
+            data = new System.Security.Cryptography.SHA256Managed().ComputeHash(data);
+            String passwordEncr = System.Text.Encoding.ASCII.GetString(data);
+
+            conn1.Close();
 
             using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString))
             {
@@ -73,9 +82,9 @@ namespace WebApplication4_0
                 {
                     command.Connection = conn;
                     command.CommandType = CommandType.Text;
-                    command.CommandText = "UPDATE Users SET Email = @email WHERE Username = @user";
+                    command.CommandText = "UPDATE Users SET Password = @pass WHERE Username = @user";
                     command.Parameters.Add("@user", SqlDbType.VarChar, 50).Value = username;
-                    command.Parameters.Add("@email", SqlDbType.VarChar, 255).Value = email;
+                    command.Parameters.Add("@pass", SqlDbType.VarChar, 255).Value = passwordEncr;
                     conn.Open();
                     int recordsAffected = command.ExecuteNonQuery();
                     conn.Close();
@@ -83,11 +92,10 @@ namespace WebApplication4_0
             }
 
             MailMessage msg = new MailMessage();
-            msg.Subject = "Changed Email.";
+            msg.Subject = "Your new password.";
             msg.From = new MailAddress("lboro.timetabling@gmail.com");
-            msg.Body = "Hello " + forename + " " + surname + ", \n \n Your email preferences have been changed \n \n Thank you";
+            msg.Body = "Hello " + forename + " " + surname + ", \n \n Your new password is: " + password + "\n \n Thank you";
             msg.To.Add(new MailAddress(email));
-            msg.To.Add(new MailAddress(oldEmail));
             SmtpClient smtp = new SmtpClient();
             smtp.UseDefaultCredentials = false;
             NetworkCredential nc = new NetworkCredential("lboro.timetabling@gmail.com", "lboroTeam02");
@@ -96,7 +104,6 @@ namespace WebApplication4_0
             smtp.Port = 587;
             smtp.EnableSsl = true;
             smtp.Send(msg);
-
             return true;
         }
     }
