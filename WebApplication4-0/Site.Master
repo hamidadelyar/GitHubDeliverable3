@@ -71,7 +71,27 @@
                 <p id="LoginDetails" runat="server" ></p>
             </div>
         </div>
+        <div id="accessBar" style="margin-right:20%; position: relative; top:25px;">
+            <img src="Images/fsize1.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeFontSize('1.2em')"/> <!-- largest font -->
+            <img src="Images/fsize2.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeFontSize('1em')"/> 
+            <img src="Images/fsize3.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeFontSize('0.8em')"/> <!-- smallest font -->
+            <img src="Images/AccessColor3.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeBackground('#70756F', '#474746');"/> <!-- grey -->
+            <img src="Images/AccessColor2.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeBackground('#55aa55', '#419741');"/> <!-- green -->
+            <img src="Images/AccessColor1.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeBackground('#86b4cc', '#79a2b8');"/> <!-- original -->
+        </div>
     </footer>
     </form>
 </body>
 </html>
+
+<script type="text/javascript">
+    function changeFontSize(size) {
+        $('#body').css("font-size", size);
+    }
+
+    function changeBackground(backgroundCol, footerCol) {
+        //document.getElementById("body").style.background = background;
+        $('#body').css("background-color", backgroundCol);
+        $('footer').css("background-color", footerCol);
+    }
+</script>
