@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using System.Net;
+using System.Net.Mail;
 using System.Web.Script.Serialization;
 
 namespace WebApplication4_0.AdminFolder
@@ -40,7 +42,7 @@ namespace WebApplication4_0.AdminFolder
                         .ToArray());
             byte[] data = System.Text.Encoding.ASCII.GetBytes(password+salt);
             data = new System.Security.Cryptography.SHA256Managed().ComputeHash(data);
-            String passswordEncr = System.Text.Encoding.ASCII.GetString(data);
+            String passwordEncr = System.Text.Encoding.ASCII.GetString(data);
             using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString))
             {
                 using (SqlCommand command = new SqlCommand())
@@ -49,7 +51,7 @@ namespace WebApplication4_0.AdminFolder
                     command.CommandType = CommandType.Text;
                     command.CommandText = "INSERT INTO Users (Username, Password, Forename, Surname, Dept_ID, Email, Salt) VALUES (@user, @pass, @fore, @sur, @dept, @email, @salt)";
                     command.Parameters.Add("@user", SqlDbType.VarChar, 50).Value = username;
-                    command.Parameters.Add("@pass", SqlDbType.VarChar, 255).Value = passswordEncr;
+                    command.Parameters.Add("@pass", SqlDbType.VarChar, 255).Value = passwordEncr;
                     command.Parameters.Add("@fore", SqlDbType.VarChar, 50).Value = forename;
                     command.Parameters.Add("@sur", SqlDbType.VarChar, 50).Value = surname;
                     command.Parameters.Add("@dept", SqlDbType.Char, 2).Value = dept;
@@ -58,9 +60,22 @@ namespace WebApplication4_0.AdminFolder
                     conn.Open();
                     int recordsAffected = command.ExecuteNonQuery();
                     conn.Close();
-                    return true;
                 }
             }
+            MailMessage msg = new MailMessage();
+            msg.Subject = "Your new account.";
+            msg.From = new MailAddress("lboro.timetabling@gmail.com");
+            msg.Body = "Welcome " + forename + " " + surname + ", \n Your new account is ready. \n \n Username: " + username + "\n Password: " + password + "\n \n Thank you";
+            msg.To.Add(new MailAddress(email));
+            SmtpClient smtp = new SmtpClient();
+            smtp.UseDefaultCredentials = false;
+            NetworkCredential nc = new NetworkCredential("lboro.timetabling@gmail.com", "lboroTeam02");
+            smtp.Credentials = nc;
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.EnableSsl = true;
+            smtp.Send(msg);
+            return true;
         }
     }
 }
