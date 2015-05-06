@@ -6,19 +6,63 @@
 <script type="text/javascript" src="Scripts/jquery-latest.js"></script>
 <script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script> 
 <!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>-->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#requestTable").tablesorter({ sortList: [[0, 0], [1, 0]] });
-    }
-);
+<style>
+tr {
+    display: none;
+}
 
-    function deleteRow(x) {
+tr.header {
+    display: table-row;
+}
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('tr.header').click(function () {
+
+            $(this).nextUntil('tr.header').css('display', function (i, v) {
+                return this.style.display === 'table-row' ? 'none' : 'table-row';
+            });
+        });
+
+        $.tablesorter.addParser({
+            // set a unique id 
+            id: 'days',
+            is: function (s) {
+                // return false so this parser is not auto detected 
+                return false;
+            },
+            format: function (s) {
+                // format your data for normalization 
+                //var rows = document.getElementById("#requestTable").getElementsByTagName("tr").length;
+            },
+            // set type, either numeric or text 
+            type: 'numeric'
+        });
+
+        $(function () {
+            $("#requestTable").tablesorter({
+                headers: {
+                    2: {
+                        sorter: 'days'
+                    }
+                }
+            });
+
+        }
+        );
+    });
+
+    function deleteRow(x, y) {
 
         var result = confirm('Are you sure you want to delete this request?');
 
         if(result)
         {
-            obj = { id: x };
+            alert(x);
+            alert(y);
+            obj = { id: x, pref_id: y };
             obj.myself = obj;
 
             seen = [];
@@ -69,6 +113,7 @@
 </script>
 <hgroup class="header">
     <h1>Your Requests</h1>
+    <h2>Click on the Row Number to reveal more information about your request</h2>
 </hgroup>
 <section class ="tableOfRequests">
 <asp:PlaceHolder ID = "PlaceHolder1" runat="server" />
