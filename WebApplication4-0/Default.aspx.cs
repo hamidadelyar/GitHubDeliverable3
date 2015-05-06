@@ -35,80 +35,115 @@ namespace WebApplication4_0
             if (temp == 1) //this means that the user entered exists in the database
             {
 
-                LoginErrorMessage.InnerHtml = "";   //no error message with successful username
+                LoginErrorMessage.InnerHtml = ""; //no error message with successful username
 
-          
+
                 //check if password matches the username provided
                 conn.Open();
                 string checkpassword = "Select Password from [Users] where Username='" + TextboxUsername.Text + "'";
-                SqlCommand comm2 = new SqlCommand(checkpassword, conn);  //1st argument is query, 2nd argument is connection with DB
+                string checksalt = "Select Salt from [Users] where Username='" + TextboxUsername.Text + "'";
+                SqlCommand comm2 = new SqlCommand(checkpassword, conn);
+                SqlCommand comm3 = new SqlCommand(checksalt, conn);
+                    //1st argument is query, 2nd argument is connection with DB
                 string password = comm2.ExecuteScalar().ToString();
+                string salt = comm3.ExecuteScalar().ToString();
                 conn.Close();
                 //gets rid of empty space, i.e. "admin ", now equals "admin"
-                string username = TextboxUsername.Text.Replace(" ", ""); //removes any spaces a user may accidently put after username
+                string username = TextboxUsername.Text.Replace(" ", "");
+                    //removes any spaces a user may accidently put after username
                 username = username.ToLower();
 
-                if (password == TextboxPassword.Text)   //if password DOES match the username entered
+                if (password == "team02")
                 {
-                    
-                    if (username != "admin")    //timetabler view shown
+                    if (password == TextboxPassword.Text) //if password DOES match the username entered
                     {
-                        Session["Username"] = username;
-                        Session["LoggedIn"] = true;
-                        if (Request.QueryString["prevPage"] != null) // if prev page is set we dont want to go to timetable we want to go to where the user was
-                        {
-                            string url = Request.QueryString["prevPage"]; //gets the prevPage
-                            if(FileExists(url)) // checks the file exists on the server before attempting to access it
-                            {
-                                Response.Redirect(url); // redirects to the prevPage the user was on
-                            }
-                            else
-                            {
-                                Response.Redirect("Timetable.aspx"); // redirects to timetable if the page wasn't existant
-                            }
-                        }
-                        else
-                        {
-                            Response.Redirect("Timetable.aspx"); // redirects to timetable if the user didnt come from a previous page
-                        }
-                        LoginErrorMessage.InnerHtml = "";   //no error message with successful password
+                        Redirect(username);
                     }
-                    else //if admin logs in, then they are redirected to a different view of the website
+                    else //if password DOES NOT match the username
                     {
-                        Session["Username"] = username;
-                        Session["LoggedIn"] = true;
-                        if (Request.QueryString["prevPage"] != null) // if prev page is set we dont want to go to timetable we want to go to where the user was
-                        {
-                            string url = Request.QueryString["prevPage"]; //gets the prevPage
-                            if (FileExists(url)) // checks the file exists on the server before attempting to access it
-                            {
-                                Response.Redirect(url); // redirects to the prevPage the user was on
-                            }
-                            else
-                            {
-                                Response.Redirect("Timetable.aspx"); // redirects to admin home if the page wasn't existant
-                            }
-                        }
-                        else
-                        {
-                            Response.Redirect("AdminFolder/Admin.aspx"); // redirects to admin home if the user didnt come from a previous page
-                        }
-                        LoginErrorMessage.InnerHtml = "";   //no error message with successful password
+                        //#LoginErrorMessage is a <p> tag within the form
+                        LoginErrorMessage.InnerHtml = "Username or password is incorrect"; //password incorrect
                     }
                 }
-                else //if password DOES NOT match the username
+                else
                 {
-                    //#LoginErrorMessage is a <p> tag within the form
-                    LoginErrorMessage.InnerHtml = "Username or password is incorrect"; //password incorrect
+                    byte[] userData = System.Text.Encoding.ASCII.GetBytes(TextboxPassword.Text + salt);
+                    userData = new System.Security.Cryptography.SHA256Managed().ComputeHash(userData);
+                    String userEncr = System.Text.Encoding.ASCII.GetString(userData);
+                    if (userEncr == password)
+                    {
+                        Redirect(username);
+                    }
+                    else //if password DOES NOT match the username
+                    {
+                        //#LoginErrorMessage is a <p> tag within the form
+                        LoginErrorMessage.InnerHtml = "Username or password is incorrect"; //password incorrect
+                    }
                 }
             }
             else //user does not exist
             {
                 //LoginErrorMessage is a <p> tag within the form
-                LoginErrorMessage.InnerHtml = "Username or password is incorrect";  //username incorrect
+                LoginErrorMessage.InnerHtml = "Username or password is incorrect"; //username incorrect
             }
 
 
+        }
+
+        private void Redirect(string username)
+        {
+            if (username != "admin") //timetabler view shown
+            {
+                Session["Username"] = username;
+                Session["LoggedIn"] = true;
+                if (Request.QueryString["prevPage"] != null)
+                // if prev page is set we dont want to go to timetable we want to go to where the user was
+                {
+                    string url = Request.QueryString["prevPage"]; //gets the prevPage
+                    if (FileExists(url))
+                    // checks the file exists on the server before attempting to access it
+                    {
+                        Response.Redirect(url); // redirects to the prevPage the user was on
+                    }
+                    else
+                    {
+                        Response.Redirect("Timetable.aspx");
+                        // redirects to timetable if the page wasn't existant
+                    }
+                }
+                else
+                {
+                    Response.Redirect("Timetable.aspx");
+                    // redirects to timetable if the user didnt come from a previous page
+                }
+                LoginErrorMessage.InnerHtml = ""; //no error message with successful password
+            }
+            else //if admin logs in, then they are redirected to a different view of the website
+            {
+                Session["Username"] = username;
+                Session["LoggedIn"] = true;
+                if (Request.QueryString["prevPage"] != null)
+                // if prev page is set we dont want to go to timetable we want to go to where the user was
+                {
+                    string url = Request.QueryString["prevPage"]; //gets the prevPage
+                    if (FileExists(url))
+                    // checks the file exists on the server before attempting to access it
+                    {
+                        Response.Redirect(url); // redirects to the prevPage the user was on
+                    }
+                    else
+                    {
+                        Response.Redirect("Timetable.aspx");
+                        // redirects to admin home if the page wasn't existant
+                    }
+                }
+                else
+                {
+                    Response.Redirect("AdminFolder/Admin.aspx");
+                    // redirects to admin home if the user didnt come from a previous page
+                }
+                LoginErrorMessage.InnerHtml = ""; //no error message with successful password
+            }
         }
         private bool FileExists(string url)
         {

@@ -85,7 +85,7 @@
                     },
                     success: function (result) {
                         alert("Added user.");
-                        window.location.reload();                    }
+                        window.location.href = "Users.aspx"                    }
                 });
             }
             function generateUserName(i) {

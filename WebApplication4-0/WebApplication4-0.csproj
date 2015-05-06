@@ -132,6 +132,7 @@
     <Content Include="AdminFolder\Requests.aspx" />
     <Content Include="AdminFolder\Rooms.aspx" />
     <Content Include="AdminFolder\Rounds.aspx" />
+    <Content Include="AdminFolder\Users.aspx" />
     <Content Include="ArchiveModules.aspx" />
     <Content Include="ArchiveRequests.aspx" />
     <Content Include="Contact.aspx" />
@@ -200,11 +201,17 @@
     <Content Include="ForgotPassword.aspx" />
     <Content Include="Home.aspx" />
     <Content Include="Images\accent.png" />
+    <Content Include="Images\AccessColor1.png" />
+    <Content Include="Images\AccessColor2.png" />
+    <Content Include="Images\AccessColor3.png" />
     <Content Include="Images\add.png" />
     <Content Include="Images\AddCircle.png" />
     <Content Include="Images\bullet.png" />
     <Content Include="Images\change.png" />
     <Content Include="Images\changeTime.png" />
+    <Content Include="Images\fsize1.png" />
+    <Content Include="Images\fsize2.png" />
+    <Content Include="Images\fsize3.png" />
     <Content Include="Images\heroAccent.png" />
     <Content Include="Images\minus.png" />
     <Content Include="Images\MinusCircle.png" />
@@ -412,6 +419,13 @@
     </Compile>
     <Compile Include="AdminFolder\Rounds.aspx.designer.cs">
       <DependentUpon>Rounds.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminFolder\Users.aspx.cs">
+      <DependentUpon>Users.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminFolder\Users.aspx.designer.cs">
+      <DependentUpon>Users.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="About.aspx.cs">
