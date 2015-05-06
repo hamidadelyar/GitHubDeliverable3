@@ -425,7 +425,6 @@
     </Compile>
     <Compile Include="AdminFolder\Users.aspx.cs">
       <DependentUpon>Users.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AdminFolder\Users.aspx.designer.cs">
       <DependentUpon>Users.aspx</DependentUpon>
