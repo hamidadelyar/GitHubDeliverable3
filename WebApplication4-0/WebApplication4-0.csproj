@@ -123,6 +123,7 @@
     <Content Include="AddRoom.aspx" />
     <Content Include="AdminFolder\AddUser.aspx" />
     <Content Include="AdminFolder\Admin.aspx" />
+    <Content Include="AdminFolder\ArchiveModules.aspx" />
     <Content Include="AdminFolder\css\AdminStyle.css" />
     <Content Include="AdminFolder\css\reset.css" />
     <Content Include="AdminFolder\css\style.css" />
@@ -384,6 +385,12 @@
     </Compile>
     <Compile Include="AdminFolder\AdminSite.master.designer.cs">
       <DependentUpon>AdminSite.master</DependentUpon>
+    </Compile>
+    <Compile Include="AdminFolder\ArchiveModules.aspx.cs">
+      <DependentUpon>ArchiveModules.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminFolder\ArchiveModules.aspx.designer.cs">
+      <DependentUpon>ArchiveModules.aspx</DependentUpon>
     </Compile>
     <Compile Include="AdminFolder\Demo.aspx.cs">
       <DependentUpon>Demo.aspx</DependentUpon>
