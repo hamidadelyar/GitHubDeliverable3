@@ -157,7 +157,7 @@
                         ID="SqlDataSource2" 
                         runat="server" 
                         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-                        SelectCommand="SELECT * FROM [Requests]">
+                        SelectCommand="SELECT TOP 5 * FROM [Requests] ">
 
                     </asp:SqlDataSource>
 

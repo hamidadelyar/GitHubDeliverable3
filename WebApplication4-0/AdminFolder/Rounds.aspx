@@ -56,7 +56,7 @@
             right: 30%;
             width: 40%;
             max-width:370px;
-            height: 300px;
+
             padding: 16px;
             background-color: white;
             z-index:1002;
@@ -69,23 +69,35 @@
 
 <div class="contentHolder">
     
+    <asp:SqlDataSource ID="SqlDataSource6" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT [RoundID], [Year], [Semester], [Round_Name], [Status] FROM [Rounds] WHERE [Status] = 'open'"></asp:SqlDataSource>
+    <asp:Repeater ID="Repeater2" runat="server" DataSourceID="SqlDataSource6">
+        <ItemTemplate>
+            <div id="leftDiv">
+                <h1 style="margin-top:23px;">Current Round: <%#Eval("Round_Name") %>, Semester <%#Eval("Semester") %> <%#Eval("Year") %></h1>
+            </div>
+        </ItemTemplate>
+    </asp:Repeater>
 
-    <div id="leftDiv">
-        <h1 style="margin-top:23px;">Current Round: 3, Semester 2 2014/2015</h1>
-    </div>
     <div id="buttonsDiv">
          <input type="button" ID="endRound" Value="End Current Round" />
          <input type="button" ID="addRound" Value="Add New Round" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
          
 
     </div>
+    <br />
+    
+    <br />
+    <br />
+    <br />
+    <asp:SqlDataSource ID="SqlDataSource4" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Year] FROM [Rounds]"></asp:SqlDataSource>
 
-    <asp:SqlDataSource ID="SqlDataSource3" 
-        runat="server" 
-        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-        SelectCommand="SELECT * FROM [Announcements]">
+    <asp:DropDownList ID="DropDownList1" runat="server" autopostback="True" DataSourceID="SqlDataSource4" DataTextField="Year" DataValueField="Year"></asp:DropDownList>
 
-    </asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource5" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Semester] FROM [Rounds]"></asp:SqlDataSource>
+
+    <asp:DropDownList ID="DropDownList2" runat="server" autopostback="True" DataSourceID="SqlDataSource5" DataTextField="Semester" DataValueField="Semester"></asp:DropDownList>
+
+
 
     <div id="light" class="white_content">
         <h1>New Round</h1>
@@ -115,14 +127,20 @@
         ID="SqlDataSource2" 
         runat="server" 
         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-        SelectCommand="SELECT DISTINCT [Year], [Semester] FROM [Rounds]"        
+        SelectCommand="SELECT DISTINCT [Year], [Semester] FROM [Rounds] WHERE [year] = @year AND [semester] = @semester"        
         InsertCommand="INSERT INTO [Rounds] ([Year],[Semester],[Round_Name],[Start_Date],[End_Date],[Status]) VALUES (@yearDB,@semesterDB,@RoundDB,GETDATE(),'','closed')">
+            <selectparameters>
+		        <asp:controlparameter controlid="DropDownList1" name="year" propertyname="SelectedValue" type="String" />
+                <asp:controlparameter controlid="DropDownList2" name="semester" propertyname="SelectedValue" type="String" />
+	        </selectparameters>
             <InsertParameters>
                 <asp:ControlParameter name="RoundDB" ControlId="TextBox1" PropertyName="Text" />
                 <asp:ControlParameter name="yearDB" ControlId="TextBox2" PropertyName="Text" />
                 <asp:ControlParameter name="semesterDB" ControlId="TextBox3" PropertyName="Text" />
             </InsertParameters>
     </asp:SqlDataSource>
+    
+    
     <asp:Repeater 
         ID="Repeater1" 
         runat="server" 
@@ -145,33 +163,38 @@
                     <td>2</td><td>14/11/2014</td><td>21/12/2014</td><td>Edit</td><td>Remove</td>
                 </tr>
             </table>
+            
+            <asp:SqlDataSource 
+                ID="SqlDataSource1" 
+                runat="server" 
+                ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+                SelectCommand="SELECT * FROM [Rounds]  WHERE [year] = @year2 AND [semester] = @semester2">
+                    <selectparameters>
+		                <asp:controlparameter controlid="DropDownList1" name="year2" propertyname="SelectedValue" type="String" />
+                        <asp:controlparameter controlid="DropDownList2" name="semester2" propertyname="SelectedValue" type="String" />
+	                </selectparameters>
+            </asp:SqlDataSource>
+            <asp:GridView 
+                ID="GridView1" 
+                runat="server" 
+                AutoGenerateColumns="False" 
+                DataSourceID="SqlDataSource1">
+                <Columns>
+                    <asp:BoundField DataField="RoundID" HeaderText="RoundID" InsertVisible="False" ReadOnly="True" SortExpression="RoundID" />
+                    <asp:BoundField DataField="Year" HeaderText="Year" SortExpression="Year" />
+                    <asp:BoundField DataField="Semester" HeaderText="Semester" SortExpression="Semester" />
+                    <asp:BoundField DataField="Round_Name" HeaderText="Round_Name" SortExpression="Round_Name" />
+                    <asp:BoundField DataField="Start_Date" HeaderText="Start_Date" SortExpression="Start_Date" />
+                    <asp:BoundField DataField="End_Date" HeaderText="End_Date" SortExpression="End_Date" />
+                    <asp:BoundField DataField="Status" HeaderText="Status" SortExpression="Status" />
+                </Columns>
+            </asp:GridView>
 
         </ItemTemplate>
 
     </asp:Repeater>
 
-    <asp:SqlDataSource 
-        ID="SqlDataSource1" 
-        runat="server" 
-        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-        SelectCommand="SELECT * FROM [Rounds]">
-
-    </asp:SqlDataSource>
-    <asp:GridView 
-        ID="GridView1" 
-        runat="server" 
-        AutoGenerateColumns="False" 
-        DataSourceID="SqlDataSource1">
-        <Columns>
-            <asp:BoundField DataField="RoundID" HeaderText="RoundID" InsertVisible="False" ReadOnly="True" SortExpression="RoundID" />
-            <asp:BoundField DataField="Year" HeaderText="Year" SortExpression="Year" />
-            <asp:BoundField DataField="Semester" HeaderText="Semester" SortExpression="Semester" />
-            <asp:BoundField DataField="Round_Name" HeaderText="Round_Name" SortExpression="Round_Name" />
-            <asp:BoundField DataField="Start_Date" HeaderText="Start_Date" SortExpression="Start_Date" />
-            <asp:BoundField DataField="End_Date" HeaderText="End_Date" SortExpression="End_Date" />
-            <asp:BoundField DataField="Status" HeaderText="Status" SortExpression="Status" />
-        </Columns>
-    </asp:GridView>
+    
 
 </div> 
 

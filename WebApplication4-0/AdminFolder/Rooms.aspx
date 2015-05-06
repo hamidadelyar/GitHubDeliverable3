@@ -28,7 +28,7 @@
             right: 30%;
             width: 40%;
             max-width:370px;
-            height: 300px;
+            
             padding: 16px;
             background-color: white;
             z-index:1002;
@@ -64,6 +64,10 @@
 <div class="contentHolder">
 
     <h1 align="center">Rooms</h1>
+
+    <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT [Building_ID], [Building_Name] FROM [Buildings] ORDER BY [Building_Name]"></asp:SqlDataSource>
+
+    <asp:DropDownList ID="DropDownList1" runat="server" autopostback="True" DataSourceID="SqlDataSource3" DataTextField="Building_Name" DataValueField="Building_ID"></asp:DropDownList>
     <div id="buttonsDiv">
         <input type="button" ID="addRoom" Value="Add Room" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
         <input type="button" ID="addFacility" Value="Add Facility" onclick = "document.getElementById('light2').style.display = 'block'; document.getElementById('fade2').style.display = 'block'" />
@@ -74,9 +78,9 @@
         Building: <br />
         <asp:TextBox id="TextBox1" runat="server" /><br />
         Room Number: <br />
-        <asp:TextBox id="TextBox2" runat="server" />
+        <asp:TextBox id="TextBox2" runat="server" /><br />
         Capacity: <br />
-        <asp:TextBox id="TextBox5" runat="server" />
+        <asp:TextBox id="TextBox5" runat="server" /><br />
         Room Type: <br />
         <asp:TextBox id="TextBox6" runat="server" />
 
@@ -106,40 +110,7 @@
 
     <div id="fade2" class="black_overlay">
     </div>
-    <div class="buildingHeader" >
-        <h2 class="white">James France - East Park</h2> 
-    </div>
 
-
-
-
-    <table class="roomInfoTable">
-        <tr>
-            <th>Room No</th><th>Capacity</th><th>Room Type</th><th>Facilities</th>
-        </tr>
-        <tr>
-            <td>JF.0.0.1</td><td>120</td><td>Lecture</td><td>OHP, Wheelchair Access, Dual Projectors</td><td></td>
-        </tr>
-        <tr>
-            <td>JF.0.0.2</td><td>100</td><td>Lab</td><td>Visualiser, Wheelchair Access, Dual Projectors</td><td></td>
-        </tr>
-    </table>
-
-    <div class="buildingHeader" >
-        <h2 class="white">Haslegrave - East Park</h2> 
-    </div>
-
-    <table class="roomInfoTable">
-        <tr>
-            <th>Room No</th><th>Capacity</th><th>Room Type</th><th>Facilities</th>
-        </tr>
-        <tr>
-            <td>N.0.0.1</td><td>120</td><td>Lab</td><td>OHP, Wheelchair Access, Dual Projectors</td><td></td>
-        </tr>
-        <tr>
-            <td>N.0.0.2</td><td>100</td><td>Lab</td><td>Visualiser, Wheelchair Access, Dual Projectors</td><td></td>
-        </tr>
-    </table>
 
 
 
@@ -147,8 +118,10 @@
         ID="SqlDataSource1" 
         runat="server" 
         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-        SelectCommand="SELECT * FROM [Buildings]">
-
+        SelectCommand="SELECT * FROM [Buildings] WHERE [Building_ID] = @Building_ID">
+            <selectparameters>
+		        <asp:controlparameter controlid="DropDownList1" name="Building_ID" propertyname="SelectedValue" type="String" />
+	        </selectparameters>
     </asp:SqlDataSource>
 
 
@@ -165,8 +138,10 @@
                 ID="SqlDataSource2" 
                 runat="server" 
                 ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-                SelectCommand="SELECT * FROM [Rooms] WHERE [Building_ID] = 'CC'">
-
+                SelectCommand="SELECT * FROM [Rooms] WHERE [Building_ID] = @Building">
+                    <selectparameters>
+		                <asp:controlparameter controlid="DropDownList1" name="Building" propertyname="SelectedValue" type="String" />
+	                </selectparameters>
             </asp:SqlDataSource>
 
             <asp:GridView 
