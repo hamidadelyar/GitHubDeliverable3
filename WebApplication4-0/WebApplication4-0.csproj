@@ -200,6 +200,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\Timetable.css" />
     <Content Include="EditModule.aspx" />
+    <Content Include="EditRequest.aspx" />
     <Content Include="FindRoom.aspx" />
     <Content Include="ForgotPassword.aspx" />
     <Content Include="Home.aspx" />
@@ -400,6 +401,7 @@
     </Compile>
     <Compile Include="AdminFolder\ArchiveModules.aspx.cs">
       <DependentUpon>ArchiveModules.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AdminFolder\ArchiveModules.aspx.designer.cs">
       <DependentUpon>ArchiveModules.aspx</DependentUpon>
@@ -434,6 +436,7 @@
     </Compile>
     <Compile Include="AdminFolder\Users.aspx.cs">
       <DependentUpon>Users.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AdminFolder\Users.aspx.designer.cs">
       <DependentUpon>Users.aspx</DependentUpon>
@@ -527,6 +530,13 @@
     </Compile>
     <Compile Include="EditModule.aspx.designer.cs">
       <DependentUpon>EditModule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EditRequest.aspx.cs">
+      <DependentUpon>EditRequest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditRequest.aspx.designer.cs">
+      <DependentUpon>EditRequest.aspx</DependentUpon>
     </Compile>
     <Compile Include="FindRoom.aspx.cs">
       <DependentUpon>FindRoom.aspx</DependentUpon>

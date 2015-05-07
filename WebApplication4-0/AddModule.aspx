@@ -61,10 +61,13 @@
         }
         function addRoom()
         {
+            var modCode = $('.codeTxt').val().toUpperCase().trim();
+            var modName = $('.nameTxt').val().Capitalise().trim();
+            $('.main').html('<span class="loader" ><img src="/Images/processing.gif" width="220" height="20" /></span>');
             $.ajax({
                 type: "POST",
                 url: "AddModule.aspx/InsertModule",
-                data: JSON.stringify({ modCode: $('.codeTxt').val().toUpperCase().trim(),  modName: $('.nameTxt').val().Capitalise().trim()}),
+                data: JSON.stringify({ modCode: modCode,  modName: modName}),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -72,8 +75,10 @@
                     window.location.reload();
                 },
                 success: function (result) {
-                    alert("Module added.");
-                    window.location.reload();
+                    $('.main').html('<div class="hdr" ><b>ADD MODULE</b></div><div class="conf" ><img src="/Images/Done.png" width="30" height="30" /><span>&nbsp;Module has been added.</span></div>');
+                    setTimeout(function () {
+                        window.location.href = "Modules.aspx"; //will redirect to your blog page (an ex: blog.html)
+                    }, 2000);
                 }
             });
         }
@@ -220,8 +225,28 @@
             width:110%;
             table-layout:fixed;
         }
+        .conf img
+        {
+            margin-top:15px;
+        }
+        .conf span
+        {
+            position:relative;
+            top:-9px;
+            font-size:1.2em;
+        }
+        .loader
+        {
+            position:relative;
+            left:50%;
+            margin-left:-110px;
+        }
+        .loader img 
+        {
+            margin-top: 3px;
+        }
     </style>
-    <div class="toolsHolder roomHolder" >
+    <div class="toolsHolder roomHolder main" >
             <div class="hdr" ><b>ADD A MODULE</b></div>
             <table class="facChecks" >
                 <tr>
