@@ -38,7 +38,7 @@
 
         .black_overlay{
             display: none;
-            position: absolute;
+            position: fixed;
             top: 0%;
             left: 0%;
             width: 100%;
@@ -151,18 +151,6 @@
             <div class="semesterHeader" >
                 <h2 class="white">Semester <%#Eval("Semester") %> - <%#Eval("Year") %></h2> 
             </div>
-
-            <table class="roundInfoTable">
-                <tr>
-                    <th>Round No</th><th>Start Date</th><th>End Date</th>
-                </tr>
-                <tr>
-                    <td>1</td><td>12/10/2014</td><td>12/11/2014</td><td>Edit</td><td>Remove</td>
-                </tr>
-                <tr>
-                    <td>2</td><td>14/11/2014</td><td>21/12/2014</td><td>Edit</td><td>Remove</td>
-                </tr>
-            </table>
             
             <asp:SqlDataSource 
                 ID="SqlDataSource1" 

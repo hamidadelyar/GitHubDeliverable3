@@ -10,7 +10,7 @@
  <style>
         .black_overlay{
             display: none;
-            position: absolute;
+            position: fixed;
             top: 0%;
             left: 0%;
             width: 100%;
@@ -25,10 +25,9 @@
             display: none;
             position: absolute;
             top: 30%;
-            right: 30%;
-            width: 40%;
-            max-width:370px;
-            
+            width: 320px;
+            margin-left:auto;
+            margin-right:auto;
             padding: 16px;
             background-color: white;
             z-index:1002;
@@ -73,11 +72,24 @@
         <input type="button" ID="addFacility" Value="Add Facility" onclick = "document.getElementById('light2').style.display = 'block'; document.getElementById('fade2').style.display = 'block'" />
     </div>
 
+    <asp:SqlDataSource 
+        ID="SqlDataSource5" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+        SelectCommand="SELECT * FROM [Rooms]">
+    </asp:SqlDataSource>
+
+    <script runat="server">
+        private void NewRoom (object source, EventArgs e) {
+          SqlDataSource1.Insert();
+        }
+    </script>
+
     <div id="light" class="white_content">
         <h1>New Room</h1>
         Building: <br />
         <asp:TextBox id="TextBox1" runat="server" /><br />
-        Room Number: <br />
+        Room ID: <br />
         <asp:TextBox id="TextBox2" runat="server" /><br />
         Capacity: <br />
         <asp:TextBox id="TextBox5" runat="server" /><br />
@@ -85,7 +97,7 @@
         <asp:TextBox id="TextBox6" runat="server" />
 
         <br />
-        <asp:Button ID="Button1" runat="server" Text="Save" /> 
+        <asp:Button ID="Button1" runat="server" Text="Save" onclick="NewRoom"/> 
         <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'" />
 
     </div>
@@ -118,10 +130,17 @@
         ID="SqlDataSource1" 
         runat="server" 
         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-        SelectCommand="SELECT * FROM [Buildings] WHERE [Building_ID] = @Building_ID">
+        SelectCommand="SELECT * FROM [Buildings] WHERE [Building_ID] = @Building_ID"
+        InsertCommand="INSERT INTO Rooms (Room_ID, Capacity, Room_Type, Building_ID, Pool) VALUES (@roomDB, @capacityDB, @typeDB, @buildingDB, 'true')">
             <selectparameters>
 		        <asp:controlparameter controlid="DropDownList1" name="Building_ID" propertyname="SelectedValue" type="String" />
 	        </selectparameters>
+            <InsertParameters>
+                <asp:ControlParameter name="buildingDB" ControlId="TextBox1" PropertyName="Text" />
+                <asp:ControlParameter name="roomDB" ControlId="TextBox2" PropertyName="Text" />
+                <asp:ControlParameter name="capacityDB" ControlId="TextBox5" PropertyName="Text" />
+                <asp:ControlParameter name="typeDB" ControlId="TextBox6" PropertyName="Text" />
+            </InsertParameters>
     </asp:SqlDataSource>
 
 
@@ -143,20 +162,59 @@
 		                <asp:controlparameter controlid="DropDownList1" name="Building" propertyname="SelectedValue" type="String" />
 	                </selectparameters>
             </asp:SqlDataSource>
-
-            <asp:GridView 
-                ID="GridView1" 
-                runat="server" 
-                DataSourceID="SqlDataSource2">
-            </asp:GridView>
-
-
+            
+            <table>
+                <tr>
+                    <th>Room ID</th><th>Capacity</th><th>Room Type</th><th></th>
+                </tr>
+                
+                    <asp:Repeater 
+                        ID="Repeater2" 
+                        runat="server"
+                        DataSourceID="SqlDataSource2">
+                            <ItemTemplate>
+                                <tr>
+                                    <td><%#Eval("Room_ID") %></td><td><%#Eval("Capacity") %></td><td><%#Eval("Room_Type") %></td><td><input type="button" ID="room<%#Eval("Room_ID") %>" Value="Edit" onclick = "document.getElementById('light<%#Eval("Room_ID") %>').style.display='block';document.getElementById('fade').style.display='block'" /></td>
+                                </tr>
+                            </ItemTemplate>
+                    </asp:Repeater>
+                
+            </table>
         </ItemTemplate>
     </asp:Repeater>
 
 
+            <asp:SqlDataSource 
+                ID="SqlDataSource4" 
+                runat="server" 
+                ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+                SelectCommand="SELECT * FROM [Rooms] WHERE [Building_ID] = @Building">
+                    <selectparameters>
+		                <asp:controlparameter controlid="DropDownList1" name="Building" propertyname="SelectedValue" type="String" />
+	                </selectparameters>
+            </asp:SqlDataSource>
 
+                   <asp:Repeater 
+                        ID="Repeater3" 
+                        runat="server"
+                        DataSourceID="SqlDataSource4">
+                            <ItemTemplate>
+                                <div id="light<%#Eval("Room_ID") %>" class="white_content">
+                                    <h1> <%#Eval("Room_ID") %> </h1>
+                                    Announcement Title: <br />
+                                    <asp:TextBox id="TextBox1" runat="server" /><br />
+                                    Announcement Details: <br />
+                                    <asp:TextBox id="TextBox2" runat="server" />
 
+                                    <br />
+                                    <asp:Button ID="Button2" runat="server" Text="Save" /> 
+                                    <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light<%#Eval("Room_ID") %>').style.display='none';document.getElementById('fade').style.display='none'" />
+
+                                </div>
+                                <div id="fade" class="black_overlay">
+                                </div>
+                            </ItemTemplate>
+                    </asp:Repeater>
          
    
 
