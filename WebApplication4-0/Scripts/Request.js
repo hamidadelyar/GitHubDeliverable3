@@ -185,9 +185,70 @@ $(document).ready(function () {
             $('header').addClass('blur-in');
         });
 
+        $("#defaultWeeksNoTwo").click(function () { //onclick, fades in to display
+            $('#popupWeeksTwo').fadeIn(1000);
+            $('#requestContainer').removeClass('blur-out');
+            $('#requestContainer').addClass('blur-in');
+
+            //only blurs the text in the footer
+            $('footer .float-left').removeClass('blur-out');
+            $('footer .float-left').addClass('blur-in');
+
+            //blurs header content, i.e. navigation
+            $('header').removeClass('blur-out');
+            $('header').addClass('blur-in');
+        });
+
+        $("#defaultWeeksNoThree").click(function () { //onclick, fades in to display
+            $('#popupWeeksThree').fadeIn(1000);
+            $('#requestContainer').removeClass('blur-out');
+            $('#requestContainer').addClass('blur-in');
+
+            //only blurs the text in the footer
+            $('footer .float-left').removeClass('blur-out');
+            $('footer .float-left').addClass('blur-in');
+
+            //blurs header content, i.e. navigation
+            $('header').removeClass('blur-out');
+            $('header').addClass('blur-in');
+        });
+
+
         //Close popup weeks
         $("#closePopup").click(function () { //onclick, fades out
             $('#popupWeeks').fadeOut(1000);
+            //$('#requestContainer').removeClass('blur-in');
+            $('#requestContainer').addClass('blur-out');
+            $('#requestContainer').removeClass('blur-in');
+
+            //unblurs the text in the footer
+            $('footer .float-left').addClass('blur-out');
+            $('footer .float-left').removeClass('blur-in');
+
+            //unblurs header content
+            $('header').addClass('blur-out');
+            $('header').removeClass('blur-in');
+        });
+
+        //Close popup weeks - room2
+        $("#closePopupTwo").click(function () { //onclick, fades out
+            $('#popupWeeksTwo').fadeOut(1000);
+            //$('#requestContainer').removeClass('blur-in');
+            $('#requestContainer').addClass('blur-out');
+            $('#requestContainer').removeClass('blur-in');
+
+            //unblurs the text in the footer
+            $('footer .float-left').addClass('blur-out');
+            $('footer .float-left').removeClass('blur-in');
+
+            //unblurs header content
+            $('header').addClass('blur-out');
+            $('header').removeClass('blur-in');
+        });
+
+        //Close popup weeks - room 3
+        $("#closePopupThree").click(function () { //onclick, fades out
+            $('#popupWeeksThree').fadeOut(1000);
             //$('#requestContainer').removeClass('blur-in');
             $('#requestContainer').addClass('blur-out');
             $('#requestContainer').removeClass('blur-in');
@@ -209,11 +270,38 @@ $(document).ready(function () {
             }
         });
 
+        //sets all the weeks to none checked - Room 2 weeks
+        $('#resetWeeksTwo').click(function () {
+            for (i = 0; i < 16; i++) {
+                $('#week' + i + "Two").prop('checked', false);
+            }
+        });
+
+        //sets all the weeks to none checked - Room 2 weeks
+        $('#resetWeeksThree').click(function () {
+            for (i = 0; i < 16; i++) {
+                $('#week' + i + "Three").prop('checked', false);
+            }
+        });
+
         //sets all the weeks to all checked
         $('#selectAllWeeks').click(function () {
-            // $('#week9').is(':checked')
             for (i = 0; i < 16; i++) {
                 $('#week' + i).prop('checked', true);
+            }
+        });
+
+        //sets all the weeks to all checked - Room 2 weeks
+        $('#selectAllWeeksTwo').click(function () {
+            for (i = 0; i < 16; i++) {
+                $('#week' + i + "Two").prop('checked', true);
+            }
+        });
+
+          //sets all the weeks to all checked - Room 3 weeks
+        $('#selectAllWeeksThree').click(function () {
+            for (i = 0; i < 16; i++) {
+                $('#week' + i + "Three").prop('checked', true);
             }
         });
     });
@@ -1302,10 +1390,36 @@ $(document).ready(function () {
                 if (document.getElementById('week' + i).checked == true) {
                     weekChecked = weekChecked + 1; //if at least 1 week has been checked, then weekChecked set to true
                     weeks.push(i); //corresponding week number will be added to the array if it has been checked
-                    /*
-                      If at least 1 week has been checked, then checked weeks set to true.
-                      Otherwise, no weeks have been selected. User must be notified.
-                  */
+                }
+            }
+        }
+
+        var weeks2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        var weekChecked2 = 12; //12 weeks checked automatically
+
+        if (document.getElementById('defaultWeeksNoTwo').checked == true) {    //if user has selected to choose own weeks
+            //check to see if any weeks have been selected.
+            weeks2 = []; //sets the weeks array to empty, so can add the specific weeks user chooses.
+            var weekChecked2 = 0;
+            for (i = 1; i < 16; i++) {
+                if (document.getElementById('week' + i + "Two").checked == true) {
+                    weekChecked2 = weekChecked2 + 1; //if at least 1 week has been checked, then weekChecked set to true
+                    weeks2.push(i); //corresponding week number will be added to the array if it has been checked
+                }
+            }
+        }
+
+        var weeks3 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        var weekChecked3 = 12; //12 weeks checked automatically
+
+        if (document.getElementById('defaultWeeksNoThree').checked == true) {    //if user has selected to choose own weeks
+            //check to see if any weeks have been selected.
+            weeks3 = []; //sets the weeks array to empty, so can add the specific weeks user chooses.
+            var weekChecked3 = 0;
+            for (i = 1; i < 16; i++) {
+                if (document.getElementById('week' + i + "Three").checked == true) {
+                    weekChecked3 = weekChecked3 + 1; //if at least 1 week has been checked, then weekChecked set to true
+                    weeks3.push(i); //corresponding week number will be added to the array if it has been checked
                 }
             }
         }
@@ -1410,6 +1524,16 @@ $(document).ready(function () {
         if (document.getElementById('defaultWeeksNo').checked) {    //if user selects to check own custom weeks, does not want default weeks
             defaultWeeks = 0;
         }
+
+        var defaultWeeks2 = 1;
+        if (document.getElementById('defaultWeeksNoTwo').checked) {    //if user selects to check own custom weeks, does not want default weeks
+            defaultWeeks2 = 0;
+        }
+
+        var defaultWeeks3 = 1;
+        if (document.getElementById('defaultWeeksNoThree').checked) {    //if user selects to check own custom weeks, does not want default weeks
+            defaultWeeks3 = 0;
+        }
         /*
              var comp = false; //computer
             var ddp = false;    //Dual Data projection
@@ -1434,7 +1558,7 @@ $(document).ready(function () {
                 lecturerName1: lecturerName1, lecturerName2: lecturerName2, lecturerName3: lecturerName3, specialR: specialR,
                 priority: priority, parkID1: parkID1, parkID2: parkID2, parkID3: parkID3, room1: room1, room2: room2, room3: room3,
                 buildingID1: buildingID1, buildingID2: buildingID2, buildingID3: buildingID3, roomType1: roomType1, roomType2: roomType2,
-                roomType3: roomType3, defaultWeeks: defaultWeeks, weeks: weeks,
+                roomType3: roomType3, defaultWeeks: defaultWeeks, defaultWeeks2: defaultWeeks2, defaultWeeks3: defaultWeeks3, weeks: weeks, weeks2: weeks2, weeks3: weeks3,
                 comp: comp, ddp: ddp, dp: dp, il: il, mp: mp, pa: pa, plasma: plasma, rev: rev, mic: mic, vis: vis, wc: wc, wb: wb,
                 comp2: comp2, ddp2: ddp2, dp2: dp2, il2: il2, mp2: mp2, pa2: pa2, plasma2: plasma2, rev2: rev2, mic2: mic2, vis2: vis2, wc2: wc2, wb2: wb2,
                 comp3: comp3, ddp3: ddp3, dp3: dp3, il3: il3, mp3: mp3, pa3: pa3, plasma3: plasma3, rev3: rev3, mic3: mic3, vis3: vis3, wc3: wc3, wb3: wb3,

@@ -244,7 +244,7 @@ namespace WebApplication4_0
                 query = "select * from [Buildings]";
             }
 
-            string result = "<option value='0'> - NO BUILDING PREFERENCE - </option>"; 
+            string result = "<option value='0'>NO BUILDING PREFERENCE</option>"; 
 
             if (query != "")
             {
@@ -721,7 +721,7 @@ namespace WebApplication4_0
                     query += " and facility12.Facility_ID = 'WB'";
                 
             }
-            string result = "<option value='0'> - NO ROOM PREFERENCE - </option>";
+            string result = "<option value='0'>NO ROOM PREFERENCE</option>";
             //only carries out query if query exists
             if (query != "")
             {
@@ -743,8 +743,8 @@ namespace WebApplication4_0
         public static string SubmitRequest(string modname, string modcode, int day, int startTime, int endTime, int numRooms, int roomCap1,
                                             int roomCap2, int roomCap3, int capacity, string lecturerName1, string lecturerName2, string lecturerName3,
                                             string specialR, int priority, string parkID1, string parkID2, string parkID3, string room1, string room2,
-                                            string room3, string buildingID1, string buildingID2, string buildingID3, string roomType1, string roomType2, 
-                                            string roomType3, int defaultWeeks, int[] weeks, bool comp, bool comp2, bool comp3, bool ddp, bool ddp2, bool ddp3,
+                                            string room3, string buildingID1, string buildingID2, string buildingID3, string roomType1, string roomType2,
+                                            string roomType3, int defaultWeeks, int defaultWeeks2, int defaultWeeks3, int[] weeks, int[] weeks2, int[] weeks3, bool comp, bool comp2, bool comp3, bool ddp, bool ddp2, bool ddp3,
                                             bool dp, bool dp2, bool dp3, bool il, bool il2, bool il3, bool mp, bool mp2, bool mp3, bool pa, bool pa2, bool pa3,
                                             bool plasma, bool plasma2, bool plasma3, bool rev, bool rev2, bool rev3, bool mic, bool mic2, bool mic3,
                                             bool vis, bool vis2, bool vis3, bool wc, bool wc2, bool wc3, bool wb, bool wb2, bool wb3)
@@ -1009,7 +1009,7 @@ namespace WebApplication4_0
                             cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
                             cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
                             cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks2);
                             cmd6.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd6.ExecuteNonQuery();
@@ -1027,7 +1027,7 @@ namespace WebApplication4_0
                             cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
                             cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
                             cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks2);
                             cmd6.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd6.ExecuteNonQuery();
@@ -1044,7 +1044,7 @@ namespace WebApplication4_0
                             cmd6.Parameters.AddWithValue("@Park_ID", parkID2);
                             cmd6.Parameters.AddWithValue("@Number_Students", roomCap2);
                             cmd6.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                            cmd6.Parameters.AddWithValue("@Weeks", defaultWeeks2);
                             cmd6.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd6.ExecuteNonQuery();
@@ -1069,7 +1069,7 @@ namespace WebApplication4_0
                             cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
                             cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
                             cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks3);
                             cmd7.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd7.ExecuteNonQuery();
@@ -1087,7 +1087,7 @@ namespace WebApplication4_0
                             cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
                             cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
                             cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks3);
                             cmd7.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd7.ExecuteNonQuery();
@@ -1104,7 +1104,7 @@ namespace WebApplication4_0
                             cmd7.Parameters.AddWithValue("@Park_ID", parkID3);
                             cmd7.Parameters.AddWithValue("@Number_Students", roomCap3);
                             cmd7.Parameters.AddWithValue("@Special_Requirements", specialR);
-                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks); //if default weeks then 1, otherwise 0
+                            cmd7.Parameters.AddWithValue("@Weeks", defaultWeeks3); //if default weeks then 1, otherwise 0
                             cmd7.Connection = connection;
                             connection.Open(); //opening connection with the DB
                             cmd7.ExecuteNonQuery();
@@ -1155,14 +1155,14 @@ namespace WebApplication4_0
                     //if 2nd room exists
                     if (numRooms > 1) //then there is 2 preference IDs, so the first one has already been inserted above, this inserts weeks for 2nd room
                     {
-                        if (defaultWeeks != 1)
+                        if (defaultWeeks2 != 1)
                         { //only if user has chosen custom weeks
                             //string weeksQuery = "insert into [Request_Preferences] (Request_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
                             string weeksQuery = "";
 
-                            for (int i = 0; i < weeks.Length; i++)
+                            for (int i = 0; i < weeks2.Length; i++)
                             {
-                                weeksQuery += "insert into [Request_Weeks] (Pref_ID, Week_ID) Values (" + prefID2 + ", " + weeks[i].ToString() + ") ";
+                                weeksQuery += "insert into [Request_Weeks] (Pref_ID, Week_ID) Values (" + prefID2 + ", " + weeks2[i].ToString() + ") ";
                             }
                             SqlCommand cmdWeeks = new SqlCommand(weeksQuery);
                             cmdWeeks.CommandType = CommandType.Text;
@@ -1176,14 +1176,14 @@ namespace WebApplication4_0
                     //if 3rd room exists
                     if (numRooms > 2) //then there is 3 preference IDs, so the 1st and 2nd ones have already been inserted above, this inserts weeks for 3rd room
                     {
-                        if (defaultWeeks != 1)
+                        if (defaultWeeks3 != 1)
                         { //only if user has chosen custom weeks
                             //string weeksQuery = "insert into [Request_Preferences] (Request_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
                             string weeksQuery = "";
 
-                            for (int i = 0; i < weeks.Length; i++)
+                            for (int i = 0; i < weeks3.Length; i++)
                             {
-                                weeksQuery += "insert into [Request_Weeks] (Pref_ID, Week_ID) Values (" + prefID3 + ", " + weeks[i].ToString() + ") ";
+                                weeksQuery += "insert into [Request_Weeks] (Pref_ID, Week_ID) Values (" + prefID3 + ", " + weeks3[i].ToString() + ") ";
                             }
                             SqlCommand cmdWeeks = new SqlCommand(weeksQuery);
                             cmdWeeks.CommandType = CommandType.Text;
