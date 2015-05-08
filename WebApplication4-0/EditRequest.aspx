@@ -7,328 +7,14 @@
     <script>
         var modData = <%= this.modData %>;
         var lectData = <%= this.lectData %>;
-        $(document).ready(function () {
-            var week = 1;
-            var pri = 0;
-            $('.weekTd').hide();
-            $('.weekBtnTd').hide();
-            $('.priTick').click(function () {
-                $('.priTick').removeClass('selTick');
-                $('.priTick').html('&nbsp;');
-                $(this).addClass('selTick');
-                $(this).html('&#10004');
-                pri = $(this).siblings('input').val();
-            });
-            $('.noTick').click(function () {
-                $('.yesTd').hide();
-                $('.noTd').hide();
-                $('.weekTd').show();
-                $('.weekBtnTd').show();
-                $('.weekTit').html('<b>CHOSEN WEEKS</b>');
-                week = 1;
-            });
-            $('.defBtn').click(function () {
-                $('.yesTd').show();
-                $('.noTd').show();
-                $('.weekTd').hide();
-                $('.weekBtnTd').hide();
-                $('.weekTit').html('<b>DEFAULT WEEKS</b>');
-                week = 0;
-            });
-            $('.week').click(function () {
-                var currVal = $(this).next('.weekCheck').val();
-                $(this).next('.weekCheck').val(Math.abs(currVal - 1));
-                if (currVal == 0) {
-                    $(this).css('background-color', '#FF8060');
-                    $(this).attr('clicked', 'true');
-                }
-                else {
-                    $(this).css('background-color', '#999');
-                    $(this).attr('clicked', 'false');
-                    $(this).hover(function () {
-                        $(this).css("background-color", "#FF8060");
-                    }, function () {
-                        if ($(this).attr('clicked') != 'true') {
-                            $(this).css("background-color", "#999");
-                        }
-                    });
-                }
-            });
-            $('.allBtn').click(function () {
-                $('.week').each(function () {
-                    $(this).next('.weekCheck').val(1);
-                    $(this).css("background-color", "#FF8060");
-                    $(this).attr('clicked', 'true');
-                });
-            });
-            $('.clrBtn').click(function () {
-                $('.week').each(function () {
-                    $(this).next('.weekCheck').val(0);
-                    $(this).css("background-color", "#999");
-                    $(this).attr('clicked', 'false');
-                });
-            });
-            $('.oddBtn').click(function () {
-                $('.week').each(function (i) {
-                    if (i % 2 == 0) {
-                        $(this).next('.weekCheck').val(1);
-                        $(this).css("background-color", "#FF8060");
-                        $(this).attr('clicked', 'true');
-                    }
-                    else {
-                        $(this).css('background-color', '#999');
-                        $(this).attr('clicked', 'false');
-                        $(this).hover(function () {
-                            $(this).css("background-color", "#FF8060");
-                        }, function () {
-                            if ($(this).attr('clicked') != 'true') {
-                                $(this).css("background-color", "#999");
-                            }
-                        });
-                    }
-                });
-            });
-            $('.evenBtn').click(function () {
-                $('.week').each(function (i) {
-                    if (i % 2 != 0) {
-                        $(this).next('.weekCheck').val(1);
-                        $(this).css("background-color", "#FF8060");
-                        $(this).attr('clicked', 'true');
-                    }
-                    else {
-                        $(this).css('background-color', '#999');
-                        $(this).attr('clicked', 'false');
-                        $(this).hover(function () {
-                            $(this).css("background-color", "#FF8060");
-                        }, function () {
-                            if ($(this).attr('clicked') != 'true') {
-                                $(this).css("background-color", "#999");
-                            }
-                        });
-                    }
-                });
-            });
-            dropDowns();
-        });
-        function dropDowns()
-        {
-            for (var i = 0; i < modData.length; i++) {
-                $('<tr><td colspan="8"><span class="codeTbl" id="code'+i+'" >' + modData[i]['Module_Code'] + '</span></td></tr>').insertAfter('.codeRw');
-            }
-            $('.codeHolderTbl').hide();
-            $('.modTxt').click(function () {
-                var left = $('.modTxt').position().left;
-                var top = $('.modTxt').position().top;
-                var width = $('.modTxt').width();
-                $('.codeHolderTbl').css('left', left);
-                $('.codeHolderTbl').css('top', top + 22);
-                $('.modHolderTbl').show();
-                $('.nameHolderTbl').hide();
-                $('.roomHolderTbl').hide();
-                $('.dayHolderTbl').hide();
-                $('.startHolderTbl').hide();
-                $('.endHolderTbl').hide();
-                $('.lectHolderTbl').hide();
-                $('.codeHolderTbl').css('width', width + 12);
-                $('.codeTxt').css('width', '100%!important')
-                $('.codeHolderTbl').children('.triang').css('left', width / 2);
-            });
-            $('.codeTbl').click(function () {
-                $('.modTxt').val($(this).html());
-                findName($(this).html())
-            });
-            for (var i = 0; i < modData.length; i++) {
-                $('<tr><td colspan="8"><span class="nameTbl" id="name'+i+'" >' + modData[i]['Module_Title'] + '</span></td></tr>').insertAfter('.nameRw');
-            }
-            $('.nameHolderTbl').hide();
-            $('.nameTxt').click(function () {
-                var left = $('.nameTxt').position().left;
-                var top = $('.nameTxt').position().top;
-                var width = $('.nameTxt').width();
-                $('.nameHolderTbl').css('left', left);
-                $('.nameHolderTbl').css('top', top + 22);
-                $('.modHolderTbl').hide();
-                $('.nameHolderTbl').show();
-                $('.dayHolderTbl').hide();
-                $('.startHolderTbl').hide();
-                $('.endHolderTbl').hide();
-                $('.lectHolderTbl').hide();
-                $('.roomHolderTbl').hide();
-                $('.nameHolderTbl').css('width', width + 12);
-                $('.nameTxt').css('width', '100%!important')
-                $('.nameHolderTbl').children('.triang').css('left', width / 2);
-            });
-            $('.nameTbl').click(function () {
-                $('.nameTxt').val($(this).html())
-                findCode($(this).html())
-            });
-            $('.dayHolderTbl').hide();
-            $('.dayTxt').click(function () {
-                var left = $('.dayTxt').position().left;
-                var top = $('.dayTxt').position().top;
-                var width = $('.dayTxt').width();
-                $('.dayHolderTbl').css('left', left);
-                $('.dayHolderTbl').css('top', top + 22);
-                $('.modHolderTbl').hide();
-                $('.dayHolderTbl').show();
-                $('.nameHolderTbl').hide();
-                $('.startHolderTbl').hide();
-                $('.endHolderTbl').hide();
-                $('.roomHolderTbl').hide();
-                $('.lectHolderTbl').hide();
-                $('.dayHolderTbl').css('width', width + 12);
-                $('.dayTxt').css('width', '100%!important')
-                $('.dayHolderTbl').children('.triang').css('left', width / 2);
-            });
-            $('.dayTbl').click(function () {
-                $('.dayTxt').val($(this).html())
-            });
-            $('.startHolderTbl').hide();
-            $('.startTxt').click(function () {
-                var left = $('.startTxt').position().left;
-                var top = $('.startTxt').position().top;
-                var width = $('.startTxt').width();
-                $('.startHolderTbl').css('left', left);
-                $('.startHolderTbl').css('top', top + 22);
-                $('.modHolderTbl').hide();
-                $('.startHolderTbl').show();
-                $('.dayHolderTbl').hide();
-                $('.nameHolderTbl').hide();
-                $('.endHolderTbl').hide();
-                $('.roomHolderTbl').hide();
-                $('.lectHolderTbl').hide();
-                $('.startHolderTbl').css('width', width + 12);
-                $('.startTxt').css('width', '100%!important')
-                $('.startHolderTbl').children('.triang').css('left', width / 2);
-            });
-            $('.startTbl').click(function () {
-                $('.startTxt').val($(this).html())
-            });
-            $('.endHolderTbl').hide();
-            $('.endTxt').click(function () {
-                var left = $('.endTxt').position().left;
-                var top = $('.endTxt').position().top;
-                var width = $('.endTxt').width();
-                $('.endHolderTbl').css('left', left);
-                $('.endHolderTbl').css('top', top + 22);
-                $('.modHolderTbl').hide();
-                $('.endHolderTbl').show();
-                $('.dayHolderTbl').hide();
-                $('.startHolderTbl').hide();
-                $('.nameHolderTbl').hide();
-                $('.roomHolderTbl').hide();
-                $('.lectHolderTbl').hide();
-                $('.endHolderTbl').css('width', width + 12);
-                $('.endTxt').css('width', '100%!important')
-                $('.endHolderTbl').children('.triang').css('left', width / 2);
-            });
-            $('.endTbl').click(function () {
-                $('.endTxt').val($(this).html())
-            });
-            $('.roomHolderTbl').hide();
-            $('.roomTxt').click(function () {
-                var left = $('.roomTxt').position().left;
-                var top = $('.roomTxt').position().top;
-                var width = $('.roomTxt').width();
-                $('.roomHolderTbl').css('left', left);
-                $('.roomHolderTbl').css('top', top + 22);
-                $('.codeHolderTbl').hide();
-                $('.roomHolderTbl').show();
-                $('.dayHolderTbl').hide();
-                $('.startHolderTbl').hide();
-                $('.endHolderTbl').hide();
-                $('.nameHolderTbl').hide();
-                $('.lectHolderTbl').hide();
-                $('.endHolderTbl').css('width', width + 12);
-                $('.endTxt').css('width', '100%!important')
-                $('.endHolderTbl').children('.triang').css('left', width / 2);
-            });
-            $('.roomTbl').click(function () {
-                $('.roomTxt').val($(this).html())
-            });
-            $('.lectHolderTbl').hide();
-            for (var i = 0; i < lectData.length; i++) {
-                $('<tr><td colspan="8"><span class="lectTbl" >' + lectData[i]['Lecturer_ID'] + '</span></td></tr>').insertAfter('.lectRw');
-            }
-            $('.lectTxt').click(function () {
-                var left = $('.lectTxt').position().left;
-                var top = $('.lectTxt').position().top;
-                var width = $('.lectTxt').width();
-                $('.lectHolderTbl').css('left', left);
-                $('.lectHolderTbl').css('top', top + 22);
-                $('.modHolderTbl').hide();
-                $('.lectHolderTbl').show();
-                $('.dayHolderTbl').hide();
-                $('.startHolderTbl').hide();
-                $('.endHolderTbl').hide();
-                $('.nameHolderTbl').hide();
-                $('.lectHolderTbl').css('width', width + 12);
-                $('.lectTxt').css('width', '100%!important')
-                $('.lectHolderTbl').children('.triang').css('left', width / 2);
-            });
-            $('.lectTbl').click(function () {
-                $('.lectTxt').val($(this).html())
-            });
-            $(document).click(function (event) { // Clear table when anywhere else on page click
-                if (event.target.id == 'modTxt') {
-                    $('.codeHolderTbl').show();
-                }
-                else if (event.target.id == 'nameTxt')
-                {
-                    $('.nameHolderTbl').show();
-                }
-                else if(event.target.id == 'dayTxt')
-                {
-                    $('.dayHolderTbl').show();
-                }
-                else if (event.target.id == 'startTxt') {
-                    $('.startHolderTbl').show();
-                }
-                else if (event.target.id == 'endTxt') {
-                    $('.endHolderTbl').show();
-                }
-                else if(event.target.id == 'roomTxt')
-                {
-                    $('.roomHolderTbl').show();
-                }
-                else if (event.target.id == 'lectTxt') {
-                    $('.lectHolderTbl').show();
-                }
-                else
-                {
-                    $('.codeHolderTbl').hide();
-                    $('.nameHolderTbl').hide();
-                    $('.dayHolderTbl').hide();
-                    $('.startHolderTbl').hide();
-                    $('.endHolderTbl').hide();
-                    $('.roomHolderTbl').hide();
-                    $('.lectHolderTbl').hide();
-                }
-            });
-        }
-        function findName(code)
-        {
-            for(var i = 0; i < modData.length; i++)
-            {
-                if(modData[i]['Module_Code'] == code)
-                {
-                    $('.nameTxt').val(modData[i]['Module_Title'])
-                    break;
-                }
-            }
-        }
-        function findCode(code)
-        {
-            for(var i = 0; i < modData.length; i++)
-            {
-                if(modData[i]['Module_Title'] == code)
-                {
-                    $('.codeTxt').val(modData[i]['Module_Code'])
-                    break;
-                }
-            }
-        }
+        var requestData = <%= this.request %>;
+        var selLects = <%= this.selLects %>;
+        var navigable = [];
+        var curr = -1;
+        var numLects = 0;
     </script>
+    <script src="/Scripts/EditRequestControls.js" ></script>
+    <script src="/Scripts/EditRequestPageLoad.js" ></script>
     <style>
         .editHolder {
             width: 95%;
@@ -450,7 +136,7 @@
         }
         .prefBtn
         {
-            line-height:40px;
+            line-height:30px;
             width:100px;
             background-color:#2B3036;
             cursor:pointer;
@@ -466,7 +152,7 @@
         }
         .subBtn
         {
-            line-height:40px;
+            line-height:30px;
             width:100px;
             background-color:#FF8060;
             cursor:pointer;
@@ -687,6 +373,25 @@
         .lectHolderTbl td {
             padding: 0;
         }
+        .lectTick {
+            border-radius: 3px;
+            background-color: #FF8060;
+            line-height: 17.5px;
+            padding: 5px;
+            border: 1px solid #FF8060;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+            margin-left: 10px;
+        }
+        .lectList {
+            padding-left: 5px;
+        }
+        .lectList span {
+            text-decoration: underline;
+            margin-right: 10px;
+            display: inline-block;
+        }
     </style>
     <div class="editHolder">
         <div class="hdr" ><b>EDIT REQUEST</b></div>
@@ -760,12 +465,12 @@
                 <td class="subHdr priTit" colspan="4"><b>PRIORITY</b><span class="alert" ></span></td>
             </tr>
             <tr class="roomRw">
-                <td colspan="5"><input autocomplete="off" type="text" class="inp lectTxt" id="lectTxt" /></td>
-                <td colspan="4"><span class="tickBox priTick">&nbsp;</span><span class="optSpan"><b>YES</b></span><input type="hidden" value="1"/></td>
+                <td colspan="5"><input autocomplete="off" type="text" class="inp lectTxt" id="lectTxt" /><span class="lectTick addLect">ADD</span><span class="lectTick subLect">DEL</span></td>
+                <td colspan="4"><span class="tickBox priTick priYes">&nbsp;</span><span class="optSpan"><b>YES</b></span><input type="hidden" value="1"/></td>
             </tr>
             <tr>
-                <td colspan="5"></td>
-                <td colspan="4"><span class="tickBox priTick selTick">&#10004;</span><span class="optSpan"><b>NO</b></span><input type="hidden" value="0"/></td>
+                <td colspan="5" class="lectList" ></td>
+                <td colspan="4"><span class="tickBox priTick selTick priNo">&#10004;</span><span class="optSpan"><b>NO</b></span><input type="hidden" value="0"/></td>
             </tr>
             <tr>
                 <td colspan="9" class="spc"></td>
@@ -790,19 +495,19 @@
             <td colspan="8"><span class="triang"></span></td>
         </tr>
         <tr class="dayRw">
-            <td colspan="8"><span class="dayTbl" >Monday</span></td>
+            <td colspan="8"><span tabindex="99" class="dayTbl" id="mon" >Monday</span></td>
         </tr>
         <tr class="dayRw">
-            <td colspan="8"><span class="dayTbl" >Tuesday</span></td>
+            <td colspan="8"><span tabindex="99" class="dayTbl" id="tue" >Tuesday</span></td>
         </tr>
         <tr class="dayRw">
-            <td colspan="8"><span class="dayTbl" >Wednesday</span></td>
+            <td colspan="8"><span tabindex="99" class="dayTbl" id="wed" >Wednesday</span></td>
         </tr>
         <tr class="dayRw">
-            <td colspan="8"><span class="dayTbl" >Thursday</span></td>
+            <td colspan="8"><span tabindex="99" class="dayTbl" id="thur" >Thursday</span></td>
         </tr>
         <tr class="dayRw">
-            <td colspan="8"><span class="dayTbl" >Friday</span></td>
+            <td colspan="8"><span tabindex="99" class="dayTbl" id="fri" >Friday</span></td>
         </tr>
     </table>
     <table class="startHolderTbl">
@@ -810,63 +515,63 @@
             <td colspan="8"><span class="triang"></span></td>
         </tr>
         <tr class="startRw">
-            <td colspan="8"><span class="startTbl" >09:00</span></td>
+            <td colspan="8"><span tabindex="99" class="startTbl" id="nine" >09:00</span></td>
         </tr>
         <tr class="startRw">
-            <td colspan="8"><span class="startTbl" >10:00</span></td>
+            <td colspan="8"><span tabindex="99" class="startTbl" id="ten" >10:00</span></td>
         </tr>
         <tr class="startRw">
-            <td colspan="8"><span class="startTbl" >11:00</span></td>
+            <td colspan="8"><span tabindex="99" class="startTbl" id="eleven" >11:00</span></td>
         </tr>
         <tr class="startRw">
-            <td colspan="8"><span class="startTbl" >12:00</span></td>
+            <td colspan="8"><span tabindex="99" class="startTbl" id="twelve" >12:00</span></td>
         </tr>
         <tr class="startRw">
-            <td colspan="8"><span class="startTbl" >13:00</span></td>
+            <td colspan="8"><span tabindex="99" class="startTbl" id="thirt" >13:00</span></td>
         </tr>
         <tr class="startRw">
-            <td colspan="8"><span class="startTbl" >14:00</span></td>
+            <td colspan="8"><span tabindex="99" class="startTbl" id="fourt" >14:00</span></td>
         </tr>
         <tr class="startRw">
-            <td colspan="8"><span class="startTbl" >15:00</span></td>
+            <td colspan="8"><span tabindex="99" class="startTbl" id="fift" >15:00</span></td>
         </tr>
         <tr class="startRw">
-            <td colspan="8"><span class="startTbl" >16:00</span></td>
+            <td colspan="8"><span tabindex="99" class="startTbl" id="sixt" >16:00</span></td>
         </tr>
         <tr class="startRw">
-            <td colspan="8"><span class="startTbl" >17:00</span></td>
+            <td colspan="8"><span tabindex="99" class="startTbl"  id="sevent">17:00</span></td>
         </tr>
     </table>
     <table class="endHolderTbl">
         <tr class="dayRw">
-            <td colspan="8"><span class="triang"></span></td>
+            <td colspan="8"><span tabindex="99" class="triang"></span></td>
         </tr>
         <tr class="endRw">
-            <td colspan="8"><span class="endTbl" >09:50</span></td>
+            <td colspan="8"><span tabindex="99" class="endTbl" id="nineEnd" >09:50</span></td>
         </tr>
         <tr class="endRw">
-            <td colspan="8"><span class="endTbl" >10:50</span></td>
+            <td colspan="8"><span tabindex="99" class="endTbl" id="tenEnd" >10:50</span></td>
         </tr>
         <tr class="endRw">
-            <td colspan="8"><span class="endTbl" >11:50</span></td>
+            <td colspan="8"><span tabindex="99" class="endTbl" id="elevenEnd" >11:50</span></td>
         </tr>
         <tr class="endRw">
-            <td colspan="8"><span class="endTbl" >12:50</span></td>
+            <td colspan="8"><span tabindex="99" class="endTbl" id="twelveEnd" >12:50</span></td>
         </tr>
         <tr class="endRw">
-            <td colspan="8"><span class="endTbl" >13:50</span></td>
+            <td colspan="8"><span tabindex="99" class="endTbl" id="thirtEnd" >13:50</span></td>
         </tr>
         <tr class="endRw">
-            <td colspan="8"><span class="endTbl" >14:50</span></td>
+            <td colspan="8"><span tabindex="99" class="endTbl" id="fourtEnd" >14:50</span></td>
         </tr>
         <tr class="endRw">
-            <td colspan="8"><span class="endTbl" >15:50</span></td>
+            <td colspan="8"><span tabindex="99" class="endTbl" id="fiftEnd" >15:50</span></td>
         </tr>
         <tr class="endRw">
-            <td colspan="8"><span class="endTbl" >16:50</span></td>
+            <td colspan="8"><span tabindex="99" class="endTbl" id="sixtEnd" >16:50</span></td>
         </tr>
         <tr class="endRw">
-            <td colspan="8"><span class="endTbl" >17:50</span></td>
+            <td colspan="8"><span tabindex="99" class="endTbl" id="seventEnd" >17:50</span></td>
         </tr>
     </table>
     <table class="roomHolderTbl">
@@ -874,13 +579,13 @@
             <td colspan="8"><span class="triang"></span></td>
         </tr>
         <tr class="roomRw">
-            <td colspan="8"><span class="roomTbl" >1</span></td>
+            <td colspan="8"><span tabindex="99" class="roomTbl" id="roomOne" >1</span></td>
         </tr>
         <tr class="roomRw">
-            <td colspan="8"><span class="roomTbl" >2</span></td>
+            <td colspan="8"><span tabindex="99" class="roomTbl" id="roomTwo" >2</span></td>
         </tr>
         <tr class="roomRw">
-            <td colspan="8"><span class="roomTbl" >3</span></td>
+            <td colspan="8"><span tabindex="99" class="roomTbl" id="roomThree" >3</span></td>
         </tr>
     </table>
     <table class="lectHolderTbl">
