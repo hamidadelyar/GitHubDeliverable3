@@ -14,6 +14,7 @@ namespace WebApplication4_0
         public string id = "";
         public string request = "";
         public string selLects = "";
+        public string weekData = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             if(Session["LoggedIn"] != null)
@@ -30,6 +31,7 @@ namespace WebApplication4_0
                 lectData = SQLSelect.Select("Lecturers", "Lecturer_ID + ' - ' + Lecturer_Name AS Lecturer_ID", "LEFT(Lecturer_ID, 2) = '" + Session["Username"].ToString().Substring(0, 2) + "'", ""); // runs a select to get all the lecturers from the user's department
                 request = SQLSelect.Select("Requests", "*", "Request_ID = '" + id + "'", "");
                 selLects = SQLSelect.Select("Request_Lecturers", "Lecturers.Lecturer_ID, Lecturers.Lecturer_Name", "Request_ID = '" + id + "'", "LEFT JOIN Lecturers ON Lecturers.Lecturer_ID = Request_Lecturers.Lecturer_ID");
+                //weekData = SQLSelect.Select("Week_ID")
             }
         }
     }

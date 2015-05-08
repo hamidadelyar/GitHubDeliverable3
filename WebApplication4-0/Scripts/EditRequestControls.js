@@ -1,6 +1,8 @@
 ﻿$(document).ready(function () {
     var week = 1;
     var pri = 0;
+    var typeSet = 1;
+    var parkSet = 1;
     $('.addLect').click(function () {
         addLect();
     });
@@ -104,6 +106,16 @@
                 });
             }
         });
+    });
+    $('.inCirc').click(function () {
+        $('.inCirc').removeClass('selectRad');
+        $(this).addClass('selectRad');
+        typeSet = $(this).siblings('.typeCheck').val();
+    });
+    $('.parkCirc').click(function () {
+        $('.parkCirc').removeClass('selectRad');
+        $(this).addClass('selectRad');
+        parkSet = $(this).siblings('.parkCheck').val();
     });
     dropDowns();
 });

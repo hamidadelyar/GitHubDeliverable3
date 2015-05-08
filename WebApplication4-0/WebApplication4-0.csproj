@@ -139,6 +139,7 @@
     <Content Include="ChangeEmail.aspx" />
     <Content Include="ChangePassword.aspx" />
     <Content Include="Contact.aspx" />
+    <Content Include="Content\EditRequest.css" />
     <Content Include="Content\jq.css" />
     <Content Include="Content\LoginStyle.css" />
     <Content Include="Content\PopupBlur.css" />
