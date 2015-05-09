@@ -68,9 +68,47 @@
 </style>
 
 <div class="contentHolder">
-    
-    <asp:SqlDataSource ID="SqlDataSource6" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT [RoundID], [Year], [Semester], [Round_Name], [Status] FROM [Rounds] WHERE [Status] = 'open'"></asp:SqlDataSource>
-    <asp:Repeater ID="Repeater2" runat="server" DataSourceID="SqlDataSource6">
+    <!--
+    <script>
+        @{
+            var db = Database.Open("Northwind");
+            var commandText = @"SELECT CategoryId FROM Categories WHERE CategoryName = @0";
+            var result = db.QueryValue(commandText, "Beverages");
+            commandText = @"SELECT ProductName FROM Products WHERE CategoryId = @0";
+            var products = db.Query(commandText, result);
+        }
+
+        @if(products.Count > 0){
+            <div>Query returned @products.Count records</div>
+        }
+    </script>
+    -->
+
+    <script runat=server>
+    protected String GetTime()
+    {
+        var status = false;
+        if (status == true) { 
+            return DateTime.Now.ToString("t");
+        }
+        else
+        {
+            return "nope";
+        }
+    }
+    </script>
+
+    Current server time is <% =GetTime()%>.
+
+    <asp:SqlDataSource 
+        ID="SqlDataSource6" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+        SelectCommand="SELECT [RoundID], [Year], [Semester], [Round_Name], [Status] FROM [Rounds] WHERE [Status] = 'open'"
+        >
+
+    </asp:SqlDataSource>
+    <asp:Repeater ID="Repeater2" runat="server" DataSourceID="SqlDataSource6" >
         <ItemTemplate>
             <div id="leftDiv">
                 <h1 style="margin-top:23px;">Current Round: <%#Eval("Round_Name") %>, Semester <%#Eval("Semester") %> <%#Eval("Year") %></h1>

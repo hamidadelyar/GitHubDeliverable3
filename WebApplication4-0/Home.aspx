@@ -5,16 +5,7 @@
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
 
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <script>
-        $(function () {
-            $("#progressbar").progressbar({
-                value: 37
-            });
-        });
-    </script>
+
     <style>
         .contentHolder
         {
@@ -112,9 +103,8 @@
     </style>
     
     <div class="contentHolder">
-        <h1 align="center">Time until end of Round XX</h1>
-        
-        <div id="progressbar"></div>
+        <h1 align="center">Current Round: </h1>
+     
 
         <div class="updatesHolder">
             <h2 class="white" align="center">Request Results:</h2>
