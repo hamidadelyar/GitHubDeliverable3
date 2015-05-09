@@ -10,11 +10,16 @@
         var lectData = <%= this.lectData %>;
         var requestData = <%= this.request %>;
         var selLects = <%= this.selLects %>;
+        var facs = <%= this.facs %>;
+        var buildData = <%= this.buildings %>;
+        var roomData = <%= this.rooms %>;
+        var preferences = <%= this.preferences %>;
         var navigable = [];
         var curr = -1;
         var numLects = 0;
+        var roomNumber = 1;
         $(document).ready(function(){
-            $('.editHolder').hide();
+            $('.roomOneHolder').hide();
         })
     </script>
     <script src="/Scripts/EditRequestControls.js" ></script>
@@ -198,7 +203,7 @@
                 <td class="subHdr studTit" colspan="9"><b>NUMBER OF STUDENTS</b><span class="alert" ></span></td>
             </tr>
             <tr class="roomRw">
-                <td colspan="9"><input autocomplete="off" type="text" class="inp studTxt" id="studTxt" /></td>
+                <td colspan="9"><input autocomplete="off" type="number" min="1" onkeypress="return isNumberKey(event)" class="inp studTxt" id="studTxt" /></td>
             </tr>
             <tr>
                 <td class="spc" ></td>
@@ -207,9 +212,9 @@
                 <td class="subHdr typeTit" colspan="9"><b>ROOM TYPE</b><span class="alert" ></span></td>
             </tr>
             <tr>
-                <td><b>LECTURE</b></td><td> <span class="outCirc" ></span><span class="inCirc selectRad"  ></span><input class="typeCheck" type="hidden" value="1" /></td>
-                <td><b>SEMINAR</b></td><td> <span class="outCirc" ></span><span class="inCirc" ></span><input class="typeCheck" type="hidden" value="2" /></td>
-                <td><b>IT LAB</b></td><td> <span class="outCirc" ></span><span class="inCirc" ></span><input class="typeCheck" type="hidden" value="3" /></td>
+                <td><b>LECTURE</b></td><td> <span class="outCirc" ></span><span class="inCirc selectRad" id="T"  ></span><input class="typeCheck" type="hidden" value="1" /></td>
+                <td><b>SEMINAR</b></td><td> <span class="outCirc" ></span><span class="inCirc" id="S" ></span><input class="typeCheck" type="hidden" value="2" /></td>
+                <td><b>IT LAB</b></td><td> <span class="outCirc" ></span><span class="inCirc" id="L" ></span><input class="typeCheck" type="hidden" value="3" /></td>
             </tr>
             <tr>
                 <td class="spc" ></td>
@@ -218,9 +223,9 @@
                 <td class="subHdr parkTit" colspan="9"><b>PARK</b><span class="alert" ></span></td>
             </tr>
             <tr>
-                <td><b>CENTRAL</b></td><td> <span class="outCirc" ></span><span class="parkCirc selectRad"  ></span><input class="parkCheck" type="hidden" value="1" /></td>
-                <td><b>WEST</b></td><td> <span class="outCirc" ></span><span class="parkCirc" ></span><input class="parkCheck" type="hidden" value="2" /></td>
-                <td><b>EAST</b></td><td> <span class="outCirc" ></span><span class="parkCirc" ></span><input class="parkCheck" type="hidden" value="3" /></td>
+                <td><b>CENTRAL</b></td><td> <span class="outCirc" ></span><span class="parkCirc selectRad" id="C"  ></span><input class="parkCheck" type="hidden" value="1" /></td>
+                <td><b>WEST</b></td><td> <span class="outCirc" ></span><span class="parkCirc" id="W" ></span><input class="parkCheck" type="hidden" value="2" /></td>
+                <td><b>EAST</b></td><td> <span class="outCirc" ></span><span class="parkCirc" id="E" ></span><input class="parkCheck" type="hidden" value="3" /></td>
             </tr>
             <tr>
                 <td class="spc" ></td>
@@ -235,36 +240,75 @@
                 <td colspan="3"><input autocomplete="off" type="text" class="inp roomCodeTxt" id="roomCodeTxt" /></td>
                 <td colspan="3"></td>
             </tr>
+            <tr>
+                <td class="spc" ></td>
+            </tr>
+            <tr>
+                <td class="subHdr facTit" colspan="3"><b>FACILITIES</b><span class="alert" ></span></td>
+                <td class="subHdr weekTit" colspan="6"><b>DEFAULT WEEKS</b><span class="alert" ></span></td>
+            </tr>
+            <tr class="roomRw">
+                <td colspan="3"><span class="tickBox facTick facYes">&nbsp;</span><span class="optSpan"><b>YES</b></span><input type="hidden" value="1"/></td>
+                <td class="weekTd" colspan="6">
+                    <span class="week" >1</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >2</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >3</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >4</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >5</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >6</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >7</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >8</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >9</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >10</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >11</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >12</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >13</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >14</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" >15</span><input class="weekCheck" type="hidden" value="0" />
+                </td>
+                <td class="yesTd" colspan="6"><span class="tickBox weekTick selTick yesTick">&#10004;</span><span class="optSpan"><b>YES</b></span><input type="hidden" value="0"/></td>
+            </tr>
+            <tr class="roomRw">
+                <td colspan="3"><span class="tickBox facTick selTick facNo">&#10004;</span><span class="optSpan"><b>NO</b></span><input type="hidden" value="0"/></td>
+                <td class="noTd" colspan="6"><span class="tickBox weekTick noTick">&nbsp;</span><span class="optSpan"><b>NO</b></span><input type="hidden" value="0"/></td>
+                <td class="weekBtnTd" colspan="6">
+                    <span class="weekBtn defBtn" >DEFAULT</span>
+                    <span class="weekBtn allBtn" >ALL</span>
+                    <span class="weekBtn oddBtn" >ODD</span>
+                    <span class="weekBtn evenBtn" >EVEN</span>
+                    <span class="weekBtn clrBtn" >CLEAR</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="9" class="spc"></td>
+            </tr>
+        </table>
+        <div class="facStuff facHolder" >
+            <table class="facTbl" >
+                <tr class="facHd">
+                    <td class="subHdr" colspan="8"><b>FACILITIES</b></td>
+                </tr>
+            </table>
+        </div>
+        <div class="facStuff btnGap" ></div>
+        <div class="prevBtn"><b>PREV</b></div><div class="nextBtn"><b>NEXT</b></div><div class="doneBtn"><b>DONE</b></div>
+        <div style="height:17.5px; padding-bottom:2.5%;"></div>
+        <table class="buildHolderTbl">
+            <tr>
+                <td colspan="8"><span class="triang"></span></td>
+            </tr>
+            <tr class="buildRw">
+                <td colspan="8"><span tabindex="6" class="buildTbl noPref" id="NONE" >NO PREFERENCE</span></td>
+            </tr>
+        </table>
+        <table class="roomCodeHolderTbl">
+            <tr>
+                <td colspan="8"><span class="triang"></span></td>
+            </tr>
+            <tr class="roomCodeRw">
+                <td colspan="8"><span tabindex="6" class="roomCodeTbl noPref" id="roomNone" >NO PREFERENCE</span></td>
+            </tr>
         </table>
     </div>
-    <!--
-    <td class="subHdr weekTit" colspan="4"><b>DEFAULT WEEKS</b><span class="alert" ></span></td>
-    <td class="weekTd" colspan="6">
-        <span class="week" >1</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >2</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >3</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >4</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >5</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >6</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >7</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >8</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >9</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >10</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >11</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >12</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >13</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >14</span><input class="weekCheck" type="hidden" value="0" />
-        <span class="week" >15</span><input class="weekCheck" type="hidden" value="0" />
-    </td>
-    <td class="yesTd" colspan="6"><span class="tickBox weekTick yesTick">&nbsp;</span><span class="optSpan"><b>YES</b></span><input type="hidden" value="0"/></td>
-    <td class="noTd" colspan="6"><span class="tickBox weekTick noTick">&nbsp;</span><span class="optSpan"><b>NO</b></span><input type="hidden" value="0"/></td>
-    <td class="weekBtnTd" colspan="6">
-        <span class="weekBtn defBtn" >DEFAULT</span>
-        <span class="weekBtn allBtn" >ALL</span>
-        <span class="weekBtn oddBtn" >ODD</span>
-        <span class="weekBtn evenBtn" >EVEN</span>
-        <span class="weekBtn clrBtn" >CLEAR</span>
-    </td>
-    -->
 
 </asp:Content>

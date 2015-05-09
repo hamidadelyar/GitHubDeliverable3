@@ -1,8 +1,34 @@
-﻿$(document).ready(function () {
-    var week = 1;
-    var pri = 0;
-    var typeSet = 1;
-    var parkSet = 1;
+﻿var week = 1;
+var pri = 0;
+var fac = 0;
+var typeSet = 1;
+var parkSet = 1;
+var cols = 1;
+var facCells = "";
+var parkCodes = ['C', 'W', 'E'];
+var typeCodes = ['T', 'S', 'L'];
+var buildID = "NONE";
+$(document).ready(function () {
+    $('.prefBtn').click(function () {
+        $('.editHolder').hide();
+        $('.roomOneHolder').show();
+    })
+    for (var i = 0; i < facs.length; i++) {
+        if (cols == 1) {
+            facCells += '<tr class="facRw" >'
+        }
+        facCells += '<td><b>' + facs[i]['Facility_Name'].toUpperCase() + '</b></td><td> <span class="line" ></span><span class="circ"></span><input class="facCheck" type="hidden" value="0" /></td>'
+        if (cols == 4) {
+            facCells += '</tr>';
+            cols = 0;
+        }
+        cols++;
+    }
+    if (facCells.substr(facCells.length - 5) != '<tr/>') {
+        facCells += '</tr>';
+    }
+    $(facCells).insertAfter('.facHd');
+    $('.facStuff').hide();
     $('.addLect').click(function () {
         addLect();
     });
@@ -17,6 +43,21 @@
         $(this).addClass('selTick');
         $(this).html('&#10004');
         pri = $(this).siblings('input').val();
+    });
+    $('.facTick').click(function () {
+        $('.facTick').removeClass('selTick');
+        $('.facTick').html('&nbsp;');
+        $(this).addClass('selTick');
+        $(this).html('&#10004');
+        fac = $(this).siblings('input').val();
+        if(fac == 1)
+        {
+            $('.facStuff').show();
+        }
+        else
+        {
+            $('.facStuff').hide();
+        }
     });
     $('.noTick').click(function () {
         $('.yesTd').hide();
@@ -116,6 +157,26 @@
         $('.parkCirc').removeClass('selectRad');
         $(this).addClass('selectRad');
         parkSet = $(this).siblings('.parkCheck').val();
+    });
+    $('.circ').click(function () {
+        var currVal = $(this).siblings('input').val();
+        $(this).siblings('input').val(Math.abs(currVal - 1));
+        if (currVal == 0) {
+            $(this).animate({
+                backgroundColor: '#FF8060',
+                left: "+=30"
+            }, 500, function () {
+                //Animation Complete
+            });
+        }
+        else {
+            $(this).animate({
+                backgroundColor: '#999',
+                left: "-=30"
+            }, 500, function () {
+                //Animation Complete
+            });
+        }
     });
     dropDowns();
 });
@@ -315,6 +376,68 @@ function dropDowns() {
     $('.lectTbl').click(function () {
         $('.lectTxt').val($(this).html())
     });
+    $('.buildHolderTbl').hide();
+    for (var i = 0; i < buildData.length; i++) {
+        $('<tr><td colspan="8"><span tabindex="' + i + '" class="buildTbl '+buildData[i]['Park_ID']+'" id="'+buildData[i]['Building_ID']+'" >' + buildData[i]['Building_Name'] + '</span></td></tr>').insertAfter('.buildRw');
+    }
+    $('.buildTxt').focusin(function () {
+        var left = $('.buildTxt').position().left;
+        var top = $('.buildTxt').position().top;
+        var width = $('.buildTxt').width();
+        $('.buildHolderTbl').css('left', left);
+        $('.buildHolderTbl').css('top', top + 22);
+        $('.roomCodeHolderTbl').hide();
+        $('.buildHolderTbl').show()
+        $('.buildHolderTbl').css('width', width + 12);
+        $('.buildTxt').css('width', '100%!important')
+        $('.buildHolderTbl').children('.triang').css('left', width / 2);
+        var selPark = parkCodes[parkSet - 1];
+        $('.buildTbl').hide();
+        $('.buildTbl').each(function () {
+            if($(this).hasClass(selPark))
+            {
+                $(this).show();
+            }
+        })
+        buildTxtPredict($(this), '.buildTbl');
+    });
+    $('.buildTxt').on('input propertychange paste', function () {
+        buildTxtPredict($(this), '.buildTbl');
+    });
+    $('.buildTbl').click(function () {
+        $('.buildTxt').val($(this).html());
+        buildID = $(this).attr('id');
+    });
+    $('.roomCodeHolderTbl').hide();
+    for (var i = 0; i < roomData.length; i++) {
+        $('<tr><td colspan="8"><span tabindex="' + i + '" class="roomCodeTbl ' + roomData[i]['Building_ID'] + ' '+roomData[i]['Room_Type']+'" id="roomCode' + i + '" >' + roomData[i]['Room_ID'] + '</span></td></tr>').insertAfter('.roomCodeRw');
+    }
+    $('.roomCodeTxt').focusin(function () {
+        var left = $('.roomCodeTxt').position().left;
+        var top = $('.roomCodeTxt').position().top;
+        var width = $('.roomCodeTxt').width();
+        $('.roomCodeHolderTbl').css('left', left);
+        $('.roomCodeHolderTbl').css('top', top + 22);
+        $('.roomCodeHolderTbl').show();
+        $('.buildHolderTbl').hide()
+        $('.roomCodeHolderTbl').css('width', width + 12);
+        $('.roomCodeTxt').css('width', '100%!important')
+        $('.roomCodeHolderTbl').children('.triang').css('left', width / 2);
+        var selType = typeCodes[typeSet - 1];
+        $('.roomCodeTbl').hide();
+        $('.roomCodeTbl').each(function () {
+            if ($(this).hasClass(selType) && $(this).hasClass(buildID)) {
+                $(this).show();
+            }
+        })
+        roomTxtPredict($(this), '.roomCodeTbl');
+    });
+    $('.roomCodeTxt').on('input propertychange paste', function () {
+        roomTxtPredict($(this), '.roomCodeTbl');
+    });
+    $('.roomCodeTbl').click(function () {
+        $('.roomCodeTxt').val($(this).html())
+    });
     $('input').focusin(function (event) { // Clear table when anywhere else on page click
         $('.codeHolderTbl').hide();
         $('.nameHolderTbl').hide();
@@ -353,6 +476,8 @@ function dropDowns() {
         $('.endHolderTbl').hide();
         $('.roomHolderTbl').hide();
         $('.lectHolderTbl').hide();
+        $('.buildHolderTbl').hide();
+        $('.roomCodeHolderTbl').hide();
         $('.codeTbl').css('background-color:', '#2b3036');
         $('.nameTbl').css('background-color:', '#2b3036');
         $('.dayTbl').css('background-color:', '#2b3036');
@@ -380,6 +505,12 @@ function dropDowns() {
         }
         if (event.target.id == 'lectTxt') {
             $('.lectHolderTbl').show();
+        }
+        if (event.target.id == 'buildTxt') {
+            $('.buildHolderTbl').show();
+        }
+        if (event.target.id == 'roomCodeTxt') {
+            $('.roomCodeHolderTbl').show();
         }
     })
     $(document).on('keyup', function (e) {
@@ -448,6 +579,67 @@ function txtPredict(inputBox, rowClass) {
     navigable = ids;
     curr = -1;
 }
+function buildTxtPredict(inputBox, rowClass) {
+    var ids = [];
+    var txt = $(inputBox).val();
+    $(rowClass).hide();
+    var selPark = parkCodes[parkSet - 1];
+    if (txt.trim() == "") {
+        $(rowClass).each(function () {
+            if ($(this).hasClass(selPark) || $(this).hasClass('noPref'))
+            {
+                $(this).show();
+                ids.push($(this).attr('id'));
+            }
+        });
+    } else {
+        $(rowClass).each(function () {
+            if (($(this).html().toUpperCase().indexOf(txt.toUpperCase()) != -1 && $(this).hasClass(selPark)) || $(this).hasClass('noPref')) {
+                $(this).show();
+                ids.push($(this).attr('id'));
+            }
+        })
+    };
+    if (ids.length > 7) {
+        $(rowClass).hide();
+        ids = ids.slice(0, 7);
+        for (var i = 0; i < ids.length; i++) {
+            $('#' + ids[i]).show();
+        }
+    }
+    navigable = ids;
+    curr = -1;
+}
+function roomTxtPredict(inputBox, rowClass) {
+    var ids = [];
+    var txt = $(inputBox).val();
+    $(rowClass).hide();
+    var selType = typeCodes[typeSet - 1];
+    if (txt.trim() == "") {
+        $(rowClass).each(function () {
+            if (($(this).hasClass(selType) && $(this).hasClass(buildID)) || $(this).hasClass('noPref')) {
+                $(this).show();
+                ids.push($(this).attr('id'));
+            }
+        });
+    } else {
+        $(rowClass).each(function () {
+            if (($(this).html().toUpperCase().indexOf(txt.toUpperCase()) != -1 && $(this).hasClass(selType) && $(this).hasClass(buildID)) || $(this).hasClass('noPref')) {
+                $(this).show();
+                ids.push($(this).attr('id'));
+            }
+        })
+    };
+    if (ids.length > 7) {
+        $(rowClass).hide();
+        ids = ids.slice(0, 7);
+        for (var i = 0; i < ids.length; i++) {
+            $('#' + ids[i]).show();
+        }
+    }
+    navigable = ids;
+    curr = -1;
+}
 function addLect() {
     if (numLects != 3) {
         if ($('.lectTxt').val().trim() == "") {
@@ -476,4 +668,10 @@ function subLect() {
     if (numLects != 0) {
         numLects--;
     }
+}
+function isNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
 }

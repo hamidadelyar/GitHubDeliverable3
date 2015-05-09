@@ -765,6 +765,22 @@ namespace WebApplication4_0
             int requestID = -1;
             bool newRequest = false;
              int semester = 0;
+             int round = 0;
+
+             /*
+              Gets the round that is currently open i.e. 1
+              */
+
+             string queryRound = "select Round_Name from [Rounds] where Status = 'open'";
+             connection.Open();
+             SqlCommand commRound = new SqlCommand(queryRound, connection);  //1st argument is query, 2nd argument is connection with DB
+
+             if (commRound.ExecuteScalar() != null)  //if it does return something
+             {
+                 round =  Convert.ToInt32(commRound.ExecuteScalar());
+             }
+             connection.Close();
+
 
             //30 September 2013 - 31 January 2014
             //3 February 2014 - 18 June 2014
@@ -792,7 +808,7 @@ namespace WebApplication4_0
             //if request is not exactly the same, then is allowed?
             string query = "select Request_ID from [Requests] where Module_Code = '" + modcode + "' and Day = " + day;
             query += " and Start_Time = " + startTime + " and End_Time = " + endTime + " and Semester = " + semester + " and Year = " + DateTime.Now.Year;
-            query += " and Round = " + 1 + " and Priority = " + priority + " and Number_Rooms = " + numRooms + " and Number_Students = " + capacity;
+            query += " and Round = " + round + " and Priority = " + priority + " and Number_Rooms = " + numRooms + " and Number_Students = " + capacity;
 
             connection.Open(); //opening connection with the DB
             SqlCommand comm = new SqlCommand(query, connection);  //1st argument is query, 2nd argument is connection with DB
@@ -852,7 +868,7 @@ namespace WebApplication4_0
               * Will write to [Requests] table
               *             [Request_Lecturers] table
               */
-      
+        if(round > 0){
             if (requestID == -1)    //if the requestID does not already exist, then can write to the db
             {
                 newRequest = true;  //it is a new request
@@ -872,7 +888,7 @@ namespace WebApplication4_0
                     cmd.Parameters.AddWithValue("@End_Time", endTime);
                     cmd.Parameters.AddWithValue("@Semester", semester);    //need to write function to work this out
                     cmd.Parameters.AddWithValue("@Year", DateTime.Now.Year);     //year
-                    cmd.Parameters.AddWithValue("@Round", 1);       //need to check db to see what round it is
+                    cmd.Parameters.AddWithValue("@Round", round);       //need to check db to see what round it is
                     cmd.Parameters.AddWithValue("@Priority", priority);    //
                     cmd.Parameters.AddWithValue("@Number_Rooms", numRooms);
                     cmd.Parameters.AddWithValue("@Number_Students", capacity);
@@ -1457,18 +1473,14 @@ namespace WebApplication4_0
                         cmdWB.ExecuteNonQuery();
                         connection.Close();
                     }
-                    
-        
                 }
-
             }
-           
-
-            
             connection.Close();
+         }
            // return requestID;
             string result = "Sorry, this request has already been submitted, with Request ID: " + requestID + ".";
             result += "<br /> Please try again.";
+
             if (newRequest == true)
             {
 
@@ -1476,6 +1488,13 @@ namespace WebApplication4_0
                 result += "<br />Your request has been submitted, thank you! Your Request ID is: " + requestID;
                 result += "<br />Please make a note of your Request ID, so that you can track its progress.";
             }
+
+            if (round < 1)
+            {
+                result = "No rounds are open, please submit request to AdHoc instead";
+            }
+
+
           
             return result;
         }
