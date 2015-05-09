@@ -5,6 +5,16 @@
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <h1>Archive Requests</h1>
+
+     <p>Show requests from the following year:
+            <asp:DropDownList
+                id="DropDownList1"
+                runat="server"
+                AutoPostBack="True">
+                <asp:ListItem Selected="True">2014</asp:ListItem>
+                <asp:ListItem>2013</asp:ListItem>
+            </asp:DropDownList></p>
+
     <asp:GridView ID="ArchiveRequests" runat="server" AllowSorting="True" AutoGenerateColumns="False" DataSourceID="SqlDataSource1" CellPadding="10" CellSpacing="10" HorizontalAlign="Center">
         <Columns>
             <asp:BoundField DataField="Module_Code" HeaderText="Module_Code" SortExpression="Module_Code" />
@@ -19,14 +29,22 @@
         <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
         <RowStyle HorizontalAlign="Center" VerticalAlign="Middle" />
     </asp:GridView>
-    <asp:SqlDataSource ID="SqlDataSource14Filter" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT [Module_Code], [Day], [Start_Time], [End_Time], [Semester], [Year], [Number_Rooms] FROM [Requests] WHERE ([Year] = @Year)">
+    <asp:SqlDataSource ID="SqlDataSource14Filter" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT [Module_Code], [Day], [Start_Time], [End_Time], [Semester], [Year], [Number_Rooms] FROM [Requests] WHERE ([Year] = @Year)" >
         <SelectParameters> 
             <asp:Parameter DefaultValue="2014" Name="Year" Type="Int32" />
         </SelectParameters>
     </asp:SqlDataSource>
-    <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT [Module_Code], [Day], [Start_Time], [End_Time], [Semester] +1 AS [Semester], [Year], [Number_Rooms] FROM [Requests] WHERE ([Year] = @Year)">
-        <SelectParameters>
+    <asp:SqlDataSource 
+        ID="SqlDataSource1" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
+        SelectCommand="SELECT [Module_Code], [Day], [Start_Time], [End_Time], [Semester] +1 AS [Semester], [Year], [Number_Rooms] FROM [Requests]" 
+        FilterExpression="Year='{0}'">  
+         <SelectParameters> 
             <asp:Parameter DefaultValue="2015" Name="Year" Type="Int32" />
         </SelectParameters>
+        <FilterParameters>
+                 <asp:ControlParameter Name="Year" ControlId="DropDownList1" PropertyName="SelectedValue"/>
+        </FilterParameters>
     </asp:SqlDataSource>
 </asp:Content>
