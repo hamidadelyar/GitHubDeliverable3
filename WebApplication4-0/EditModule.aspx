@@ -62,7 +62,7 @@
         }
         String.prototype.Capitalise = function()
         { 
-            return this.toLowerCase().replace(/^.|\s\S/g, function(a) { return a.toUpperCase(); });
+            return this.toLowerCase().replace(/\b./g, function(a) { return a.toUpperCase(); });
         }
         function addRoom() {
             var modCode = $('.codeTxt').val().toUpperCase().trim();

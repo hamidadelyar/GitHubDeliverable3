@@ -1,15 +1,13 @@
-﻿$(document).ready(function () {
+﻿var prefID;
+var lesserVal = -1;
+$(document).ready(function () {
     mainLoad()
-    prefLoad(roomNumber)
+    prefLoad(roomNumber-1)
 });
-function mainLoad()
-{
-    var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-    var starts = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
-    var ends = ['09:50', '10:50', '11:50', '12:50', '13:50', '14:50', '15:50', '16:50', '17:50'];
+function mainLoad() {
     if (requestData.length == 0) {
         alert("Request doesn't exist");
-        Window.Location.hfref = "ViewRequets.aspx";
+        Window.Location.href = "ViewRequets.aspx";
     }
     $('.modTxt').val(requestData[0]['Module_Code']);
     for (var i = 0; i < modData.length; i++) {
@@ -33,10 +31,16 @@ function mainLoad()
         numLects++;
     }
 }
-function prefLoad(i)
-{    
+function prefLoad(i) {
+    while ($('.roomTxt').val() > preferences.length) {
+        preferences.push({Pref_ID: lesserVal, Room_ID: '', Building_ID: '', Room_Type: 'T', Park_ID: 'C', Number_Students: '', Special_Requirements: '', Weeks: 1});
+        lesserVal--;
+    }
+    while ($('.roomTxt').val() < preferences.length)
+    {
+        preferences.pop();
+    }
     $('.studTxt').val(preferences[i]['Number_Students']);
-
     $('.inCirc').removeClass('selectRad');
     $('#' + preferences[i]['Room_Type']).addClass('selectRad');
     typeSet = $('#' + preferences[i]['Room_Type']).siblings('input').val();
@@ -44,15 +48,92 @@ function prefLoad(i)
     $('.parkCirc').removeClass('selectRad');
     $('#' + preferences[i]['Park_ID']).addClass('selectRad');
     parkSet = $('#' + preferences[i]['Park_ID']).siblings('input').val();
-    var buildName = "NO PREFERENCE"
-    for (var i = 0; i < buildData.length; i++)
-    {
-        if(buildData[i]['Building_ID'] == preferences[i]['Building_ID'])
-        {
-            buildName = buildData[i]['Building_Name']
+    var buildName = "NO PREFERENCE";
+    for (var j = 0; j < buildData.length; j++) {
+        if (buildData[j]['Building_ID'] == preferences[i]['Building_ID']) {
+            buildName = buildData[j]['Building_Name'];
         }
     }
-    
-    $('.buildTxt').val();
-    $('.roomCodeTxt').val(preferences[i]['_ID']);
+
+    $('.buildTxt').val(buildName);
+    if (preferences[i]['Room_ID'] != null && preferences[i]['Room_ID'] != "")
+    {
+        $('.roomCodeTxt').val(preferences[i]['Room_ID']);
+    }
+    else {
+        $('.roomCodeTxt').val("NO PREFERENCE");
+    }
+    if(preferences[i]['Weeks'] != 1 && preferences[i]['Weeks'] != 'true')
+    {
+        $('.noTick').click();
+        for(var j = 0; j < weekData.length; j++)
+        {
+            if (weekData[j]['Pref_ID'] == preferences[i]['Pref_ID'])
+            {
+                $('#week'+weekData[j]['Week_ID']).css('background-color', '#FF8060');
+                $('#week' + weekData[j]['Week_ID']).attr('clicked', 'true');
+                $('#week' + weekData[j]['Week_ID']).next('.weekCheck').val(1);
+            }
+        }
+    }
+    else {
+        $('.defBtn').click();
+    }
+    $('.facYes').click();
+    var counter = 0;
+    clearFacs();
+    for (var j = 0; j < facData.length; j++) {
+        if (facData[j]['Pref_ID'] == preferences[i]['Pref_ID']) {
+            counter++
+            $('#fac' + facData[j]['Facility_ID']).val('0');
+            $('#fac' + facData[j]['Facility_ID']).siblings('.circ').click();
+        }
+    }
+    if (counter == 0)
+    {
+        $('.facNo').click();
+    }
+    $('.prefTit').html('<b>PREFERENCES (ROOM ' + (i + 1) + ')</b>');
+    prefID = preferences[i]['Pref_ID'];
+}
+function savePref(i)
+{
+    preferences[i]['Room_ID'] = $('.roomCodeTxt').val();
+    var buildName = "";
+    for (var j = 0; j < buildData.length; j++) {
+        if (buildData[j]['Building_Name'] == $('.buildTxt').val()) {
+            buildName = buildData[j]['Building_ID'];
+        }
+    }
+    preferences[i]['Building_ID'] = buildName;
+    preferences[i]['Room_Type'] = typeCodes[typeSet - 1];
+    preferences[i]['Park_ID'] = parkCodes[typeSet - 1];
+    preferences[i]['Number_Students'] = $('.studTxt').val();
+    preferences[i]['Weeks'] = Math.abs(week - 1);
+    for (var j = weekData.length - 1; j >= 0; j--) {
+        if (weekData[j]['Pref_ID'] == preferences[i]['Pref_ID']) {
+            weekData.splice(j, 1);
+        }
+    }
+    for (var j = facData.length - 1; j >= 0; j--) {
+        if (facData[j]['Pref_ID'] == preferences[i]['Pref_ID']) {
+            facData.splice(j, 1);
+        }
+    }
+
+    $('.weekCheck').each(function () {
+        if ($(this).val() == 1)
+        {
+            weekData.push({ Pref_ID: prefID, Week_ID: $(this).prev('.week').html() })
+        }
+    });
+
+    $('.facCheck').each(function () {
+        if ($(this).val() == 1)
+        {
+            facCode = $(this).attr('id').replace("fac", "");
+            facData.push({ Pref_ID: prefID, Facility_ID: facCode })
+        }
+    });
+
 }

@@ -11,9 +11,15 @@
         var requestData = <%= this.request %>;
         var selLects = <%= this.selLects %>;
         var facs = <%= this.facs %>;
+        var facData = <%= this.facData %>;
         var buildData = <%= this.buildings %>;
         var roomData = <%= this.rooms %>;
         var preferences = <%= this.preferences %>;
+        var weekData = <%= this.weekData %>;
+        var reqId = <%= this.id %>;
+        var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        var starts = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+        var ends = ['09:50', '10:50', '11:50', '12:50', '13:50', '14:50', '15:50', '16:50', '17:50'];
         var navigable = [];
         var curr = -1;
         var numLects = 0;
@@ -73,13 +79,13 @@
                 <td colspan="9"><input autocomplete="off" type="text" class="inp lectTxt" id="lectTxt" /><span class="lectTick addLect">ADD</span><span class="lectTick subLect">DEL</span></td>
             </tr>
             <tr>
-                <td colspan="9" class="lectList" ></td>
+                <td colspan="9" class="lectList" >&nbsp;</td>
             </tr>
             <tr>
                 <td colspan="9" class="spc"></td>
             </tr>
             <tr>
-                <td colspan="9"><span class="prefBtn"><b>PREFERENCES</b></span><span class="subBtn"><b>SUBMIT</b></span></td>
+                <td colspan="9"><span class="prefBtn"><b>PREFERENCES</b></span><span class="subBtn" onclick="validate()"><b>SUBMIT</b></span></td>
             </tr>
         </table>
         <table class="codeHolderTbl">
@@ -197,7 +203,7 @@
     </table>
     </div>
     <div class="roomOneHolder reqHolder" >
-        <div class="hdr" ><b>PREFERENCES (ROOM 1)</b></div>
+        <div class="hdr prefTit" ><b>PREFERENCES (ROOM 1)</b></div>
         <table class="modData">
             <tr>
                 <td class="subHdr studTit" colspan="9"><b>NUMBER OF STUDENTS</b><span class="alert" ></span></td>
@@ -250,21 +256,21 @@
             <tr class="roomRw">
                 <td colspan="3"><span class="tickBox facTick facYes">&nbsp;</span><span class="optSpan"><b>YES</b></span><input type="hidden" value="1"/></td>
                 <td class="weekTd" colspan="6">
-                    <span class="week" >1</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >2</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >3</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >4</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >5</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >6</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >7</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >8</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >9</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >10</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >11</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >12</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >13</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >14</span><input class="weekCheck" type="hidden" value="0" />
-                    <span class="week" >15</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week1" >1</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week2" >2</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week3" >3</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week4" >4</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week5" >5</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week6" >6</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week7" >7</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week8" >8</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week9" >9</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week10" >10</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week11" >11</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week12" >12</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week13" >13</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week14" >14</span><input class="weekCheck" type="hidden" value="0" />
+                    <span class="week" id="week15" >15</span><input class="weekCheck" type="hidden" value="0" />
                 </td>
                 <td class="yesTd" colspan="6"><span class="tickBox weekTick selTick yesTick">&#10004;</span><span class="optSpan"><b>YES</b></span><input type="hidden" value="0"/></td>
             </tr>

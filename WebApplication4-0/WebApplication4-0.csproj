@@ -336,9 +336,7 @@
     <Content Include="Scripts\dist\jquery.floatThead.js" />
     <Content Include="Scripts\dist\jquery.floatThead.min.js" />
     <Content Include="Scripts\EditRequestControls.js" />
-    <Content Include="..\..\..\..\Desktop\EditRequestPageLoad.js">
-      <Link>Scripts\EditRequestPageLoad.js</Link>
-    </Content>
+    <Content Include="Scripts\EditRequestPageLoad.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <Content Include="Scripts\jquery-latest.js" />
