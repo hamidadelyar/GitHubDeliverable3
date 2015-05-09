@@ -5,37 +5,31 @@
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <h1>Archive Requests</h1>
-
-     <p>Show requests from the following year:
-            <asp:DropDownList
+        <p>Show requests from the following year: 
+            <asp:DropDownList <%-- Dropdown to filter archived requests--%>
                 id="DropDownList1"
                 runat="server"
                 AutoPostBack="True">
                 <asp:ListItem Selected="True">2014</asp:ListItem>
                 <asp:ListItem>2013</asp:ListItem>
-            </asp:DropDownList></p>
-
+            </asp:DropDownList></p> 
+    <%-- Gridview used to display the results of the SQL query --%>
     <asp:GridView ID="ArchiveRequests" runat="server" AllowSorting="True" AutoGenerateColumns="False" DataSourceID="SqlDataSource1" CellPadding="10" CellSpacing="10" HorizontalAlign="Center">
         <Columns>
-            <asp:BoundField DataField="Module_Code" HeaderText="Module_Code" SortExpression="Module_Code" />
+            <asp:BoundField DataField="Module_Code" HeaderText="Module Code" SortExpression="Module_Code" />
             <asp:BoundField DataField="Day" HeaderText="Day" SortExpression="Day" />
-            <asp:BoundField DataField="Start_Time" HeaderText="Start_Time" SortExpression="Start_Time" />
-            <asp:BoundField DataField="End_Time" HeaderText="End_Time" SortExpression="End_Time" />
+            <asp:BoundField DataField="Start_Time" HeaderText="Start Time" SortExpression="Start_Time" />
+            <asp:BoundField DataField="End_Time" HeaderText="End Time" SortExpression="End_Time" />
             <asp:BoundField DataField="Semester" HeaderText="Semester" ReadOnly="True" SortExpression="Semester" />
             <asp:BoundField DataField="Year" HeaderText="Year" SortExpression="Year" />
-            <asp:BoundField DataField="Number_Rooms" HeaderText="Number_Rooms" SortExpression="Number_Rooms" />
+            <asp:BoundField DataField="Number_Rooms" HeaderText="Number Rooms" SortExpression="Number_Rooms" />
         </Columns>
         <EditRowStyle HorizontalAlign="Center" VerticalAlign="Middle" />
         <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
         <RowStyle HorizontalAlign="Center" VerticalAlign="Middle" />
     </asp:GridView>
-    <asp:SqlDataSource ID="SqlDataSource14Filter" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT [Module_Code], [Day], [Start_Time], [End_Time], [Semester], [Year], [Number_Rooms] FROM [Requests] WHERE ([Year] = @Year)" >
-        <SelectParameters> 
-            <asp:Parameter DefaultValue="2014" Name="Year" Type="Int32" />
-        </SelectParameters>
-    </asp:SqlDataSource>
     <asp:SqlDataSource 
-        ID="SqlDataSource1" 
+        ID="SqlDataSource1" <%-- SQL statement used to fill gridview  --%>
         runat="server" 
         ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
         SelectCommand="SELECT [Module_Code], [Day], [Start_Time], [End_Time], [Semester] +1 AS [Semester], [Year], [Number_Rooms] FROM [Requests]" 
@@ -44,7 +38,7 @@
             <asp:Parameter DefaultValue="2015" Name="Year" Type="Int32" />
         </SelectParameters>
         <FilterParameters>
-                 <asp:ControlParameter Name="Year" ControlId="DropDownList1" PropertyName="SelectedValue"/>
+                 <asp:ControlParameter Name="Year" ControlId="DropDownList1" PropertyName="SelectedValue"/> <%-- Results filtered by the year chosen by the user in the dropdown --%>
         </FilterParameters>
     </asp:SqlDataSource>
 </asp:Content>
