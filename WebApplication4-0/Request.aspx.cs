@@ -868,7 +868,7 @@ namespace WebApplication4_0
               * Will write to [Requests] table
               *             [Request_Lecturers] table
               */
-      
+        if(round > 0){
             if (requestID == -1)    //if the requestID does not already exist, then can write to the db
             {
                 newRequest = true;  //it is a new request
@@ -1473,18 +1473,14 @@ namespace WebApplication4_0
                         cmdWB.ExecuteNonQuery();
                         connection.Close();
                     }
-                    
-        
                 }
-
             }
-           
-
-            
             connection.Close();
+         }
            // return requestID;
             string result = "Sorry, this request has already been submitted, with Request ID: " + requestID + ".";
             result += "<br /> Please try again.";
+
             if (newRequest == true)
             {
 
@@ -1492,6 +1488,13 @@ namespace WebApplication4_0
                 result += "<br />Your request has been submitted, thank you! Your Request ID is: " + requestID;
                 result += "<br />Please make a note of your Request ID, so that you can track its progress.";
             }
+
+            if (round < 1)
+            {
+                result = "No rounds are open, please submit request to AdHoc instead";
+            }
+
+
           
             return result;
         }

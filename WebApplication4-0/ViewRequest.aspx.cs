@@ -193,6 +193,7 @@ namespace WebApplication4_0
                 }
                 DataTable pref = GetData("Pref_ID", "Request_Preferences", "WHERE Request_ID = " + rows[i].getReq());
                 int p = 0;
+                List<int> rowps = new List<int>();
 
                 foreach (DataRow rowp in pref.Rows)
                 {
@@ -200,18 +201,29 @@ namespace WebApplication4_0
                     foreach (DataColumn columnp in pref.Columns)
                     {
                         p = Convert.ToInt32(rowp[columnp.ColumnName]);
-                        //rowps.Add(p);
+                        rowps.Add(p);
                     }
                 }
 
-               
-
-                
-
-                html.Append("<td>");
-                html.Append("<input type='button' id='buttondel' value='Delete' onclick=\"deleteRow(" + rows[i].getReq() + "," + p + ")\"/>");
-                //html.Append("<asp:button runat='server' id='button" + i + "' Text='Delete' OnClick='deleteRow_Click' />");
-                html.Append("</td>");
+                if (rowps.Count() == 1)
+                {
+                    html.Append("<td>");
+                    html.Append("<input type='button' id='buttondel' value='Delete' onclick=\"deleteRow(" + rows[i].getReq() + "," + rowps[0] + ")\"/>");
+                    //html.Append("<asp:button runat='server' id='button" + i + "' Text='Delete' OnClick='deleteRow_Click' />");
+                    html.Append("</td>");
+                }else if (rowps.Count() == 2)
+                {
+                    html.Append("<td>");
+                    html.Append("<input type='button' id='buttondel' value='Delete' onclick=\"deleteRow2(" + rows[i].getReq() + "," + rowps[0] + "," + rowps[1] + ")\"/>");
+                    //html.Append("<asp:button runat='server' id='button" + i + "' Text='Delete' OnClick='deleteRow_Click' />");
+                    html.Append("</td>");
+                }else if (rowps.Count() == 3)
+                {
+                    html.Append("<td>");
+                    html.Append("<input type='button' id='buttondel' value='Delete' onclick=\"deleteRow3(" + rows[i].getReq() + "," + rowps[0] + "," + rowps[1] + "," + rowps[2] + ")\"/>");
+                    //html.Append("<asp:button runat='server' id='button" + i + "' Text='Delete' OnClick='deleteRow_Click' />");
+                    html.Append("</td>");
+                }
                 html.Append("<td>");
                 html.Append("<input type='button' id='buttondet' value='Show Full Details' onclick='showDetails()'/>");
                 html.Append("</tr>");
@@ -366,6 +378,190 @@ namespace WebApplication4_0
             msg = "true";
             return msg;
                     //conn.Dispose();
+        }
+
+        [System.Web.Services.WebMethod]
+        public static string Delete2(int id, int pref_id, int pref_id2)
+        {
+            string msg = string.Empty;
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+            using (conn)
+            {
+                string sql = "DELETE FROM Bookings WHERE Request_ID = @Request_ID";
+                string sql1 = "DELETE FROM Requests WHERE Request_ID = @Request_ID ";
+                string sql2 = "DELETE FROM Request_Preferences WHERE Request_ID = @Request_ID";
+                string sql3 = "DELETE FROM Request_Facilities WHERE Pref_ID = @Pref_ID AND Pref_ID = @Pref_ID2";
+                string sql4 = "DELETE FROM Request_Weeks WHERE Pref_ID = @Pref_ID AND Pref_ID = @Pref_ID2";
+                string sql5 = "DELETE FROM Request_Lecturers WHERE Request_ID = @Request_ID";
+
+                //conn.Open();
+                SqlCommand cmd = new SqlCommand(sql);
+                cmd.CommandType = CommandType.Text;
+
+                //conn.Open();
+                cmd.Parameters.AddWithValue("@Request_ID", id);
+                cmd.Connection = conn;
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+
+                SqlCommand cmd1 = new SqlCommand(sql1);
+                cmd1.CommandType = CommandType.Text;
+
+
+                cmd1.Parameters.AddWithValue("@Request_ID", id);
+                cmd1.Connection = conn;
+                conn.Open();
+                cmd1.ExecuteNonQuery();
+                conn.Close();
+
+                SqlCommand cmd2 = new SqlCommand(sql2);
+                cmd2.CommandType = CommandType.Text;
+
+
+                cmd2.Parameters.AddWithValue("@Request_ID", id);
+                cmd2.Connection = conn;
+                conn.Open();
+                cmd2.ExecuteNonQuery();
+                conn.Close();
+
+                SqlCommand cmd3 = new SqlCommand(sql3);
+                cmd3.CommandType = CommandType.Text;
+
+
+                cmd3.Parameters.AddWithValue("@Pref_ID", pref_id);
+                cmd3.Parameters.AddWithValue("@Pref_ID2", pref_id2);
+                cmd3.Connection = conn;
+                conn.Open();
+                cmd3.ExecuteNonQuery();
+                conn.Close();
+
+                SqlCommand cmd4 = new SqlCommand(sql4);
+                cmd4.CommandType = CommandType.Text;
+
+
+                cmd4.Parameters.AddWithValue("@Pref_ID", pref_id);
+                cmd3.Parameters.AddWithValue("@Pref_ID2", pref_id2);
+                cmd4.Connection = conn;
+                conn.Open();
+                cmd4.ExecuteNonQuery();
+                conn.Close();
+
+                SqlCommand cmd5 = new SqlCommand(sql5);
+                cmd5.CommandType = CommandType.Text;
+
+
+                cmd5.Parameters.AddWithValue("@Request_ID", id);
+                cmd5.Connection = conn;
+                conn.Open();
+                cmd5.ExecuteNonQuery();
+                conn.Close();
+                /*if (y == 1)
+                {
+                    msg = "true";
+                }
+                else
+                {
+                    msg = "false";
+                }
+                */
+            }
+            msg = "true";
+            return msg;
+            //conn.Dispose();
+        }
+
+        [System.Web.Services.WebMethod]
+        public static string Delete3(int id, int pref_id, int pref_id2, int pref_id3)
+        {
+            string msg = string.Empty;
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+            using (conn)
+            {
+                string sql = "DELETE FROM Bookings WHERE Request_ID = @Request_ID";
+                string sql1 = "DELETE FROM Requests WHERE Request_ID = @Request_ID ";
+                string sql2 = "DELETE FROM Request_Preferences WHERE Request_ID = @Request_ID";
+                string sql3 = "DELETE FROM Request_Facilities WHERE Pref_ID = @Pref_ID AND Pref_ID = @Pref_ID2 AND Pref_ID = @Pref_ID3";
+                string sql4 = "DELETE FROM Request_Weeks WHERE Pref_ID = @Pref_ID AND Pref_ID = @Pref_ID2 AND Pref_ID = @Pref_ID3";
+                string sql5 = "DELETE FROM Request_Lecturers WHERE Request_ID = @Request_ID";
+
+                //conn.Open();
+                SqlCommand cmd = new SqlCommand(sql);
+                cmd.CommandType = CommandType.Text;
+
+                //conn.Open();
+                cmd.Parameters.AddWithValue("@Request_ID", id);
+                cmd.Connection = conn;
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+
+                SqlCommand cmd1 = new SqlCommand(sql1);
+                cmd1.CommandType = CommandType.Text;
+
+
+                cmd1.Parameters.AddWithValue("@Request_ID", id);
+                cmd1.Connection = conn;
+                conn.Open();
+                cmd1.ExecuteNonQuery();
+                conn.Close();
+
+                SqlCommand cmd2 = new SqlCommand(sql2);
+                cmd2.CommandType = CommandType.Text;
+
+
+                cmd2.Parameters.AddWithValue("@Request_ID", id);
+                cmd2.Connection = conn;
+                conn.Open();
+                cmd2.ExecuteNonQuery();
+                conn.Close();
+
+                SqlCommand cmd3 = new SqlCommand(sql3);
+                cmd3.CommandType = CommandType.Text;
+
+
+                cmd3.Parameters.AddWithValue("@Pref_ID", pref_id);
+                cmd3.Parameters.AddWithValue("@Pref_ID2", pref_id2);
+                cmd3.Parameters.AddWithValue("@Pref_ID3", pref_id3);
+                cmd3.Connection = conn;
+                conn.Open();
+                cmd3.ExecuteNonQuery();
+                conn.Close();
+
+                SqlCommand cmd4 = new SqlCommand(sql4);
+                cmd4.CommandType = CommandType.Text;
+
+
+                cmd4.Parameters.AddWithValue("@Pref_ID", pref_id);
+                cmd3.Parameters.AddWithValue("@Pref_ID2", pref_id2);
+                cmd3.Parameters.AddWithValue("@Pref_ID3", pref_id3);
+                cmd4.Connection = conn;
+                conn.Open();
+                cmd4.ExecuteNonQuery();
+                conn.Close();
+
+                SqlCommand cmd5 = new SqlCommand(sql5);
+                cmd5.CommandType = CommandType.Text;
+
+
+                cmd5.Parameters.AddWithValue("@Request_ID", id);
+                cmd5.Connection = conn;
+                conn.Open();
+                cmd5.ExecuteNonQuery();
+                conn.Close();
+                /*if (y == 1)
+                {
+                    msg = "true";
+                }
+                else
+                {
+                    msg = "false";
+                }
+                */
+            }
+            msg = "true";
+            return msg;
+            //conn.Dispose();
         }
 
         public static StringBuilder getFullDetails(int reqid)

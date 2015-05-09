@@ -81,11 +81,24 @@
             border-radius:3px;
             display:inline-block;
         }
+        .facHolder
+        {
+            background-color:#2B3036;
+            border-radius:10px;
+            padding-bottom:2.5%;
+            color:#FFF;
+        }
+        .facTbl
+        {
+            margin-left:2.5%;
+            width:105%;
+            table-layout:fixed;
+        }
         .circ
         {
             position:relative;
             top:2.5px;
-            left:-42px;
+            left:-12px;
             height:25px;
             width:25px;
             background-color:#999;
@@ -185,6 +198,58 @@
             padding: 5px;
             float:right;
             margin-right:6.66%;
+        }
+        .prevBtn
+        {
+            line-height:30px;
+            width:100px;
+            background-color:#2B3036;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            padding: 5px;
+            float:left;
+            color:#FFF
+        }
+        .prevBtn:hover
+        {
+            background-color:#FF8060;
+        }
+        .btnGap
+        {
+            height:30px;
+        }
+        .nextBtn
+        {
+            line-height:30px;
+            width:100px;
+            background-color:#2B3036;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            padding: 5px;
+            float:left;
+            margin-left:20px;
+            color:#FFF;
+        }
+        .nextBtn:hover
+        {
+            background-color:#FF8060;
+        }
+        .doneBtn
+        {
+            line-height:30px;
+            width:100px;
+            background-color:#FF8060;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            padding: 5px;
+            float:right;
+            color:#FFF;
         }
         .week
         {
@@ -414,4 +479,50 @@
             text-decoration: underline;
             margin-right: 10px;
             display: inline-block;
+        }
+        .buildTbl
+        {
+            border:1px #2B3036 solid;
+            color: #FFF;
+            background-color: #2b3036;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 5px;
+            width:400px;
+            display: inline-block;
+        }
+        .buildTbl:hover 
+        {
+            background-color: #FF8060;
+
+        }
+        .buildHolderTbl {
+            position: absolute;
+            width:400px;
+        }
+        .buildHolderTbl td {
+            padding: 0;
+        }
+        .roomCodeTbl
+        {
+            border:1px #2B3036 solid;
+            color: #FFF;
+            background-color: #2b3036;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 5px;
+            width:200px;
+            display: inline-block;
+        }
+        .roomCodeTbl:hover 
+        {
+            background-color: #FF8060;
+
+        }
+        .roomCodeHolderTbl {
+            position: absolute;
+            width:200px;
+        }
+        .roomCodeHolderTbl td {
+            padding: 0;
         }
