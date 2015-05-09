@@ -1,4 +1,9 @@
 ﻿$(document).ready(function () {
+    mainLoad()
+    prefLoad(roomNumber)
+});
+function mainLoad()
+{
     var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     var starts = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
     var ends = ['09:50', '10:50', '11:50', '12:50', '13:50', '14:50', '15:50', '16:50', '17:50'];
@@ -27,4 +32,27 @@
         $('.lectList').append('<span>' + selLects[i]['Lecturer_ID'] + ' - ' + selLects[i]['Lecturer_Name'] + '</span>');
         numLects++;
     }
-});
+}
+function prefLoad(i)
+{    
+    $('.studTxt').val(preferences[i]['Number_Students']);
+
+    $('.inCirc').removeClass('selectRad');
+    $('#' + preferences[i]['Room_Type']).addClass('selectRad');
+    typeSet = $('#' + preferences[i]['Room_Type']).siblings('input').val();
+
+    $('.parkCirc').removeClass('selectRad');
+    $('#' + preferences[i]['Park_ID']).addClass('selectRad');
+    parkSet = $('#' + preferences[i]['Park_ID']).siblings('input').val();
+    var buildName = "NO PREFERENCE"
+    for (var i = 0; i < buildData.length; i++)
+    {
+        if(buildData[i]['Building_ID'] == preferences[i]['Building_ID'])
+        {
+            buildName = buildData[i]['Building_Name']
+        }
+    }
+    
+    $('.buildTxt').val();
+    $('.roomCodeTxt').val(preferences[i]['_ID']);
+}
