@@ -60,6 +60,27 @@
 
         }
         );
+
+        $("#closePopupDetails").click(function () { //onclick, fades out
+            $('#popupDetails').fadeOut(1000);
+            //$('#requestContainer').removeClass('blur-in');
+            $('#requestTable').addClass('blur-out');
+            $('#requestTable').removeClass('blur-in');
+
+            //unblurs the text in the footer
+            $('footer .float-left').addClass('blur-out');
+            $('footer .float-left').removeClass('blur-in');
+
+            $('footer #accessBar').addClass('blur-out');
+            $('footer #accessBar').removeClass('blur-in');
+
+            //unblurs header content
+            $('header').addClass('blur-out');
+            $('header').removeClass('blur-in');
+
+            $('.header').addClass('blur-out');
+            $('.header').removeClass('blur-in');
+        });
     });
 
     function deleteRow(x, y) {
@@ -125,17 +146,25 @@
 
         $('#popupDetails').fadeIn(1000);
         $('#requestTable').removeClass('blur-out');
-        $('#requestTable').removeClass('blur-in');
+        $('#requestTable').addClass('blur-in');
 
         //only blurs the text in the footer
         $('footer .float-left').removeClass('blur-out');
         $('footer .float-left').addClass('blur-in');
 
+        $('footer #accessBar').removeClass('blur-out');
+        $('footer #accessBar').addClass('blur-in');
+
         //blurs header content, i.e. navigation
         $('header').removeClass('blur-out');
         $('header').addClass('blur-in');
 
+        $('.header').removeClass('blur-out');
+        $('.header').addClass('blur-in');
+
     }
+
+    
 </script>
 <hgroup class="header">
     <h1>Your Requests</h1>
