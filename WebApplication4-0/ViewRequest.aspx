@@ -89,8 +89,8 @@
 
         if(result)
         {
-            alert(x);
-            alert(y);
+            //alert(x);
+            //alert(y);
             obj = { id: x, pref_id: y };
             obj.myself = obj;
 
@@ -129,6 +129,122 @@
         }
 
        
+
+        //var row = document.getElementById(x);
+        //row.parentNode.removeChild(row);
+
+        //var but = "button"
+        //var buttonid = but.concat(x);
+        //alert(buttonid);
+        //var button = document.getElementById(buttonid);
+        //alert(button);
+        //button.click();
+        //return true;
+    }
+
+    function deleteRow2(x, y1, y2) {
+
+        var result = confirm('Are you sure you want to delete this request?');
+
+        if (result) {
+            //alert(x);
+            //alert(y);
+            obj = { id: x, pref_id: y1, pref_id2: y2 };
+            obj.myself = obj;
+
+            seen = [];
+
+            /*
+            }*/
+
+            //var userid = document.getElementById(id);
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "ViewRequest.aspx/Delete2",
+                data: JSON.stringify(obj, function (key, val) {
+                    if (typeof val == "object") {
+                        if (seen.indexOf(val) >= 0)
+                            return undefined;
+                        seen.push(val);
+                    }
+                    return val;
+                }),
+                dataType: "json",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("There has been an error with your request \n\nRequest: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                },
+                success: function (data) {
+                    //alert('success');
+                    if (data.d == 'true') {
+                        location.reload();
+                    }
+                }
+
+
+            }
+                );
+        }
+
+
+
+        //var row = document.getElementById(x);
+        //row.parentNode.removeChild(row);
+
+        //var but = "button"
+        //var buttonid = but.concat(x);
+        //alert(buttonid);
+        //var button = document.getElementById(buttonid);
+        //alert(button);
+        //button.click();
+        //return true;
+    }
+
+    function deleteRow3(x, y1, y2, y3) {
+
+        var result = confirm('Are you sure you want to delete this request?');
+
+        if (result) {
+            //alert(x);
+            //alert(y);
+            obj = { id: x, pref_id: y1, pref_id2: y2, pref_id3: y3 };
+            obj.myself = obj;
+
+            seen = [];
+
+            /*
+            }*/
+
+            //var userid = document.getElementById(id);
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "ViewRequest.aspx/Delete3",
+                data: JSON.stringify(obj, function (key, val) {
+                    if (typeof val == "object") {
+                        if (seen.indexOf(val) >= 0)
+                            return undefined;
+                        seen.push(val);
+                    }
+                    return val;
+                }),
+                dataType: "json",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("There has been an error with your request \n\nRequest: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                },
+                success: function (data) {
+                    //alert('success');
+                    if (data.d == 'true') {
+                        location.reload();
+                    }
+                }
+
+
+            }
+                );
+        }
+
+
 
         //var row = document.getElementById(x);
         //row.parentNode.removeChild(row);
