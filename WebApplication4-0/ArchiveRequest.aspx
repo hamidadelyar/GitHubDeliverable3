@@ -5,8 +5,9 @@
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <h1>Archive Requests</h1>
+    <%-- Dropdown to filter archived requests--%>
         <p>Show requests from the following year: 
-            <asp:DropDownList <%-- Dropdown to filter archived requests--%>
+            <asp:DropDownList 
                 id="DropDownList1"
                 runat="server"
                 AutoPostBack="True">
@@ -28,8 +29,9 @@
         <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
         <RowStyle HorizontalAlign="Center" VerticalAlign="Middle" />
     </asp:GridView>
+     <%-- SQL statement used to fill gridview  --%>
     <asp:SqlDataSource 
-        ID="SqlDataSource1" <%-- SQL statement used to fill gridview  --%>
+        ID="SqlDataSource1"
         runat="server" 
         ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
         SelectCommand="SELECT [Module_Code], [Day], [Start_Time], [End_Time], [Semester] +1 AS [Semester], [Year], [Number_Rooms] FROM [Requests]" 
