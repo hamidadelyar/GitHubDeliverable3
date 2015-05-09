@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ArchiveRequest.aspx.cs" Inherits="WebApplication4_0.WebForm1" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ArchiveRequest.aspx.cs" Inherits="WebApplication4_0.ArchiveRequest" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
