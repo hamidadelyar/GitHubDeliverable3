@@ -4,7 +4,9 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
-    <asp:GridView ID="ArchiveRequests" runat="server" AllowSorting="True" AutoGenerateColumns="False" DataSourceID="SqlDataSource1">
+
+    <h1>Previous Requests</h1>
+    <asp:GridView ID="ArchiveRequests" runat="server" AllowSorting="True" AutoGenerateColumns="False" DataSourceID="SqlDataSource1" CellPadding="10" CellSpacing="10" HorizontalAlign="Center">
         <Columns>
             <asp:BoundField DataField="Module_Code" HeaderText="Module Code" SortExpression="Module_Code" />
             <asp:BoundField DataField="Day" HeaderText="Day" SortExpression="Day" />
@@ -14,6 +16,9 @@
             <asp:BoundField DataField="Year" HeaderText="Year" SortExpression="Year" />
             <asp:BoundField DataField="Number_Rooms" HeaderText="Number of Rooms" SortExpression="Number_Rooms" />
         </Columns>
+        <EditRowStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+        <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+        <RowStyle HorizontalAlign="Center" VerticalAlign="Middle" />
     </asp:GridView>
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT [Module_Code], [Day], [Start_Time], [End_Time], [Semester] +1 AS [Semester], [Year], [Number_Rooms] FROM [Requests] WHERE ([Year] = @Year)">
         <SelectParameters>
