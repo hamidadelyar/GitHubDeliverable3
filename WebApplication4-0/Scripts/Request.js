@@ -1195,10 +1195,74 @@ $(document).ready(function () {
         if (weekChecked == 0) {
             flag = false;
             showValidation();
-            $('#errorList').append("<li>No weeks have been selected. Please select at least 1 week to continue or set <b>'Default Weeks'</b> to <b>'Yes'</b></li>");
+            $('#errorList').append("<li>No weeks have been selected for Room 1. Please select at least 1 week to continue or set <b>'Default Weeks'</b> to <b>'Yes'</b></li>");
             document.getElementById("MainContent_defaultWeeksLabel").style.borderBottom = "3px solid red";
         } else {  //gets rid of the red border
             document.getElementById("MainContent_defaultWeeksLabel").style.borderBottom = "";
+        }
+
+        /* repetition of above - but for weeks for room2 and room3 if the user wants 2/3 rooms */
+        var weeks2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        var weekChecked2 = 12; //12 weeks checked automatically
+
+        if (document.getElementById('defaultWeeksNoTwo').checked == true) {    //if user has selected to choose own weeks
+            //check to see if any weeks have been selected.
+            weeks2 = []; //sets the weeks array to empty, so can add the specific weeks user chooses.
+            var weekChecked2 = 0;
+            for (i = 1; i < 16; i++) {
+                if (document.getElementById('week' + i + "Two").checked == true) {
+                    weekChecked2 = weekChecked2 + 1; //if at least 1 week has been checked, then weekChecked set to true
+                    weeks2.push(i); //corresponding week number will be added to the array if it has been checked
+                    /*
+                      If at least 1 week has been checked, then checked weeks set to true.
+                      Otherwise, no weeks have been selected. User must be notified.
+                  */
+                }
+            }
+        }
+
+        if (numRooms > 1) {
+            //if user selects to choose own weeks for room 2, must select at least 1 week.
+            if (weekChecked2 == 0) {
+                flag = false;
+                showValidation();
+                $('#errorList').append("<li>No weeks have been selected for Room 2. Please select at least 1 week to continue or set <b>'Default Weeks'</b> to <b>'Yes'</b></li>");
+                document.getElementById("MainContent_Label1").style.borderBottom = "3px solid red";
+            } else {  //gets rid of the red border
+                document.getElementById("MainContent_Label1").style.borderBottom = "";
+            }
+        }
+
+
+        var weeks3 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        var weekChecked3 = 12; //12 weeks checked automatically
+
+        if (document.getElementById('defaultWeeksNoThree').checked == true) {    //if user has selected to choose own weeks
+            //check to see if any weeks have been selected.
+            weeks3 = []; //sets the weeks array to empty, so can add the specific weeks user chooses.
+            var weekChecked3 = 0;
+            for (i = 1; i < 16; i++) {
+                if (document.getElementById('week' + i + "Three").checked == true) {
+                    weekChecked3 = weekChecked3 + 1; //if at least 1 week has been checked, then weekChecked set to true
+                    weeks3.push(i); //corresponding week number will be added to the array if it has been checked
+                    /*
+                      If at least 1 week has been checked, then checked weeks set to true.
+                      Otherwise, no weeks have been selected. User must be notified.
+                  */
+                }
+            }
+        }
+
+        if (numRooms > 2) {
+            //if user selects to choose own weeks for room 3, must select at least 1 week.
+            if (weekChecked3 == 0) {
+                flag = false;
+                showValidation();
+                $('#errorList').append("<li>No weeks have been selected for Room 3. Please select at least 1 week to continue or set <b>'Default Weeks'</b> to <b>'Yes'</b></li>");
+                document.getElementById("MainContent_Label3").style.borderBottom = "3px solid red";
+            } else {  //gets rid of the red border
+                document.getElementById("MainContent_Label3").style.borderBottom = "";
+            }
         }
 
 
@@ -1207,11 +1271,24 @@ $(document).ready(function () {
         */
 
         var weeksString = "";
+        var weeksString2 = "";
+        var weeksString3 = "";
         //iterates through the weeks array, to find out which weeks have been selected
         for (i = 0; i < weeks.length; i++) {
             weeksString += weeks[i] + ", "  //puts contents of the array into the form 1, 2, 3 etc.
         }
+        //iterates through the weeks array, to find out which weeks have been selected
+        for (i = 0; i < weeks2.length; i++) {
+            weeksString2 += weeks2[i] + ", "  //puts contents of the array into the form 1, 2, 3 etc.
+        }
+        //iterates through the weeks array, to find out which weeks have been selected
+        for (i = 0; i < weeks3.length; i++) {
+            weeksString3 += weeks3[i] + ", "  //puts contents of the array into the form 1, 2, 3 etc.
+        }
         weeksString = weeksString.substring(0, weeksString.length - 2); //gets rid of the ',' at the end.
+        weeksString2 = weeksString2.substring(0, weeksString2.length - 2); //gets rid of the ',' at the end.
+        weeksString3 = weeksString3.substring(0, weeksString3.length - 2); //gets rid of the ',' at the end.
+
         if (flag == true) {
             formInputEnabled("false");  //cannot change data once in submission mode
             showConfirmation(); //brings up confirmation pop up
@@ -1230,7 +1307,7 @@ $(document).ready(function () {
             $('#confirmationContents').append("<strong>Day:</strong> " + dayString + "<br />");
             $('#confirmationContents').append("<strong>Start Time:</strong> " + startTimeString + " (Period " + startTime + ")" + "<br />");
             $('#confirmationContents').append("<strong>End Time:</strong> " + endTimeString + " (Period " + endTime + ")" + "<br />");
-            $('#confirmationContents').append("<strong>Weeks:</strong> " + weeksString + "<br />");
+       
             $('#confirmationContents').append("<strong>Priority:</strong> " + priorityString + "<br />");
 
             if (numRooms == 1) { //if user has requested just 1 room
@@ -1239,6 +1316,7 @@ $(document).ready(function () {
                 } else {
                     $('#confirmationContents').append("<strong>Room:</strong> n/a <br />");
                 }
+                $('#confirmationContents').append("<strong>Weeks:</strong> " + weeksString + "<br />");
                 $('#confirmationContents').append("<strong>Total number of students:</strong> " + capacity + "<br />");
             }
             if (numRooms == 2) {    //if user has requested 2 rooms
@@ -1252,6 +1330,8 @@ $(document).ready(function () {
                 } else {
                     $('#confirmationContents').append("<strong>Room 2:</strong> n/a <br />");
                 }
+                $('#confirmationContents').append("<strong>Weeks (Room 1):</strong> " + weeksString + "<br />");
+                $('#confirmationContents').append("<strong>Weeks (Room 2):</strong> " + weeksString2 + "<br />");
                 $('#confirmationContents').append("<strong>Total number of students:</strong> " + capacity + "<br />");
             }
             if (numRooms == 3) {    //if user has requested 2 rooms
@@ -1270,6 +1350,9 @@ $(document).ready(function () {
                 } else {
                     $('#confirmationContents').append("<strong>Room 3:</strong> n/a <br />");
                 }
+                $('#confirmationContents').append("<strong>Weeks (Room 1):</strong> " + weeksString + "<br />");
+                $('#confirmationContents').append("<strong>Weeks (Room 2):</strong> " + weeksString2 + "<br />");
+                $('#confirmationContents').append("<strong>Weeks (Room 3):</strong> " + weeksString3 + "<br />");
                 $('#confirmationContents').append("<strong>Total number of students:</strong> " + capacity + "<br />");
             }
 
