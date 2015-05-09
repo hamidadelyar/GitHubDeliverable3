@@ -1,0 +1,417 @@
+﻿
+        .reqHolder {
+            width: 95%;
+            padding: 2.5%;
+            margin-top: 50px;
+            background-color: #3E454D;
+            border-radius: 10px;
+        }
+        .hdr
+        {
+            margin-top:10px;
+            font-size:1.4em;
+            color:#FFF;
+            float:left;
+            text-align:center;
+            width:95%;
+            margin-left:2.5%;
+        }
+        .subHdr
+        {
+            color:#FF8060;
+            font-size:1.2em;
+            padding-top:15px;
+        }
+        .alert
+        {
+            margin-top:10px;
+            color:#FFD800;
+        }
+        .spc
+        {
+            height:15px;
+        }
+        .smlSpc
+        {
+            height:5px;
+        }
+        .inp
+        {
+            line-height:17.5px;
+            width:200px;
+            background-color:#2B3036;
+            border-radius:3px;
+            border:1px #2B3036 solid;
+            color:#FFF;
+        }
+        .nameTxt
+        {
+            width:400px!important;
+        }
+        .lectTxt
+        {
+            width:400px!important;
+        }
+        .modData
+        {
+            margin-top:35px;
+            width:110%;
+            table-layout:fixed;
+            color: #FFF;
+        }
+        .line
+        {
+            margin-left:-5px;
+            position:relative;
+            top:-3px;
+            height:13px;
+            width:30px;
+            background-color:#FFF;
+            border-radius:3px;
+            display:inline-block;
+        }
+        .darkLine
+        {
+            margin-left:5px;
+            position:relative;
+            top:1px;
+            height:13px;
+            width:30px;
+            background-color:#3E454D;
+            border-radius:3px;
+            display:inline-block;
+        }
+        .circ
+        {
+            position:relative;
+            top:2.5px;
+            left:-42px;
+            height:25px;
+            width:25px;
+            background-color:#999;
+            border-radius:35px;
+            display:inline-block;
+            cursor:pointer;
+        }
+        .selected
+        {
+            left:-12px;
+            background-color:#FF8060;
+        }
+        .outCirc
+        {
+            position:relative;
+            display:inline-block;
+            height:25px;
+            width:25px;
+            border:1px #FFF solid;
+            border-radius:25px;
+            top:2px;
+            left:-16px;
+            cursor:pointer;
+        }
+        .inCirc
+        {
+            position:relative;
+            display:inline-block;
+            height:15px;
+            width:15px;
+            background-color:#3E454D;
+            border-radius:15px;
+            top:-4px;
+            left:-37px;
+            cursor:pointer;
+        }
+        .parkCirc
+        {
+            position:relative;
+            display:inline-block;
+            height:15px;
+            width:15px;
+            background-color:#3E454D;
+            border-radius:15px;
+            top:-4px;
+            left:-37px;
+            cursor:pointer;
+        }
+        .selectRad
+        {
+            background-color:#FF8060;
+        }
+        .tickBox {
+            border-radius: 3px;
+            background-color: #2b3036;
+            line-height: 17.5px;
+            padding: 5px;
+            border: 1px solid #2b3036;
+            width: 17.5px;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+        }
+        .optSpan {
+            margin-left: 15px;
+            text-align: center;
+        }
+        .selTick {
+            background-color: #FF8060;
+            border: 1px solid #FF8060;
+        }
+        .prefBtn
+        {
+            line-height:30px;
+            width:100px;
+            background-color:#2B3036;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            padding: 5px;
+            float:left;
+        }
+        .prefBtn:hover
+        {
+            background-color:#FF8060;
+        }
+        .subBtn
+        {
+            line-height:30px;
+            width:100px;
+            background-color:#FF8060;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            padding: 5px;
+            float:right;
+            margin-right:6.66%;
+        }
+        .week
+        {
+            width:32.5px;
+            line-height:32.5px;
+            border-radius:3px;
+            background-color:#999;
+            display:inline-block;
+            text-align:center;
+            cursor:pointer;
+        }
+        .week:hover
+        {
+            background-color:#FF8060;
+        }
+        .weekBtn
+        {
+            margin-top:10px;
+            line-height:32.5px;
+            width:74px;
+            background-color:#2B3036;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+        }
+        .weekBtn:hover
+        {
+            background-color:#FF8060;
+        }
+        .blurHolder
+        {
+            -webkit-filter: blur(5px);
+            -moz-filter: blur(5px);
+            -o-filter: blur(5px);
+            -ms-filter: blur(5px);
+            filter: blur(5px);
+            opacity: 0.4;
+        }
+        .triang {
+            position: relative;
+            display: inline-block;
+            left: 90px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 15px 15px 15px;
+            border-color: transparent transparent #2b3036 transparent;
+            top: 3.5px;
+        }
+        .codeTbl
+        {
+            border:1px #2B3036 solid;
+            color: #FFF;
+            background-color: #2b3036;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 5px;
+            width:200px;
+            display: inline-block;
+        }
+        .codeTbl:hover 
+        {
+            background-color: #FF8060;
+
+        }
+        .codeHolderTbl {
+            position: absolute;
+            width:200px;
+        }
+        .codeHolderTbl td {
+            padding: 0;
+        }
+        .nameTbl
+        {
+            border:1px #2B3036 solid;
+            color: #FFF;
+            background-color: #2b3036;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 5px;
+            width:400px;
+            display: inline-block;
+        }
+        .nameTbl:hover 
+        {
+            background-color: #FF8060;
+
+        }
+        .nameHolderTbl {
+            position: absolute;
+            width:400px;
+        }
+        .nameHolderTbl td {
+            padding: 0;
+        }
+        .dayTbl
+        {
+            border:1px #2B3036 solid;
+            color: #FFF;
+            background-color: #2b3036;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 5px;
+            width:200px;
+            display: inline-block;
+        }
+        .dayTbl:hover 
+        {
+            background-color: #FF8060;
+
+        }
+        .dayHolderTbl {
+            position: absolute;
+            width:200px;
+        }
+        .dayHolderTbl td {
+            padding: 0;
+        }
+        .startTbl
+        {
+            border:1px #2B3036 solid;
+            color: #FFF;
+            background-color: #2b3036;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 5px;
+            width:200px;
+            display: inline-block;
+        }
+        .startTbl:hover 
+        {
+            background-color: #FF8060;
+
+        }
+        .startHolderTbl {
+            position: absolute;
+            width:200px;
+        }
+        .startHolderTbl td {
+            padding: 0;
+        }
+        .endTbl
+        {
+            border:1px #2B3036 solid;
+            color: #FFF;
+            background-color: #2b3036;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 5px;
+            width:200px;
+            display: inline-block;
+        }
+        .endTbl:hover 
+        {
+            background-color: #FF8060;
+
+        }
+        .endHolderTbl {
+            position: absolute;
+            width:200px;
+        }
+        .endHolderTbl td {
+            padding: 0;
+        }
+        .roomTbl
+        {
+            border:1px #2B3036 solid;
+            color: #FFF;
+            background-color: #2b3036;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 5px;
+            width:200px;
+            display: inline-block;
+        }
+        .roomTbl:hover 
+        {
+            background-color: #FF8060;
+
+        }
+        .roomHolderTbl {
+            position: absolute;
+            width:200px;
+        }
+        .roomHolderTbl td {
+            padding: 0;
+        }
+        .lectTbl
+        {
+            border:1px #2B3036 solid;
+            color: #FFF;
+            background-color: #2b3036;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 5px;
+            width:400px;
+            display: inline-block;
+        }
+        .lectTbl:hover 
+        {
+            background-color: #FF8060;
+
+        }
+        .lectHolderTbl {
+            position: absolute;
+            width:400px;
+        }
+        .lectHolderTbl td {
+            padding: 0;
+        }
+        .lectTick {
+            border-radius: 3px;
+            background-color: #FF8060;
+            line-height: 17.5px;
+            padding: 5px;
+            border: 1px solid #FF8060;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+            margin-left: 10px;
+        }
+        .lectList {
+            padding-left: 5px;
+        }
+        .lectList span {
+            text-decoration: underline;
+            margin-right: 10px;
+            display: inline-block;
+        }

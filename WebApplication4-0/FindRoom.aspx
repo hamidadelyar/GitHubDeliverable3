@@ -892,7 +892,7 @@
                 </tr>
                 <tr class="parkRw">
                     <td><b>CENTRAL PARK</b></td><td> <span class="line" ></span><span class="park circ" id="Cent" ></span><input class="parkCheck" type="hidden" value="1" /></td>
-                    <td><b>WEST PARK</b></td><td> <span class="line" ></span><span class="park circ" id="West" ></span><input class="parkCheck" type="hidden" value="1" /></td>
+                    <td><b>WEST PARK</b></td><td> <span class="line" ></span><span class="park circ" id="West" ></span><input class="parkCheck" d="hidden" value="1" /></td>
                     <td><b>EAST PARK</b></td><td> <span class="line" ></span><span class="park circ" id="East" ></span><input class="parkCheck" type="hidden" value="1" /></td>
                     <td colspan="2"></td>
                 </tr>

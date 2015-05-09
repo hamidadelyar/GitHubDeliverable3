@@ -10,7 +10,7 @@
  <style>
         .black_overlay{
             display: none;
-            position: absolute;
+            position: fixed;
             top: 0%;
             left: 0%;
             width: 100%;
@@ -25,10 +25,24 @@
             display: none;
             position: absolute;
             top: 30%;
-            right: 30%;
-            width: 40%;
-            max-width:370px;
-            
+
+            margin-left:auto;
+            margin-right:auto;
+            padding: 16px;
+            background-color: white;
+            z-index:1002;
+            overflow: auto;
+            border: 2px solid;
+            border-radius: 25px;
+        }
+
+        .white_content_facilities {
+            display: none;
+            position: absolute;
+            top: 30%;
+            width:650px;
+            margin-left:auto;
+            margin-right:auto;
             padding: 16px;
             background-color: white;
             z-index:1002;
@@ -70,14 +84,32 @@
     <asp:DropDownList ID="DropDownList1" runat="server" autopostback="True" DataSourceID="SqlDataSource3" DataTextField="Building_Name" DataValueField="Building_ID"></asp:DropDownList>
     <div id="buttonsDiv">
         <input type="button" ID="addRoom" Value="Add Room" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
-        <input type="button" ID="addFacility" Value="Add Facility" onclick = "document.getElementById('light2').style.display = 'block'; document.getElementById('fade2').style.display = 'block'" />
+        <input type="button" ID="addFacility" Value="Facilities" onclick = "document.getElementById('light2').style.display = 'block'; document.getElementById('fade2').style.display = 'block'" />
     </div>
+
+    <asp:SqlDataSource 
+        ID="SqlDataSource5" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+        SelectCommand="SELECT * FROM [Rooms]">
+    </asp:SqlDataSource>
+
+    <script runat="server">
+        private void NewRoom (object source, EventArgs e) {
+          SqlDataSource1.Insert();
+        }
+
+        private void NewFacility(object source, EventArgs e)
+        {
+            SqlDataSource6.Insert();
+        }
+    </script>
 
     <div id="light" class="white_content">
         <h1>New Room</h1>
         Building: <br />
         <asp:TextBox id="TextBox1" runat="server" /><br />
-        Room Number: <br />
+        Room ID: <br />
         <asp:TextBox id="TextBox2" runat="server" /><br />
         Capacity: <br />
         <asp:TextBox id="TextBox5" runat="server" /><br />
@@ -85,7 +117,7 @@
         <asp:TextBox id="TextBox6" runat="server" />
 
         <br />
-        <asp:Button ID="Button1" runat="server" Text="Save" /> 
+        <asp:Button ID="Button1" runat="server" Text="Save" onclick="NewRoom"/> 
         <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'" />
 
     </div>
@@ -95,7 +127,22 @@
 
             
 
-    <div id="light2" class="white_content">
+    <div id="light2" class="white_content_facilities">
+        <div style="float:left;">
+            <asp:GridView 
+                ID="GridView1" 
+                runat="server" 
+                AutoGenerateColumns="False" 
+                DataSourceID="SqlDataSource6" 
+                DataKeyNames="Facility_ID">
+                <Columns>
+                    <asp:BoundField DataField="Facility_ID" HeaderText="Facility ID"  />
+                    <asp:BoundField DataField="Facility_Name" HeaderText="Facility Name" />
+                    <asp:CommandField ShowDeleteButton="True"/>
+                </Columns>
+            </asp:GridView>
+        </div>
+        <div style="float:right;">
         <h1>New Facility</h1>
         Facility Name: <br />
         <asp:TextBox id="TextBox3" runat="server" /><br />
@@ -103,25 +150,45 @@
         <asp:TextBox id="TextBox4" runat="server" />
 
         <br />
-        <asp:Button ID="Button2" runat="server" Text="Save" /> 
+        <asp:Button ID="Button2" runat="server" Text="Save" onclick="NewFacility"/> 
         <input type="button" ID="closeInsert2" value="Close" onclick = "document.getElementById('light2').style.display = 'none'; document.getElementById('fade2').style.display = 'none'" />
-
+        </div>
     </div>
 
     <div id="fade2" class="black_overlay">
     </div>
 
+    <asp:SqlDataSource 
+        ID="SqlDataSource6" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+        SelectCommand="SELECT * FROM [Facilities]"
+        InsertCommand="INSERT INTO Facilities (Facility_ID, Facility_Name) VALUES (@FID, @FName)"
+        DeleteCommand="DELETE FROM Facilities WHERE Facility_ID = @Facility_ID">
 
+            <InsertParameters>
+                <asp:ControlParameter name="FName" ControlId="TextBox3" PropertyName="Text" />
+                <asp:ControlParameter name="FID" ControlId="TextBox4" PropertyName="Text" />
+
+            </InsertParameters>
+    </asp:SqlDataSource>
 
 
     <asp:SqlDataSource 
         ID="SqlDataSource1" 
         runat="server" 
         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-        SelectCommand="SELECT * FROM [Buildings] WHERE [Building_ID] = @Building_ID">
+        SelectCommand="SELECT * FROM [Buildings] INNER JOIN [Parks] ON [Buildings].[Park_ID] = [Parks].[Park_ID] WHERE [Building_ID] = @Building_ID"
+        InsertCommand="INSERT INTO Rooms (Room_ID, Capacity, Room_Type, Building_ID, Pool) VALUES (@roomDB, @capacityDB, @typeDB, @buildingDB, 'true')">
             <selectparameters>
 		        <asp:controlparameter controlid="DropDownList1" name="Building_ID" propertyname="SelectedValue" type="String" />
 	        </selectparameters>
+            <InsertParameters>
+                <asp:ControlParameter name="buildingDB" ControlId="TextBox1" PropertyName="Text" />
+                <asp:ControlParameter name="roomDB" ControlId="TextBox2" PropertyName="Text" />
+                <asp:ControlParameter name="capacityDB" ControlId="TextBox5" PropertyName="Text" />
+                <asp:ControlParameter name="typeDB" ControlId="TextBox6" PropertyName="Text" />
+            </InsertParameters>
     </asp:SqlDataSource>
 
 
@@ -132,10 +199,41 @@
        <ItemTemplate> 
 
             <div class="buildingHeader" >
-                <h2 class="white"><%#Eval("Building_Name") %> - <%#Eval("Park_ID") %></h2> 
+                <h2 class="white"><%#Eval("Building_Name") %> - <%#Eval("Park_Name") %> Park</h2> 
             </div>
             <asp:SqlDataSource 
                 ID="SqlDataSource2" 
+                runat="server" 
+                ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+                SelectCommand="SELECT * FROM [Rooms] INNER JOIN [Room_Types] ON [Rooms].[Room_Type] = [Room_Types].[Room_Type] WHERE [Building_ID] = @Building">
+                    <selectparameters>
+		                <asp:controlparameter controlid="DropDownList1" name="Building" propertyname="SelectedValue" type="String" />
+	                </selectparameters>
+            </asp:SqlDataSource>
+            
+            <table>
+                <tr>
+                    <th>Room ID</th><th>Capacity</th><th>Room Type</th><th></th>
+                </tr>
+                
+                    <asp:Repeater 
+                        ID="Repeater2" 
+                        runat="server"
+                        DataSourceID="SqlDataSource2">
+                            <ItemTemplate>
+                                <tr>
+                                    <td><%#Eval("Room_ID") %></td><td><%#Eval("Capacity") %></td><td><%#Eval("Type_Name") %></td><td><input type="button" ID="room<%#Eval("Room_ID") %>" Value="Edit" onclick = "document.getElementById('light<%#Eval("Room_ID") %>').style.display='block';document.getElementById('fade').style.display='block'" /></td>
+                                </tr>
+                            </ItemTemplate>
+                    </asp:Repeater>
+                
+            </table>
+        </ItemTemplate>
+    </asp:Repeater>
+
+
+            <asp:SqlDataSource 
+                ID="SqlDataSource4" 
                 runat="server" 
                 ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
                 SelectCommand="SELECT * FROM [Rooms] WHERE [Building_ID] = @Building">
@@ -144,19 +242,27 @@
 	                </selectparameters>
             </asp:SqlDataSource>
 
-            <asp:GridView 
-                ID="GridView1" 
-                runat="server" 
-                DataSourceID="SqlDataSource2">
-            </asp:GridView>
+                   <asp:Repeater 
+                        ID="Repeater3" 
+                        runat="server"
+                        DataSourceID="SqlDataSource4">
+                            <ItemTemplate>
+                                <div id="light<%#Eval("Room_ID") %>" class="white_content">
+                                    <h1> <%#Eval("Room_ID") %> </h1>
+                                    Announcement Title: <br />
+                                    <asp:TextBox id="TextBox1" runat="server" /><br />
+                                    Announcement Details: <br />
+                                    <asp:TextBox id="TextBox2" runat="server" />
 
+                                    <br />
+                                    <asp:Button ID="Button2" runat="server" Text="Save" /> 
+                                    <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light<%#Eval("Room_ID") %>').style.display='none';document.getElementById('fade').style.display='none'" />
 
-        </ItemTemplate>
-    </asp:Repeater>
-
-
-
-
+                                </div>
+                                <div id="fade" class="black_overlay">
+                                </div>
+                            </ItemTemplate>
+                    </asp:Repeater>
          
    
 

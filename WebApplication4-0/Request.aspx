@@ -122,21 +122,7 @@
                         </div>
                     </td>
 
-                    <td>
-                        <asp:Label ID="defaultWeeksLabel" runat="server" Text="DEFAULT WEEKS?" ToolTip="Default weeks are weeks 1 to 12. if you wish to choose the specific weeks yourself, select 'No'."></asp:Label>
-                    </td>
-                    <td>
-                        <div class="divClass">
-                            <input type="radio" name="radioWeek" id="defaultWeeksYes" class="radio" checked />
-                            <!-- checked by default -->
-                            <label for="defaultWeeksYes">Yes</label>
-                        </div>
-                        <div class="divClass">
-                            <input type="radio" name="radioWeek" id="defaultWeeksNo" class="radio" />
-                            <label for="defaultWeeksNo">No</label>
-                        </div>
-                    </td>
-
+         
                      <td>
                          <asp:Label ID="priorityLabel" ToolTip="Is this a priority request?" runat="server" Text="PRIORITY"></asp:Label>
                     </td>
@@ -161,8 +147,6 @@
 
                     <td style="width:150%">
                         <input id="lecturerInput" type="text" style="width:150%; margin-left:0px; " placeholder="e.g. John Smith"/>
-                        
-                      
                     </td>
 
                     <td>
@@ -238,8 +222,25 @@
 
             <tr>
              
+         
+
                 <td>
-                     <asp:Label ID="Label8" runat="server" Text="REQUEST ROOM FACILITIES?" ToolTip="Select the preferences that you would like"></asp:Label>
+                    <asp:Label ID="defaultWeeksLabel" runat="server" Text="DEFAULT WEEKS?" ToolTip="Default weeks are weeks 1 to 12. if you wish to choose the specific weeks yourself, select 'No'."></asp:Label>
+                </td>
+                <td>
+                    <div class="divClass">
+                        <input type="radio" name="radioWeek" id="defaultWeeksYes" class="radio" checked />
+                        <!-- checked by default -->
+                        <label for="defaultWeeksYes">Yes</label>
+                    </div>
+                    <div class="divClass">
+                        <input type="radio" name="radioWeek" id="defaultWeeksNo" class="radio" />
+                        <label for="defaultWeeksNo">No</label>
+                    </div>
+                </td>
+
+                <td>
+                    <asp:Label ID="Label8" runat="server" Text="REQUEST ROOM FACILITIES?" ToolTip="Select the preferences that you would like"></asp:Label>
                 </td>
                 <td>
                    <div class="divClass requestFacilitiesClass">
@@ -253,23 +254,18 @@
                 </td>   
 
                 <td>
-                    <!-- empty cell - formatting -->
-                </td>
-                   
-                
-                <td>
-                    <asp:Label ID="Label5" runat="server" Text="BUILDING"></asp:Label>
+                    <asp:Label ID="Label5" runat="server" Text="BUILDING" style="position:relative; top:8px"></asp:Label>
                     <br /><br /><br />
-                    <asp:Label ID="room1_label" runat="server" Text="ROOM"></asp:Label>
+                    <asp:Label ID="room1_label" runat="server" Text="ROOM" style="position:relative; top:8px"></asp:Label>
                 </td>
 
                 <td>
-                    <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
+                    <div class="styled-select" style="width:150%; position:relative; left: -20%; margin-top:28px; margin-bottom:20px">
                         <select id="select_building">
                             <!-- options filled with AJAX -->
                         </select>
                     </div>
-                    <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
+                    <div class="styled-select" style="width:150%; position:relative; left: -20%;  margin-top:20px; margin-bottom:20px">
                         <select id="select_room">
                             <!-- options filled with AJAX -->
                          </select>
@@ -354,7 +350,22 @@
             </tr>
 
             <tr>
-             
+                <td>
+                    <asp:Label ID="Label1" runat="server" Text="DEFAULT WEEKS?" ToolTip="Default weeks are weeks 1 to 12. if you wish to choose the specific weeks yourself, select 'No'."></asp:Label>
+                </td>
+                <td>
+                    <div class="divClass">
+                        <input type="radio" name="radioWeek2" id="defaultWeeksYesTwo" class="radio" checked />
+                        <!-- checked by default -->
+                        <label for="defaultWeeksYesTwo">Yes</label>
+                    </div>
+                    <div class="divClass">
+                        <input type="radio" name="radioWeek2" id="defaultWeeksNoTwo" class="radio" />
+                        <label for="defaultWeeksNoTwo">No</label>
+                    </div>
+                </td>
+                
+
                 <td>
                      <asp:Label ID="Label11" runat="server" Text="REQUEST ROOM FACILITIES?" ToolTip="Select the preferences that you would like"></asp:Label>
                 </td>
@@ -369,24 +380,20 @@
                    </div>
                 </td>   
 
+         
                 <td>
-                    <!-- empty cell - formatting -->
-                </td>
-                   
-                
-                <td>
-                    <asp:Label ID="Label12" runat="server" Text="BUILDING"></asp:Label>
+                    <asp:Label ID="Label12" runat="server" Text="BUILDING" style="position:relative; top:8px"></asp:Label>
                     <br /><br /><br />
-                    <asp:Label ID="room2_label" runat="server" Text="ROOM"></asp:Label>
+                    <asp:Label ID="room2_label" runat="server" Text="ROOM" style="position:relative; top:8px"></asp:Label>
                 </td>
 
                 <td>
-                    <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
+                    <div class="styled-select" style="width:150%; position: relative; left:-20%; margin-top:28px; margin-bottom:20px">
                         <select id="select_building2">
                             <!-- options filled with AJAX -->
                         </select>
                     </div>
-                    <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
+                    <div class="styled-select" style="width:150%; position: relative; left:-20%;  margin-top:20px; margin-bottom:20px">
                         <select id="select_room2">
                             <!-- options filled with AJAX -->
                          </select>
@@ -462,6 +469,22 @@
             <tr>
              
                 <td>
+                    <asp:Label ID="Label3" runat="server" Text="DEFAULT WEEKS?" ToolTip="Default weeks are weeks 1 to 12. if you wish to choose the specific weeks yourself, select 'No'."></asp:Label>
+                </td>
+                <td>
+                    <div class="divClass">
+                        <input type="radio" name="radioWeek3" id="defaultWeeksYesThree" class="radio" checked />
+                        <!-- checked by default -->
+                        <label for="defaultWeeksYesThree">Yes</label>
+                    </div>
+                    <div class="divClass">
+                        <input type="radio" name="radioWeek3" id="defaultWeeksNoThree" class="radio" />
+                        <label for="defaultWeeksNoThree">No</label>
+                    </div>
+                </td>
+                
+
+                <td>
                      <asp:Label ID="Label17" runat="server" Text="REQUEST ROOM FACILITIES?" ToolTip="Select the preferences that you would like"></asp:Label>
                 </td>
                 <td>
@@ -476,23 +499,18 @@
                 </td>   
 
                 <td>
-                    <!-- empty cell - formatting -->
-                </td>
-                   
-                
-                <td>
-                    <asp:Label ID="Label18" runat="server" Text="BUILDING"></asp:Label>
+                    <asp:Label ID="Label18" runat="server" Text="BUILDING" style="position:relative; top:8px"></asp:Label>
                     <br /><br /><br />
-                    <asp:Label ID="room3_label" runat="server" Text="ROOM"></asp:Label>
+                    <asp:Label ID="room3_label" runat="server" Text="ROOM" style="position:relative; top:8px"></asp:Label>
                 </td>
 
                 <td>
-                    <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
+                    <div class="styled-select" style="width:150%; position:relative; left: -20%; margin-top:28px; margin-bottom:20px">
                         <select id="select_building3">
                             <!-- options filled with AJAX -->
                         </select>
                     </div>
-                    <div class="styled-select" style="width:170%; margin-top:20px; margin-bottom:20px">
+                    <div class="styled-select" style="width:150%; position:relative; left: -20%; margin-top:20px; margin-bottom:20px">
                         <select id="select_room3">
                             <!-- options filled with AJAX -->
                          </select>
@@ -690,6 +708,364 @@
                 </td>
                <td>
                     <input type="button" value="Select All" id="selectAllWeeks" style="background-color:white; width: 100%; font-size: 1em; border-radius:8px"/>
+               </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+
+
+<!-- popup contents for week selection - Room2-->
+<div class="pop" id="popupWeeksTwo">
+
+    <span id="closePopupTwo" style="cursor: pointer; left: 15px; top: -10px; font-size: 2em; display:inline-block; position:relative; ">✖</span>
+    <h1 style="display:inline-block; left:140px; position:relative; color:white; top: -10px;">Week Selection</h1>  
+   
+    <div style="width:100%; height:90%; top:10%; background-color:#3E454D; border-bottom-left-radius:8px; border-bottom-right-radius:8px;">
+       
+         <table style="width:70%; height:80%; top: 5%; left:15%;position:relative; table-layout:fixed;">
+            <tr>
+                <td>
+                    &nbsp;&nbsp; WEEK 1
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne">
+                        <input type="checkbox" id="week1Two"/>
+                        <label for="week1Two" ></label>
+                    </div>
+                </td>
+
+                <td>
+                   &nbsp;&nbsp;  WEEK 2
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week2Two"/>
+                        <label for="week2Two" ></label>
+                    </div>
+                </td>
+
+                <td>
+                   &nbsp;&nbsp;  WEEK 3
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week3Two"/>
+                        <label for="week3Two" ></label>
+                    </div>
+                </td>
+
+               <td>
+                  &nbsp;&nbsp;  WEEK 4
+               </td>
+                <td>
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week4Two"/>
+                        <label for="week4Two" ></label>
+                    </div>
+                </td>
+            </tr>
+            
+            <tr style="border-top:3px solid white; border-bottom: 3px solid white;">
+                <td>
+                    &nbsp;&nbsp; WEEK 5
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week5Two"/>
+                        <label for="week5Two" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 6
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week6Two"/>
+                        <label for="week6Two" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 7
+                </td>
+                 <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week7Two"/>
+                        <label for="week7Two" ></label>
+                    </div>
+                </td>
+
+                <td>
+                   &nbsp;&nbsp;  WEEK 8
+                </td>
+                 <td>
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week8Two"/>
+                        <label for="week8Two" ></label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr style="border-top:3px solid white; border-bottom: 3px solid white;">
+                <td>
+                   &nbsp;&nbsp;  WEEK 9
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week9Two"/>
+                        <label for="week9Two" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 10
+                </td>
+                 <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week10Two"/>
+                        <label for="week10Two" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 11
+                </td>
+                 <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week11Two"/>
+                        <label for="week11Two" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 12
+                </td>
+                 <td>
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week12Two"/>
+                        <label for="week12Two" ></label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    &nbsp;&nbsp; WEEK 13
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week13Two"/>
+                        <label for="week13Two" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 14
+                </td>
+                 <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week14Two"/>
+                        <label for="week14Two" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp;  WEEK 15
+                </td>
+                 <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week15Two"/>
+                        <label for="week15Two" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    <input type="button" value="Reset" id="resetWeeksTwo" style="margin-left:10px; background-color:white; width: 90%; font-size: 1em; border-radius:8px"/>
+                </td>
+               <td>
+                    <input type="button" value="Select All" id="selectAllWeeksTwo" style="background-color:white; width: 100%; font-size: 1em; border-radius:8px"/>
+               </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+<!-- popup contents for week selection-->
+<div class="pop" id="popupWeeksThree">
+
+    <span id="closePopupThree" style="cursor: pointer; left: 15px; top: -10px; font-size: 2em; display:inline-block; position:relative; ">✖</span>
+    <h1 style="display:inline-block; left:140px; position:relative; color:white; top: -10px;">Week Selection</h1>  
+   
+    <div style="width:100%; height:90%; top:10%; background-color:#3E454D; border-bottom-left-radius:8px; border-bottom-right-radius:8px;">
+       
+         <table style="width:70%; height:80%; top: 5%; left:15%;position:relative; table-layout:fixed;">
+            <tr>
+                <td>
+                    &nbsp;&nbsp; WEEK 1
+                </td>
+                <td style="border-right:3px solid white; ">
+                    <div class="checkboxOne">
+                        <input type="checkbox" id="week1Three"/>
+                        <label for="week1Three" ></label>
+                    </div>
+                </td>
+
+                <td>
+                   &nbsp;&nbsp;  WEEK 2
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week2Three"/>
+                        <label for="week2Three" ></label>
+                    </div>
+                </td>
+
+                <td>
+                   &nbsp;&nbsp;  WEEK 3
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week3Three"/>
+                        <label for="week3Three" ></label>
+                    </div>
+                </td>
+
+               <td>
+                  &nbsp;&nbsp;  WEEK 4
+               </td>
+                <td>
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week4Three"/>
+                        <label for="week4Three" ></label>
+                    </div>
+                </td>
+            </tr>
+            
+            <tr style="border-top:3px solid white; border-bottom: 3px solid white;">
+                <td>
+                    &nbsp;&nbsp; WEEK 5
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week5Three"/>
+                        <label for="week5Three" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 6
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week6Three"/>
+                        <label for="week6Three" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 7
+                </td>
+                 <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week7Three"/>
+                        <label for="week7Three" ></label>
+                    </div>
+                </td>
+
+                <td>
+                   &nbsp;&nbsp;  WEEK 8
+                </td>
+                 <td>
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week8Three"/>
+                        <label for="week8Three" ></label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr style="border-top:3px solid white; border-bottom: 3px solid white;">
+                <td>
+                   &nbsp;&nbsp;  WEEK 9
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week9Three"/>
+                        <label for="week9Three" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 10
+                </td>
+                 <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week10Three"/>
+                        <label for="week10Three" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 11
+                </td>
+                 <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week11Three"/>
+                        <label for="week11Three" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 12
+                </td>
+                 <td>
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week12Three"/>
+                        <label for="week12Three" ></label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    &nbsp;&nbsp; WEEK 13
+                </td>
+                <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week13Three"/>
+                        <label for="week13Three" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp; WEEK 14
+                </td>
+                 <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week14Three"/>
+                        <label for="week14Three" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    &nbsp;&nbsp;  WEEK 15
+                </td>
+                 <td style="border-right:3px solid white; ">
+                     <div class="checkboxOne">
+                        <input type="checkbox" id="week15Three"/>
+                        <label for="week15Three" ></label>
+                    </div>
+                </td>
+
+                <td>
+                    <input type="button" value="Reset" id="resetWeeksThree" style="margin-left:10px; background-color:white; width: 90%; font-size: 1em; border-radius:8px"/>
+                </td>
+               <td>
+                    <input type="button" value="Select All" id="selectAllWeeksThree" style="background-color:white; width: 100%; font-size: 1em; border-radius:8px"/>
                </td>
             </tr>
         </table>

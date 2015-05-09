@@ -85,15 +85,6 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label Label2;
         
         /// <summary>
-        /// defaultWeeksLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label defaultWeeksLabel;
-        
-        /// <summary>
         /// priorityLabel control.
         /// </summary>
         /// <remarks>
@@ -137,6 +128,15 @@ namespace WebApplication4_0 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label Label4;
+        
+        /// <summary>
+        /// defaultWeeksLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label defaultWeeksLabel;
         
         /// <summary>
         /// Label8 control.
@@ -193,6 +193,15 @@ namespace WebApplication4_0 {
         protected global::System.Web.UI.WebControls.Label Label10;
         
         /// <summary>
+        /// Label1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label1;
+        
+        /// <summary>
         /// Label11 control.
         /// </summary>
         /// <remarks>
@@ -245,6 +254,15 @@ namespace WebApplication4_0 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label Label16;
+        
+        /// <summary>
+        /// Label3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label3;
         
         /// <summary>
         /// Label17 control.

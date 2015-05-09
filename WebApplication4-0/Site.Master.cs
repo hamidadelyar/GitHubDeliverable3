@@ -94,8 +94,7 @@ namespace WebApplication4_0
 
         }
 
-
-        protected void logoutButton_Click(object sender, EventArgs e)
+        protected void logoutButton_Click()
         {
             Session["LoggedIn"] = false;
             Response.Redirect("Default.aspx");

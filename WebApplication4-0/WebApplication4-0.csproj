@@ -139,6 +139,7 @@
     <Content Include="ChangeEmail.aspx" />
     <Content Include="ChangePassword.aspx" />
     <Content Include="Contact.aspx" />
+    <Content Include="Content\EditRequest.css" />
     <Content Include="Content\jq.css" />
     <Content Include="Content\LoginStyle.css" />
     <Content Include="Content\PopupBlur.css" />
@@ -200,6 +201,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\Timetable.css" />
     <Content Include="EditModule.aspx" />
+    <Content Include="EditRequest.aspx" />
     <Content Include="FindRoom.aspx" />
     <Content Include="ForgotPassword.aspx" />
     <Content Include="Home.aspx" />
@@ -320,6 +322,7 @@
     <Content Include="Images\Room Pictures\ZZ103.jpg" />
     <Content Include="Images\Room Pictures\ZZ105.jpg" />
     <Content Include="Images\Room Pictures\ZZ106.jpg" />
+    <Content Include="Logout.aspx" />
     <Content Include="Modules.aspx" />
     <Content Include="packages.config" />
     <Content Include="AdminFolder\AdminSite.master" />
@@ -332,6 +335,8 @@
     <Content Include="Scripts\dist\jquery.floatThead-slim.min.js" />
     <Content Include="Scripts\dist\jquery.floatThead.js" />
     <Content Include="Scripts\dist\jquery.floatThead.min.js" />
+    <Content Include="Scripts\EditRequestControls.js" />
+    <Content Include="Scripts\EditRequestPageLoad.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <Content Include="Scripts\jquery-latest.js" />
@@ -530,6 +535,13 @@
     <Compile Include="EditModule.aspx.designer.cs">
       <DependentUpon>EditModule.aspx</DependentUpon>
     </Compile>
+    <Compile Include="EditRequest.aspx.cs">
+      <DependentUpon>EditRequest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditRequest.aspx.designer.cs">
+      <DependentUpon>EditRequest.aspx</DependentUpon>
+    </Compile>
     <Compile Include="FindRoom.aspx.cs">
       <DependentUpon>FindRoom.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -553,6 +565,13 @@
     </Compile>
     <Compile Include="Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Logout.aspx.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Logout.aspx.designer.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
     </Compile>
     <Compile Include="Modules.aspx.cs">
       <DependentUpon>Modules.aspx</DependentUpon>

@@ -15,7 +15,7 @@
                 $('.deptTxt').click(function() {
                     var left = $('.deptTxt').position().left;
                     var top = $('.deptTxt').position().top;
-                    $('.deptHolderTbl').css('left',left-8);
+                    $('.deptHolderTbl').css('left',left);
                     $('.deptHolderTbl').css('top', top+22);
                     $('.deptHolderTbl').show();
                 });
@@ -298,8 +298,8 @@
         </table>
     </div>
     <table class="deptHolderTbl">
-                <tr class="deptRw">
-        <td colspan="8"><span class="triang"></span></td>
-    </tr>
+        <tr class="deptRw">
+            <td colspan="8"><span class="triang"></span></td>
+        </tr>
     </table>
 </asp:Content>

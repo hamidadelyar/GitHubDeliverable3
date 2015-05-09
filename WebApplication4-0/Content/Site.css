@@ -370,6 +370,14 @@ fieldset.open-auth-providers {
 }
 
 /* forms */
+#logoutButton {
+        background-color: #d3dce0;
+        cursor: pointer;
+        padding: 3px;
+        font-size:1.3em;
+        margin-right: 8px;
+        width: auto;
+    }
 fieldset {
     border: none;
     margin: 0;
