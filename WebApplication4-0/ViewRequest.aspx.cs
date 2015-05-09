@@ -466,6 +466,8 @@ namespace WebApplication4_0
             }
 
             html.Append("</table>");
+            html.Append("</div>");
+            html.Append("</div>");
 
             return html;
         }
