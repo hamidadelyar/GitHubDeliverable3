@@ -53,32 +53,17 @@ namespace WebApplication4_0
                     //removes any spaces a user may accidently put after username
                 username = username.ToLower();
 
-                if (password == "team02")
+                byte[] userData = System.Text.Encoding.ASCII.GetBytes(TextboxPassword.Text + salt);
+                userData = new System.Security.Cryptography.SHA256Managed().ComputeHash(userData);
+                String userEncr = System.Text.Encoding.ASCII.GetString(userData);
+                if (userEncr == password)
                 {
-                    if (password == TextboxPassword.Text) //if password DOES match the username entered
-                    {
-                        Redirect(username);
-                    }
-                    else //if password DOES NOT match the username
-                    {
-                        //#LoginErrorMessage is a <p> tag within the form
-                        LoginErrorMessage.InnerHtml = "Username or password is incorrect"; //password incorrect
-                    }
+                    Redirect(username);
                 }
-                else
+                else //if password DOES NOT match the username
                 {
-                    byte[] userData = System.Text.Encoding.ASCII.GetBytes(TextboxPassword.Text + salt);
-                    userData = new System.Security.Cryptography.SHA256Managed().ComputeHash(userData);
-                    String userEncr = System.Text.Encoding.ASCII.GetString(userData);
-                    if (userEncr == password)
-                    {
-                        Redirect(username);
-                    }
-                    else //if password DOES NOT match the username
-                    {
-                        //#LoginErrorMessage is a <p> tag within the form
-                        LoginErrorMessage.InnerHtml = "Username or password is incorrect"; //password incorrect
-                    }
+                    //#LoginErrorMessage is a <p> tag within the form
+                    LoginErrorMessage.InnerHtml = "Username or password is incorrect"; //password incorrect
                 }
             }
             else //user does not exist
@@ -107,13 +92,13 @@ namespace WebApplication4_0
                     }
                     else
                     {
-                        Response.Redirect("Timetable.aspx");
+                        Response.Redirect("Home.aspx");
                         // redirects to timetable if the page wasn't existant
                     }
                 }
                 else
                 {
-                    Response.Redirect("Timetable.aspx");
+                    Response.Redirect("Home.aspx");
                     // redirects to timetable if the user didnt come from a previous page
                 }
                 LoginErrorMessage.InnerHtml = ""; //no error message with successful password
@@ -133,7 +118,7 @@ namespace WebApplication4_0
                     }
                     else
                     {
-                        Response.Redirect("Timetable.aspx");
+                        Response.Redirect("Home.aspx");
                         // redirects to admin home if the page wasn't existant
                     }
                 }
