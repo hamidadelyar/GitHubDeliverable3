@@ -17,6 +17,7 @@
         var preferences = <%= this.preferences %>;
         var weekData = <%= this.weekData %>;
         var reqId = <%= this.id %>;
+        var user = <%= this.user %>;
         var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         var starts = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
         var ends = ['09:50', '10:50', '11:50', '12:50', '13:50', '14:50', '15:50', '16:50', '17:50'];

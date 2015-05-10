@@ -205,6 +205,7 @@
     <Content Include="FindRoom.aspx" />
     <Content Include="ForgotPassword.aspx" />
     <Content Include="Home.aspx" />
+    <Content Include="Images\Fail.png" />
     <Content Include="Images\processing.gif" />
     <Content Include="Images\Edit.png" />
     <Content Include="Images\accent.png" />
