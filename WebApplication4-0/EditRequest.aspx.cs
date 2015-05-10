@@ -75,7 +75,6 @@ namespace WebApplication4_0
                 request = SQLSelect.Select("Requests", "*", "Request_ID = '" + id + "'", "");
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 List<RequestStuff> reqStuff = jss.Deserialize<List<RequestStuff>>(request);
-                System.Diagnostics.Debug.WriteLine(privates);
                 selLects = SQLSelect.Select("Request_Lecturers", "Lecturers.Lecturer_ID, Lecturers.Lecturer_Name", "Request_ID = '" + id + "'", "LEFT JOIN Lecturers ON Lecturers.Lecturer_ID = Request_Lecturers.Lecturer_ID");
                 facs = SQLSelect.Select("Facilities", "Facility_Name, Facility_ID", "1=1", "");
                 buildings = SQLSelect.Select("Buildings", "Building_Name, Building_ID, Park_ID", "1=1", "");
@@ -145,7 +144,7 @@ namespace WebApplication4_0
                 SubmitEdit("INSERT INTO Request_Lecturers VALUES('" + user.Request_ID + "','"+lects[i].Lecturer_ID+"')");
             }
             SubmitEdit("DELETE FROM Request_Preferences WHERE Request_ID = '" + user.Request_ID + "'");
-            string privates = SQLSelect.Select("Private_Rooms", "Room_ID", "Private_Rooms.Dept_ID = '" + reqStuff[0].Module_Code.Substring(0, 2) + "'", "");
+            string privates = SQLSelect.Select("Private_Rooms", "Room_ID", "Private_Rooms.Dept_ID = '" + user.Module_Code.Substring(0, 2) + "'", "");
             List<PrivateRooms> privList = jss.Deserialize<List<PrivateRooms>>(privates);
             var privCounter = 0;
             for(int i = 0; i < prefs.Count; i++)
