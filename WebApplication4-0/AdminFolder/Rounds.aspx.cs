@@ -62,7 +62,7 @@ namespace WebApplication4_0.AdminFolder
             }
             if (status == true)
             {
-                return "No add";
+                return "";
             }
             else
             {
@@ -70,7 +70,7 @@ namespace WebApplication4_0.AdminFolder
             }
         }
 
-        protected bool RoundStatusEnd()
+        protected String RoundStatusEnd()
         {
             int count = 0;
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
@@ -92,12 +92,12 @@ namespace WebApplication4_0.AdminFolder
             if (status == true)
             {
                 Button2.Visible = true;
-                return true;
+                return "";
             }
             else
             {
                 Button2.Visible = false;
-                return false;
+                return "";
             }
         }
     }

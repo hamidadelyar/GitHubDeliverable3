@@ -81,7 +81,7 @@
 
     <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT [Building_ID], [Building_Name] FROM [Buildings] ORDER BY [Building_Name]"></asp:SqlDataSource>
 
-    <asp:DropDownList ID="DropDownList1" runat="server" autopostback="True" DataSourceID="SqlDataSource3" DataTextField="Building_Name" DataValueField="Building_ID"></asp:DropDownList>
+    <asp:DropDownList ID="DropDownList1" runat="server" autopostback="True" DataSourceID="SqlDataSource3" DataTextField="Building_Name" DataValueField="Building_ID" CssClass="margin5"></asp:DropDownList>
     <div id="buttonsDiv">
         <input type="button" ID="addRoom" Value="Add Room" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
         <input type="button" ID="addFacility" Value="Facilities" onclick = "document.getElementById('light2').style.display = 'block'; document.getElementById('fade2').style.display = 'block'" />
@@ -211,7 +211,7 @@
 	                </selectparameters>
             </asp:SqlDataSource>
             
-            <table>
+            <table  Class="margin5">
                 <tr>
                     <th>Room ID</th><th>Capacity</th><th>Room Type</th><th></th>
                 </tr>
@@ -219,7 +219,8 @@
                     <asp:Repeater 
                         ID="Repeater2" 
                         runat="server"
-                        DataSourceID="SqlDataSource2">
+                        DataSourceID="SqlDataSource2"
+                        >
                             <ItemTemplate>
                                 <tr>
                                     <td><%#Eval("Room_ID") %></td><td><%#Eval("Capacity") %></td><td><%#Eval("Type_Name") %></td><td><input type="button" ID="room<%#Eval("Room_ID") %>" Value="Edit" onclick = "document.getElementById('light<%#Eval("Room_ID") %>').style.display='block';document.getElementById('fade').style.display='block'" /></td>
@@ -241,20 +242,16 @@
 		                <asp:controlparameter controlid="DropDownList1" name="Building" propertyname="SelectedValue" type="String" />
 	                </selectparameters>
             </asp:SqlDataSource>
-
+            
                    <asp:Repeater 
                         ID="Repeater3" 
                         runat="server"
                         DataSourceID="SqlDataSource4">
                             <ItemTemplate>
                                 <div id="light<%#Eval("Room_ID") %>" class="white_content">
-                                    <h1> <%#Eval("Room_ID") %> </h1>
-                                    Announcement Title: <br />
-                                    <asp:TextBox id="TextBox1" runat="server" /><br />
-                                    Announcement Details: <br />
-                                    <asp:TextBox id="TextBox2" runat="server" />
-
-                                    <br />
+                                    <h1> <%#Eval("Room_ID") %> </h1> <div style="float:right;">Capacity: </div>
+                                    <p></p>
+                                    <div class="buildingHeader"><h1 class="white">Facilities</h1></div>
                                     <asp:Button ID="Button2" runat="server" Text="Save" /> 
                                     <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light<%#Eval("Room_ID") %>').style.display='none';document.getElementById('fade').style.display='none'" />
 

@@ -83,10 +83,7 @@
                 <asp:ControlParameter name="titleDB" ControlId="TextBox1" PropertyName="Text" />
                 <asp:ControlParameter name="contentDB" ControlId="TextBox2" PropertyName="Text" />
             </InsertParameters>
-            <UpdateParameters>
-                <asp:ControlParameter Name="title" ControlId="TextBox3" PropertyName="Text"/>
-                <asp:ControlParameter Name="content" ControlId="TextBox4" PropertyName="Text" />
-            </UpdateParameters>
+
     </asp:SqlDataSource>
     <div id="TableDiv">
     <asp:GridView 
@@ -101,7 +98,7 @@
         <Columns>
             <asp:BoundField DataField="title" HeaderText="Title" SortExpression="title" />
             <asp:BoundField DataField="content" HeaderText="Content" SortExpression="content" />
-            <asp:BoundField DataField="postDate" HeaderText="Date" SortExpression="postDate" />
+            <asp:BoundField DataField="postDate" HeaderText="Date" SortExpression="postDate" ReadOnly="true"/>
             <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" />
         </Columns>
     </asp:GridView>  
