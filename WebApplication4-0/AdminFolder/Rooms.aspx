@@ -223,7 +223,7 @@
                         >
                             <ItemTemplate>
                                 <tr>
-                                    <td><%#Eval("Room_ID") %></td><td><%#Eval("Capacity") %></td><td><%#Eval("Type_Name") %></td><td><input type="button" ID="room<%#Eval("Room_ID") %>" Value="Edit" onclick = "document.getElementById('light<%#Eval("Room_ID") %>').style.display='block';document.getElementById('fade').style.display='block'" /></td>
+                                    <td><%#Eval("Room_ID") %></td><td><%#Eval("Capacity") %></td><td><%#Eval("Type_Name") %></td><td><a href="../RoomDetails.aspx?roomCode=<%#Eval("Room_ID") %>">Edit</a></td><td><a href="../AddRoom.aspx?ID=<%#Eval("Room_ID") %>">Edit</a></td>
                                 </tr>
                             </ItemTemplate>
                     </asp:Repeater>
@@ -232,6 +232,12 @@
         </ItemTemplate>
     </asp:Repeater>
 
+        <script runat="server">
+        private void EditRoom (object source, EventArgs e) 
+        {
+            Response.Redirect("AddRoom.aspx.aspx");
+        }
+    </script>
 
             <asp:SqlDataSource 
                 ID="SqlDataSource4" 

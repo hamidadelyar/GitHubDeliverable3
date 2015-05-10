@@ -44,7 +44,7 @@
         <h1 align="center">Welcome, Admin.</h1>
 
         <div class="updatesHolder">
-            <h2 class="white" align="center">New Requests:<asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT TOP 3 * FROM [Requests] ORDER BY [Module_Code]"></asp:SqlDataSource>
+            <h2 class="white" align="center">New Requests:<asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT TOP 3 * FROM [Requests] INNER JOIN [Modules] ON [Requests].[Module_Code]=[Modules].[Module_Code] WHERE Request_ID IN (SELECT [Request_ID] FROM [Bookings] Where [Confirmed] = 'Pending') ORDER BY [Request_ID] DESC"></asp:SqlDataSource>
             </h2>
             <asp:GridView 
                 ID="GridView2" 
