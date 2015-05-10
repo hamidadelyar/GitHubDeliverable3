@@ -68,20 +68,53 @@
 </style>
 
 <div class="contentHolder">
+    <!--
+    <script>
+        @{
+            var db = Database.Open("Northwind");
+            var commandText = @"SELECT CategoryId FROM Categories WHERE CategoryName = @0";
+            var result = db.QueryValue(commandText, "Beverages");
+            commandText = @"SELECT ProductName FROM Products WHERE CategoryId = @0";
+            var products = db.Query(commandText, result);
+        }
+
+        @if(products.Count > 0){
+            <div>Query returned @products.Count records</div>
+        }
+    </script>
+    -->
+
+
+
+    <asp:SqlDataSource 
+        ID="SqlDataSource6" 
+        runat="server" 
+        ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+        SelectCommand="SELECT [RoundID], [Year], [Semester], [Round_Name], [Status] FROM [Rounds] WHERE [Status] = 'open'"
+        >
+
+    </asp:SqlDataSource>
     
-    <asp:SqlDataSource ID="SqlDataSource6" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT [RoundID], [Year], [Semester], [Round_Name], [Status] FROM [Rounds] WHERE [Status] = 'open'"></asp:SqlDataSource>
-    <asp:Repeater ID="Repeater2" runat="server" DataSourceID="SqlDataSource6">
-        <ItemTemplate>
-            <div id="leftDiv">
-                <h1 style="margin-top:23px;">Current Round: <%#Eval("Round_Name") %>, Semester <%#Eval("Semester") %> <%#Eval("Year") %></h1>
-            </div>
-        </ItemTemplate>
-    </asp:Repeater>
+    <div id="leftDiv">
+        <h1 style="margin-top:23px;">
+            <asp:Repeater ID="Repeater2" runat="server" DataSourceID="SqlDataSource6" >
+                <ItemTemplate>
+            
+                    Current Round: <%#Eval("Round_Name") %>, Semester <%#Eval("Semester") %> <%#Eval("Year") %>
+            
+                </ItemTemplate>
+            </asp:Repeater>
+        </h1>
+
+    </div>
+    
+    <% =RoundStatusEnd()%> 
+
+    <asp:Button ID="Button2" runat="server" Text="End Current Round" OnClick="EndRound"  />
 
     <div id="buttonsDiv">
-         <input type="button" ID="endRound" Value="End Current Round" />
-         <input type="button" ID="addRound" Value="Add New Round" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
          
+    <% =RoundStatusAdd()%>    
 
     </div>
     <br />
@@ -89,11 +122,11 @@
     <br />
     <br />
     <br />
-    <asp:SqlDataSource ID="SqlDataSource4" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Year] FROM [Rounds]"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource4" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Year] FROM [Rounds] ORDER BY [Year] DESC"></asp:SqlDataSource>
 
     <asp:DropDownList ID="DropDownList1" runat="server" autopostback="True" DataSourceID="SqlDataSource4" DataTextField="Year" DataValueField="Year"></asp:DropDownList>
 
-    <asp:SqlDataSource ID="SqlDataSource5" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Semester] FROM [Rounds]"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource5" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Semester] FROM [Rounds] ORDER BY [Semester] DESC"></asp:SqlDataSource>
 
     <asp:DropDownList ID="DropDownList2" runat="server" autopostback="True" DataSourceID="SqlDataSource5" DataTextField="Semester" DataValueField="Semester"></asp:DropDownList>
 
@@ -118,8 +151,14 @@
     </div>
 
     <script runat="server">
-        private void NewRound (object source, EventArgs e) {
+        private void NewRound (object source, EventArgs e) 
+        {
           SqlDataSource2.Insert();
+        }
+
+        private void EndRound (object source, EventArgs e)
+        {
+            SqlDataSource2.Update();
         }
     </script>
 
@@ -128,7 +167,8 @@
         runat="server" 
         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
         SelectCommand="SELECT DISTINCT [Year], [Semester] FROM [Rounds] WHERE [year] = @year AND [semester] = @semester"        
-        InsertCommand="INSERT INTO [Rounds] ([Year],[Semester],[Round_Name],[Start_Date],[End_Date],[Status]) VALUES (@yearDB,@semesterDB,@RoundDB,GETDATE(),'','closed')">
+        InsertCommand="INSERT INTO [Rounds] ([Year],[Semester],[Round_Name],[Start_Date],[End_Date],[Status]) VALUES (@yearDB,@semesterDB,@RoundDB,GETDATE(),'','open')"
+        UpdateCommand="UPDATE [rounds] SET [status] = 'closed' WHERE [status] = 'open'">
             <selectparameters>
 		        <asp:controlparameter controlid="DropDownList1" name="year" propertyname="SelectedValue" type="String" />
                 <asp:controlparameter controlid="DropDownList2" name="semester" propertyname="SelectedValue" type="String" />

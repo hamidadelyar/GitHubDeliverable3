@@ -44,8 +44,26 @@
         <h1 align="center">Welcome, Admin.</h1>
 
         <div class="updatesHolder">
-            <h2 class="white" align="center">New Requests:</h2>
-            <p class="white" align="center">There are currently no new requests.</p>
+            <h2 class="white" align="center">New Requests:<asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT TOP 3 * FROM [Requests] ORDER BY [Module_Code]"></asp:SqlDataSource>
+            </h2>
+            <asp:GridView 
+                ID="GridView2" 
+                runat="server" 
+                AutoGenerateColumns="False" 
+                DataKeyNames="Request_ID" 
+                DataSourceID="SqlDataSource2"
+                ForeColor="White"
+                HorizontalAlign="center"
+                EmptyDataText="Currently no pending requests." >
+                <Columns>
+                    <asp:BoundField DataField="Module_Code" HeaderText="Module Code" SortExpression="Module_Code" />
+                    <asp:BoundField DataField="Day" HeaderText="Day" SortExpression="Day" />
+                    <asp:BoundField DataField="Start_Time" HeaderText="Start Time" SortExpression="Start_Time" />
+                    <asp:BoundField DataField="End_Time" HeaderText="End Time" SortExpression="End_Time" />
+                    <asp:BoundField DataField="Dept_ID" HeaderText="Department" SortExpression="Dept_ID" />
+                </Columns>
+                </asp:GridView>
+            <p class="white" align="center">Head to <a href="Requests.aspx">Request</a> to respond.</p>
             <br />
             <br />
         </div>
