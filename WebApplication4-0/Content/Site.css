@@ -44,6 +44,11 @@ mark {
 .float-left {
     float: left;
 }
+.loginStuff {
+    position: relative;
+    right: 0px;
+    top: 0px;
+}
 
 .float-right {
     float: right;
@@ -377,7 +382,12 @@ fieldset.open-auth-providers {
         font-size:1.3em;
         margin-right: 8px;
         width: auto;
+    float: right;
     }
+#profBtn {
+    margin-right: 8px;
+    cursor: pointer;
+}
 fieldset {
     border: none;
     margin: 0;
