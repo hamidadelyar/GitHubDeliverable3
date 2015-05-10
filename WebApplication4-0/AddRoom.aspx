@@ -185,7 +185,11 @@
             {
                 if(rooms[i]['Room_ID'].toUpperCase() == subst && rooms[i]['Dept_ID'] != department)
                 {
-                    return false;
+                    if ((rooms[i]['Pool'] == 1 || rooms[i]['Pool'] == true) && department == 'AD') {
+
+                    } else {
+                        return false;   
+                    }
                 }
             }
             return true;
@@ -588,7 +592,7 @@
         {
             line-height:17.5px;
             border-radius:3px;
-            border:1px #3E454D; solid;
+            border:1px #3E454D solid;
             color:#FFF;
             width: -moz-calc(100% - 325px);
             width: -webkit-calc(100% - 325px);
