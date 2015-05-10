@@ -923,7 +923,7 @@ $(document).ready(function () {
 
         /*if module name is empty */
 
-        if (startTime > endTime) {
+        if (startTime >= endTime) {
             flag = false;
             showValidation();
             $('#errorList').append("<li><b>'Start Time'</b> must be before <b>'End Time'</b>.  Please change desired times.</li>");
