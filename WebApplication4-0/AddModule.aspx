@@ -63,7 +63,7 @@
         {
             var modCode = $('.codeTxt').val().toUpperCase().trim();
             var modName = $('.nameTxt').val().Capitalise().trim();
-            $('.main').html('<span class="loader" ><img src="/Images/processing.gif" width="220" height="20" /></span>');
+            $('.main').html('<span class="loader" ><img src="./Images/processing.gif" width="220" height="20" /></span>');
             $.ajax({
                 type: "POST",
                 url: "AddModule.aspx/InsertModule",
@@ -75,7 +75,7 @@
                     window.location.reload();
                 },
                 success: function (result) {
-                    $('.main').html('<div class="hdr" ><b>ADD MODULE</b></div><div class="conf" ><img src="/Images/Done.png" width="30" height="30" /><span>&nbsp;Module has been added.</span></div>');
+                    $('.main').html('<div class="hdr" ><b>ADD MODULE</b></div><div class="conf" ><img src="./Images/Done.png" width="30" height="30" /><span>&nbsp;Module has been added.</span></div>');
                     setTimeout(function () {
                         window.location.href = "Modules.aspx"; //will redirect to your blog page (an ex: blog.html)
                     }, 2000);
