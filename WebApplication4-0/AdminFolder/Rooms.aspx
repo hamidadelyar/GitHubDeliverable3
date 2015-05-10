@@ -223,7 +223,7 @@
                         >
                             <ItemTemplate>
                                 <tr>
-                                    <td><%#Eval("Room_ID") %></td><td><%#Eval("Capacity") %></td><td><%#Eval("Type_Name") %></td><td><a href="../AddRoom.aspx?ID=<%#Eval("Room_ID") %>">Edit</a></td>
+                                    <td><%#Eval("Room_ID") %></td><td><%#Eval("Capacity") %></td><td><%#Eval("Type_Name") %></td><td><a href="../RoomDetails.aspx?roomCode=<%#Eval("Room_ID") %>">Edit</a></td><td><a href="../AddRoom.aspx?ID=<%#Eval("Room_ID") %>">Edit</a></td>
                                 </tr>
                             </ItemTemplate>
                     </asp:Repeater>
