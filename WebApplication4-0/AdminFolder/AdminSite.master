@@ -84,6 +84,7 @@
                         <li><a runat="server" href="Rounds.aspx">Rounds</a></li>
                         <li><a runat="server" href="Rooms.aspx">Rooms</a></li>
                         <li><a runat="server" href="Users.aspx">Users</a></li>
+                        <li><a runat="server" href="ArchiveModules.aspx">Run Archive</a></li>
                     </ul>
                 </nav>
             </div>
