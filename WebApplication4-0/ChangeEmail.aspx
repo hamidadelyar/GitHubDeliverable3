@@ -56,7 +56,7 @@
         function changeEmail()
         {
             var email = $('.emailTxt').val();
-            $('.main').html('<span class="loader" ><img src="/Images/processing.gif" width="220" height="20" /></span>');
+            $('.main').html('<span class="loader" ><img src="./Images/processing.gif" width="220" height="20" /></span>');
             $.ajax({
                 type: "POST",
                 url: "ChangeEmail.aspx/ChangeEmails",
@@ -69,7 +69,7 @@
                 },
                 success: function (result) {
                     if (result.d) {
-                        $('.main').html('<div class="hdr" ><b>CHANGE EMAIL</b></div><div class="conf" ><img src="/Images/Done.png" width="30" height="30" /><span>&nbsp;Email changed confirmation has been sent to: ' + email + '</span></div>');
+                        $('.main').html('<div class="hdr" ><b>CHANGE EMAIL</b></div><div class="conf" ><img src="./Images/Done.png" width="30" height="30" /><span>&nbsp;Email changed confirmation has been sent to: ' + email + '</span></div>');
                         setTimeout(function () {
                             window.location.href = "Profile.aspx"; //will redirect to your blog page (an ex: blog.html)
                         }, 2000);
