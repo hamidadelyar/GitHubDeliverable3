@@ -13,12 +13,14 @@
         var buildName = "";
         var rooms = <%= this.rooms %>;
         var department = <%= this.department %>;
+        var roomCode = <%= this.roomCode %>;
         department = department[0]['Dept_ID'];
         var edit = false;
         var capacity = 0;
         var type = "";
         var buildCode = ""
         $(document).ready(function () {
+            $('.roomTxt').val(roomCode);
             $('.confirmDel').hide();
             $('.dark').hide();
             $('.deleteBtn').click(function(){

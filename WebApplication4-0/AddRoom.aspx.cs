@@ -17,6 +17,7 @@ namespace WebApplication4_0
         public string facs = "";
         public string rooms = "";
         public string department = "";
+        public string roomCode = "''";
 
         protected void Page_PreInit(object sender, EventArgs e)
         {
@@ -49,6 +50,10 @@ namespace WebApplication4_0
             if(Session["LoggedIn"] != null)
             {
                 department = SQLSelect.Select("Users", "Dept_ID", "Username = '" + Session["Username"] + "'", "");
+            }
+            if (Request.QueryString["ID"] != null)
+            {
+                roomCode = "'"+Request.QueryString["ID"]+"'";
             }
         }
 
