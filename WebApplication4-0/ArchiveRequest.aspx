@@ -14,7 +14,7 @@
                 <asp:ListItem Selected="True">2014</asp:ListItem>
                 <asp:ListItem>2013</asp:ListItem>
             </asp:DropDownList></p> 
-    <%-- Gridview used to display the results of the SQL query --%>
+    <%-- Gridview used to display the results of the SQL query i --%>
     <asp:GridView ID="ArchiveRequests" runat="server" AllowSorting="True" AutoGenerateColumns="False" DataSourceID="SqlDataSource1" CellPadding="10" CellSpacing="10" HorizontalAlign="Center">
         <Columns>
             <asp:BoundField DataField="Module_Code" HeaderText="Module Code" SortExpression="Module_Code" />
