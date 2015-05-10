@@ -103,13 +103,55 @@
     </style>
     
     <div class="contentHolder">
-        <h1 align="center">Current Round: </h1>
+
      
+        <asp:SqlDataSource 
+            ID="SqlDataSource6" 
+            runat="server" 
+            ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+            SelectCommand="SELECT [RoundID], [Year], [Semester], [Round_Name], [Status] FROM [Rounds] WHERE [Status] = 'open'"
+            >
+
+        </asp:SqlDataSource>
+
+        <h1 style="margin-top:23px;" align="center">
+            <asp:Repeater ID="Repeater4" runat="server" DataSourceID="SqlDataSource6" >
+                <ItemTemplate>
+            
+                    Current Round: <%#Eval("Round_Name") %>, Semester <%#Eval("Semester") %> <%#Eval("Year") %>
+            
+                </ItemTemplate>
+            </asp:Repeater>
+            <% =RoundStatusAddMessage()%> 
+        </h1>
 
         <div class="updatesHolder">
-            <h2 class="white" align="center">Request Results:</h2>
-            <p class="white" align="center">There are currently no new request results.</p>
-            <br />
+            <h2 class="white" align="center">Latest Request Results:</h2>
+            <asp:SqlDataSource 
+                ID="SqlDataSource3" 
+                runat="server" 
+                ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+                SelectCommand="SELECT TOP 3 * FROM [Requests] INNER JOIN [Modules] ON [Requests].[Module_Code]=[Modules].[Module_Code] WHERE Request_ID IN (SELECT [Request_ID] FROM [Bookings] Where [Confirmed] = 'Allocated') ORDER BY [Request_ID] DESC">
+
+            </asp:SqlDataSource>
+            <asp:GridView 
+                ID="GridView2" 
+                runat="server" 
+                AutoGenerateColumns="False" 
+                DataKeyNames="Request_ID" 
+                DataSourceID="SqlDataSource3"
+                ForeColor="White"
+                HorizontalAlign="center"
+                EmptyDataText="Currently No Request Results." 
+                cellpadding="10">
+                <Columns>
+                    <asp:BoundField DataField="Module_Code" HeaderText="Module Code" SortExpression="Module_Code" />
+                    <asp:BoundField DataField="Day" HeaderText="Day" SortExpression="Day" />
+                    <asp:BoundField DataField="Start_Time" HeaderText="Start Period" SortExpression="Start_Time" />
+                    <asp:BoundField DataField="End_Time" HeaderText="End Period" SortExpression="End_Time" />
+                </Columns>
+                </asp:GridView>
+             <p class="white" align="center">Head to <a style="color:white;" href="ViewRequest.aspx">View Requests</a> to view.</p>
             <br />
         </div>
         <table id="containerTable">
@@ -158,7 +200,8 @@
                     <asp:Repeater ID="Repeater3" runat="server" DataSourceID="SqlDataSource2">
                         <ItemTemplate>
                             <tr>
-                                <td>Request for <%#Eval("Module_Code") %> made</td><td></td><td><input type="button" Value="View" /></td>
+                                <td>Request for <%#Eval("Module_Code") %> made</td><td></td><td>
+                                    <asp:Button ID="Button1" runat="server" Text="View" OnClick="linkRequests" /></td>
                             </tr>
                         </ItemTemplate>
                     </asp:Repeater>
@@ -166,6 +209,14 @@
             </tr>
         </table>      
         
+            <script runat="server">
+
+        private void linkRequests (object source, EventArgs e)
+        {
+            Response.Redirect("ViewRequest.aspx");
+        }
+    </script>
+
                     <asp:Repeater ID="Repeater2" runat="server" DataSourceID="SqlDataSource1">
                         <ItemTemplate>
                             <div id="light<%#Eval("announcementID") %>" class="white_content">

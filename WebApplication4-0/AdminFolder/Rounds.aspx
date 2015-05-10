@@ -139,9 +139,17 @@
         Round Number: <br />
         <asp:TextBox id="TextBox1" runat="server" /><br />
         Academic Year: <br />
-        <asp:TextBox id="TextBox2" runat="server" /><br />
+        <asp:DropDownList ID="DropDownList4" runat="server">
+            <asp:ListItem Text="2015/2016" Value="2015/2016"></asp:ListItem>
+            <asp:ListItem Text="2014/2015" Value="2014/2015"></asp:ListItem>
+            <asp:ListItem Text="2013/2014" Value="2013/2014"></asp:ListItem>
+            <asp:ListItem Text="2012/2013" Value="2012/2013"></asp:ListItem>
+        </asp:DropDownList><br />
         Semester: <br />
-        <asp:TextBox id="TextBox3" runat="server" /><br />
+        <asp:DropDownList ID="DropDownList3" runat="server">
+            <asp:ListItem Text="1" Value="1"></asp:ListItem>
+            <asp:ListItem Text="2" Value="2"></asp:ListItem>
+        </asp:DropDownList><br />
 
 
         <br />
@@ -179,8 +187,8 @@
 	        </selectparameters>
             <InsertParameters>
                 <asp:ControlParameter name="RoundDB" ControlId="TextBox1" PropertyName="Text" />
-                <asp:ControlParameter name="yearDB" ControlId="TextBox2" PropertyName="Text" />
-                <asp:ControlParameter name="semesterDB" ControlId="TextBox3" PropertyName="Text" />
+                <asp:ControlParameter name="yearDB" ControlId="DropDownList4" PropertyName="Text" />
+                <asp:ControlParameter name="semesterDB" ControlId="DropDownList3" PropertyName="Text" />
             </InsertParameters>
     </asp:SqlDataSource>
     

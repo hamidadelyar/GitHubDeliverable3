@@ -73,6 +73,15 @@
         float:right;
         margin-right:5%;
     }
+
+    th {
+        padding-right:15px;
+    }
+
+    td {
+        
+        padding-right:15px;
+    }
 </style>
 
 <div class="contentHolder">
