@@ -20,14 +20,49 @@ namespace WebApplication4_0.AdminFolder
 
         }
 
+
+
+        /*
+            string myScalarQuery = "SELECT * rounds WHERE status = 'open'";
+            SqlConnection myConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["team02ConnectionString1"].ConnectionString);
+            SqlCommand myCommand = new SqlCommand(myScalarQuery, myConnection);
+            myCommand.Connection.Open();
+            int count = (int)myCommand.ExecuteScalar();
+            myConnection.Close();
+        
+         *             string queryString = "SELECT * Rounds WHERE Status = 'open'";
+            string connectionString = "team02ConnectionString1";
+            using (SqlConnection connection = new SqlConnection(
+                       connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Connection.Open();
+                count = (int)command.ExecuteScalar();
+                command.Connection.Close();
+            }
+         
+         */
+
         protected String RoundStatusAdd()
         {
+            int count = 0;
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
-            string sql = "SELECT * rounds WHERE status = 'open'";
-            var status = false;
+            string sql = "SELECT count(*) FROM Rounds WHERE Status = 'open'";
+
+            conn.Open();
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            count = (int)cmd.ExecuteScalar();
+            conn.Close();
+            conn.Dispose();
+
+            var status = true; 
+
+            if (count == 0) { // no current open round
+                status = false; 
+            }
             if (status == true)
             {
-                return "";
+                return "No add";
             }
             else
             {
@@ -37,7 +72,23 @@ namespace WebApplication4_0.AdminFolder
 
         protected bool RoundStatusEnd()
         {
-            var status = false;
+            int count = 0;
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+            string sql = "SELECT count(*) FROM Rounds WHERE Status = 'open'";
+
+            conn.Open();
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            count = (int)cmd.ExecuteScalar();
+            conn.Close();
+            conn.Dispose();
+
+            var status = true;
+
+            if (count == 0)
+            { // no current open round
+                status = false;
+            }
+
             if (status == true)
             {
                 Button2.Visible = true;
