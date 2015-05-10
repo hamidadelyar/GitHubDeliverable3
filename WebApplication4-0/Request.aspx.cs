@@ -1013,6 +1013,8 @@ namespace WebApplication4_0
                             connection.Close();
 
                         }
+
+                        //here2
                         if (numRooms > 1) //if at least 2 rooms selected, this inserts the 2nd room to the table
                         {
                             //if room and building specified
@@ -1708,9 +1710,9 @@ namespace WebApplication4_0
                             for(int i=0; i<allocatedRequestIDs.ToArray().Length; i++){
                                 //gives requestIDs of those that have been allocated
                                 requestIDAllocatedList.Add(requestNumsArray[allocatedRequestIDs.ToArray()[i]]); //i.e. if A.0.01 wanted, this has been allocated to requestID 1
-                                result+= "room:" + room1 + "has been allocated with RequestID: " + requestNumsArray[allocatedRequestIDs.ToArray()[i]];
-                                result += "<br />";
-                                result += "the room preferences are: " + prefIDArray[allocatedRequestIDs.ToArray()[i]];
+                                //result+= "room:" + room1 + "has been allocated with RequestID: " + requestNumsArray[allocatedRequestIDs.ToArray()[i]];
+                                //result += "<br />";
+                                //result += "the room preferences are: " + prefIDArray[allocatedRequestIDs.ToArray()[i]];
                             }
                             int[] requestIDAllocated = requestIDAllocatedList.ToArray();
                             List<int> AllocatedWeeksList = new List<int>();
@@ -1829,14 +1831,258 @@ namespace WebApplication4_0
                                 //otherwise can start writing to the the table
                                 if (flagRoom1 == true)
                                 {
+                                    /* Writes to the [Requests] table*/
+                                    string command = "Insert into [Requests]  (Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students, Dept_ID)";
+                                    command += " VALUES (@Module_Code, @Day, @Start_Time, @End_Time, @Semester, @Year, @Round, @Priority, @Number_Rooms, @Number_Students, @Dept_ID)";
 
+                                    SqlCommand cmd = new SqlCommand(command);
+                                    cmd.CommandType = CommandType.Text;
+
+                                    cmd.Parameters.AddWithValue("@Module_Code", modcode);
+                                    cmd.Parameters.AddWithValue("@Day", day);
+                                    cmd.Parameters.AddWithValue("@Start_Time", startTime);
+                                    cmd.Parameters.AddWithValue("@End_Time", endTime);
+                                    cmd.Parameters.AddWithValue("@Semester", semester);    //need to write function to work this out
+                                    cmd.Parameters.AddWithValue("@Year", DateTime.Now.Year);     //year
+                                    cmd.Parameters.AddWithValue("@Round", 5);       //round for adhoc is 5 - identifier
+                                    cmd.Parameters.AddWithValue("@Priority", priority);    //
+                                    cmd.Parameters.AddWithValue("@Number_Rooms", numRooms);
+                                    cmd.Parameters.AddWithValue("@Number_Students", capacity);
+                                    cmd.Parameters.AddWithValue("@Dept_ID", dep);
+                                    cmd.Connection = connection;
+                                    connection.Open(); //opening connection with the DB
+                                    cmd.ExecuteNonQuery();
+                                    connection.Close();
+
+                                    //gets Request_Id of the submitted adhoc request.
+                                    string query = "select Request_ID from [Requests] where Module_Code = '" + modcode + "' and Day = " + day;
+                                    query += " and Start_Time = " + startTime + " and End_Time = " + endTime + " and Semester = " + semester + " and Year = " + DateTime.Now.Year;
+                                    query += " and Round = " + 5 + " and Priority = " + priority + " and Number_Rooms = " + numRooms + " and Number_Students = " + capacity;
+
+                                    connection.Open(); //opening connection with the DB
+                                    SqlCommand comm9 = new SqlCommand(query, connection);  //1st argument is query, 2nd argument is connection with DB
+                                    SqlDataReader reader9 = comm9.ExecuteReader();
+                                    while (reader9.Read())
+                                    {
+                                        requestID = reader9.GetInt32(0);
+                                    }
+                                    connection.Close();
+
+
+                                    /* writes to the [Request_Lecturers] if the Lecturer_ID has been obtained */
+                                    if (lecturerID != "")
+                                    {
+                                        string command2 = "insert into [Request_Lecturers] (Request_ID, Lecturer_ID) Values (@Request_ID, @Lecturer_ID)";
+                                        SqlCommand cmd2 = new SqlCommand(command2);
+                                        cmd2.CommandType = CommandType.Text;
+                                        cmd2.Parameters.AddWithValue("@Request_ID", requestID);
+                                        cmd2.Parameters.AddWithValue("@Lecturer_ID", lecturerID);
+                                        cmd2.Connection = connection;
+                                        connection.Open(); //opening connection with the DB
+                                        cmd2.ExecuteNonQuery();
+                                        connection.Close();
+                                    }
+                                    /* writes to the [Request_Lecturers] if the Lecturer_ID for 2nd lecturer has been obtained */
+                                    if (lecturer2ID != "")
+                                    {
+                                        string command3 = "insert into [Request_Lecturers] (Request_ID, Lecturer_ID) Values (@Request_ID, @Lecturer_ID)";
+                                        SqlCommand cmd3 = new SqlCommand(command3);
+                                        cmd3.CommandType = CommandType.Text;
+                                        cmd3.Parameters.AddWithValue("@Request_ID", requestID);
+                                        cmd3.Parameters.AddWithValue("@Lecturer_ID", lecturer2ID);
+                                        cmd3.Connection = connection;
+                                        connection.Open(); //opening connection with the DB
+                                        cmd3.ExecuteNonQuery();
+                                        connection.Close();
+                                    }
+                                    if (lecturer3ID != "")
+                                    {
+                                        string command4 = "insert into [Request_Lecturers] (Request_ID, Lecturer_ID) Values (@Request_ID, @Lecturer_ID)";
+                                        SqlCommand cmd4 = new SqlCommand(command4);
+                                        cmd4.CommandType = CommandType.Text;
+                                        cmd4.Parameters.AddWithValue("@Request_ID", requestID);
+                                        cmd4.Parameters.AddWithValue("@Lecturer_ID", lecturer3ID);
+                                        cmd4.Connection = connection;
+                                        connection.Open(); //opening connection with the DB
+                                        cmd4.ExecuteNonQuery();
+                                        connection.Close();
+                                    }
+                                    //here
+
+
+                                    if (room1 == "" || room1 == "0")
+                                    {
+                                        room1 = "";
+                                    }
+                                    if (buildingID1 == "")
+                                    {
+                                        buildingID1 = "";
+                                    }
+
+                                    /* writes to the [Request_Preferences] Table */
+                                    //if room and building specified
+
+
+                                    if (room1 != "" && room1 != "0" && buildingID1 != "0")
+                                    {
+                                        string command5 = "insert into [Request_Preferences] (Request_ID, Room_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                                        SqlCommand cmd5 = new SqlCommand(command5);
+                                        cmd5.CommandType = CommandType.Text;
+                                        cmd5.Parameters.AddWithValue("@Request_ID", requestID);
+                                        cmd5.Parameters.AddWithValue("@Room_ID", room1);
+                                        cmd5.Parameters.AddWithValue("@Building_ID", buildingID1);
+                                        cmd5.Parameters.AddWithValue("@Room_Type", roomType1);
+                                        cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
+                                        cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
+                                        cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
+                                        cmd5.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                                        cmd5.Connection = connection;
+                                        connection.Open(); //opening connection with the DB
+                                        cmd5.ExecuteNonQuery();
+                                        connection.Close();
+                                    }
+                                    //if room not specified, but building is
+                                    if ((room1 == "" && room1 == "0") && buildingID1 != "0")
+                                    {
+                                        string command5 = "insert into [Request_Preferences] (Request_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Building_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                                        SqlCommand cmd5 = new SqlCommand(command5);
+                                        cmd5.CommandType = CommandType.Text;
+                                        cmd5.Parameters.AddWithValue("@Request_ID", requestID);
+                                        cmd5.Parameters.AddWithValue("@Building_ID", buildingID1);
+                                        cmd5.Parameters.AddWithValue("@Room_Type", roomType1);
+                                        cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
+                                        cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
+                                        cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
+                                        cmd5.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                                        cmd5.Connection = connection;
+                                        connection.Open(); //opening connection with the DB
+                                        cmd5.ExecuteNonQuery();
+                                        connection.Close();
+                                    }
+                                    //if neither room or building is specified
+                                    if ((room1 == "" || room1 == "0") && buildingID1 == "0")
+                                    {
+                                        string command5 = "insert into [Request_Preferences] (Request_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                                        SqlCommand cmd5 = new SqlCommand(command5);
+                                        cmd5.CommandType = CommandType.Text;
+                                        cmd5.Parameters.AddWithValue("@Request_ID", requestID);
+                                        cmd5.Parameters.AddWithValue("@Room_Type", roomType1);
+                                        cmd5.Parameters.AddWithValue("@Park_ID", parkID1);
+                                        cmd5.Parameters.AddWithValue("@Number_Students", roomCap1);
+                                        cmd5.Parameters.AddWithValue("@Special_Requirements", specialR);
+                                        cmd5.Parameters.AddWithValue("@Weeks", defaultWeeks);
+                                        cmd5.Connection = connection;
+                                        connection.Open(); //opening connection with the DB
+                                        cmd5.ExecuteNonQuery();
+                                        connection.Close();
+
+                                    }
+
+
+                                    /* 
+                                      gets the preference id for the first room with the request_id equal to submitted request id. 
+                                     */
+
+                                    string queryPrefID = "select Pref_ID from [Request_Preferences] where Request_ID = " + requestID;
+                                    connection.Open(); //opening connection with the DB
+                                    SqlCommand getPrefID = new SqlCommand(queryPrefID, connection);  //1st argument is query, 2nd argument is connection with DB
+                                    int prefID1 = Convert.ToInt32(getPrefID.ExecuteScalar().ToString());
+                                    int prefID2 = prefID1 + 1;
+                                    int prefID3 = prefID2 + 1;
+                                    connection.Close();
+
+
+                                    /*
+                                     * -- Writes to the weeks table --
+                                     */
+
+                                    //always bigger than 0.
+                                    if (numRooms > 0) //then there is only 1 preference ID, so only inserts weeks for room1.
+                                    {
+                                        if (defaultWeeks != 1)
+                                        { //only if user has chosen custom weeks
+                                            //string weeksQuery = "insert into [Request_Preferences] (Request_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Values (@Request_ID, @Room_Type, @Park_ID, @Number_Students, @Special_Requirements, @Weeks)";
+                                            string weeksQuery = "";
+
+                                            for (int k = 0; k < weeks.Length; k++)
+                                            {
+                                                weeksQuery += "insert into [Request_Weeks] (Pref_ID, Week_ID) Values (" + prefID1 + ", " + weeks[k].ToString() + ") ";
+                                            }
+                                            SqlCommand cmdWeeks = new SqlCommand(weeksQuery);
+                                            cmdWeeks.CommandType = CommandType.Text;
+                                            cmdWeeks.Connection = connection;
+                                            connection.Open(); //opening connection with the DB
+                                            cmdWeeks.ExecuteNonQuery();
+                                            connection.Close();
+                                        }
+                                    }
+
+
+                                    /*
+                                   * 
+                                    <-- WRITES TO THE [REQUEST_FACILITIES] TABLE --> 
+                                   * 
+                                   */
+                                    string roomFacilityQuery1 = "";
+                                    if (comp == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'C') ";
+                                    if (ddp == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'DDP') ";
+                                    if (dp == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'DP') ";
+                                    if (il == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'I') ";
+                                    if (mp == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'MP') ";
+                                    if (pa == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'PA') ";
+                                    if (plasma == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'PS') ";
+                                    if (rev == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'RLC') ";
+                                    if (mic == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'RM') ";
+                                    if (vis == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'V') ";
+                                    if (wc == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'W') ";
+                                    if (wb == true)
+                                        roomFacilityQuery1 += "insert into [Request_Facilities] (Pref_ID, Facility_ID) Values (" + prefID1 + ", 'WB') ";
+
+
+                                    /*
+                                     * FINALLY WRITES TO THE BOOKINGS TABLE - always allocated as room has been checked and it is available
+                                     * 
+                                     */
+
+                                    string writeBooking = "insert into [Bookings] (Request_ID, Confirmed) Values (@Request_ID, @Confirmed) ";
+                                    SqlCommand cmdWB = new SqlCommand(writeBooking);
+                                    cmdWB.Parameters.AddWithValue("@Request_ID", requestID);
+                                    cmdWB.Parameters.AddWithValue("@Confirmed", "Allocated");
+                                    cmdWB.CommandType = CommandType.Text;
+                                    cmdWB.Connection = connection;
+                                    connection.Open(); //opening connection with the DB
+                                    cmdWB.ExecuteNonQuery();
+                                    connection.Close();
+
+                                    result = "Congratulations, your room has been booked successfully! <br /><br />";
+                                    result += "Your <strong>Request ID</strong> is: <strong>" + requestID + "</strong>";
+
+                                }
+                                else
+                                {
+                                    result = "Sorry, this room is unavailable for the time/date that you have requested";
                                 }
 
 
                             }
 
-
-                        }// if room != ""
+                        }
+                        else
+                        {
+                            result = "For adhoc you need to select a desired room e.g. A.0.01";
+                        }
+                        // if room != ""
                        
 
 
@@ -1844,7 +2090,7 @@ namespace WebApplication4_0
                         connection.Close();
                     }else{
 
-                        result += "Sorry, you can only send an AdHoc request for one room. ";
+                        result += "Sorry, you can only send an AdHoc request for one room at a time. ";
                
                     }
 
@@ -1856,7 +2102,7 @@ namespace WebApplication4_0
             {
                 //result = "You cannot submit an AdHoc request while rounds are open. Please send the request to rounds instead.";
             }
-            result += "flag = " + flagRoom1;
+            //result += "flag = " + flagRoom1;
             return result;
         }
 
