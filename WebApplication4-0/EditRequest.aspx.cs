@@ -73,10 +73,13 @@ namespace WebApplication4_0
                     lectData = SQLSelect.Select("Lecturers", "Lecturer_ID + ' - ' + Lecturer_Name AS Lecturer_ID", "LEFT(Lecturer_ID, 2) = '" + Session["Username"].ToString().Substring(0, 2) + "'", ""); // runs a select to get all the lecturers from the user's department
                 }
                 request = SQLSelect.Select("Requests", "*", "Request_ID = '" + id + "'", "");
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+                List<RequestStuff> reqStuff = jss.Deserialize<List<RequestStuff>>(request);
+                System.Diagnostics.Debug.WriteLine(privates);
                 selLects = SQLSelect.Select("Request_Lecturers", "Lecturers.Lecturer_ID, Lecturers.Lecturer_Name", "Request_ID = '" + id + "'", "LEFT JOIN Lecturers ON Lecturers.Lecturer_ID = Request_Lecturers.Lecturer_ID");
                 facs = SQLSelect.Select("Facilities", "Facility_Name, Facility_ID", "1=1", "");
                 buildings = SQLSelect.Select("Buildings", "Building_Name, Building_ID, Park_ID", "1=1", "");
-                rooms = SQLSelect.Select("Rooms", "Room_ID, Building_ID, Room_Type, Capacity", "1=1", "");
+                rooms = SQLSelect.Select("Rooms", "Rooms.Room_ID, Building_ID, Room_Type, Capacity", " (Rooms.Pool = 1 OR Private_Rooms.Dept_ID = '" + reqStuff[0].Module_Code.Substring(0,2) + "')", "LEFT JOIN Private_Rooms ON Private_Rooms.Room_ID = Rooms.Room_ID");
                 preferences = SQLSelect.Select("Request_Preferences", "Pref_ID, Room_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks", "Request_ID = '" + id + "'", "");
                 weekData = SQLSelect.Select("Request_Weeks", "Request_Weeks.Pref_ID, Week_ID", "Request_ID = '" + id + "'", "LEFT JOIN Request_Preferences ON Request_Preferences.Pref_ID = Request_Weeks.Pref_ID");
                 facData = SQLSelect.Select("Request_Facilities", "Request_Facilities.Pref_ID, Facility_ID", "Request_ID = '" + id + "'", "LEFT JOIN Request_Preferences ON Request_Preferences.Pref_ID = Request_Facilities.Pref_ID");
@@ -142,6 +145,9 @@ namespace WebApplication4_0
                 SubmitEdit("INSERT INTO Request_Lecturers VALUES('" + user.Request_ID + "','"+lects[i].Lecturer_ID+"')");
             }
             SubmitEdit("DELETE FROM Request_Preferences WHERE Request_ID = '" + user.Request_ID + "'");
+            string privates = SQLSelect.Select("Private_Rooms", "Room_ID", "Private_Rooms.Dept_ID = '" + reqStuff[0].Module_Code.Substring(0, 2) + "'", "");
+            List<PrivateRooms> privList = jss.Deserialize<List<PrivateRooms>>(privates);
+            var privCounter = 0;
             for(int i = 0; i < prefs.Count; i++)
             {
                 var newID = SubmitPref("INSERT INTO Request_Preferences(Request_ID, Room_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks) Output Inserted.Pref_ID VALUES('" + user.Request_ID + "','" + prefs[i].Room_ID + "','" + prefs[i].Building_ID + "','" + prefs[i].Room_Type + "','" + prefs[i].Park_ID + "','" + prefs[i].Number_Students + "','" + prefs[i].Special_Requirements + "','" + prefs[i].Weeks + "')");
@@ -159,15 +165,19 @@ namespace WebApplication4_0
                         SubmitEdit("INSERT INTO Request_Facilities VALUES('" + newID + "','" + facs[j].Facility_ID + "')");
                     }
                 }
+                for (int j = 0; j < privList.Count; j++)
+                {
+                    if (privList[j].Room_ID == prefs[i].Room_ID)
+                    {
+                        privCounter++;
+                    }
+                }
             }
-            if(username == "'admin'")
+            if (privCounter == prefs.Count)
             {
-                SubmitEdit("UPDATE Bookings SET Confirmed = 'Allocated' WHERE Request_ID = '" + user.Request_ID + "'");
+                status = "Allocated";
             }
-            else
-            {
-                SubmitEdit("UPDATE Bookings SET Confirmed = '"+status+"' WHERE Request_ID = '" + user.Request_ID + "'");
-            }
+            SubmitEdit("UPDATE Bookings SET Confirmed = '"+status+"' WHERE Request_ID = '" + user.Request_ID + "'");
             return true;
         }
 
@@ -216,6 +226,28 @@ namespace WebApplication4_0
             public string End_Time { get; set; }
             public int Priority { get; set; }
             public string Number_Rooms { get; set; }
+        }
+
+        private class RequestStuff
+        {
+            public int Request_ID { get; set; }
+            public string Module_Code { get; set; }
+            public int Day { get; set; }
+            public int Start_Time { get; set; }
+            public int End_Time { get; set; }
+            public bool Semester { get; set; }
+            public int Year { get; set; }
+            public int Round { get; set; }
+            public bool Priority { get; set; }
+            public int Number_Rooms { get; set; }
+            public int Number_Students { get; set; }
+            public string Dept_ID { get; set; }
+        }
+
+
+        private class PrivateRooms
+        {
+            public string Room_ID { get; set; }
         }
 
         public class Lecturers
