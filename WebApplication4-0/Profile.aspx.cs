@@ -11,6 +11,29 @@ namespace WebApplication4_0
     public partial class Profile : System.Web.UI.Page
     {
         public string details = "";
+        protected void Page_PreInit(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Session["LoggedIn"] != null)
+                {
+                    if (Session["Username"].ToString() == "admin")
+                    {
+                        this.Page.MasterPageFile = "~/AdminFolder/AdminSite.master";
+                    }
+                    else
+                    {
+                        this.Page.MasterPageFile = "~/Site.master";
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["LoggedIn"] != null)
