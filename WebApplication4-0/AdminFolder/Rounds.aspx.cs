@@ -70,6 +70,34 @@ namespace WebApplication4_0.AdminFolder
             }
         }
 
+        protected String RoundStatusAddMessage()
+        {
+            int count = 0;
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
+            string sql = "SELECT count(*) FROM Rounds WHERE Status = 'open'";
+
+            conn.Open();
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            count = (int)cmd.ExecuteScalar();
+            conn.Close();
+            conn.Dispose();
+
+            var status = true;
+
+            if (count == 0)
+            { // no current open round
+                status = false;
+            }
+            if (status == true)
+            {
+                return "";
+            }
+            else
+            {
+                return "No Round Currently in Progress";
+            }
+        }
+
         protected String RoundStatusEnd()
         {
             int count = 0;
