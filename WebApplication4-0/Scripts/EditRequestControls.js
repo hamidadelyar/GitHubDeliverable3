@@ -9,7 +9,6 @@ var parkCodes = ['C', 'W', 'E'];
 var typeCodes = ['T', 'S', 'L'];
 var buildID = "NONE";
 $(document).ready(function () {
-    $('.prevBtn').hide();
     $('.prefBtn').click(function () {
         $('.editHolder').hide();
         $('.roomOneHolder').show();
@@ -190,13 +189,9 @@ $(document).ready(function () {
         if (prefValid())
         {
             if (roomNumber != 1) {
-                $('.nextBtn').show();
                 savePref(roomNumber - 1);
                 roomNumber--;
                 prefLoad(roomNumber - 1)
-            }
-            else {
-                $('.prevBtn').hide();
             }
         }
     });
@@ -207,9 +202,6 @@ $(document).ready(function () {
                 savePref(roomNumber - 1);
                 roomNumber++;
                 prefLoad(roomNumber - 1);
-            }
-            else {
-                $('.nextBtn').hide();
             }
         }
     });
@@ -468,6 +460,7 @@ function dropDowns() {
         buildTxtPredict($(this), '.buildTbl');
     });
     $('.buildTbl').click(function () {
+        $('.roomCodeTxt').val('');
         $('.buildTxt').val($(this).html());
         buildID = $(this).attr('id');
     });
@@ -959,16 +952,27 @@ String.prototype.Capitalise = function()
 
 function insertData()
 {
-    var reqData = {Request_ID: reqId, Module_Code: $('.modTxt').val().trim().toUpperCase(), Day: $('.dayTxt').val().trim().Capitalise(), Start_Time: $('.startTxt').val().trim(), End_Time: $('.endTxt').val().trim(), Priority: pri, Number_Rooms: $('.roomTxt').val().trim()};
+    var reqData = JSON.stringify({Request_ID: reqId, Module_Code: $('.modTxt').val().trim().toUpperCase(), Day: days.indexOf($('.dayTxt').val().trim().Capitalise()), Start_Time: starts.indexOf($('.startTxt').val().trim()), End_Time: ends.indexOf($('.endTxt').val().trim()), Priority: Number(pri), Number_Rooms: $('.roomTxt').val().trim()});
     var reqLects =[];
     $('.lectList span').each(function () {
         reqLects.push({ Request_ID: reqId, Lecturer_ID: $(this).html().substring(0, $(this).html().indexOf(' ')).trim() })
     });
+    for (var i = 0; i < preferences.length; i++)
+    {
+        if(preferences[i]['Weeks'] == 'false')
+        {
+            preferences[i]['Weeks'] = 0;
+        }
+        else if (preferences[i]['Weeks'] == 'true')
+        {
+            preferences[i]['Weeks'] = 0;
+        }
+    }
     $('.editHolder').html('<span class="loader" ><img src="/Images/processing.gif" width="220" height="20" /></span>');
-    /*$.ajax({
+    $.ajax({
         type: "POST",
         url: "EditRequest.aspx/UpdateRequest",
-        data: JSON.stringify({requestDets: reqData, reqLects: reqLects, prefData: preferences, weekData: weekData, facData, facData}),
+        data: JSON.stringify({requestDets: reqData, reqLects: JSON.stringify(reqLects), prefData: JSON.stringify(preferences), weekData: JSON.stringify(weekData), facData: JSON.stringify(facData), username: user}),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -976,10 +980,17 @@ function insertData()
             window.location.reload();
         },
         success: function (result) {
-            $('.main').html('<div class="hdr" ><b>EDIT MODULE</b></div><div class="conf" ><img src="/Images/Done.png" width="30" height="30" /><span>&nbsp;Module has been updated.</span></div>');
-            setTimeout(function () {
-                window.location.href = "Modules.aspx"; //will redirect to your blog page (an ex: blog.html)
-            }, 2000);
+            if (result.d)
+            {
+                $('.editHolder').html('<div class="hdr" ><b>EDIT REQUEST</b></div><div class="conf" ><img src="/Images/Done.png" width="30" height="30" /><span>&nbsp;Request has been updated.</span></div>');
+                setTimeout(function () {
+                    window.location.href = "ViewRequest.aspx"; //will redirect to your blog page (an ex: blog.html)
+                }, 2000);
+            }
+            else
+            {
+                $('.editHolder').html('<div class="hdr" ><b>ROUNDS CLOSED</b></div><div class="conf" ><img src="/Images/Fail.png" width="30" height="30" /><span>&nbsp;Rounds are no longer open submit to adhoc instead.</span></div>');
+            }
         }
-    });*/
+    });
 }

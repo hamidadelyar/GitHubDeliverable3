@@ -526,3 +526,23 @@
         .roomCodeHolderTbl td {
             padding: 0;
         }
+        .conf img
+        {
+            margin-top:15px;
+        }
+        .conf span
+        {
+            position:relative;
+            top:-9px;
+            font-size:1.2em;
+        }
+        .loader
+        {
+            position:relative;
+            left:50%;
+            margin-left:-110px;
+        }
+        .loader img 
+        {
+            margin-top: 3px;
+        }

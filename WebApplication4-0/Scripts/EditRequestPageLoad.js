@@ -63,6 +63,9 @@ function prefLoad(i) {
     else {
         $('.roomCodeTxt').val("NO PREFERENCE");
     }
+    var wkcounter = 0;
+    $('.week').attr('chosen', false);
+    $(this).css('background-color', '#999');
     if(preferences[i]['Weeks'] != 1 && preferences[i]['Weeks'] != 'true')
     {
         $('.noTick').click();
@@ -73,10 +76,11 @@ function prefLoad(i) {
                 $('#week'+weekData[j]['Week_ID']).css('background-color', '#FF8060');
                 $('#week' + weekData[j]['Week_ID']).attr('clicked', 'true');
                 $('#week' + weekData[j]['Week_ID']).next('.weekCheck').val(1);
+                wkcounter++;
             }
         }
     }
-    else {
+    if (wkcounter == 0) {
         $('.defBtn').click();
     }
     $('.facYes').click();
@@ -108,7 +112,8 @@ function savePref(i)
     preferences[i]['Building_ID'] = buildName;
     preferences[i]['Room_Type'] = typeCodes[typeSet - 1];
     preferences[i]['Park_ID'] = parkCodes[typeSet - 1];
-    preferences[i]['Number_Students'] = $('.studTxt').val();
+    preferences[i]['Number_Students'] = parseInt($('.studTxt').val());
+    preferences[i]['Special_Requirements'] = "";
     preferences[i]['Weeks'] = Math.abs(week - 1);
     for (var j = weekData.length - 1; j >= 0; j--) {
         if (weekData[j]['Pref_ID'] == preferences[i]['Pref_ID']) {
@@ -127,7 +132,7 @@ function savePref(i)
             weekData.push({ Pref_ID: prefID, Week_ID: $(this).prev('.week').html() })
         }
     });
-
+    $('.weekCheck').val(0);
     $('.facCheck').each(function () {
         if ($(this).val() == 1)
         {
@@ -135,5 +140,8 @@ function savePref(i)
             facData.push({ Pref_ID: prefID, Facility_ID: facCode })
         }
     });
+    $('.facCheck').val(0);
+    $('.week').attr('chosen', false);
+    $(this).css('background-color', '#999');
 
 }
