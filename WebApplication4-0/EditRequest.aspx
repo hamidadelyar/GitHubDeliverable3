@@ -30,8 +30,8 @@
             $('.roomOneHolder').hide();
         })
     </script>
-    <script src="/Scripts/EditRequestControls.js" ></script>
-    <script src="/Scripts/EditRequestPageLoad.js" ></script>
+    <script src="./Scripts/EditRequestControls.js" ></script>
+    <script src="./Scripts/EditRequestPageLoad.js" ></script>
     <div class="editHolder reqHolder">
         <div class="hdr" ><b>EDIT REQUEST</b></div>
         <table class="modData">
