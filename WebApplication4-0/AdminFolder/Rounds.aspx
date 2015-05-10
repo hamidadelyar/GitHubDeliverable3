@@ -208,7 +208,7 @@
                 ID="SqlDataSource1" 
                 runat="server" 
                 ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-                SelectCommand="SELECT * FROM [Rounds]  WHERE [year] = @year2 AND [semester] = @semester2"
+                SelectCommand="SELECT * FROM [Rounds]  WHERE [year] = @year2 AND [semester] = @semester2 AND [Status] = 'closed' ORDER BY [Round_Name] ASC"
                 UpdateCommand="UPDATE [Rounds] SET [Year]=@Year, [Semester]=@Semester, [Round_Name]=@Round_Name, [Start_Date]=@Start_Date, [End_Date]=@End_Date WHERE [RoundID] = @RoundID"
                 DeleteCommand="DELETE FROM [Rounds]  WHERE [RoundID] = @RoundID">
                     <selectparameters>
