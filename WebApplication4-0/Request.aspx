@@ -138,6 +138,9 @@
                             <label for="priorityYes">Yes</label>
                         </div>
                     </td>
+                    <td colspan="2">
+                      
+                    </td>
                     
                 </tr>
                 <tr>
@@ -157,11 +160,12 @@
                        
                     </td>
                     <td>
-                        <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; width: 120%; display:block; margin-left: 30%"/>
                         
+                       
+                        <input type="button" id="preferencesButton" value="Preferences" class="orangeButton" style="font-size:1.5em; margin: auto; width: 120%; display:block; margin-left: 30%"/>
                     </td>
                     <td>
-                        <input type="button" id="submitButton" value="Submit" style="margin-bottom:0px; width:120%; position:relative; margin-left: 60%; top: -2px;"  class="greenButton"/>
+                       <input type="button" id="submitButton" value="Submit" style="margin-bottom:0px; width:120%; position:relative; margin-left: 60%; top: -2px;"  class="greenButton"/>
                     </td>
                    
                 </tr>
@@ -1533,6 +1537,16 @@
                     </td>
                     <td>
                         <input type="button" id="cancelRequest" class="orangeButton" style="width:30%; float:left;" value="No" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        Alternatively, If you would like to submit this as an AdHoc Request, click the button below.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="button" id="adhocButton" value="AdHoc" class="blueButton" style="width:15%;" />
                     </td>
                 </tr>
             </table>
