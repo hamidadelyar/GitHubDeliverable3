@@ -96,7 +96,7 @@
 
     <script runat="server">
         private void NewRoom (object source, EventArgs e) {
-          SqlDataSource1.Insert();
+            SqlDataSource1.Insert();
         }
 
         private void NewFacility(object source, EventArgs e)
@@ -105,16 +105,18 @@
         }
     </script>
 
+    <asp:SqlDataSource ID="SqlDataSource7" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT * FROM [Room_Types]"></asp:SqlDataSource>
+
     <div id="light" class="white_content">
         <h1>New Room</h1>
         Building: <br />
-        <asp:TextBox id="TextBox1" runat="server" /><br />
+        <asp:DropDownList ID="DropDownList2" runat="server" DataSourceID="SqlDataSource3" DataTextField="Building_Name" DataValueField="Building_ID" ></asp:DropDownList><br />
         Room ID: <br />
         <asp:TextBox id="TextBox2" runat="server" /><br />
         Capacity: <br />
         <asp:TextBox id="TextBox5" runat="server" /><br />
         Room Type: <br />
-        <asp:TextBox id="TextBox6" runat="server" />
+        <asp:DropDownList ID="DropDownList3" runat="server" DataSourceID="SqlDataSource7" DataTextField="Type_Name" DataValueField="Room_Type" ></asp:DropDownList>
 
         <br />
         <asp:Button ID="Button1" runat="server" Text="Save" onclick="NewRoom"/> 
@@ -179,15 +181,15 @@
         runat="server" 
         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
         SelectCommand="SELECT * FROM [Buildings] INNER JOIN [Parks] ON [Buildings].[Park_ID] = [Parks].[Park_ID] WHERE [Building_ID] = @Building_ID"
-        InsertCommand="INSERT INTO Rooms (Room_ID, Capacity, Room_Type, Building_ID, Pool) VALUES (@roomDB, @capacityDB, @typeDB, @buildingDB, 'true')">
+        InsertCommand="INSERT INTO [Rooms] ([Room_ID], [Capacity], [Room_Type], [Building_ID], [Pool]) VALUES (@roomDB, @capacityDB, @typeDB, @buildingDB, 'true')">
             <selectparameters>
 		        <asp:controlparameter controlid="DropDownList1" name="Building_ID" propertyname="SelectedValue" type="String" />
 	        </selectparameters>
             <InsertParameters>
-                <asp:ControlParameter name="buildingDB" ControlId="TextBox1" PropertyName="Text" />
+                <asp:ControlParameter name="buildingDB" ControlId="DropDownList2" PropertyName="Text" />
                 <asp:ControlParameter name="roomDB" ControlId="TextBox2" PropertyName="Text" />
                 <asp:ControlParameter name="capacityDB" ControlId="TextBox5" PropertyName="Text" />
-                <asp:ControlParameter name="typeDB" ControlId="TextBox6" PropertyName="Text" />
+                <asp:ControlParameter name="typeDB" ControlId="DropDownList3" PropertyName="Text" />
             </InsertParameters>
     </asp:SqlDataSource>
 
@@ -223,7 +225,7 @@
                         >
                             <ItemTemplate>
                                 <tr>
-                                    <td><%#Eval("Room_ID") %></td><td><%#Eval("Capacity") %></td><td><%#Eval("Type_Name") %></td><td><a href="../RoomDetails.aspx?roomCode=<%#Eval("Room_ID") %>">Edit</a></td><td><a href="../AddRoom.aspx?ID=<%#Eval("Room_ID") %>">Edit</a></td>
+                                    <td><%#Eval("Room_ID") %></td><td><%#Eval("Capacity") %></td><td><%#Eval("Type_Name") %></td><td><a href="../RoomsDetails.aspx?roomCode=<%#Eval("Room_ID") %>">View</a></td><td><a href="../AddRoom.aspx?ID=<%#Eval("Room_ID") %>">Edit</a></td>
                                 </tr>
                             </ItemTemplate>
                     </asp:Repeater>

@@ -86,10 +86,10 @@
 
             <table class="requestInfoTable">
                 <tr>
-                    <th>Day</th><th>Start Time</th><th>End Time</th><th>Weeks</th><th>Students</th>
+                    <th>Day</th><th>Start Period</th><th>End Period</th><th>Students</th>
                 </tr>
                 <tr>
-                    <td><%#Eval("Day") %></td><td><%#Eval("Start_Time") %></td><td><%#Eval("End_Time") %></td><td>####</td><td><%#Eval("Number_Students") %></td><td>
+                    <td><%#Eval("Day") %></td><td><%#Eval("Start_Time") %></td><td><%#Eval("End_Time") %></td><td><%#Eval("Number_Students") %></td><td>
                         <a href="../EditRequest.aspx?ID=<%#Eval("Request_ID") %>" />Respond</a></td>
                 </tr>
             </table>

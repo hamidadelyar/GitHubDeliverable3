@@ -13,7 +13,11 @@
     <script>
         var facs = <%= this.facs %>;
         var facData = <%= this.facData %>;
-        $(document).ready(function(){
+        var pool = <%= this.pool %>;
+        var deptId = <%= this.deptID %>;
+        var user =  <%= this.user %>;
+        $(document).ready(function() {
+            $('.editBtn').hide();
             var cols = 1;
             var facCells = "";
             for (var i = 0; i < facData.length; i++) {
@@ -36,11 +40,14 @@
             {
                 $('#'+facs[i]['Facility_ID']).addClass('selected')
             }
+            if (deptId == user.substring(0, 2).toUpperCase() || ((pool == 1 || pool == true) && user.substring(0,2) == 'ad')) {
+                $('.editBtn').show();
+            }
         });
         function imgError(image)
         {
             image.onerror = "";
-            $('.dataHolder img').hide();
+            $('.roomImg').hide();
             $('.noImg').show();
             $('.noImg img').show();
             return true;
@@ -61,7 +68,7 @@
             background-color:#FFF;
             height:173px;
         }
-        .dataHolder img
+        .roomImg
         {
             float:left;
             display:inline;
@@ -146,10 +153,24 @@
             left:-7px;
             background-color:#FF8060;
         }
+        .editBtn {
+            float: right;
+            text-decoration: underline;
+            color: #3E454D;
+            cursor: pointer;
+        }
+        .editBtn img {
+            float:right;
+            display:inline;
+            height:16px;
+            width:16px;
+            margin-right:0px;
+        }
     </style>
         <div class="dataHolder" >
-            <img src="Images/Room Pictures/<%= this.img %>.jpg" onerror="imgError(this)"/>
+            <img class="roomImg" src="Images/Room Pictures/<%= this.img %>.jpg" onerror="imgError(this)"/>
             <span class="noImg" ><img src="Images/Room Pictures/noImage.png" /></span>
+            <span onclick="window.location.href = 'AddRoom?ID=<%=this.code %>'" class="editBtn" >EDIT <img class="editImg" src="Images/Edit.png" height="16" width="16"/></span>
             <span class="detHolder" >
                 <b class="hdr" >ROOM: <%= this.code %></b><br /><br />
                 <b>BUILDING: <%= this.building %></b><br />

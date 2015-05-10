@@ -179,7 +179,7 @@ namespace WebApplication4_0
             //prepare query
             string roomQuery = "Select " + columns + " FROM " + table + " " + leftJoin + " WHERE " + where;   //produces a select statement from the parameters passed to the function
             SqlCommand comm = new SqlCommand(roomQuery, conn);  //1st argument is query, 2nd argument is connection with DB
-
+            System.Diagnostics.Debug.WriteLine(roomQuery);
             SqlDataAdapter da = new SqlDataAdapter(comm);
             da.Fill(dt);
             JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
