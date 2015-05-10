@@ -12,12 +12,12 @@ function mainLoad() {
     $('.modTxt').val(requestData[0]['Module_Code']);
     for (var i = 0; i < modData.length; i++) {
         if (modData[i]['Module_Code'] == requestData[0]['Module_Code']) {
-            $('.nameTxt').val(modData[0]['Module_Title']);
+            $('.nameTxt').val(modData[i]['Module_Title']);
         }
     }
-    $('.dayTxt').val(days[requestData[0]['Day']])
-    $('.startTxt').val(starts[requestData[0]['Start_Time']])
-    $('.endTxt').val(ends[requestData[0]['End_Time']]);
+    $('.dayTxt').val(days[requestData[0]['Day']-1])
+    $('.startTxt').val(starts[requestData[0]['Start_Time']-1])
+    $('.endTxt').val(ends[requestData[0]['End_Time']-1]);
     $('.roomTxt').val(requestData[0]['Number_Rooms']);
     if (requestData[0]['Priority'] == 1 || requestData[0]['Priority'] == 'true') {
         $('.priNo').removeClass('selTick');
@@ -30,6 +30,8 @@ function mainLoad() {
         $('.lectList').append('<span>' + selLects[i]['Lecturer_ID'] + ' - ' + selLects[i]['Lecturer_Name'] + '</span>');
         numLects++;
     }
+
+    $('.specReqs').val(preferences[0]["Special_Requirements"]);
 }
 function prefLoad(i) {
     while ($('.roomTxt').val() > preferences.length) {
@@ -83,19 +85,18 @@ function prefLoad(i) {
     if (wkcounter == 0) {
         $('.defBtn').click();
     }
-    $('.facYes').click();
+    facTicks($('.facYes'));
     var counter = 0;
     clearFacs();
     for (var j = 0; j < facData.length; j++) {
         if (facData[j]['Pref_ID'] == preferences[i]['Pref_ID']) {
             counter++
             $('#fac' + facData[j]['Facility_ID']).val('0');
-            $('#fac' + facData[j]['Facility_ID']).siblings('.circ').click();
+            moveCirc($('#fac' + facData[j]['Facility_ID']).siblings('.circ'));
         }
     }
-    if (counter == 0)
-    {
-        $('.facNo').click();
+    if (counter == 0) {
+        facTicks($('.facNo'));
     }
     $('.prefTit').html('<b>PREFERENCES (ROOM ' + (i + 1) + ')</b>');
     prefID = preferences[i]['Pref_ID'];

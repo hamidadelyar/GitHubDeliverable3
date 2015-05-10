@@ -25,6 +25,30 @@ namespace WebApplication4_0
         public string preferences = "";
         public string facData = "";
         public string user = "";
+
+        protected void Page_PreInit(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Session["LoggedIn"] != null)
+                {
+                    if (Session["Username"].ToString() == "admin")
+                    {
+                        this.Page.MasterPageFile = "~/AdminFolder/AdminSite.master";
+                    }
+                    else
+                    {
+                        this.Page.MasterPageFile = "~/Site.master";
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if(Session["LoggedIn"] != null)
@@ -52,14 +76,14 @@ namespace WebApplication4_0
                 selLects = SQLSelect.Select("Request_Lecturers", "Lecturers.Lecturer_ID, Lecturers.Lecturer_Name", "Request_ID = '" + id + "'", "LEFT JOIN Lecturers ON Lecturers.Lecturer_ID = Request_Lecturers.Lecturer_ID");
                 facs = SQLSelect.Select("Facilities", "Facility_Name, Facility_ID", "1=1", "");
                 buildings = SQLSelect.Select("Buildings", "Building_Name, Building_ID, Park_ID", "1=1", "");
-                rooms = SQLSelect.Select("Rooms", "Room_ID, Building_ID, Room_Type", "1=1", "");
+                rooms = SQLSelect.Select("Rooms", "Room_ID, Building_ID, Room_Type, Capacity", "1=1", "");
                 preferences = SQLSelect.Select("Request_Preferences", "Pref_ID, Room_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks", "Request_ID = '" + id + "'", "");
                 weekData = SQLSelect.Select("Request_Weeks", "Request_Weeks.Pref_ID, Week_ID", "Request_ID = '" + id + "'", "LEFT JOIN Request_Preferences ON Request_Preferences.Pref_ID = Request_Weeks.Pref_ID");
                 facData = SQLSelect.Select("Request_Facilities", "Request_Facilities.Pref_ID, Facility_ID", "Request_ID = '" + id + "'", "LEFT JOIN Request_Preferences ON Request_Preferences.Pref_ID = Request_Facilities.Pref_ID");
             }
         }
         [System.Web.Services.WebMethod]
-        public static bool UpdateRequest(string requestDets, string reqLects, string prefData, string weekData, string facData, string username)
+        public static bool UpdateRequest(string requestDets, string reqLects, string prefData, string weekData, string facData, string username, string status)
         {
             JavaScriptSerializer jss = new JavaScriptSerializer();
             RequestData user = jss.Deserialize<RequestData>(requestDets);
@@ -142,7 +166,7 @@ namespace WebApplication4_0
             }
             else
             {
-                SubmitEdit("UPDATE Bookings SET Confirmed = 'Pending' WHERE Request_ID = '" + user.Request_ID + "'");
+                SubmitEdit("UPDATE Bookings SET Confirmed = '"+status+"' WHERE Request_ID = '" + user.Request_ID + "'");
             }
             return true;
         }
