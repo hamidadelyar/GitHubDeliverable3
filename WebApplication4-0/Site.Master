@@ -42,11 +42,12 @@
             <div class="float-left">
                 <p class="site-title"><a runat="server" href="~/"><img style="padding-bottom:15px" src="Images/LU_Color.png" width="200" height="47" /></a></p>
             </div>
-            <div class="float-right">
+            <div class="loginStuff">
                 <section id="login">
                     <asp:LoginView runat="server" ViewStateMode="Disabled">
                         <AnonymousTemplate>
                             <ul>
+                                <li><span ID="profBtn" onclick="window.location.href = 'Profile.aspx'"><img style="border:1px, dashed, white" src="Images/user.png" alt="userpic"/></span></li>
                                 <li><span ID="logoutButton" >Log Out</span></li>
                             </ul>
                         </AnonymousTemplate>
@@ -60,13 +61,15 @@
                         </LoggedInTemplate>
                     </asp:LoginView>
                 </section>
+            </div>
+            <div class="float-right">
                 <nav>
                     <ul id="menu">
                         <li><a runat="server" href="~/Home">Home</a></li>
                         <li><a runat="server" href="~/Request">Request</a></li>
                         <li><a runat="server" href="~/Timetable">Timetable</a></li>
                         <li><a runat="server" href="~/ViewRequest">View Requests</a></li>
-                        <li><a runat="server" href="~/ArchiveRequest">Archive Requests</a></li>
+                        <li><a runat="server" href="~/ArchiveRequest1">Archive Requests</a></li>
                         <li><a runat="server" href="~/AddRoom">Add/Edit Room</a></li>
                         <li><a runat="server" href="~/Modules">Modules</a></li>
                     </ul>

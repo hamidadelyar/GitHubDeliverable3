@@ -17,14 +17,43 @@ namespace WebApplication4_0
         public string facs = "";
         public string rooms = "";
         public string department = "";
+        public string roomCode = "''";
+
+        protected void Page_PreInit(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Session["LoggedIn"] != null)
+                {
+                    if (Session["Username"].ToString() == "admin")
+                    {
+                        this.Page.MasterPageFile = "~/AdminFolder/AdminSite.master";
+                    }
+                    else
+                    {
+                        this.Page.MasterPageFile = "~/Site.master";
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             buildings = SQLSelect.Select("Buildings", "Building_Name, Building_ID", "1=1", "");
             facs = SQLSelect.Select("Facilities", "Facility_Name, Facility_ID", "1=1", "");
-            rooms = SQLSelect.Select("Rooms", "Rooms.Room_ID, Capacity, Room_Type, Building_ID, Dept_ID", "1=1", "LEFT JOIN Private_Rooms ON Private_Rooms.Room_ID = Rooms.Room_ID");
+            rooms = SQLSelect.Select("Rooms", "Rooms.Room_ID, Capacity, Room_Type, Building_ID, Dept_ID, Pool", "1=1", "LEFT JOIN Private_Rooms ON Private_Rooms.Room_ID = Rooms.Room_ID");
             if(Session["LoggedIn"] != null)
             {
                 department = SQLSelect.Select("Users", "Dept_ID", "Username = '" + Session["Username"] + "'", "");
+            }
+            if (Request.QueryString["ID"] != null)
+            {
+                roomCode = "'"+Request.QueryString["ID"]+"'";
             }
         }
 
@@ -78,9 +107,14 @@ namespace WebApplication4_0
             {
                 using (SqlCommand command = new SqlCommand())
                 {
+                    int pool = 0;
+                    if (dept == "AD")
+                    {
+                        pool = 1;
+                    }
                     command.Connection = conn;
                     command.CommandType = CommandType.Text;
-                    command.CommandText = "INSERT INTO Rooms VALUES (@roomCode, @capacity,  @roomType, @buildCode, 0)";
+                    command.CommandText = "INSERT INTO Rooms VALUES (@roomCode, @capacity,  @roomType, @buildCode, "+pool+")";
                     command.Parameters.Add("@roomCode", SqlDbType.VarChar, 13).Value = roomCode;
                     command.Parameters.Add("@roomType", SqlDbType.Char, 1).Value = roomType;
                     command.Parameters.Add("@capacity", SqlDbType.Int).Value = capacity;
@@ -89,16 +123,19 @@ namespace WebApplication4_0
                     int recordsAffected = command.ExecuteNonQuery();
                     conn.Close();
                 }
-                using (SqlCommand command2 = new SqlCommand())
+                if (dept != "AD")
                 {
-                    command2.Connection = conn;
-                    command2.CommandType = CommandType.Text;
-                    command2.CommandText = "INSERT INTO Private_Rooms VALUES (@roomCode, @dept)";
-                    command2.Parameters.Add("@roomCode", SqlDbType.VarChar, 13).Value = roomCode;
-                    command2.Parameters.Add("@dept", SqlDbType.Char, 2).Value = dept;
-                    conn.Open();
-                    int recordsAffected = command2.ExecuteNonQuery();
-                    conn.Close();
+                    using (SqlCommand command2 = new SqlCommand())
+                    {
+                        command2.Connection = conn;
+                        command2.CommandType = CommandType.Text;
+                        command2.CommandText = "INSERT INTO Private_Rooms VALUES (@roomCode, @dept)";
+                        command2.Parameters.Add("@roomCode", SqlDbType.VarChar, 13).Value = roomCode;
+                        command2.Parameters.Add("@dept", SqlDbType.Char, 2).Value = dept;
+                        conn.Open();
+                        int recordsAffected = command2.ExecuteNonQuery();
+                        conn.Close();
+                    }
                 }
             }
             insertFacs(roomCode, facs);

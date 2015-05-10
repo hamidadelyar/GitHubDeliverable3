@@ -322,6 +322,7 @@
     <Content Include="Images\Room Pictures\ZZ103.jpg" />
     <Content Include="Images\Room Pictures\ZZ105.jpg" />
     <Content Include="Images\Room Pictures\ZZ106.jpg" />
+    <Content Include="Images\user.png" />
     <Content Include="Logout.aspx" />
     <Content Include="Modules.aspx" />
     <Content Include="packages.config" />

@@ -105,6 +105,7 @@
             
                 </ItemTemplate>
             </asp:Repeater>
+            <% =RoundStatusAddMessage()%> 
         </h1>
 
     </div>
@@ -155,11 +156,13 @@
         private void NewRound (object source, EventArgs e) 
         {
           SqlDataSource2.Insert();
+          Response.Redirect("Rounds.aspx");
         }
 
         private void EndRound (object source, EventArgs e)
         {
             SqlDataSource2.Update();
+            Response.Redirect("Rounds.aspx");
         }
     </script>
 
@@ -199,7 +202,7 @@
                 ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
                 SelectCommand="SELECT * FROM [Rounds]  WHERE [year] = @year2 AND [semester] = @semester2"
                 UpdateCommand="UPDATE [Rounds] SET [Year]=@Year, [Semester]=@Semester, [Round_Name]=@Round_Name, [Start_Date]=@Start_Date, [End_Date]=@End_Date WHERE [RoundID] = @RoundID"
-                DeleteCommand="DELETE * FROM [Rounds]  WHERE [Round_ID] = @Round_ID">
+                DeleteCommand="DELETE FROM [Rounds]  WHERE [RoundID] = @RoundID">
                     <selectparameters>
 		                <asp:controlparameter controlid="DropDownList1" name="year2" propertyname="SelectedValue" type="String" />
                         <asp:controlparameter controlid="DropDownList2" name="semester2" propertyname="SelectedValue" type="String" />
@@ -214,12 +217,10 @@
                 CssClass="margin5"
                 Width="90%">
                 <Columns>
-                    <asp:BoundField DataField="RoundID" HeaderText="Round ID" SortExpression="RoundID"  />
-                    <asp:BoundField DataField="Year" HeaderText="Year" SortExpression="Year"  />
-                    <asp:BoundField DataField="Semester" HeaderText="Semester" SortExpression="Semester" />
-                    <asp:BoundField DataField="Round_Name" HeaderText="Round_Name" SortExpression="Round_Name" />
-                    <asp:BoundField DataField="Start_Date" HeaderText="Start_Date" SortExpression="Start_Date" />
-                    <asp:BoundField DataField="End_Date" HeaderText="End_Date" SortExpression="End_Date" />
+
+                    <asp:BoundField DataField="Round_Name" HeaderText="Round Name" SortExpression="Round_Name" />
+                    <asp:BoundField DataField="Start_Date" HeaderText="Start Date" SortExpression="Start_Date" />
+                    <asp:BoundField DataField="End_Date" HeaderText="End Date" SortExpression="End_Date" />
                     <asp:BoundField DataField="Status" HeaderText="Status" SortExpression="Status" ReadOnly="true"/>
                     <asp:CommandField ShowDeleteButton="True"/>
                 </Columns>
