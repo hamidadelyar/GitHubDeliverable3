@@ -25,7 +25,9 @@
             display: none;
             position: absolute;
             top: 30%;
-
+            right: 40%;
+            width: 40%;
+            max-width:370px;
             margin-left:auto;
             margin-right:auto;
             padding: 16px;
@@ -40,6 +42,7 @@
             display: none;
             position: absolute;
             top: 30%;
+            left: 33%;
             width:650px;
             margin-left:auto;
             margin-right:auto;

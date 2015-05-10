@@ -88,10 +88,9 @@
             display: none;
             position: absolute;
             top: 30%;
-            right: 30%;
+            right: 40%;
             width: 40%;
             max-width:370px;
-            height: 300px;
             padding: 16px;
             background-color: white;
             z-index:1002;
@@ -131,8 +130,8 @@
                 ID="SqlDataSource3" 
                 runat="server" 
                 ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-                SelectCommand="SELECT TOP 3 * FROM [Requests] INNER JOIN [Modules] ON [Requests].[Module_Code]=[Modules].[Module_Code] WHERE Request_ID IN (SELECT [Request_ID] FROM [Bookings] Where [Confirmed] = 'Allocated') ORDER BY [Request_ID] DESC">
-
+                SelectCommand="SELECT TOP 3 * FROM [Requests] INNER JOIN [Bookings] ON [Requests].[Request_ID] = [Bookings].[Request_ID] Where [Confirmed] = 'Allocated' ORDER BY [Requests].[Request_ID] DESC">
+                
             </asp:SqlDataSource>
             <asp:GridView 
                 ID="GridView2" 
@@ -149,6 +148,7 @@
                     <asp:BoundField DataField="Day" HeaderText="Day" SortExpression="Day" />
                     <asp:BoundField DataField="Start_Time" HeaderText="Start Period" SortExpression="Start_Time" />
                     <asp:BoundField DataField="End_Time" HeaderText="End Period" SortExpression="End_Time" />
+                    <asp:BoundField DataField="Confirmed" HeaderText="Result" SortExpression="Confirmed" />
                 </Columns>
                 </asp:GridView>
              <p class="white" align="center">Head to <a style="color:white;" href="ViewRequest.aspx">View Requests</a> to view.</p>
@@ -162,7 +162,7 @@
                         ID="SqlDataSource1" 
                         runat="server" 
                         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-                        SelectCommand="SELECT * FROM [Announcements]">
+                        SelectCommand="SELECT TOP 5 * FROM [Announcements] ORDER BY [postDate] DESC">
 
                     </asp:SqlDataSource>
                     <table id="newsTable">
@@ -189,7 +189,7 @@
                         ID="SqlDataSource2" 
                         runat="server" 
                         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-                        SelectCommand="SELECT TOP 5 * FROM [Requests] ORDER BY [Request_ID] DESC ">
+                        SelectCommand="SELECT TOP 5 * FROM [Requests] INNER JOIN [Modules] ON [Requests].[Module_Code]=[Modules].[Module_Code] WHERE Request_ID IN (SELECT [Request_ID] FROM [Bookings] Where [Confirmed] = 'Pending') ORDER BY [Request_ID] DESC">
 
                     </asp:SqlDataSource>
 
@@ -223,7 +223,8 @@
                             <h1><%#Eval("Title") %></h1>
                             <%#Eval("Content") %>
                             <br />
-                            <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light<%#Eval("announcementID") %>').style.display='none';document.getElementById('fade').style.display='none'" />
+                            <br />
+                                <input type="button" ID="closeInsert" value="Close" onclick = "document.getElementById('light<%#Eval("announcementID") %>').style.display='none';document.getElementById('fade').style.display='none'" />
 
                             </div>
                             <div id="fade" class="black_overlay">

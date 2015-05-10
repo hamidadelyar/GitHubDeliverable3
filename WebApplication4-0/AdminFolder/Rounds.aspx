@@ -53,7 +53,7 @@
             display: none;
             position: absolute;
             top: 30%;
-            right: 30%;
+            right: 40%;
             width: 40%;
             max-width:370px;
 
