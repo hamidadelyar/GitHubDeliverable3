@@ -79,6 +79,11 @@ namespace WebApplication4_0
 
             string username = (string)(Session["username"]);
 
+            if (username != "admin")
+            {
+                Response.Redirect("../Home.aspx");
+            }
+
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
             conn.Open();
             string getForename = "Select Forename from [Users] where Username='" + username + "'";

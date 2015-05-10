@@ -10,6 +10,22 @@
     <link href="~/Images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <asp:PlaceHolder runat="server">        
         <script src="<%: ResolveUrl("~/Scripts/modernizr-2.6.2.js") %>"></script>
+        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+        <script>
+            $(document).ready(function() {
+                $('#logoutButton').click(function() {
+                    callLogout();
+                });
+                $('#logoutButton').on('keyup', function (e) {
+                    if (e.which === 13) {
+                        callLogout();
+                    }
+                });
+            });
+            function callLogout() {
+                window.location.href = "../Logout";
+            }
+        </script>
     </asp:PlaceHolder>
     <meta name="viewport" content="width=device-width" />
     <asp:ContentPlaceHolder runat="server" ID="HeadContent" />
@@ -28,14 +44,29 @@
             <div class="float-left">
                 <p class="site-title"><a runat="server" href="~/"><img style="padding-bottom:15px" src="../Images/LU_Color.png" width="200" height="47" /></a></p>
             </div>
-            <div class="float-right">
+            <div class="loginStuff">
                 <section id="login">
                     <asp:LoginView runat="server" ViewStateMode="Disabled">
                         <AnonymousTemplate>
                             <ul>
-                                <li><asp:Button ID="logoutButton" runat="server" Text="Logout" OnClick="logoutButton_Click" /></li>
+                                <li><span ID="profBtn" onclick="window.location.href = '../Profile.aspx'"><img style="border:1px, dashed, white" src="../Images/user.png" alt="userpic"/></span></li>
+                                <li><span ID="logoutButton" >Log Out</span></li>
                             </ul>
                         </AnonymousTemplate>
+                        <LoggedInTemplate>
+                            <p>
+                                Hello, <a runat="server" class="username" href="~/Account/Manage" title="Manage your account">
+                                    <asp:LoginName runat="server" CssClass="username" />
+                                </a>!
+                                <asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" />
+                            </p>
+                        </LoggedInTemplate>
+                    </asp:LoginView>
+                </section>
+            </div>
+            <div class="float-right">
+                <section id="login">
+                    <asp:LoginView runat="server" ViewStateMode="Disabled">
                         <LoggedInTemplate>
                             <p>
                                 Hello, <a runat="server" class="username" href="~/Account/Manage" title="Manage your account">
@@ -52,6 +83,7 @@
                         <li><a runat="server" href="Requests.aspx">Requests</a></li>
                         <li><a runat="server" href="Rounds.aspx">Rounds</a></li>
                         <li><a runat="server" href="Rooms.aspx">Rooms</a></li>
+                        <li><a runat="server" href="Users.aspx">Users</a></li>
                     </ul>
                 </nav>
             </div>

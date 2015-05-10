@@ -16,6 +16,30 @@ namespace WebApplication4_0
     {
         public string tblFacs = "";
         public string department = "";
+
+        protected void Page_PreInit(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Session["LoggedIn"] != null)
+                {
+                    if (Session["Username"].ToString() == "admin")
+                    {
+                        this.Page.MasterPageFile = "~/AdminFolder/AdminSite.master";
+                    }
+                    else
+                    {
+                        this.Page.MasterPageFile = "~/Site.master";
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             tblFacs = SQLSelect.Select("Facilities", "Facility_Name", "1=1", "");

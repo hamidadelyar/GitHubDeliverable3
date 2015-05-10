@@ -6,6 +6,7 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
     <script src="Scripts/dist/jquery.floatThead.js" ></script>
+    <script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script>
     <script>
         var modules = <%= this.modules %>;
         var years = <%= this.years %>;
@@ -43,6 +44,7 @@
             $('.filt').show();
             var $table = $('.modTbl');
             $table.floatThead();
+            $(".modTbl").tablesorter( {sortList: [[1,0]]} ); 
             $('.showHide').click(function () {
                 if (showing)
                 {
@@ -400,6 +402,15 @@
             background-color:#FF8060;
             color:#FFF;
         }
+        .modTbl th {
+            cursor: pointer;
+        }
+        .modTbl th.headerSortUp { 
+            background-color: #CC664D; 
+        }
+        .modTbl th.headerSortDown { 
+            background-color: #CC664D; 
+        } 
         .modTbl td
         {
             padding-top:5px;
