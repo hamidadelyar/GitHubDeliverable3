@@ -135,7 +135,6 @@
     <Content Include="AdminFolder\Users.aspx" />
     <Content Include="ArchiveModules.aspx" />
     <Content Include="ArchiveRequest1.aspx" />
-    <Content Include="ArchiveRequests.aspx" />
     <Content Include="ChangeEmail.aspx" />
     <Content Include="ChangePassword.aspx" />
     <Content Include="Contact.aspx" />
@@ -497,10 +496,6 @@
     </Compile>
     <Compile Include="ArchiveRequest1.aspx.designer.cs">
       <DependentUpon>ArchiveRequest1.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ArchiveRequests.aspx.cs">
-      <DependentUpon>ArchiveRequests.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ChangeEmail.aspx.cs">
       <DependentUpon>ChangeEmail.aspx</DependentUpon>
