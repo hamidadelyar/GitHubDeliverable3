@@ -223,7 +223,7 @@
                         >
                             <ItemTemplate>
                                 <tr>
-                                    <td><%#Eval("Room_ID") %></td><td><%#Eval("Capacity") %></td><td><%#Eval("Type_Name") %></td><td><input type="button" ID="room<%#Eval("Room_ID") %>" Value="Edit" onclick = "document.getElementById('light<%#Eval("Room_ID") %>').style.display='block';document.getElementById('fade').style.display='block'" /></td>
+                                    <td><%#Eval("Room_ID") %></td><td><%#Eval("Capacity") %></td><td><%#Eval("Type_Name") %></td><td><a href="../AddRoom.aspx">Edit</a></td>
                                 </tr>
                             </ItemTemplate>
                     </asp:Repeater>
