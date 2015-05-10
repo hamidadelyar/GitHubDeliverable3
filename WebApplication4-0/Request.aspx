@@ -67,7 +67,7 @@
                     <td>
                         <asp:Label ID="startTimeLabel" runat="server" Text="START TIME" ToolTip="Select the time that you would like the lecture to start i.e. 10:00"></asp:Label>
                         <asp:Label ID="startPeriodLabel" runat="server" Text="START PERIOD" style="display:none" ToolTip="Select the period that you would like the lecture to start i.e. 2"></asp:Label>
-                        <img id="changeTime" src="/Images/changeTime.png" style="width:20px; height:20px; margin-left:5px; cursor:pointer"/>
+                        <img id="changeTime" src="Images/changeTime.png" style="width:20px; height:20px; margin-left:5px; cursor:pointer" alt="change format"/>
                         
                     </td>
                     <td>
