@@ -127,7 +127,6 @@
     <Content Include="AdminFolder\css\AdminStyle.css" />
     <Content Include="AdminFolder\css\reset.css" />
     <Content Include="AdminFolder\css\style.css" />
-    <Content Include="AdminFolder\Demo.aspx" />
     <Content Include="AdminFolder\js\main.js" />
     <Content Include="AdminFolder\js\modernizr.js" />
     <Content Include="AdminFolder\Requests.aspx" />
@@ -410,13 +409,6 @@
     </Compile>
     <Compile Include="AdminFolder\ArchiveModules.aspx.designer.cs">
       <DependentUpon>ArchiveModules.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AdminFolder\Demo.aspx.cs">
-      <DependentUpon>Demo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AdminFolder\Demo.aspx.designer.cs">
-      <DependentUpon>Demo.aspx</DependentUpon>
     </Compile>
     <Compile Include="AdminFolder\Requests.aspx.cs">
       <DependentUpon>Requests.aspx</DependentUpon>

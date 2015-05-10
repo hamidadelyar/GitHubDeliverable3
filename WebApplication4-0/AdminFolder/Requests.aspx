@@ -79,9 +79,10 @@
                 </tr>
                 <tr>
                     <td><%#Eval("Day") %></td><td><%#Eval("Start_Time") %></td><td><%#Eval("End_Time") %></td><td>####</td><td><%#Eval("Number_Students") %></td><td>
-                        <input type="button" ID="respond<%#Eval("Request_ID") %>" Value="Respond" onclick = "document.getElementById('light<%#Eval("Request_ID") %>').style.display='block';document.getElementById('fade').style.display='block'" /></td>
+                        <a href="../EditRequest.aspx?ID=<%#Eval("Request_ID") %>" />Edit</a></td>
                 </tr>
             </table>
+
 
                 
             <div id="light<%#Eval("Request_ID") %>" class="white_content">
@@ -99,7 +100,7 @@
             <div id="fade" class="black_overlay">
             </div>
 
-            
+            <!--<input type="button" ID="respond<%#Eval("Request_ID") %>" Value="Respond" onclick = "document.getElementById('light<%#Eval("Request_ID") %>').style.display='block';document.getElementById('fade').style.display='block'" />-->
         </ItemTemplate>
     </asp:Repeater>
 
