@@ -22,6 +22,10 @@
             font-size:1.2em;
             padding-top:15px;
         }
+        .tinyHdr
+        {
+            color:#FF8060;
+        }
         .alert
         {
             margin-top:10px;
@@ -43,6 +47,16 @@
             border-radius:3px;
             border:1px #2B3036 solid;
             color:#FFF;
+        }
+        .specReqs
+        {
+            line-height:17.5px;
+            width:98.5%;
+            background-color:#3e454d;
+            border-radius:3px;
+            border:1px #3e454d solid;
+            color:#FFF;
+            resize: none;
         }
         .nameTxt
         {
@@ -525,4 +539,129 @@
         }
         .roomCodeHolderTbl td {
             padding: 0;
+        }
+        .conf img
+        {
+            margin-top:15px;
+        }
+        .conf span
+        {
+            position:relative;
+            top:-9px;
+            font-size:1.2em;
+        }
+        .loader
+        {
+            position:relative;
+            left:50%;
+            margin-left:-110px;
+        }
+        .loader img 
+        {
+            margin-top: 3px;
+        }
+        .blurHolder
+        {
+            -webkit-filter: blur(5px);
+            -moz-filter: blur(5px);
+            -o-filter: blur(5px);
+            -ms-filter: blur(5px);
+            filter: blur(5px);
+            opacity: 0.4;
+        }
+        .confirmImp
+        {
+            position:fixed;
+            padding:2.5%;
+            width:45%;
+            left:50%;
+            margin-left:-25%;
+            top:200px;
+            background-color:#2B3036;
+            border-radius:10px;
+        }
+        .txt
+        {
+            color:#FFF;
+        }
+        .cclImp
+        {
+            margin-top:25px;
+            line-height:40px;
+            width:100px;
+            background-color:#3E454D;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            float:left;
+            color:#FFF;
+        }
+        .cclImp:hover
+        {
+            background-color:#FF8060;
+        }
+        .subImp
+        {
+            margin-top:25px;
+            line-height:40px;
+            width:100px;
+            background-color:#FF8060;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            float:right;
+            color:#FFF;
+        }
+        .subImp:hover
+        {
+            background-color:#FF8060;
+        }
+        .dark
+        {
+            position:fixed;
+            top:0px;
+            left:0px;
+            width:100%;
+            height:100%;
+            background-color:#2B3036;
+            opacity:0.4;
+        }
+        .cclStat
+        {
+            margin-top:25px;
+            line-height:40px;
+            width:100px;
+            background-color:#3E454D;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            float:left;
+            color:#FFF;
+        }
+        .cclStat:hover
+        {
+            background-color:#FF8060;
+        }
+        .subStat
+        {
+            margin-top:25px;
+            line-height:40px;
+            width:100px;
+            background-color:#FF8060;
+            cursor:pointer;
+            display:inline-block;
+            text-align:center;
+            border-radius:3px;
+            float:right;
+            color:#FFF;
+        }
+        .subStat:hover
+        {
+            background-color:#FF8060;
+        }
+        .reqSpn {
+            color: #FFF;
         }

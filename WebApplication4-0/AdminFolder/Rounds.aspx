@@ -65,6 +65,7 @@
             border-radius: 25px;
         }
 
+
 </style>
 
 <div class="contentHolder">
@@ -84,21 +85,7 @@
     </script>
     -->
 
-    <script runat=server>
-    protected String GetTime()
-    {
-        var status = false;
-        if (status == true) { 
-            return DateTime.Now.ToString("t");
-        }
-        else
-        {
-            return "nope";
-        }
-    }
-    </script>
 
-    Current server time is <% =GetTime()%>.
 
     <asp:SqlDataSource 
         ID="SqlDataSource6" 
@@ -108,18 +95,26 @@
         >
 
     </asp:SqlDataSource>
-    <asp:Repeater ID="Repeater2" runat="server" DataSourceID="SqlDataSource6" >
-        <ItemTemplate>
-            <div id="leftDiv">
-                <h1 style="margin-top:23px;">Current Round: <%#Eval("Round_Name") %>, Semester <%#Eval("Semester") %> <%#Eval("Year") %></h1>
-            </div>
-        </ItemTemplate>
-    </asp:Repeater>
+    
+    <div id="leftDiv">
+        <h1 style="margin-top:23px;">
+            <asp:Repeater ID="Repeater2" runat="server" DataSourceID="SqlDataSource6" >
+                <ItemTemplate>
+            
+                    Current Round: <%#Eval("Round_Name") %>, Semester <%#Eval("Semester") %> <%#Eval("Year") %>
+            
+                </ItemTemplate>
+            </asp:Repeater>
+        </h1>
 
+    </div>
     <div id="buttonsDiv">
-         <input type="button" ID="endRound" Value="End Current Round" />
-         <input type="button" ID="addRound" Value="Add New Round" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" />
-         
+
+    <% =RoundStatusEnd()%> 
+
+    <asp:Button ID="Button2" runat="server" Text="End Current Round" OnClick="EndRound"  />
+
+    <% =RoundStatusAdd()%>    
 
     </div>
     <br />
@@ -127,14 +122,15 @@
     <br />
     <br />
     <br />
-    <asp:SqlDataSource ID="SqlDataSource4" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Year] FROM [Rounds]"></asp:SqlDataSource>
+    <div class="margin5">
+        <asp:SqlDataSource ID="SqlDataSource4" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Year] FROM [Rounds] ORDER BY [Year] DESC"></asp:SqlDataSource> 
 
-    <asp:DropDownList ID="DropDownList1" runat="server" autopostback="True" DataSourceID="SqlDataSource4" DataTextField="Year" DataValueField="Year"></asp:DropDownList>
+        Academic Year: <asp:DropDownList ID="DropDownList1" runat="server" autopostback="True" DataSourceID="SqlDataSource4" DataTextField="Year" DataValueField="Year"></asp:DropDownList> <br />
 
-    <asp:SqlDataSource ID="SqlDataSource5" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Semester] FROM [Rounds]"></asp:SqlDataSource>
+        <asp:SqlDataSource ID="SqlDataSource5" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Semester] FROM [Rounds] ORDER BY [Semester] DESC"></asp:SqlDataSource>
 
-    <asp:DropDownList ID="DropDownList2" runat="server" autopostback="True" DataSourceID="SqlDataSource5" DataTextField="Semester" DataValueField="Semester"></asp:DropDownList>
-
+        Semester: <asp:DropDownList ID="DropDownList2" runat="server" autopostback="True" DataSourceID="SqlDataSource5" DataTextField="Semester" DataValueField="Semester"></asp:DropDownList> 
+    </div>
 
 
     <div id="light" class="white_content">
@@ -156,8 +152,14 @@
     </div>
 
     <script runat="server">
-        private void NewRound (object source, EventArgs e) {
+        private void NewRound (object source, EventArgs e) 
+        {
           SqlDataSource2.Insert();
+        }
+
+        private void EndRound (object source, EventArgs e)
+        {
+            SqlDataSource2.Update();
         }
     </script>
 
@@ -166,7 +168,8 @@
         runat="server" 
         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
         SelectCommand="SELECT DISTINCT [Year], [Semester] FROM [Rounds] WHERE [year] = @year AND [semester] = @semester"        
-        InsertCommand="INSERT INTO [Rounds] ([Year],[Semester],[Round_Name],[Start_Date],[End_Date],[Status]) VALUES (@yearDB,@semesterDB,@RoundDB,GETDATE(),'','closed')">
+        InsertCommand="INSERT INTO [Rounds] ([Year],[Semester],[Round_Name],[Start_Date],[End_Date],[Status]) VALUES (@yearDB,@semesterDB,@RoundDB,GETDATE(),'','open')"
+        UpdateCommand="UPDATE [rounds] SET [status] = 'closed', [End_Date] = GETDATE() WHERE [status] = 'open'">
             <selectparameters>
 		        <asp:controlparameter controlid="DropDownList1" name="year" propertyname="SelectedValue" type="String" />
                 <asp:controlparameter controlid="DropDownList2" name="semester" propertyname="SelectedValue" type="String" />
@@ -194,7 +197,9 @@
                 ID="SqlDataSource1" 
                 runat="server" 
                 ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-                SelectCommand="SELECT * FROM [Rounds]  WHERE [year] = @year2 AND [semester] = @semester2">
+                SelectCommand="SELECT * FROM [Rounds]  WHERE [year] = @year2 AND [semester] = @semester2"
+                UpdateCommand="UPDATE [Rounds] SET [Year]=@Year, [Semester]=@Semester, [Round_Name]=@Round_Name, [Start_Date]=@Start_Date, [End_Date]=@End_Date WHERE [RoundID] = @RoundID"
+                DeleteCommand="DELETE * FROM [Rounds]  WHERE [Round_ID] = @Round_ID">
                     <selectparameters>
 		                <asp:controlparameter controlid="DropDownList1" name="year2" propertyname="SelectedValue" type="String" />
                         <asp:controlparameter controlid="DropDownList2" name="semester2" propertyname="SelectedValue" type="String" />
@@ -204,15 +209,19 @@
                 ID="GridView1" 
                 runat="server" 
                 AutoGenerateColumns="False" 
-                DataSourceID="SqlDataSource1">
+                DataSourceID="SqlDataSource1"
+                DataKeyNames="RoundID" 
+                CssClass="margin5"
+                Width="90%">
                 <Columns>
-                    <asp:BoundField DataField="RoundID" HeaderText="RoundID" InsertVisible="False" ReadOnly="True" SortExpression="RoundID" />
-                    <asp:BoundField DataField="Year" HeaderText="Year" SortExpression="Year" />
+                    <asp:BoundField DataField="RoundID" HeaderText="Round ID" SortExpression="RoundID"  />
+                    <asp:BoundField DataField="Year" HeaderText="Year" SortExpression="Year"  />
                     <asp:BoundField DataField="Semester" HeaderText="Semester" SortExpression="Semester" />
                     <asp:BoundField DataField="Round_Name" HeaderText="Round_Name" SortExpression="Round_Name" />
                     <asp:BoundField DataField="Start_Date" HeaderText="Start_Date" SortExpression="Start_Date" />
                     <asp:BoundField DataField="End_Date" HeaderText="End_Date" SortExpression="End_Date" />
-                    <asp:BoundField DataField="Status" HeaderText="Status" SortExpression="Status" />
+                    <asp:BoundField DataField="Status" HeaderText="Status" SortExpression="Status" ReadOnly="true"/>
+                    <asp:CommandField ShowDeleteButton="True"/>
                 </Columns>
             </asp:GridView>
 

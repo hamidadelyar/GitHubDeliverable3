@@ -537,6 +537,48 @@ td input[type="submit"], td input[type="button"], td button{
 
 
 
+.blueButton {
+	-moz-box-shadow: 0px 10px 14px -7px #04416B;
+	-webkit-box-shadow: 0px 10px 14px -7px #04416B;
+	box-shadow: 0px 10px 14px -7px #04416B;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #009AFF), color-stop(1, #0577C3));
+	background:-moz-linear-gradient(top, #009AFF 5%, #0577C3 100%);
+	background:-webkit-linear-gradient(top, #009AFF 5%, #0577C3 100%);
+	background:-o-linear-gradient(top, #009AFF 5%, #0577C3 100%);
+	background:-ms-linear-gradient(top, #009AFF 5%, #0577C3 100%);
+	background:linear-gradient(to bottom, #009AFF 5%, #0577C3 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#009AFF', endColorstr='#0577C3',GradientType=0);
+	background-color:#009AFF;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	border:1px solid #055A92;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:11px 20px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #5b8a3c;
+}
+.blueButton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #04416B), color-stop(1, #009AFF));
+	background:-moz-linear-gradient(top, #04416B 5%, #009AFF 100%);
+	background:-webkit-linear-gradient(top, #04416B 5%, #009AFF 100%);
+	background:-o-linear-gradient(top, #04416B 5%, #009AFF 100%);
+	background:-ms-linear-gradient(top, #04416B 5%, #009AFF 100%);
+	background:linear-gradient(to bottom, #04416B 5%, #009AFF 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#04416B', endColorstr='#009AFF',GradientType=0);
+	background-color:#04416B;
+}
+.blueButton:active {
+	position:relative;
+	top:1px;
+}
+
+
 #confirmationContainer{
   position:fixed;
   top:20%;

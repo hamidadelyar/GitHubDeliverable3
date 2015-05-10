@@ -9,11 +9,56 @@ var parkCodes = ['C', 'W', 'E'];
 var typeCodes = ['T', 'S', 'L'];
 var buildID = "NONE";
 $(document).ready(function () {
-    $('.prevBtn').hide();
-    $('.prefBtn').click(function () {
+    $('.specAlert').hide();
+    $('.specDark').hide();
+    $('.chooseStatus').hide();
+    $('.statDark').hide();
+    $('.specDark').click(function () {
+        $('.reqHolder').removeClass('blurHolder');
+        $('.specAlert').hide();
+        $('.dark').hide();
+    });
+    $('.cclImp').click(function () {
+        $('.reqHolder').removeClass('blurHolder');
+        $('.specAlert').hide();
+        $('.specDark').hide();
+    });
+    $('.prefBtn').click(function() {
         $('.editHolder').hide();
         $('.roomOneHolder').show();
-        prefLoad(roomNumber-1)
+        prefLoad(roomNumber - 1)
+    });
+    $('.subImp').click(function () {
+        if (user != 'admin') {
+            $('.reqHolder').removeClass('blurHolder');
+            $('.specAlert').hide();
+            $('.specDark').hide();
+            insertData();
+        } else {
+            $('.specAlert').hide();
+            $('.specDark').hide();
+            $('.chooseStatus').show();
+            $('.statDark').show();
+        }
+    })
+    $('.statDark').click(function () {
+        $('.reqHolder').removeClass('blurHolder');
+        $('.chooseStatus').hide();
+        $('.statDark').hide();
+    });
+    $('.cclStat').click(function () {
+        $('.reqHolder').removeClass('blurHolder');
+        $('.chooseStatus').hide();
+        $('.statDark').hide();
+    });
+    $('.subStat').click(function () {
+        $('.reqHolder').removeClass('blurHolder');
+        $('.chooseStatus').hide();
+        $('.statDark').hide();
+        insertData();
+    });
+    $('.statDrop').change(function() {
+        status = $(this).val();
     })
     for (var i = 0; i < facs.length; i++) {
         if (cols == 1) {
@@ -40,26 +85,13 @@ $(document).ready(function () {
     $('.weekTd').hide();
     $('.weekBtnTd').hide();
     $('.priTick').click(function () {
-        $('.priTick').removeClass('selTick');
-        $('.priTick').html('&nbsp;');
-        $(this).addClass('selTick');
-        $(this).html('&#10004');
-        pri = $(this).siblings('input').val();
+        if (user != 'admin') {
+            priTicks($(this));
+        }
     });
     $('.facTick').click(function () {
-        $('.facTick').removeClass('selTick');
-        $('.facTick').html('&nbsp;');
-        $(this).addClass('selTick');
-        $(this).html('&#10004');
-        fac = $(this).siblings('input').val();
-        if(fac == 1)
-        {
-            $('.facStuff').show();
-        }
-        else
-        {
-            $('.facStuff').hide();
-            clearFacs();
+        if (user != 'admin') {
+            facTicks($(this));
         }
     });
     $('.noTick').click(function () {
@@ -167,36 +199,17 @@ $(document).ready(function () {
         $('.roomCodeTxt').val('NO PREFERENCE');
     });
     $('.circ').click(function () {
-        var currVal = $(this).siblings('input').val();
-        $(this).siblings('input').val(Math.abs(currVal - 1));
-        if (currVal == 0) {
-            $(this).animate({
-                backgroundColor: '#FF8060',
-                left: "+=30"
-            }, 500, function () {
-                //Animation Complete
-            });
-        }
-        else {
-            $(this).animate({
-                backgroundColor: '#999',
-                left: "-=30"
-            }, 500, function () {
-                //Animation Complete
-            });
+        if (user != 'admin') {
+            moveCirc($(this));
         }
     });
     $('.prevBtn').click(function () {
         if (prefValid())
         {
             if (roomNumber != 1) {
-                $('.nextBtn').show();
                 savePref(roomNumber - 1);
                 roomNumber--;
                 prefLoad(roomNumber - 1)
-            }
-            else {
-                $('.prevBtn').hide();
             }
         }
     });
@@ -207,9 +220,6 @@ $(document).ready(function () {
                 savePref(roomNumber - 1);
                 roomNumber++;
                 prefLoad(roomNumber - 1);
-            }
-            else {
-                $('.nextBtn').hide();
             }
         }
     });
@@ -223,7 +233,49 @@ $(document).ready(function () {
         }
     });
     dropDowns();
+    setupAdminBoxes();
 });
+function moveCirc(clicked) {
+    var currVal = $(clicked).siblings('input').val();
+    $(clicked).siblings('input').val(Math.abs(currVal - 1));
+    if (currVal == 0) {
+        $(clicked).animate({
+            backgroundColor: '#FF8060',
+            left: "+=30"
+        }, 500, function () {
+            //Animation Complete
+        });
+    }
+    else {
+        $(clicked).animate({
+            backgroundColor: '#999',
+            left: "-=30"
+        }, 500, function () {
+            //Animation Complete
+        });
+    }
+}
+function facTicks(clicked) {
+    $('.facTick').removeClass('selTick');
+    $('.facTick').html('&nbsp;');
+    $(clicked).addClass('selTick');
+    $(clicked).html('&#10004');
+    fac = $(clicked).siblings('input').val();
+    if (fac == 1) {
+        $('.facStuff').show();
+    }
+    else {
+        $('.facStuff').hide();
+        clearFacs();
+    }
+}
+function priTicks(clicked) {
+    $('.priTick').removeClass('selTick');
+    $('.priTick').html('&nbsp;');
+    $(clicked).addClass('selTick');
+    $(clicked).html('&#10004');
+    pri = $(clicked).siblings('input').val();
+}
 function clearFacs() {
     $('.facCheck').each(function () {
         $(this).val('0');
@@ -231,18 +283,19 @@ function clearFacs() {
         $(this).siblings('.circ').css('background-color', '#999');
     });
 }
+
 function dropDowns() {
     for (var i = 0; i < modData.length; i++) {
         $('<tr><td colspan="8"><span tabindex="' + i + '" class="codeTbl" id="code' + i + '" >' + modData[i]['Module_Code'] + '</span></td></tr>').insertAfter('.codeRw');
     }
     $('.codeHolderTbl').hide();
-    $('.modTxt').focusin(function () {
+    $('.modTxt').focusin(function() {
         var left = $('.modTxt').position().left;
         var top = $('.modTxt').position().top;
         var width = $('.modTxt').width();
         $('.codeHolderTbl').css('left', left);
         $('.codeHolderTbl').css('top', top + 22);
-        $('.modHolderTbl').show();
+        $('.codeHolderTbl').show();
         $('.nameHolderTbl').hide();
         $('.roomHolderTbl').hide();
         $('.dayHolderTbl').hide();
@@ -255,14 +308,14 @@ function dropDowns() {
         $('.codeHolderTbl').children('.triang').css('left', width / 2);
         txtPredict($(this), '.codeTbl');
     });
-    $('.modTxt').on('input propertychange paste', function () {
+    $('.modTxt').on('input propertychange paste', function() {
         $('.nameTxt').val("");
         txtPredict($(this), '.codeTbl');
     });
-    $('.modTxt').focusout(function () {
+    $('.modTxt').focusout(function() {
         findName($(this).val());
     });
-    $('.codeTbl').click(function () {
+    $('.codeTbl').click(function() {
         $('.modTxt').val($(this).html());
         findName($(this).html());
         $('.modTxt').focus();
@@ -272,7 +325,7 @@ function dropDowns() {
         $('<tr><td colspan="8"><span tabindex="' + i + '" class="nameTbl" id="name' + i + '" >' + modData[i]['Module_Title'] + '</span></td></tr>').insertAfter('.nameRw');
     }
     $('.nameHolderTbl').hide();
-    $('.nameTxt').focusin(function () {
+    $('.nameTxt').focusin(function() {
         var left = $('.nameTxt').position().left;
         var top = $('.nameTxt').position().top;
         var width = $('.nameTxt').width();
@@ -290,14 +343,14 @@ function dropDowns() {
         $('.nameHolderTbl').children('.triang').css('left', width / 2);
         txtPredict($(this), '.nameTbl');
     });
-    $('.nameTxt').on('input propertychange paste', function () {
+    $('.nameTxt').on('input propertychange paste', function() {
         $('.modTxt').val("");
         txtPredict($(this), '.nameTbl');
     });
-    $('.nameTxt').focusout(function () {
+    $('.nameTxt').focusout(function() {
         findCode($(this).val());
     });
-    $('.nameTbl').click(function () {
+    $('.nameTbl').click(function() {
         $('.nameTxt').val($(this).html())
         findCode($(this).html());
         findCode($(this).html());
@@ -305,7 +358,7 @@ function dropDowns() {
         $(this).css('background-color:', '#2b3036');
     });
     $('.dayHolderTbl').hide();
-    $('.dayTxt').focusin(function () {
+    $('.dayTxt').focusin(function() {
         var left = $('.dayTxt').position().left;
         var top = $('.dayTxt').position().top;
         var width = $('.dayTxt').width();
@@ -323,16 +376,16 @@ function dropDowns() {
         $('.dayHolderTbl').children('.triang').css('left', width / 2);
         txtPredict($(this), '.dayTbl');
     });
-    $('.dayTxt').on('input propertychange paste', function () {
+    $('.dayTxt').on('input propertychange paste', function() {
         txtPredict($(this), '.dayTbl');
     });
-    $('.dayTbl').click(function () {
+    $('.dayTbl').click(function() {
         $('.dayTxt').val($(this).html());
         $('.dayTxt').focus();
         $(this).css('background-color:', '#2b3036');
     });
     $('.startHolderTbl').hide();
-    $('.startTxt').focusin(function () {
+    $('.startTxt').focusin(function() {
         var left = $('.startTxt').position().left;
         var top = $('.startTxt').position().top;
         var width = $('.startTxt').width();
@@ -350,16 +403,16 @@ function dropDowns() {
         $('.startHolderTbl').children('.triang').css('left', width / 2);
         txtPredict($(this), '.startTbl');
     });
-    $('.startTxt').on('input propertychange paste', function () {
+    $('.startTxt').on('input propertychange paste', function() {
         txtPredict($(this), '.startTbl');
     });
-    $('.startTbl').click(function () {
+    $('.startTbl').click(function() {
         $('.startTxt').val($(this).html());
         $('.startTxt').focus();
         $(this).css('background-color:', '#2b3036');
     });
     $('.endHolderTbl').hide();
-    $('.endTxt').focusin(function () {
+    $('.endTxt').focusin(function() {
         var left = $('.endTxt').position().left;
         var top = $('.endTxt').position().top;
         var width = $('.endTxt').width();
@@ -377,16 +430,16 @@ function dropDowns() {
         $('.endHolderTbl').children('.triang').css('left', width / 2);
         txtPredict($(this), '.endTbl');
     });
-    $('.endTxt').on('input propertychange paste', function () {
+    $('.endTxt').on('input propertychange paste', function() {
         txtPredict($(this), '.endTbl');
     });
-    $('.endTbl').click(function () {
+    $('.endTbl').click(function() {
         $('.endTxt').val($(this).html());
         $('.endTxt').focus();
         $(this).css('background-color:', '#2b3036');
     });
     $('.roomHolderTbl').hide();
-    $('.roomTxt').focusin(function () {
+    $('.roomTxt').focusin(function() {
         var left = $('.roomTxt').position().left;
         var top = $('.roomTxt').position().top;
         var width = $('.roomTxt').width();
@@ -404,10 +457,10 @@ function dropDowns() {
         $('.endHolderTbl').children('.triang').css('left', width / 2);
         txtPredict($(this), '.roomTbl');
     });
-    $('.roomTxt').on('input propertychange paste', function () {
+    $('.roomTxt').on('input propertychange paste', function() {
         txtPredict($(this), '.roomTbl');
     });
-    $('.roomTbl').click(function () {
+    $('.roomTbl').click(function() {
         $('.roomTxt').val($(this).html());
         $('.roomTxt').focus();
         $(this).css('background-color:', '#2b3036');
@@ -416,7 +469,7 @@ function dropDowns() {
     for (var i = 0; i < lectData.length; i++) {
         $('<tr><td colspan="8"><span tabindex="' + i + '" class="lectTbl" id="lect' + i + '" >' + lectData[i]['Lecturer_ID'] + '</span></td></tr>').insertAfter('.lectRw');
     }
-    $('.lectTxt').focusin(function () {
+    $('.lectTxt').focusin(function() {
         var left = $('.lectTxt').position().left;
         var top = $('.lectTxt').position().top;
         var width = $('.lectTxt').width();
@@ -433,17 +486,17 @@ function dropDowns() {
         $('.lectHolderTbl').children('.triang').css('left', width / 2);
         txtPredict($(this), '.lectTbl');
     });
-    $('.lectTxt').on('input propertychange paste', function () {
+    $('.lectTxt').on('input propertychange paste', function() {
         txtPredict($(this), '.lectTbl');
     });
-    $('.lectTbl').click(function () {
+    $('.lectTbl').click(function() {
         $('.lectTxt').val($(this).html())
     });
     $('.buildHolderTbl').hide();
     for (var i = 0; i < buildData.length; i++) {
-        $('<tr><td colspan="8"><span tabindex="' + i + '" class="buildTbl '+buildData[i]['Park_ID']+'" id="'+buildData[i]['Building_ID']+'" >' + buildData[i]['Building_Name'] + '</span></td></tr>').insertAfter('.buildRw');
+        $('<tr><td colspan="8"><span tabindex="' + i + '" class="buildTbl ' + buildData[i]['Park_ID'] + '" id="' + buildData[i]['Building_ID'] + '" >' + buildData[i]['Building_Name'] + '</span></td></tr>').insertAfter('.buildRw');
     }
-    $('.buildTxt').focusin(function () {
+    $('.buildTxt').focusin(function() {
         var left = $('.buildTxt').position().left;
         var top = $('.buildTxt').position().top;
         var width = $('.buildTxt').width();
@@ -456,26 +509,26 @@ function dropDowns() {
         $('.buildHolderTbl').children('.triang').css('left', width / 2);
         var selPark = parkCodes[parkSet - 1];
         $('.buildTbl').hide();
-        $('.buildTbl').each(function () {
-            if($(this).hasClass(selPark))
-            {
+        $('.buildTbl').each(function() {
+            if ($(this).hasClass(selPark)) {
                 $(this).show();
             }
         })
         buildTxtPredict($(this), '.buildTbl');
     });
-    $('.buildTxt').on('input propertychange paste', function () {
+    $('.buildTxt').on('input propertychange paste', function() {
         buildTxtPredict($(this), '.buildTbl');
     });
-    $('.buildTbl').click(function () {
+    $('.buildTbl').click(function() {
+        $('.roomCodeTxt').val('');
         $('.buildTxt').val($(this).html());
         buildID = $(this).attr('id');
     });
     $('.roomCodeHolderTbl').hide();
     for (var i = 0; i < roomData.length; i++) {
-        $('<tr><td colspan="8"><span tabindex="' + i + '" class="roomCodeTbl ' + roomData[i]['Building_ID'] + ' '+roomData[i]['Room_Type']+'" id="roomCode' + i + '" >' + roomData[i]['Room_ID'] + '</span></td></tr>').insertAfter('.roomCodeRw');
+        $('<tr><td colspan="8"><span tabindex="' + i + '" class="roomCodeTbl ' + roomData[i]['Building_ID'] + ' ' + roomData[i]['Room_Type'] + '" id="roomCode' + i + '" >' + roomData[i]['Room_ID'] + '</span></td></tr>').insertAfter('.roomCodeRw');
     }
-    $('.roomCodeTxt').focusin(function () {
+    $('.roomCodeTxt').focusin(function() {
         var left = $('.roomCodeTxt').position().left;
         var top = $('.roomCodeTxt').position().top;
         var width = $('.roomCodeTxt').width();
@@ -488,20 +541,20 @@ function dropDowns() {
         $('.roomCodeHolderTbl').children('.triang').css('left', width / 2);
         var selType = typeCodes[typeSet - 1];
         $('.roomCodeTbl').hide();
-        $('.roomCodeTbl').each(function () {
+        $('.roomCodeTbl').each(function() {
             if ($(this).hasClass(selType) && $(this).hasClass(buildID)) {
                 $(this).show();
             }
         })
         roomTxtPredict($(this), '.roomCodeTbl');
     });
-    $('.roomCodeTxt').on('input propertychange paste', function () {
+    $('.roomCodeTxt').on('input propertychange paste', function() {
         roomTxtPredict($(this), '.roomCodeTbl');
     });
-    $('.roomCodeTbl').click(function () {
+    $('.roomCodeTbl').click(function() {
         $('.roomCodeTxt').val($(this).html())
     });
-    $('input').focusin(function (event) { // Clear table when anywhere else on page click
+    $('input').focusin(function(event) { // Clear table when anywhere else on page click
         $('.codeHolderTbl').hide();
         $('.nameHolderTbl').hide();
         $('.dayHolderTbl').hide();
@@ -531,7 +584,7 @@ function dropDowns() {
             $('.lectHolderTbl').show();
         }
     });
-    $(document).click(function (event) { // Clear table when anywhere else on page click
+    $(document).click(function(event) { // Clear table when anywhere else on page click
         $('.codeHolderTbl').hide();
         $('.nameHolderTbl').hide();
         $('.dayHolderTbl').hide();
@@ -576,7 +629,7 @@ function dropDowns() {
             $('.roomCodeHolderTbl').show();
         }
     })
-    $(document).on('keyup', function (e) {
+    $(document).on('keyup', function(e) {
         if (e.which === 40) {
             $('#' + navigable[curr]).css('background-color', '#2b3036');
             if (curr != navigable.length - 1) {
@@ -597,7 +650,8 @@ function dropDowns() {
             $(document.activeElement).click();
         }
     });
-}
+};
+
 function findName(code) {
     for (var i = 0; i < modData.length; i++) {
         if (modData[i]['Module_Code'].toUpperCase() == code.toUpperCase()) {
@@ -742,6 +796,13 @@ function isNumberKey(evt) {
 function prefValid()
 {
     var bool = true;
+    var capacity = true;
+    for (var i = 0; i < roomData.length; i++) {
+        if (roomData[i]['Room_ID'] == $('.roomCodeTxt').val().trim() && parseInt(roomData[i]["Capacity"]) < parseInt($('.studTxt').val())) {
+            capacity = false;
+            break;
+        }
+    }
     if($('.studTxt').val().trim() == "")
     {
         bool = false;
@@ -751,6 +812,10 @@ function prefValid()
     {
         bool = false;
         $('.studTit').html('<b>NUMBER OF STUDENTS</b><span class="alert" >&nbsp;You must enter a number greater than 0</span>');
+    }
+    else if (!capacity) {
+        bool = false;
+        $('.studTit').html('<b>NUMBER OF STUDENTS</b><span class="alert" >&nbsp;More students than room can hold</span>');
     }
     else
     {
@@ -946,9 +1011,8 @@ function validate()
     {
         $('.lectTit').html('<b>LECTURER</b><span class="alert" ></span>')
     }
-    if(bool)
-    {
-        insertData();
+    if(bool) {
+        showSpec();
     }
 }
 
@@ -956,19 +1020,35 @@ String.prototype.Capitalise = function()
 { 
     return this.toLowerCase().replace(/\b./g, function(a) { return a.toUpperCase(); });
 }
-
+function showSpec() {
+    $('.reqHolder').addClass('blurHolder');
+    $('.specAlert').show();
+    $('.specDark').show();
+}
 function insertData()
 {
-    var reqData = {Request_ID: reqId, Module_Code: $('.modTxt').val().trim().toUpperCase(), Day: $('.dayTxt').val().trim().Capitalise(), Start_Time: $('.startTxt').val().trim(), End_Time: $('.endTxt').val().trim(), Priority: pri, Number_Rooms: $('.roomTxt').val().trim()};
+    var reqData = JSON.stringify({Request_ID: reqId, Module_Code: $('.modTxt').val().trim().toUpperCase(), Day: days.indexOf($('.dayTxt').val().trim().Capitalise())+1, Start_Time: starts.indexOf($('.startTxt').val().trim())+1, End_Time: ends.indexOf($('.endTxt').val().trim())+1, Priority: Number(pri), Number_Rooms: $('.roomTxt').val().trim()});
     var reqLects =[];
     $('.lectList span').each(function () {
         reqLects.push({ Request_ID: reqId, Lecturer_ID: $(this).html().substring(0, $(this).html().indexOf(' ')).trim() })
     });
+    for (var i = 0; i < preferences.length; i++)
+    {
+        if (preferences[i]['Weeks'] == 'false' || preferences[i]['Weeks'] == 'False' || preferences[i]['Weeks'] == false)
+        {
+            preferences[i]['Weeks'] = 0;
+        }
+        else if (preferences[i]['Weeks'] == 'true' || preferences[i]['Weeks'] == 'True' || preferences[i]['Weeks'] == true)
+        {
+            preferences[i]['Weeks'] = 1;
+        }
+        preferences[i]["Special_Requirements"] = $('.specReqs').val();
+    }
     $('.editHolder').html('<span class="loader" ><img src="/Images/processing.gif" width="220" height="20" /></span>');
-    /*$.ajax({
+    $.ajax({
         type: "POST",
         url: "EditRequest.aspx/UpdateRequest",
-        data: JSON.stringify({requestDets: reqData, reqLects: reqLects, prefData: preferences, weekData: weekData, facData, facData}),
+        data: JSON.stringify({requestDets: reqData, reqLects: JSON.stringify(reqLects), prefData: JSON.stringify(preferences), weekData: JSON.stringify(weekData), facData: JSON.stringify(facData), username: user, status: status}),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -976,10 +1056,46 @@ function insertData()
             window.location.reload();
         },
         success: function (result) {
-            $('.main').html('<div class="hdr" ><b>EDIT MODULE</b></div><div class="conf" ><img src="/Images/Done.png" width="30" height="30" /><span>&nbsp;Module has been updated.</span></div>');
-            setTimeout(function () {
-                window.location.href = "Modules.aspx"; //will redirect to your blog page (an ex: blog.html)
-            }, 2000);
+            if (result.d)
+            {
+                $('.editHolder').html('<div class="hdr" ><b>EDIT REQUEST</b></div><div class="conf" ><img src="/Images/Done.png" width="30" height="30" /><span class="reqSpn">&nbsp;Request has been updated.</span></div>');
+                setTimeout(function () {
+                    if (user == 'admin') {
+                        window.location.href = "/AdminFolder/Requests.aspx";
+                    } else {
+                        window.location.href = "ViewRequest.aspx";
+                    }
+                }, 2000);
+            }
+            else
+            {
+                $('.editHolder').html('<div class="hdr" ><b>ROUNDS CLOSED</b></div><div class="conf" ><img src="/Images/Fail.png" width="30" height="30" /><span class="reqSpn" >&nbsp;Rounds are no longer open submit to adhoc instead.</span></div>');
+            }
         }
-    });*/
+    });
+}
+
+function setupAdminBoxes() {
+    if (user == "admin") {
+        $('.nameHolderTbl').remove();
+        $('.codeHolderTbl').remove();
+        $('.roomHolderTbl').remove();
+        $('.lecInp').remove();
+        $('.modTxt').attr('readonly', 'readonly');
+        $('.nameTxt').attr('readonly', 'readonly');
+        $('.roomTxt').attr('readonly', 'readonly');
+        $('.modTxt').css('background-color', '#3E454D');
+        $('.nameTxt').css('background-color', '#3E454D');
+        $('.roomTxt').css('background-color', '#3E454D');
+        $('.modTxt').css('border-color', '#3E454D');
+        $('.nameTxt').css('border-color', '#3E454D');
+        $('.roomTxt').css('border-color', '#3E454D');
+        $('.priNo').css('cursor', 'default');
+        $('.priYes').css('cursor', 'default');
+        $('.facTick').css('cursor', 'default');
+        $('.circ').css('cursor', 'default');
+        $('.studTxt').attr('readonly', 'readonly');
+        $('.studTxt').css('background-color', '#3E454D');
+        $('.studTxt').css('border-color', '#3E454D');
+    }
 }

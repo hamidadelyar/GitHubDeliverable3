@@ -17,6 +17,7 @@
         var preferences = <%= this.preferences %>;
         var weekData = <%= this.weekData %>;
         var reqId = <%= this.id %>;
+        var user = <%= this.user %>;
         var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         var starts = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
         var ends = ['09:50', '10:50', '11:50', '12:50', '13:50', '14:50', '15:50', '16:50', '17:50'];
@@ -24,6 +25,7 @@
         var curr = -1;
         var numLects = 0;
         var roomNumber = 1;
+        var status = 'Pending';
         $(document).ready(function(){
             $('.roomOneHolder').hide();
         })
@@ -75,7 +77,7 @@
             <tr>
                 <td class="subHdr lectTit" colspan="9"><b>LECTURER</b><span class="alert" ></span></td>
             </tr>
-            <tr class="roomRw">
+            <tr class="roomRw lecInp">
                 <td colspan="9"><input autocomplete="off" type="text" class="inp lectTxt" id="lectTxt" /><span class="lectTick addLect">ADD</span><span class="lectTick subLect">DEL</span></td>
             </tr>
             <tr>
@@ -316,5 +318,24 @@
             </tr>
         </table>
     </div>
-
+    <div class="dark specDark" ></div>
+    <div class="confirmImp specAlert" >
+        <span class="subHdr" ><b>UPDATE REQUEST?</b></span><br /><br />
+        <span class="tinyHdr"><b>Special Requests</b></span><br/>
+        <span class="specReqHolder"><textarea class="specReqs" rows="7"></textarea></span><br/><br/>
+        <span class="txt" ><b>This will overwrite the current request and reset it to pending. <br /> Are you sure you wish to proceed?</b></span><br />
+        <span class="cclImp" ><b>CANCEL</b></span><span class="subImp"><b>PROCEED</b></span>
+    </div>
+    
+    <div class="dark statDark" ></div>
+    <div class="confirmImp chooseStatus" >
+        <span class="subHdr" ><b>CHOOSE STATUS</b></span><br /><br />
+        <span><select class="statDrop">
+          <option value="Pending">Pending</option>
+          <option value="Allocated">Allocated</option>
+          <option value="Changed">Changed</option>
+          <option value="Rejected">Rejected</option>
+        </select></span><br />
+        <span class="cclStat" ><b>CANCEL</b></span><span class="subStat"><b>PROCEED</b></span>
+    </div>
 </asp:Content>
