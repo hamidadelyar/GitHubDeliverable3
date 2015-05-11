@@ -12,7 +12,15 @@
         <script src="<%: ResolveUrl("~/Scripts/modernizr-2.6.2.js") %>"></script>
         <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
         <script>
+            var logString = "../Logout";
             $(document).ready(function() {
+                if (window.location.pathname.indexOf('AdminFolder') == -1) {
+                    alert('Hello World');
+                    $('.logo').attr('src', './Images/LU_Color.png');
+                    $('#profBtn img').attr('src', './Images/user.png');
+                    $('#profBtn').attr('onclick', "window.location.href = './Profile.aspx'");
+                    logString = "./Logout";
+                }
                 $('#logoutButton').click(function() {
                     callLogout();
                 });
@@ -23,7 +31,7 @@
                 });
             });
             function callLogout() {
-                window.location.href = "../Logout";
+                window.location.href = logString;
             }
         </script>
     </asp:PlaceHolder>
@@ -42,7 +50,7 @@
     <header>
         <div class="content-wrapper">
             <div class="float-left">
-                <p class="site-title"><a runat="server" href="~/"><img style="padding-bottom:15px" src="../Images/LU_Color.png" width="200" height="47" /></a></p>
+                <p class="site-title"><a runat="server" href="~/"><img class="logo" style="padding-bottom:15px" src="../Images/LU_Color.png" width="200" height="47" /></a></p>
             </div>
             <div class="loginStuff">
                 <section id="login">
