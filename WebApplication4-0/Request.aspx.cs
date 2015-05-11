@@ -780,7 +780,7 @@ namespace WebApplication4_0
             bool room3Private = false;
             string privateRooms = "";
             //only carried out if room1 has been specified
-            if (room1 != "")
+            if (room1 != "" && room1 != "0")
             {
                 bool result1 = true;
                 //finds whether the room requested is a pool room or not, if not pool room, then it is a private room, for a specific department
@@ -817,7 +817,7 @@ namespace WebApplication4_0
 
             if (numRooms > 1)
             {
-                if (room2 != "")
+                if (room2 != "" && room2 != "0")
                 {
                     bool result2 = true;
                     //finds whether the room requested is a pool room or not, if not pool room, then it is a private room, for a specific department
@@ -857,7 +857,7 @@ namespace WebApplication4_0
 
             if (numRooms > 2)
             {
-                if (room3 != "")
+                if (room3 != "" && room3 != "0")
                 {
                     bool result3 = true;
                     //finds whether the room requested is a pool room or not, if not pool room, then it is a private room, for a specific department
