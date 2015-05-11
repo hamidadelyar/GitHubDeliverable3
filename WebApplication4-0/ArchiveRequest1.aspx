@@ -4,16 +4,41 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
-    <h1>Archive Requests</h1>
-        <p>Show requests from the following year: 
-            <asp:DropDownList 
+
+    <style>
+        .contentHolder
+        {
+            margin-top:50px;
+            width:100%;
+            height:600px;
+            border-top-left-radius:10px;
+            border-top-right-radius:10px;
+            border-bottom-left-radius:10px;
+            border-bottom-right-radius:10px;
+            background-color:#FFF;
+            float:left;
+        }
+
+            .requestHeader{
+        margin-top:10px;
+        padding-top:10px;
+        width:100%;
+        background-color:#3E454D;
+    }
+    </style>
+
+    <div class="contentHolder">
+    <h1 align="center">Archive Requests</h1>
+      <p align="center">Show requests from the following year: 
+                <asp:DropDownList
                 id="DropDownList1"
                 runat="server"
                 AutoPostBack="True">
                 <asp:ListItem Selected="True">2014</asp:ListItem>
                 <asp:ListItem>2013</asp:ListItem>
-            </asp:DropDownList></p> 
-   
+            </asp:DropDownList></p>
+         
+            
     <asp:GridView ID="ArchiveRequests" runat="server" AllowSorting="True" AutoGenerateColumns="False" DataSourceID="SqlDataSource1" CellPadding="10" CellSpacing="10" HorizontalAlign="Center" DataKeyNames="Request_ID" OnSelectedIndexChanged="ArchiveRequests_SelectedIndexChanged">
         <Columns>
             <asp:BoundField DataField="Request_ID" HeaderText="Request ID" SortExpression="Request_ID" InsertVisible="False" ReadOnly="True" />
@@ -34,7 +59,7 @@
         <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
         <RowStyle HorizontalAlign="Center" VerticalAlign="Middle" />
     </asp:GridView>
-     
+     </div>
     <asp:SqlDataSource 
         ID="SqlDataSource1"
         runat="server" 
