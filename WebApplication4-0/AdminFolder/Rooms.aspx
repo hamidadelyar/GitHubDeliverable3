@@ -219,7 +219,7 @@
                 ID="SqlDataSource2" 
                 runat="server" 
                 ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-                SelectCommand="SELECT * FROM [Rooms] INNER JOIN [Room_Types] ON [Rooms].[Room_Type] = [Room_Types].[Room_Type] WHERE [Building_ID] = @Building">
+                SelectCommand="SELECT * FROM [Rooms] INNER JOIN [Room_Types] ON [Rooms].[Room_Type] = [Room_Types].[Room_Type] WHERE [Building_ID] = @Building AND [Pool] = 'true'">
                     <selectparameters>
 		                <asp:controlparameter controlid="DropDownList1" name="Building" propertyname="SelectedValue" type="String" />
 	                </selectparameters>
