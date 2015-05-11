@@ -28,7 +28,7 @@ namespace WebApplication4_0
         protected void ArchiveRequests_SelectedIndexChanged(object sender, EventArgs e)
         {
             GridViewRow row = ArchiveRequests.SelectedRow;
-            string value = row.Cells[0].Text;
+            string value = row.Cells[0].Text; 
             
         }
     }
