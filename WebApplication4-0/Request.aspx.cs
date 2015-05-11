@@ -768,6 +768,134 @@ namespace WebApplication4_0
             int round = 0;
 
             /*
+             * checks whether the request contains any pool rooms.
+             * if all pool rooms belonging to the department requesting, then sends it through
+             * if mix of private and non private, set to pending.
+             * if private room belonging to another department, request will not go through
+             * stops departments from sending requests for other departments private rooms
+             */
+            bool flagWrite = true;
+            bool room1Private = false;  //true if it is a private room
+            bool room2Private = false;
+            bool room3Private = false;
+            string privateRooms = "";
+            //only carried out if room1 has been specified
+            if (room1 != "")
+            {
+                bool result1 = true;
+                //finds whether the room requested is a pool room or not, if not pool room, then it is a private room, for a specific department
+                string poolQuery1 = "select Pool from [Rooms] where Room_ID = '" + room1 + "'";
+                connection.Open();
+                SqlCommand getPool1 = new SqlCommand(poolQuery1, connection);  //gets Pool - false if private room, true if is a pool room
+                result1 = Convert.ToBoolean(getPool1.ExecuteScalar());
+
+                connection.Close();
+                if (result1 == false)
+                {
+                    room1Private = true;
+                }
+
+                string roomDep1 = "";   //contains department of the room i.e. CO
+                //finds out if the private room belongs to the department making the request
+                if (room1Private == true)
+                {
+                    string roomDepQuery1 = "select Dept_ID from [Private_Rooms] where Room_ID = '" + room1 + "'";
+                    connection.Open();
+                    SqlCommand getDep1 = new SqlCommand(roomDepQuery1, connection); 
+                    roomDep1 = getDep1.ExecuteScalar().ToString();
+                    connection.Close();
+
+                    //if private room department different to that of the department making the request, write set to false
+                    if (roomDep1 != dep)
+                    {
+                        //pool = true;
+                        flagWrite = false;
+                        privateRooms += room1 + " ";
+                    }
+                }
+            }
+
+            if (numRooms > 1)
+            {
+                if (room2 != "")
+                {
+                    bool result2 = true;
+                    //finds whether the room requested is a pool room or not, if not pool room, then it is a private room, for a specific department
+                    string poolQuery2 = "select Pool from [Rooms] where Room_ID = '" + room2 + "'";
+                    connection.Open();
+                    SqlCommand getPool2 = new SqlCommand(poolQuery2, connection);  //gets Pool - false if private room, true if is a pool room
+                    result2 = Convert.ToBoolean(getPool2.ExecuteScalar());
+
+                    connection.Close();
+                    if (result2 == false)
+                    {
+                        room2Private = true;
+                    }
+
+                    string roomDep2 = "";   //contains department of the room i.e. CO
+                    //finds out if the private room belongs to the department making the request
+                    if (room2Private == true)
+                    {
+                        string roomDepQuery2 = "select Dept_ID from [Private_Rooms] where Room_ID = '" + room2 + "'";
+                        connection.Open();
+                        SqlCommand getDep2 = new SqlCommand(roomDepQuery2, connection);
+                        roomDep2 = getDep2.ExecuteScalar().ToString();
+                        connection.Close();
+
+                        //if private room department different to that of the department making the request, write set to false
+                        if (roomDep2 != dep)
+                        {
+                            //pool = true;
+                            flagWrite = false;
+                            privateRooms += room2 + " ";
+                        }
+                    }
+                  
+                }
+
+            }
+
+            if (numRooms > 2)
+            {
+                if (room3 != "")
+                {
+                    bool result3 = true;
+                    //finds whether the room requested is a pool room or not, if not pool room, then it is a private room, for a specific department
+                    string poolQuery3 = "select Pool from [Rooms] where Room_ID = '" + room3 + "'";
+                    connection.Open();
+                    SqlCommand getPool3 = new SqlCommand(poolQuery3, connection);  //gets Pool - false if private room, true if is a pool room
+                    result3 = Convert.ToBoolean(getPool3.ExecuteScalar());
+
+                    connection.Close();
+                    if (result3 == false)
+                    {
+                        room3Private = true;
+                    }
+
+                    string roomDep3 = "";   //contains department of the room i.e. CO
+                    //finds out if the private room belongs to the department making the request
+                    if (room3Private == true)
+                    {
+                        string roomDepQuery3 = "select Dept_ID from [Private_Rooms] where Room_ID = '" + room3 + "'";
+                        connection.Open();
+                        SqlCommand getDep3 = new SqlCommand(roomDepQuery3, connection);
+                        roomDep3 = getDep3.ExecuteScalar().ToString();
+                        connection.Close();
+
+                        //if private room department different to that of the department making the request, write set to false
+                        if (roomDep3 != dep)
+                        {
+                            //pool = true;
+                            flagWrite = false;
+                            privateRooms += room3 + " ";
+                        }
+                    }
+
+                }
+            }
+
+
+            /*
              Gets the round that is currently open i.e. 1
              */
 
@@ -871,7 +999,7 @@ namespace WebApplication4_0
              */
             if (round > 0)
             {
-                if (requestID == -1)    //if the requestID does not already exist, then can write to the db
+                if (requestID == -1 && flagWrite == true)    //if the requestID does not already exist, then can write to the db
                 {
                     newRequest = true;  //it is a new request
 
@@ -1488,6 +1616,12 @@ namespace WebApplication4_0
             // return requestID;
             string result = "Sorry, this request has already been submitted, with Request ID: " + requestID + ".";
             result += "<br /> Please try again.";
+
+            if (flagWrite == false)
+            {
+                result = "Sorry, you cannot send requests for other department's <strong>private</strong> rooms.";
+                result += "<br /><br />Please change the following room(s): " + privateRooms;
+            }
 
             if (newRequest == true)
             {

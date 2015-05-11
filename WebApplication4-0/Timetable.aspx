@@ -9,6 +9,7 @@
     <script>var roomsArray = <%= this.data %>;</script>
     <script>var modsArray = <%= this.modData %>;</script>
     <script>var lectsArray = <%= this.lectData %>;</script>
+    <script>var degsArray = <%= this.programs %>;</script>
     <script src="Scripts/Loading.js" type="text/javascript" ></script>
     <script src="Scripts/Timetable.js" type="text/javascript" ></script>
     <link rel="stylesheet" href="Content/Timetable.css" />
@@ -126,13 +127,14 @@
     </div>
     <div class="toolsHolder" >
         <div class="hdr" ><b>TOOLS</b></div>
-        <div class="options" ><span class="roomChoice choice" >ROOM</span> | <span class="modChoice choice" >MODULE</span> | <span class="lectChoice choice" >LECTURER</span></div>
+        <div class="options" ><span class="roomChoice choice" >ROOM</span> | <span class="modChoice choice" >MODULE</span> | <span class="lectChoice choice" >LECTURER</span> <span class="degChoice choice" >DEGREE</span></div>
         <div class="rooms" ><b>ROOM</b><br /><input style="text-transform:uppercase" autocomplete="off" type="text" class="roomTxt" id="roomTxt" name="roomTxt" value="<%= this.code %>" /><img id="clearImg" src="Images/clear.png" width="23" height="15" /></div>
         <div class="suggest" >
             <table class="suggestTbl">
             </table>
         </div>
         <div class="semesters" ><b>SEMESTERS</b><br /><span class="semOne semBtn" >ONE</span><span class="splitter" ></span><span class="semTwo semBtn" >TWO</span></div>
+        <div class="parts" ><b>PART</b><br /><select class="partSel" ><option value="A" >A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="P">P</option></select></div>
     </div>
     <div class="whiteSpace" ></div>
 </asp:Content>
