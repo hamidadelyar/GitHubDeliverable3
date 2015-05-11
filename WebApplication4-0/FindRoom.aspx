@@ -966,71 +966,71 @@
                 <tr>
                     <td colspan="8">
                         <span class="head leftLab" >MON</span>
-                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn one nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn two nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn three nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn four nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="8">
                         <span class="head leftLab" >TUES</span>
-                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn one nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn two nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn three nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn four nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="8">
                         <span class="head leftLab" >WED</span>
-                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn one nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn two nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn three nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn four nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="8">
                         <span class="head leftLab" >THURS</span>
-                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn one nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn two nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn three nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn four nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="8">
                         <span class="head leftLab" >FRI</span>
-                        <span class="dayBtn one nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn two nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn three nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn four nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
-                        <span class="dayBtn five nonTop" ><img src="/Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn one nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn two nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn three nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn four nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
+                        <span class="dayBtn five nonTop" ><img src="./Images/Cross.png" height="10" width="10" /><input type="hidden" class="perCheck" value="0" /></span>
                     </td>
                 </tr>
                 <tr>
@@ -1070,7 +1070,7 @@
         </div>
     </div>
     <div class="showSrch" >
-        SEARCH AGAIN <img src="/Images/RightArrow.png" height="11" width="6" />
+        SEARCH AGAIN <img src="./Images/RightArrow.png" height="11" width="6" />
     </div>
     <div class="resultHolder" >
         <div class="resHdr" ><b>RESULTS</b></div>
@@ -1205,5 +1205,5 @@
             </table>
         </div>
     </div>
-    <div class="switchView" onclick="window.location.href = 'Timetable.aspx'" >VIEW TIMETABLES <img src="/Images/RightArrow.png" height="11" width="6" /></div>
+    <div class="switchView" onclick="window.location.href = 'Timetable.aspx'" >VIEW TIMETABLES <img src="./Images/RightArrow.png" height="11" width="6" /></div>
 </asp:Content>

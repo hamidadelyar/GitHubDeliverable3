@@ -22,7 +22,7 @@
             display: none;
             position: absolute;
             top: 30%;
-            right: 30%;
+            right: 40%;
             width: 40%;
             max-width:370px;
             height: 250px;
@@ -51,7 +51,7 @@
                 ID="SqlDataSource2" 
                 runat="server" 
                 ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-                SelectCommand="SELECT TOP 3 * FROM [Requests] INNER JOIN [Modules] ON [Requests].[Module_Code]=[Modules].[Module_Code] WHERE Request_ID IN (SELECT [Request_ID] FROM [Bookings] Where [Confirmed] = 'Pending') ORDER BY [Request_ID] DESC">
+                SelectCommand="SELECT TOP 3 * FROM [Requests] INNER JOIN [Bookings] ON [Requests].[Request_ID] = [Bookings].[Request_ID] INNER JOIN [Days] ON [Requests].[Day] = [Days].[Day_ID] WHERE [Confirmed] = 'Pending' ORDER BY [Requests].[Request_ID] DESC">
 
             </asp:SqlDataSource>
             <asp:GridView 
@@ -66,7 +66,7 @@
                 cellpadding="10">
                 <Columns>
                     <asp:BoundField DataField="Module_Code" HeaderText="Module Code" SortExpression="Module_Code" />
-                    <asp:BoundField DataField="Day" HeaderText="Day" SortExpression="Day" />
+                    <asp:BoundField DataField="Day_Name" HeaderText="Day" SortExpression="Day_Name" />
                     <asp:BoundField DataField="Start_Time" HeaderText="Start Time" SortExpression="Start_Time" />
                     <asp:BoundField DataField="End_Time" HeaderText="End Time" SortExpression="End_Time" />
                     <asp:BoundField DataField="Dept_ID" HeaderText="Department" SortExpression="Dept_ID" />
