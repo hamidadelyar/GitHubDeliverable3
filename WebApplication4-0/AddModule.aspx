@@ -105,9 +105,23 @@
             {
                 $('.nameTit').html('<b>MODULE NAME</b><span class="alert" ></span>');
             }
-            if($('.progTxt').val().trim() == "")
+            var progExists = false;
+            for(var i = 0; i < programs.length; i++)
             {
-                $('.progTit').html('<b>PROGRAM CODE</b><span class="alert" >&nbsp;You must input a program code.</span>');
+                if($('.progTxt').val() == programs[i]['Program_Code'])
+                {
+                    progExists = true;
+                    break;
+                }
+            }
+            if(!progExists)
+            {
+                failed = true;
+                $('.progTit').html('<b>PROGAM NAME</b><span class="alert" >This is not an existing program code. Add new <a href="AddDegree.aspx" >here</a></span>');
+            }
+            else if($('.progTxt').val().trim() == "")
+            {
+                $('.progTit').html('<b>PROGRAM NAME</b><span class="alert" >&nbsp;You must input a program code.</span>');
                 failed = true;
             }
             else
@@ -392,7 +406,7 @@
                     <td colspan="8" class="spc"></td>
                 </tr>
                 <tr>
-                    <td class="subHdr partTit" id="partCode" colspan="9"><b>PROGRAM CODE</b><span class="alert" ></span></td>
+                    <td class="subHdr progTit" id="partCode" colspan="9"><b>PROGRAM CODE</b><span class="alert" ></span></td>
                 </tr>
                 <tr class="roomRw">
                     <td colspan="9"><input autocomplete="off" type="text" class="inp progTxt" id="progTxt" /></td>
