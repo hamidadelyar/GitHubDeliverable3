@@ -67,14 +67,12 @@
 
 <div class="contentHolderRequest">
     <h1 align="center">Requests</h1>
-    
 
     <asp:SqlDataSource 
         ID="SqlDataSource1" 
         runat="server" 
         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
         SelectCommand="SELECT * FROM [Requests] INNER JOIN [Modules] ON [Requests].[Module_Code]=[Modules].[Module_Code] INNER JOIN [Days] ON [Requests].[Day] = [Days].[Day_ID] WHERE Request_ID IN (SELECT [Request_ID] FROM [Bookings] Where [Confirmed] = 'Pending')">
-
     </asp:SqlDataSource>
     <br />
     <asp:Repeater ID="Repeater1" runat="server" DataSourceID="SqlDataSource1">

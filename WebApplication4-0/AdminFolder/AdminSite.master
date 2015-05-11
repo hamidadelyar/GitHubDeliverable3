@@ -15,7 +15,6 @@
             var logString = "../Logout";
             $(document).ready(function() {
                 if (window.location.pathname.indexOf('AdminFolder') == -1) {
-                    alert('Hello World');
                     $('.logo').attr('src', './Images/LU_Color.png');
                     $('#profBtn img').attr('src', './Images/user.png');
                     $('#profBtn').attr('onclick', "window.location.href = './Profile.aspx'");

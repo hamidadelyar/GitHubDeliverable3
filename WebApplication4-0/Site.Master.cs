@@ -82,7 +82,7 @@ namespace WebApplication4_0
 
                 if (username == "admin")
                 {
-                    Response.Redirect("/AdminFolder/Admin.aspx");
+                    Response.Redirect("./AdminFolder/Admin.aspx");
                 }
 
                 SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
