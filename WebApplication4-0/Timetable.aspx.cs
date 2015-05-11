@@ -17,6 +17,7 @@ namespace WebApplication4_0
         public String modData = "";
         public String lectData = "";
         public string code = "";
+        public string programs = "";
 
         protected void Page_PreInit(object sender, EventArgs e)
         {
@@ -47,6 +48,7 @@ namespace WebApplication4_0
             if ((Session["LoggedIn"]) != null) {  // checks the user is logged in to remove error of trying to get a null session variable
                 modData = SQLSelect.Select("Modules", "Module_Code + ' ' + Module_Title AS Module_Code", "LEFT(Module_Code, 2) = '" + Session["Username"].ToString().Substring(0, 2) + "'", ""); // runs a select to get all the module codes that are from the user's department
                 lectData = SQLSelect.Select("Lecturers", "Lecturer_ID + ' ' + Lecturer_Name AS Lecturer_ID", "LEFT(Lecturer_ID, 2) = '" + Session["Username"].ToString().Substring(0, 2) + "'", ""); // runs a select to get all the lecturers from the user's department
+                programs = SQLSelect.Select("Degrees", "Program_Code + ' ' + Program_Name AS Program_Code", "Dept_ID = '" + Session["Username"].ToString().Substring(0, 2) + "'", "");
             }
             if (Request.QueryString["roomCode"] != null) // checks if the url bar has been sent a roomCode variable
             {
@@ -54,7 +56,7 @@ namespace WebApplication4_0
             }
         }
         [System.Web.Services.WebMethod]
-        public static string SearchAll(string search, int semester, int type)
+        public static string SearchAll(string search, int semester, int type, string part)
         {
             string weekData = "";
             string searchColumn = "";
@@ -70,10 +72,16 @@ namespace WebApplication4_0
                 search = search.Substring(0, search.IndexOf(' ')); // strips the search to only contain the module code not the title too
                 searchColumn = " AND Requests.Module_Code = '" + search + "'"; // sets the searchColumn to search for modules matching the search
             }
-            else
+            else if(type == 3)
             {
                 search = search.Substring(0, search.IndexOf(' ')); // strips the search to only contain the lecturer id not their name too
                 searchColumn = "AND Request_Preferences.Request_ID IN (SELECT Request_ID FROM Request_Lecturers WHERE Request_Lecturers.Lecturer_ID = '" + search + "')"; // sets the searchColumn to search for lecturers matching the search
+            }
+            else
+            {
+                search = search.Substring(0, search.IndexOf(' ')); // strips the search to only contain the lecturer id not their name too
+                searchColumn = "AND Modules.Program_Code = '"+search+"' AND SUBSTRING(Modules.Module_Code, 3,1) = '" + part + "'"; // sets the searchColumn to search for programs matching the search
+
             }
             string where = "Bookings.Confirmed = 'Allocated' " + searchColumn + " AND Requests.Semester = " + semester; // sets the where to find all bookings that have their booking request set to allocated and match the time and date of this search
             string leftJoin = "LEFT JOIN Modules ON Requests.Module_Code = Modules.Module_Code LEFT JOIN Request_Preferences ON Requests.Request_ID = Request_Preferences.Request_ID LEFT JOIN Bookings ON Bookings.Request_ID = Requests.Request_ID LEFT JOIN Request_Lecturers ON Request_Lecturers.Request_ID = Requests.Request_ID LEFT JOIN Request_Weeks ON Request_Weeks.Pref_ID = Request_Preferences.Pref_ID LEFT JOIN Lecturers ON Lecturers.Lecturer_ID = Request_Lecturers.Lecturer_ID"; // sets the left join to include all the tables needed for the search

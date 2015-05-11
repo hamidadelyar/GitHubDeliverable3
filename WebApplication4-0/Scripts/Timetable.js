@@ -88,10 +88,16 @@ $(document).ready(function () {
         $('.semOne').css('background-color', '#2B3036')
     });
 
+    $('.parts').hide();
+
     $(document).click(function (event) { // Clear table when anywhere else on page click
         if (event.target.id !== 'roomTxt' && event.target.id !== 'clearImg') {
             $(".suggestTbl").hide();
             $('.semesters').show();
+            if(type == 4)
+            {
+                $('.parts').show();
+            }
         }
     })
 
@@ -110,6 +116,7 @@ $(document).ready(function () {
         $(this).css('text-decoration', 'underline');
         $('.roomTxt').val('');
         $('.rooms b').html('ROOM');
+        $('.parts').hide();
     });
 
     $('.modChoice').click(function () { // change the tools panel to reflect that they wish to search module timetables
@@ -118,6 +125,7 @@ $(document).ready(function () {
         $(this).css('text-decoration', 'underline');
         $('.roomTxt').val('');
         $('.rooms b').html('MODULE CODE');
+        $('.parts').hide();
     });
 
     $('.lectChoice').click(function () { // change the tools panel to reflect that they wish to search module timetables
@@ -126,7 +134,21 @@ $(document).ready(function () {
         $(this).css('text-decoration', 'underline');
         $('.roomTxt').val('');
         $('.rooms b').html('LECTURER');
+        $('.parts').hide();
     });
+
+    $('.degChoice').click(function () { // change the tools panel to reflect that they wish to search module timetables
+        type = 4;
+        $('.choice').css('text-decoration', 'none');
+        $(this).css('text-decoration', 'underline');
+        $('.roomTxt').val('');
+        $('.rooms b').html('DEGREE');
+        $('.parts').show();
+    });
+
+    $('.partSel').change(function () {
+        getBooking();
+    })
 });
 function fillTable() // fills the rooms suggestion table with data that matches the input
 {
@@ -181,7 +203,7 @@ function fillTable() // fills the rooms suggestion table with data that matches 
             }
         }
     }
-    else {
+    else if(type == 3) {
         if (roomTxt == "") {
             if ($('.suggestTbl tr').length == lectsArray.length) {
                 return;
@@ -199,6 +221,28 @@ function fillTable() // fills the rooms suggestion table with data that matches 
                 var searchTxt = lectsArray[i]['Lecturer_ID'].split('.').join('').toUpperCase();
                 if (searchTxt.indexOf(roomTxt) != -1) {
                     $('.suggestTbl').append("<tr><td>" + lectsArray[i]['Lecturer_ID'] + "</td></tr>");
+                }
+            }
+        }
+    }
+    else {
+        if (roomTxt == "") {
+            if ($('.suggestTbl tr').length == degsArray.length) {
+                return;
+            }
+            else {
+                $('.suggestTbl').html('');
+                for (var i = 0; i < degsArray.length; i++) {
+                    $('.suggestTbl').append("<tr><td>" + degsArray[i]['Program_Code'] + "</td></tr>");
+                }
+            }
+        }
+        else {
+            $('.suggestTbl').html('');
+            for (var i = 0; i < degsArray.length; i++) {
+                var searchTxt = degsArray[i]['Program_Code'].split('.').join('').toUpperCase();
+                if (searchTxt.indexOf(roomTxt) != -1) {
+                    $('.suggestTbl').append("<tr><td>" + degsArray[i]['Program_Code'] + "</td></tr>");
                 }
             }
         }
@@ -223,7 +267,7 @@ function getBooking() // uses ajax to run the code behind and then put the data 
     $.ajax({
         type: "POST",
         url: "Timetable.aspx/SearchAll",
-        data: JSON.stringify({search: search, semester: semester, type: type}),
+        data: JSON.stringify({search: search, semester: semester, type: type, part: $('.partSel').val()}),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function (XMLHttpRequest, textStatus, errorThrown) {
