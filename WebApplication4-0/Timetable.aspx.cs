@@ -18,6 +18,29 @@ namespace WebApplication4_0
         public String lectData = "";
         public string code = "";
 
+        protected void Page_PreInit(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Session["LoggedIn"] != null)
+                {
+                    if (Session["Username"].ToString() == "admin")
+                    {
+                        this.Page.MasterPageFile = "~/AdminFolder/AdminSite.master";
+                    }
+                    else
+                    {
+                        this.Page.MasterPageFile = "~/Site.master";
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             data = SQLSelect.Select("Rooms", "Room_ID", "1=1", ""); // runs a select to get all the room ids stored in the DB for use in jquery for room prediction
