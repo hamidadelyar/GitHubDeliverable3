@@ -2,7 +2,7 @@
 
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
 
-    <link rel="stylesheet" type="text/css" href="css/AdminStyle.css"> 
+    <link rel="stylesheet" type="text/css" href="css/AdminStyle.css">
   	
     <style>
         .black_overlay{
@@ -134,6 +134,7 @@
     <script runat="server">
         private void NewAnnouncement (object source, EventArgs e) {
           SqlDataSource1.Insert();
+          WebApplication4_0.Admin.SendEmail(TextBox1.Text, TextBox2.Text);
         }
     </script>
             

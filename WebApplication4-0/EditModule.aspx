@@ -7,8 +7,11 @@
     <script>
         var modules = <%= this.modules %>;
         var currModule = <%= this.module %>;
+        var programs = <%= this.programs %>;
         var modCode = "";
         var modTitle = "";
+        var navigable = [];
+        var curr = 0;
         $(document).ready(function(){
 
             var exists = false;
@@ -21,9 +24,65 @@
             {
                 modCode = currModule[0]['Module_Code'];
                 modTitle = currModule[0]['Module_Title'];
+                progCode = currModule[0]['Program_Code'];
                 $('.codeTxt').val(modCode);
                 $('.nameTxt').val(modTitle);
+                $('.progTxt').val(progCode);
             }
+
+            for (var i = 0; i < programs.length; i++) {
+                $('<tr><td colspan="8"><span tabindex="' + i + '" class="progTbl" id="prog' + i + '" >' + programs[i]['Program_Code'] + '</span></td></tr>').insertAfter('.progRw');
+            }
+            $('.progHolderTbl').hide();
+            $(document).click(function(){
+                $('.progHolderTbl').hide();
+                if (event.target.id == 'progTxt') {
+                    $('.progHolderTbl').show();
+                }
+            })
+            $('.progTxt').focusin(function() {
+                var left = $('.progTxt').position().left;
+                var top = $('.progTxt').position().top;
+                var width = $('.progTxt').width();
+                $('.progHolderTbl').css('left', left);
+                $('.progHolderTbl').css('top', top + 22);
+                $('.progHolderTbl').show();
+                $('.progHolderTbl').css('width', width + 12);
+                $('.progHolderTbl').css('max-height', '400px');
+                $('.progTxt').css('width', '100%!important')
+                $('.progHolderTbl').children('.triang').css('left', width / 2);
+                txtPredict($(this), '.progTbl');
+            });
+            $('.progTxt').on('input propertychange paste', function() {
+                txtPredict($(this), '.progTbl');
+            });
+            $('.progTbl').click(function() {
+                $('.progTxt').val($(this).html());
+                $('.progTxt').focus();
+                $(this).css('background-color:', '#2b3036');
+            });
+            $(document).on('keyup', function(e) {
+                if (e.which === 40) {
+                    $('#' + navigable[curr]).css('background-color', '#2b3036');
+                    if (curr != navigable.length - 1) {
+                        curr++;
+                    }
+                    $('#' + navigable[curr]).css('background-color', '#FF8060');
+                    $('#' + navigable[curr]).focus();
+                };
+                if (e.which === 38) {
+                    $('#' + navigable[curr]).css('background-color', '#2b3036');
+                    if (curr != 0) {
+                        curr--;
+                    }
+                    $('#' + navigable[curr]).css('background-color', '#FF8060');
+                    $('#' + navigable[curr]).focus();
+                };
+                if (e.which === 13) {
+                    $(document.activeElement).click();
+                }
+            });
+
         });
         function validate()
         {
@@ -55,6 +114,29 @@
             {
                 $('.nameTit').html('<b>MODULE NAME</b><span class="alert" ></span>');
             }
+            var progExists = false;
+            for(var i = 0; i < programs.length; i++)
+            {
+                if($('.progTxt').val() == programs[i]['Program_Code'])
+                {
+                    progExists = true;
+                    break;
+                }
+            }
+            if(!progExists)
+            {
+                failed = true;
+                $('.progTit').html('<b>PROGAM NAME</b><span class="alert" >This is not an existing program code. Add new <a href="AddDegree.aspx" >here</a></span>');
+            }
+            else if($('.progTxt').val().trim() == "")
+            {
+                $('.progTit').html('<b>PROGRAM NAME</b><span class="alert" >&nbsp;You must input a program code.</span>');
+                failed = true;
+            }
+            else
+            {
+                $('.progTit').html('<b>PROGRAM CODE</b><span class="alert" ></span>');
+            }
             if(!failed)
             {
                 addRoom();
@@ -67,11 +149,12 @@
         function addRoom() {
             var modCode = $('.codeTxt').val().toUpperCase().trim();
             var modName = $('.nameTxt').val().Capitalise().trim();
+            var progTxt = $('.progTxt').val().trim().substring(0, 6).toUpperCase();
             $('.main').html('<span class="loader" ><img src="./Images/processing.gif" width="220" height="20" /></span>');
             $.ajax({
                 type: "POST",
                 url: "EditModule.aspx/UpdateModule",
-                data: JSON.stringify({ modCode: modCode,  modName: modName}),
+                data: JSON.stringify({ modCode: modCode,  modName: modName, progTit: progTxt}),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -81,7 +164,7 @@
                 success: function (result) {
                     $('.main').html('<div class="hdr" ><b>EDIT MODULE</b></div><div class="conf" ><img src="./Images/Done.png" width="30" height="30" /><span>&nbsp;Module has been updated.</span></div>');
                     setTimeout(function () {
-                        window.location.href = "Modules.aspx"; //will redirect to your blog page (an ex: blog.html)
+                        window.location.href = "Modules.aspx";
                     }, 2000);
                 }
             });
@@ -131,6 +214,34 @@
                 return true;
             }
             return false;
+        }
+        function txtPredict(inputBox, rowClass) {
+            var ids = [];
+            var txt = $(inputBox).val();
+            if (txt.trim() == "") {
+                $(rowClass).show();
+                $(rowClass).each(function () {
+                    ids.push($(this).attr('id'));
+                });
+            } else {
+                $(rowClass).each(function () {
+                    if ($(this).html().toUpperCase().indexOf(txt.toUpperCase()) != -1) {
+                        $(this).show();
+                        ids.push($(this).attr('id'));
+                    } else {
+                        $(this).hide();
+                    }
+                })
+            };
+            if (ids.length > 7) {
+                $(rowClass).hide();
+                ids = ids.slice(0, 7);
+                for (var i = 0; i < ids.length; i++) {
+                    $('#' + ids[i]).show();
+                }
+            }
+            navigable = ids;
+            curr = -1;
         }
     </script>
     <style>
@@ -205,6 +316,40 @@
             font-size:1.2em;
             padding-top:15px;
         }
+        .triang {
+            position: relative;
+            display: inline-block;
+            left: 90px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 15px 15px 15px;
+            border-color: transparent transparent #2b3036 transparent;
+            top: 3.5px;
+        }
+        .progTbl
+        {
+            border:1px #2B3036 solid;
+            color: #FFF;
+            background-color: #2b3036;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 5px;
+            width:400px;
+            display: inline-block;
+        }
+        .progTbl:hover 
+        {
+            background-color: #FF8060;
+
+        }
+        .progHolderTbl {
+            position: absolute;
+            width:400px;
+        }
+        .progHolderTbl td {
+            padding: 0;
+        }
         .inp
         {
             line-height:17.5px;
@@ -252,6 +397,10 @@
         {
             margin-top: 3px;
         }
+        .progTxt
+        {
+            width:400px!important;
+        }
     </style>
         <div class="toolsHolder roomHolder main" >
             <div class="hdr" ><b>EDIT A MODULE</b></div>
@@ -268,7 +417,21 @@
                     <td colspan="8" class="spc"></td>
                 </tr>
                 <tr>
+                    <td class="subHdr progTit" id="partCode" colspan="9"><b>PROGRAM CODE</b><span class="alert" ></span></td>
+                </tr>
+                <tr class="roomRw">
+                    <td colspan="9"><input autocomplete="off" type="text" class="inp progTxt" id="progTxt" /></td>
+                </tr>
+                <tr>
+                    <td colspan="8" class="spc"></td>
+                </tr>
+                <tr>
                     <td colspan="8"><span class="clearAllBtn" onclick="location.reload()"><b>CLEAR ALL</b></span><span class="searchBtn" onclick="validate()"><b>UPDATE</b></span></td>
+                </tr>
+            </table>
+            <table class="progHolderTbl" >
+                <tr class="progRw">
+                    <td colspan="8"><span class="triang"></span></td>
                 </tr>
             </table>
         </div>

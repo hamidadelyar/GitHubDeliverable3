@@ -78,7 +78,14 @@ namespace WebApplication4_0
                 selLects = SQLSelect.Select("Request_Lecturers", "Lecturers.Lecturer_ID, Lecturers.Lecturer_Name", "Request_ID = '" + id + "'", "LEFT JOIN Lecturers ON Lecturers.Lecturer_ID = Request_Lecturers.Lecturer_ID");
                 facs = SQLSelect.Select("Facilities", "Facility_Name, Facility_ID", "1=1", "");
                 buildings = SQLSelect.Select("Buildings", "Building_Name, Building_ID, Park_ID", "1=1", "");
-                rooms = SQLSelect.Select("Rooms", "Rooms.Room_ID, Building_ID, Room_Type, Capacity", " (Rooms.Pool = 1 OR Private_Rooms.Dept_ID = '" + reqStuff[0].Module_Code.Substring(0,2) + "')", "LEFT JOIN Private_Rooms ON Private_Rooms.Room_ID = Rooms.Room_ID");
+                if(reqStuff.Count > 0)
+                {
+                    rooms = SQLSelect.Select("Rooms", "Rooms.Room_ID, Building_ID, Room_Type, Capacity", " (Rooms.Pool = 1 OR Private_Rooms.Dept_ID = '" + reqStuff[0].Module_Code.Substring(0, 2) + "')", "LEFT JOIN Private_Rooms ON Private_Rooms.Room_ID = Rooms.Room_ID");
+                }
+                else
+                {
+                    rooms = "[]";
+                }
                 preferences = SQLSelect.Select("Request_Preferences", "Pref_ID, Room_ID, Building_ID, Room_Type, Park_ID, Number_Students, Special_Requirements, Weeks", "Request_ID = '" + id + "'", "");
                 weekData = SQLSelect.Select("Request_Weeks", "Request_Weeks.Pref_ID, Week_ID", "Request_ID = '" + id + "'", "LEFT JOIN Request_Preferences ON Request_Preferences.Pref_ID = Request_Weeks.Pref_ID");
                 facData = SQLSelect.Select("Request_Facilities", "Request_Facilities.Pref_ID, Facility_ID", "Request_ID = '" + id + "'", "LEFT JOIN Request_Preferences ON Request_Preferences.Pref_ID = Request_Facilities.Pref_ID");
@@ -209,6 +216,7 @@ namespace WebApplication4_0
                     command.CommandText = cmdTxt;
                     System.Diagnostics.Debug.WriteLine(cmdTxt);
                     conn.Open();
+                    System.Diagnostics.Debug.WriteLine(cmdTxt);
                     recordsAffected = (int)command.ExecuteScalar();
                     conn.Close();
                 }

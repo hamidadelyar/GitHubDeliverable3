@@ -102,6 +102,14 @@ td
 {
     text-decoration:underline;
 }
+.degChoice
+{
+    cursor:pointer
+}
+.degChoice:hover
+{
+    text-decoration:underline;
+}
 .rooms
 {
     margin-top:43px;
@@ -169,6 +177,22 @@ td
 .semTwo
 {
     background-color:#2B3036;
+}
+.parts
+{
+    margin-top:65px;
+    width:100%;
+}
+.partSel
+{
+    position:relative;
+    padding:10px;
+    top:25px;
+    border-radius:7px;
+    cursor:pointer;
+    background-color:#FF8060;
+    border:#FF8060;
+    color:#FFF;
 }
 .splitter
 {

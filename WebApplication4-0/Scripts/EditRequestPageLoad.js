@@ -2,12 +2,12 @@
 var lesserVal = -1;
 $(document).ready(function () {
     mainLoad()
-    prefLoad(roomNumber-1)
+    prefLoad(roomNumber - 1)
 });
 function mainLoad() {
     if (requestData.length == 0) {
         alert("Request doesn't exist");
-        Window.Location.href = "ViewRequets.aspx";
+        window.location.href = "ViewRequest.aspx";
     }
     $('.modTxt').val(requestData[0]['Module_Code']);
     for (var i = 0; i < modData.length; i++) {
@@ -15,9 +15,9 @@ function mainLoad() {
             $('.nameTxt').val(modData[i]['Module_Title']);
         }
     }
-    $('.dayTxt').val(days[requestData[0]['Day']-1])
-    $('.startTxt').val(starts[requestData[0]['Start_Time']-1])
-    $('.endTxt').val(ends[requestData[0]['End_Time']-1]);
+    $('.dayTxt').val(days[requestData[0]['Day'] - 1])
+    $('.startTxt').val(starts[requestData[0]['Start_Time'] - 1])
+    $('.endTxt').val(ends[requestData[0]['End_Time'] - 1]);
     $('.roomTxt').val(requestData[0]['Number_Rooms']);
     if (requestData[0]['Priority'] == 1 || requestData[0]['Priority'] == 'true') {
         $('.priNo').removeClass('selTick');
@@ -35,11 +35,10 @@ function mainLoad() {
 }
 function prefLoad(i) {
     while ($('.roomTxt').val() > preferences.length) {
-        preferences.push({Pref_ID: lesserVal, Room_ID: '', Building_ID: '', Room_Type: 'T', Park_ID: 'C', Number_Students: '', Special_Requirements: '', Weeks: 1});
+        preferences.push({ Pref_ID: lesserVal, Room_ID: '', Building_ID: '', Room_Type: 'T', Park_ID: 'C', Number_Students: '', Special_Requirements: '', Weeks: 1 });
         lesserVal--;
     }
-    while ($('.roomTxt').val() < preferences.length)
-    {
+    while ($('.roomTxt').val() < preferences.length) {
         preferences.pop();
     }
     $('.studTxt').val(preferences[i]['Number_Students']);
@@ -58,8 +57,7 @@ function prefLoad(i) {
     }
 
     $('.buildTxt').val(buildName);
-    if (preferences[i]['Room_ID'] != null && preferences[i]['Room_ID'] != "")
-    {
+    if (preferences[i]['Room_ID'] != null && preferences[i]['Room_ID'] != "") {
         $('.roomCodeTxt').val(preferences[i]['Room_ID']);
     }
     else {
@@ -68,14 +66,11 @@ function prefLoad(i) {
     var wkcounter = 0;
     $('.week').attr('chosen', false);
     $(this).css('background-color', '#999');
-    if(preferences[i]['Weeks'] != 1 && preferences[i]['Weeks'] != 'true')
-    {
+    if (preferences[i]['Weeks'] != 1 && preferences[i]['Weeks'] != 'true') {
         $('.noTick').click();
-        for(var j = 0; j < weekData.length; j++)
-        {
-            if (weekData[j]['Pref_ID'] == preferences[i]['Pref_ID'])
-            {
-                $('#week'+weekData[j]['Week_ID']).css('background-color', '#FF8060');
+        for (var j = 0; j < weekData.length; j++) {
+            if (weekData[j]['Pref_ID'] == preferences[i]['Pref_ID']) {
+                $('#week' + weekData[j]['Week_ID']).css('background-color', '#FF8060');
                 $('#week' + weekData[j]['Week_ID']).attr('clicked', 'true');
                 $('#week' + weekData[j]['Week_ID']).next('.weekCheck').val(1);
                 wkcounter++;
@@ -101,8 +96,7 @@ function prefLoad(i) {
     $('.prefTit').html('<b>PREFERENCES (ROOM ' + (i + 1) + ')</b>');
     prefID = preferences[i]['Pref_ID'];
 }
-function savePref(i)
-{
+function savePref(i) {
     preferences[i]['Room_ID'] = $('.roomCodeTxt').val();
     var buildName = "";
     for (var j = 0; j < buildData.length; j++) {
@@ -128,15 +122,13 @@ function savePref(i)
     }
 
     $('.weekCheck').each(function () {
-        if ($(this).val() == 1)
-        {
+        if ($(this).val() == 1) {
             weekData.push({ Pref_ID: prefID, Week_ID: $(this).prev('.week').html() })
         }
     });
     $('.weekCheck').val(0);
     $('.facCheck').each(function () {
-        if ($(this).val() == 1)
-        {
+        if ($(this).val() == 1) {
             facCode = $(this).attr('id').replace("fac", "");
             facData.push({ Pref_ID: prefID, Facility_ID: facCode })
         }
