@@ -118,6 +118,7 @@
     <Content Include="Account\OpenAuthProviders.ascx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
+    <Content Include="AddDegree.aspx" />
     <Content Include="AddModule.aspx" />
     <Content Include="AddRoom.aspx" />
     <Content Include="AdminFolder\AddUser.aspx" />
@@ -367,6 +368,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddDegree.aspx.cs">
+      <DependentUpon>AddDegree.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AddDegree.aspx.designer.cs">
+      <DependentUpon>AddDegree.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AddModule.aspx.cs">
       <DependentUpon>AddModule.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
