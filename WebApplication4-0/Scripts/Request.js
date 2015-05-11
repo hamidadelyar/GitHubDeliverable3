@@ -750,6 +750,7 @@ $(document).ready(function () {
          VALIDATION FOR TIME SELECTION
          if the user selects a start time which is later then the end time, will not be allowed, user will be notified.
     */
+    /*
     $('#select_startTime, #select_endTime').change(function () {
         var startTime = +document.getElementById('select_startTime').value;
         var endTime = +document.getElementById('select_endTime').value;
@@ -768,7 +769,7 @@ $(document).ready(function () {
             document.getElementById("MainContent_startPeriodLabel").style.borderBottom = "";
             document.getElementById("MainContent_endPeriodLabel").style.borderBottom = "";
         }
-    });
+    });*/
 
     function showValidation() {
         $('#validationContainer').show();
@@ -922,7 +923,7 @@ $(document).ready(function () {
 
         /*if module name is empty */
 
-        if (startTime > endTime) {
+        if (startTime >= endTime) {
             flag = false;
             showValidation();
             $('#errorList').append("<li><b>'Start Time'</b> must be before <b>'End Time'</b>.  Please change desired times.</li>");

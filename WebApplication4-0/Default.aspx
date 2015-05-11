@@ -18,7 +18,7 @@
         <div class="user">
             
            <!-- <span style="color:white; font-family:'Open Sans', sans-serif; font-size:1.1em; font-weight:600"> Loughborough University Timetabling System </span> -->
-            <img style="border:1px, dashed, white" src="Images/user.png" alt="userpic"/>
+            <img style="border:1px, dashed, white" src="./Images/user.png" alt="userpic"/>
         </div>
 
         <div class="login">

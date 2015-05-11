@@ -78,7 +78,7 @@
                 var sur = $('.surTxt').val();
                 var email = $('.emailTxt').val();
                 var dept = $('.deptTxt').val()[0] + $('.deptTxt').val()[1];
-                $('.main').html('<span class="loader" ><img src="/Images/processing.gif" width="220" height="20" /></span>');
+                $('.main').html('<span class="loader" ><img src="../Images/processing.gif" width="220" height="20" /></span>');
                 $.ajax({
                     type: "POST",
                     url: "AddUser.aspx/InsertUser",
