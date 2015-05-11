@@ -12,7 +12,15 @@
         <script src="<%: ResolveUrl("~/Scripts/modernizr-2.6.2.js") %>"></script>
         <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
         <script>
+            var logString = "../Logout";
             $(document).ready(function() {
+                if (window.location.pathname.indexOf('AdminFolder') == -1) {
+                    alert('Hello World');
+                    $('.logo').attr('src', './Images/LU_Color.png');
+                    $('#profBtn img').attr('src', './Images/user.png');
+                    $('#profBtn').attr('onclick', "window.location.href = './Profile.aspx'");
+                    logString = "./Logout";
+                }
                 $('#logoutButton').click(function() {
                     callLogout();
                 });
@@ -23,7 +31,7 @@
                 });
             });
             function callLogout() {
-                window.location.href = "../Logout";
+                window.location.href = logString;
             }
         </script>
     </asp:PlaceHolder>
@@ -42,7 +50,7 @@
     <header>
         <div class="content-wrapper">
             <div class="float-left">
-                <p class="site-title"><a runat="server" href="~/"><img style="padding-bottom:15px" src="../Images/LU_Color.png" width="200" height="47" /></a></p>
+                <p class="site-title"><a runat="server" href="~/"><img class="logo" style="padding-bottom:15px" src="../Images/LU_Color.png" width="200" height="47" /></a></p>
             </div>
             <div class="loginStuff">
                 <section id="login">
@@ -104,7 +112,28 @@
                 <p id="LoginDetails" runat="server"></p>
             </div>
         </div>
+        <div id="accessBar" style="margin-right:20%; position: relative; top:25px;">
+            <img src="../Images/fsize1.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeFontSize('1.2em')"/> <!-- largest font -->
+            <img src="../Images/fsize2.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeFontSize('1em')"/> 
+            <img src="../Images/fsize3.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeFontSize('0.8em')"/> <!-- smallest font -->
+            <img src="../Images/AccessColor3.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeBackground('#70756F', '#474746');"/> <!-- grey -->
+            <img src="../Images/AccessColor2.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeBackground('#55aa55', '#419741');"/> <!-- green -->
+            <img src="../Images/AccessColor1.png" style="width:50px; height:50px; float:right; cursor:pointer; border-bottom:solid white" onclick="changeBackground('#86b4cc', '#79a2b8');"/> <!-- original -->
+        </div>
     </footer>
 </form>    
 </body>
 </html>
+
+
+<script type="text/javascript">
+    function changeFontSize(size) {
+        $('#body').css("font-size", size);
+    }
+
+    function changeBackground(backgroundCol, footerCol) {
+        //document.getElementById("body").style.background = background;
+        $('#body').css("background-color", backgroundCol);
+        $('footer').css("background-color", footerCol);
+    }
+</script>

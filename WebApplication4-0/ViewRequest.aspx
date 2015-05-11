@@ -4,7 +4,7 @@
 
 <link rel="stylesheet" href="Content/jq.css"/>
 <script type="text/javascript" src="Scripts/jquery-latest.js"></script>
-<script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="./Scripts/jquery.tablesorter.js"></script>
 <link rel="stylesheet" href="Content/PopupBlur.css" /> 
 <!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>-->
 <style>

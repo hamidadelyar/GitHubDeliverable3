@@ -47,7 +47,7 @@
             }
             function changePass() {
                 var pass = $('.emailTxt').val()
-                $('.main').html('<span class="loader" ><img src="/Images/processing.gif" width="220" height="20" /></span>');
+                $('.main').html('<span class="loader" ><img src="./Images/processing.gif" width="220" height="20" /></span>');
                 $.ajax({
                     type: "POST",
                     url: "ChangePassword.aspx/UpdatePassword",
@@ -60,7 +60,7 @@
                     },
                     success: function (result) {
                         if (result.d) {
-                            $('.main').html('<div class="hdr" ><b>CHANGE PASSWORD</b></div><div class="conf" ><img src="/Images/Done.png" width="30" height="30" /><span>&nbsp; Password changed confirmation has been sent to your email.</span></div>');
+                            $('.main').html('<div class="hdr" ><b>CHANGE PASSWORD</b></div><div class="conf" ><img src="./Images/Done.png" width="30" height="30" /><span>&nbsp; Password changed confirmation has been sent to your email.</span></div>');
                             setTimeout(function () {
                                 window.location.href = "Profile.aspx"; //will redirect to your blog page (an ex: blog.html)
                             }, 2000);

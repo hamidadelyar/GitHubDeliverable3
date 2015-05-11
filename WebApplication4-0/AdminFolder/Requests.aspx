@@ -73,7 +73,7 @@
         ID="SqlDataSource1" 
         runat="server" 
         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-        SelectCommand="SELECT * FROM [Requests] INNER JOIN [Modules] ON [Requests].[Module_Code]=[Modules].[Module_Code] WHERE Request_ID IN (SELECT [Request_ID] FROM [Bookings] Where [Confirmed] = 'Pending')">
+        SelectCommand="SELECT * FROM [Requests] INNER JOIN [Modules] ON [Requests].[Module_Code]=[Modules].[Module_Code] INNER JOIN [Days] ON [Requests].[Day] = [Days].[Day_ID] WHERE Request_ID IN (SELECT [Request_ID] FROM [Bookings] Where [Confirmed] = 'Pending')">
 
     </asp:SqlDataSource>
     <br />
@@ -89,7 +89,7 @@
                     <th>Day</th><th>Start Period</th><th>End Period</th><th>Students</th>
                 </tr>
                 <tr>
-                    <td><%#Eval("Day") %></td><td><%#Eval("Start_Time") %></td><td><%#Eval("End_Time") %></td><td><%#Eval("Number_Students") %></td><td>
+                    <td><%#Eval("Day_Name") %></td><td><%#Eval("Start_Time") %></td><td><%#Eval("End_Time") %></td><td><%#Eval("Number_Students") %></td><td>
                         <a href="../EditRequest.aspx?ID=<%#Eval("Request_ID") %>" />Respond</a></td>
                 </tr>
             </table>
