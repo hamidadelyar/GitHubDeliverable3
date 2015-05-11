@@ -130,8 +130,10 @@
                 ID="SqlDataSource3" 
                 runat="server" 
                 ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-                SelectCommand="SELECT TOP 3 * FROM [Requests] INNER JOIN [Bookings] ON [Requests].[Request_ID] = [Bookings].[Request_ID] INNER JOIN [Days] ON [Requests].[Day] = [Days].[Day_ID] WHERE [Confirmed] = 'Allocated' ORDER BY [Requests].[Request_ID] DESC">
-                
+                SelectCommand="SELECT TOP 3 * FROM [Requests] INNER JOIN [Bookings] ON [Requests].[Request_ID] = [Bookings].[Request_ID] INNER JOIN [Days] ON [Requests].[Day] = [Days].[Day_ID] WHERE [Confirmed] = 'Allocated' AND [Dept_ID] = LEFT(@DeptCode,2) ORDER BY [Requests].[Request_ID] DESC">
+                        <SelectParameters>
+                            <asp:SessionParameter Name="DeptCode" SessionField="Username" Type="String" />
+                        </SelectParameters>
             </asp:SqlDataSource>
             <asp:GridView 
                 ID="GridView2" 
@@ -189,8 +191,10 @@
                         ID="SqlDataSource2" 
                         runat="server" 
                         ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
-                        SelectCommand="SELECT TOP 5 * FROM [Requests] INNER JOIN [Modules] ON [Requests].[Module_Code]=[Modules].[Module_Code] WHERE Request_ID IN (SELECT [Request_ID] FROM [Bookings] Where [Confirmed] = 'Pending') ORDER BY [Request_ID] DESC">
-
+                        SelectCommand="SELECT TOP 5 * FROM [Requests] INNER JOIN [Modules] ON [Requests].[Module_Code]=[Modules].[Module_Code] WHERE [Dept_ID] = LEFT(@DeptCode,2) AND Request_ID IN (SELECT [Request_ID] FROM [Bookings] Where [Confirmed] = 'Pending') ORDER BY [Request_ID] DESC">
+                        <SelectParameters>
+                            <asp:SessionParameter Name="DeptCode" SessionField="Username" Type="String" />
+                        </SelectParameters>
                     </asp:SqlDataSource>
 
                 <table id="activityTable">
