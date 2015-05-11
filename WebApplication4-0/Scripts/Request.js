@@ -176,6 +176,10 @@ $(document).ready(function () {
             $('#requestContainer').removeClass('blur-out');
             $('#requestContainer').addClass('blur-in');
 
+            $('#contentContainer').removeClass('blur-out');
+            $('#contentContainer').addClass('blur-in');
+            
+
             //only blurs the text in the footer
             $('footer .float-left').removeClass('blur-out');
             $('footer .float-left').addClass('blur-in');
@@ -190,6 +194,9 @@ $(document).ready(function () {
             $('#requestContainer').removeClass('blur-out');
             $('#requestContainer').addClass('blur-in');
 
+            $('#contentContainer').removeClass('blur-out');
+            $('#contentContainer').addClass('blur-in');
+
             //only blurs the text in the footer
             $('footer .float-left').removeClass('blur-out');
             $('footer .float-left').addClass('blur-in');
@@ -203,6 +210,9 @@ $(document).ready(function () {
             $('#popupWeeksThree').fadeIn(1000);
             $('#requestContainer').removeClass('blur-out');
             $('#requestContainer').addClass('blur-in');
+
+            $('#contentContainer').removeClass('blur-out');
+            $('#contentContainer').addClass('blur-in');
 
             //only blurs the text in the footer
             $('footer .float-left').removeClass('blur-out');
@@ -221,6 +231,11 @@ $(document).ready(function () {
             $('#requestContainer').addClass('blur-out');
             $('#requestContainer').removeClass('blur-in');
 
+            $('#contentContainer').addClass('blur-out');
+            $('#contentContainer').removeClass('blur-in');
+
+
+
             //unblurs the text in the footer
             $('footer .float-left').addClass('blur-out');
             $('footer .float-left').removeClass('blur-in');
@@ -237,6 +252,10 @@ $(document).ready(function () {
             $('#requestContainer').addClass('blur-out');
             $('#requestContainer').removeClass('blur-in');
 
+            $('#contentContainer').addClass('blur-out');
+            $('#contentContainer').removeClass('blur-in');
+
+
             //unblurs the text in the footer
             $('footer .float-left').addClass('blur-out');
             $('footer .float-left').removeClass('blur-in');
@@ -252,6 +271,10 @@ $(document).ready(function () {
             //$('#requestContainer').removeClass('blur-in');
             $('#requestContainer').addClass('blur-out');
             $('#requestContainer').removeClass('blur-in');
+
+            $('#contentContainer').addClass('blur-out');
+            $('#contentContainer').removeClass('blur-in');
+
 
             //unblurs the text in the footer
             $('footer .float-left').addClass('blur-out');
@@ -777,6 +800,9 @@ $(document).ready(function () {
         $('#requestContainer').removeClass('blur-out');
         $('#requestContainer').addClass('blur-in');
 
+        $('#contentContainer').removeClass('blur-out');
+        $('#contentContainer').addClass('blur-in');
+
         //only blurs the text in the footer
         $('footer .float-left').removeClass('blur-out');
         $('footer .float-left').addClass('blur-in');
@@ -792,6 +818,9 @@ $(document).ready(function () {
         formInputEnabled('true');
         $('#requestContainer').addClass('blur-out');
         $('#requestContainer').removeClass('blur-in');
+
+        $('#contentContainer').addClass('blur-out');
+        $('#contentContainer').removeClass('blur-in');
 
         //unblurs the text in the footer
         $('footer .float-left').addClass('blur-out');
