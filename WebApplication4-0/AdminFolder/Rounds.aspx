@@ -124,9 +124,22 @@
     <br />
     <br />
     <div class="margin5">
-        <asp:SqlDataSource ID="SqlDataSource4" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Year] FROM [Rounds] ORDER BY [Year] DESC"></asp:SqlDataSource> 
+        <asp:SqlDataSource 
+            ID="SqlDataSource4" 
+            runat="server" 
+            ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" 
+            SelectCommand="SELECT DISTINCT [Year] FROM [Rounds] ORDER BY [Year] DESC">
 
-        Academic Year: <asp:DropDownList ID="DropDownList1" runat="server" autopostback="True" DataSourceID="SqlDataSource4" DataTextField="Year" DataValueField="Year"></asp:DropDownList> <br />
+        </asp:SqlDataSource> 
+
+        Academic Year: <asp:DropDownList 
+            ID="DropDownList1" 
+            runat="server" 
+            autopostback="True" 
+            DataSourceID="SqlDataSource4" 
+            DataTextField="Year" 
+            DataValueField="Year">
+        </asp:DropDownList> <br />
 
         <asp:SqlDataSource ID="SqlDataSource5" runat="server" ConnectionString="<%$ ConnectionStrings:team02ConnectionString1 %>" SelectCommand="SELECT DISTINCT [Semester] FROM [Rounds] ORDER BY [Semester] DESC"></asp:SqlDataSource>
 
