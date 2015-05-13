@@ -37,7 +37,7 @@ namespace WebApplication4_0
                 }
             }*/
 
-            string[] cols = { "Request No.", "Module Code", "Day", "Start Time", "End Time", "Semester", "Year", "Round", "Priority", "No. of Rooms", "No. of Students", "Status", "Delete Row" };
+            string[] cols = { "Request No.", "Module Code", "Day", "Start Time", "End Time", "Semester", "Year", "Round", "Priority", "No. of Rooms", "No. of Students", "Status", "Delete Row","" };
             //DataTable dt = GetData("Request_ID, Module_Code, Day, Start_Time, End_Time, Semester, Year, Round, Priority, Number_Rooms, Number_Students", "Requests", "" );
 
             StringBuilder html = new StringBuilder();
@@ -50,11 +50,26 @@ namespace WebApplication4_0
             html.Append("<thead>");
 
             html.Append("<tr>");
-            for(int i=0;i<cols.Length;i++)
+            for(int j=0;j<13;j++)
             {
-                html.Append("<th>");
-                html.Append(cols[i]);
-                html.Append("</th>");
+				if(cols[j] == "Day")
+				{
+					html.Append("<th class='sorter-weekday'>");
+					html.Append(cols[j]);
+					html.Append("</th>");
+				}
+				else if(cols[j] == "Start Time")
+				{
+					html.Append("<th class='sorter-time'>");
+					html.Append(cols[j]);
+					html.Append("</th>");
+				}else
+				{
+	
+					html.Append("<th>");
+					html.Append(cols[j]);
+					html.Append("</th>");
+				}
             }
             html.Append("</tr>");
             html.Append("</thead>");
@@ -176,7 +191,7 @@ namespace WebApplication4_0
                                     }
                                     else if (rows[i].getStatus() == "Pending")
                                     {
-                                        html.Append("<td style='color:#FFFF00'>");
+                                        html.Append("<td style='color:#FF9933'>");
                                         html.Append(rows[i].getStatus());
                                         html.Append("</td>");
                                         break;
@@ -572,8 +587,8 @@ namespace WebApplication4_0
             html.Append("<span id='closePopupDetails' style='cursor: pointer; left: 15px; top: -10px; font-size: 2em; display:inline-block; position:relative; '>✖</span>");
             html.Append("<h1 style='display:inline-block; left:140px; position:relative; color:white; top: -10px;'>Room Details</h1> ");
 
-            html.Append("<div style='width:100%; height:90%; top:10%; background-color:#3E454D; border-bottom-left-radius:8px; border-bottom-right-radius:8px;'>");
-            html.Append("<table>");
+            html.Append("<div style='width:50%; height:90%; top:10%; background-color:#3E454D; border-bottom-left-radius:8px; border-bottom-right-radius:8px;'>");
+            html.Append("<table style='width:90%; height:80%; top:5%;'>");
 
 
             DataTable rooms = GetData("Room_ID, Building_Name, Type_Name, Park_Name, Special_Requirements", "Request_Preferences, Parks, Buildings, Room_Types", "WHERE Request_ID = " + reqid + " AND Parks.Park_ID = Request_Preferences.Park_ID AND Buildings.Building_ID = Request_Preferences.Building_ID AND Room_Types.Room_Type = Request_Preferences.Room_Type");

@@ -3,16 +3,18 @@
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
 
 <link rel="stylesheet" href="Content/jq.css"/>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="./Scripts/jquery-latest.js"></script>
 <script type="text/javascript" src="./Scripts/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="./Scripts/parser-date-weekday.js"></script>
 <link rel="stylesheet" href="Content/PopupBlur.css" /> 
+<!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>-->
 <style>
     .pop{
   display:none;
   position:fixed;
   top:20%;
   left:7.5%;
-  width:85%;
+  width:50%;
   height:60%;
   border-radius:8px;
   background:#ff8060;
@@ -20,6 +22,23 @@
   font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
   
 }
+
+.tablesorter {
+		background-color:#ffffff;
+		border: 1px solid #ff7f00;
+		width: 100%;
+		height: 100%;
+}
+.tablesorter th{
+		padding-left: 10px;
+		padding-right: 10px;
+}
+.tablesorter td{
+		padding-left: 10px;
+		padding-right: 10px;
+}
+			
+
 </style>
 <script type="text/javascript">
 
@@ -33,7 +52,7 @@
         });
         */
 
-        $.tablesorter.addParser({
+        /*$.tablesorter.addParser({
             // set a unique id 
             id: 'days',
             is: function (s) {
@@ -46,18 +65,15 @@
             },
             // set type, either numeric or text 
             type: 'numeric'
-        });
+        });*/
 
         $(function () {
             $("#requestTable").tablesorter({
-                headers: {
-                    2: {
-                        sorter: 'days'
-                    }
+					//sortList: [[0,0], [1,0]] 
                 }
-            });
+            
 
-        }
+        
         );
 
         $("#closePopupDetails").click(function () { //onclick, fades out
@@ -81,6 +97,7 @@
             $('.header').removeClass('blur-in');
         });
     });
+	});
 
     function deleteRow(x, y) {
 
@@ -278,12 +295,13 @@
         $('.header').addClass('blur-in');
 
     }
+	
 
     
 </script>
 <hgroup class="header">
     <h1>Your Requests</h1>
-    <h2>Click on the Row Number to reveal more information about your request</h2>
+    <h1></h1>
 </hgroup>
 <section class ="tableOfRequests">
     <asp:PlaceHolder ID = "PlaceHolder1" runat="server" />
