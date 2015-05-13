@@ -23,6 +23,10 @@
   
 }
 
+    tr 
+    {
+        cursor:pointer;
+    }
 .tablesorter {
 		background-color:#ffffff;
 		border: 1px solid #ff7f00;
@@ -66,6 +70,10 @@
             // set type, either numeric or text 
             type: 'numeric'
         });*/
+
+        $('#requestTable tr').click(function () {
+            window.location.href = "./EditRequest.aspx?ID=" + $(this).children('td:first').html();
+        });
 
         $(function () {
             $("#requestTable").tablesorter({
